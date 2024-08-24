@@ -1,0 +1,40 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
+import 'package:immoplus_pro/data/models/residence/piece_model.dart';
+import 'package:immoplus_pro/data/models/residence/position_model.dart';
+
+part 'residence_model.freezed.dart';
+part 'residence_model.g.dart';
+
+@freezed
+class ResidenceModel with _$ResidenceModel {
+  const factory ResidenceModel({
+    @Default('') String id,
+    @Default('') String miniature,
+    @Default('') String nom,
+    @Default('Appartement') String typeResidence,
+    @Default('') String description,
+    @Default(0) int prixReservation,
+    @Default('') String adresse,
+    @Default('') String ville,
+    @Default('') String commune,
+    @Default(PositionModel()) PositionModel position,
+    @Default('') String video,
+    @Default([]) List<String> images,
+    @Default([]) List<CommoditeModel> commodites,
+    @Default([]) List<PieceModel> pieces,
+    @Default(0) int dureeMinSejour,
+    @Default(0) int dureeMaxSejour,
+    @Default('') String heureEntree,
+    @Default('') String heureDepart,
+    @Default(0) int nombreMaxOccupants,
+    @Default(false) bool animauxAutorises,
+    @Default(false) bool fetesAutorises,
+    @Default('') String reglesSupplementaires,
+    @Default('') String proprietaire,
+    @Default(true) bool residenceDisponible,
+  }) = _ResidenceModel;
+
+  factory ResidenceModel.fromJson(Map<String, dynamic> json) =>
+      _$ResidenceModelFromJson(json);
+}
