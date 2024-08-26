@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_is_empty
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,14 +13,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/utils/booking_utils.dart';
+import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/views/booking/logic/booking_cubit.dart';
 import 'package:immoplus_pro/views/booking/logic/booking_request_state.dart';
 import 'package:immoplus_pro/views/booking/widgets/logment_info.dart';
 import 'package:immoplus_pro/views/booking/widgets/planing_booking_card_detail.dart';
+import 'package:immoplus_pro/views/home_page/home_page.dart';
+import 'package:immoplus_pro/views/home_page/pages/booking_page.dart';
 import 'package:immoplus_pro/views/shared_widgets/custom_button.dart';
+import 'package:immoplus_pro/views/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/views/shared_widgets/loading_page.dart';
 
 class BookingDetailPage extends StatefulWidget {
@@ -272,10 +279,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             SVGMap.map['gmail']!,
                             height: 30,
                           ),
-                          title: Text("Envoyez-nous un e-mail"),
+                          title: const Text("Envoyez-nous un e-mail"),
                           titleTextStyle:
                               Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
+                          trailing: const Icon(
                             CupertinoIcons.chevron_right_circle_fill,
                             color: Colors.red,
                           ),
@@ -299,9 +306,11 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   //   text: 'Valider cette réservation',
                   //   onClick: () {},
                   // ),
-                  CupertinoActionSheetAction(
-                    isDestructiveAction: true,
+                  OutlinedButton(
+                    // isDestructiveAction: true,
                     onPressed: () {
+                      log("TOTO");
+                      final _formKey = GlobalKey<FormState>();
                       showModalBottomSheet(
                         backgroundColor: AppColors.scafold,
                         showDragHandle: true,
@@ -310,44 +319,70 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         context: context,
-                        builder: (context) => Container(
-                          height: MediaQuery.of(context).size.height * 0.5,
-                          child: Scaffold(
-                            backgroundColor: AppColors.scafold,
-                            appBar: AppBar(
-                              title: Text('Pour quel raison réfusez-vous ?',
+                        builder: (context) => Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Pour quel raison annulez-vous ?',
                                   style:
-                                      Theme.of(context).textTheme.titleLarge!),
-                              backgroundColor: AppColors.scafold,
-                            ),
-                            body: ListView.builder(
-                              itemCount: 4,
-                              itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: ListTile(
-                                  tileColor: Colors.white,
-                                  title: Text('La résidence est indisponible'),
-                                  trailing: Checkbox(
-                                    value: true,
-                                    onChanged: (value) {},
-                                  ),
+                                      Theme.of(context).textTheme.titleMedium!),
+                              const Gap(30),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: CustomTextField(
+                                  minLines: 4,
+                                  labelText: 'Donnez nous la raison',
+                                  maxLines: 5,
+                                  validator: (value) =>
+                                      FormUtils.fieldValidator(value: value),
                                 ),
                               ),
-                            ),
-                            bottomNavigationBar: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              height: 100,
-                              child: CustomButtom(
-                                text: 'Confirmer',
-                                onClick: () {},
+                              Gap(10),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: CustomButtom(
+                                  text: 'Confirmer',
+                                  onClick: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      EasyLoading.show(status: 'Annulement..');
+                                      LogmentRepository.annulerReservations(
+                                              id: widget.id)
+                                          .then(
+                                        (value) {
+                                          if (value.data.id.isNotEmpty) {
+                                            EasyLoading.showSuccess(
+                                                'Reservation Annulé');
+                                          } else {
+                                            EasyLoading.showError(
+                                                'Echec Annulement');
+                                          }
+                                        },
+                                      );
+                                    }
+                                  },
+                                  isLoading: false,
+                                ),
                               ),
-                            ),
+                              const Gap(20),
+                              Gap(MediaQuery.of(context).viewInsets.bottom),
+                            ],
                           ),
                         ),
                       );
                     },
                     child: const Text(
-                      "Annuler la réservation",
+                      "Annulers la réservation",
+                    ),
+
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(color: Colors.red),
                     ),
                   ),
                 ],
@@ -380,7 +415,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     width: 300,
                     child: ListTile(
                       onTap: () {
-                        context.go("/history");
+                        context.goNamed(BookingPage.name);
                       },
                       horizontalTitleGap: 5,
                       shape: RoundedRectangleBorder(

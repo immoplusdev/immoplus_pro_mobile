@@ -1,13 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
-import 'package:immoplus_pro/request_path.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ResidenceListCard extends StatelessWidget {
   const ResidenceListCard({super.key, required this.residence});
@@ -16,7 +15,7 @@ class ResidenceListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        context.go('/logment_page/${residence.id}');
+        context.push('/logment_page/${residence.id}');
 
         // final Uri url = Uri.parse(
         //     "${RequestPath.baseUrl}/admin/content/logements/${residence.id}");
@@ -25,7 +24,7 @@ class ResidenceListCard extends StatelessWidget {
         // }
       },
       child: Container(
-        height: 150,
+        height: 165,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -75,7 +74,7 @@ class ResidenceListCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      AutoSizeText(
                         residence.nom ?? '',
                         style: Theme.of(context)
                             .textTheme
@@ -92,7 +91,7 @@ class ResidenceListCard extends StatelessWidget {
                               size: 14,
                             ),
                             Flexible(
-                              child: Text(
+                              child: AutoSizeText(
                                 residence.adresse ?? '',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
@@ -107,7 +106,7 @@ class ResidenceListCard extends StatelessWidget {
                             Icons.villa,
                             size: 14,
                           ),
-                          Text(
+                          AutoSizeText(
                             residence.typeResidence,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),

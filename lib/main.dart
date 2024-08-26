@@ -19,6 +19,7 @@ Future<void> main() async {
     name: 'ImmoPlus',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Initialize the LocationMarker plugin
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
     ..backgroundColor = Colors.blue.shade300 // Couleur du fond

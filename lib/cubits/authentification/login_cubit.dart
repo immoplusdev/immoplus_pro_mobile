@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/core/dio_client.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
@@ -35,6 +36,10 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
       );
+      await SessionManager().getCurrentUser();
+      DioClient.token = response.data.accessToken;
+      DioClient().dio.options.headers['Authorization'] =
+          'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
     } catch (e) {

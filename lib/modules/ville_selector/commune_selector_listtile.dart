@@ -32,6 +32,7 @@ class _CommuneSelectorListtileState extends State<CommuneSelectorListtile> {
       title: Text(
         (communeModel != null) ? communeModel!.name : "Selectioner une commune",
       ),
+      trailing: const Icon(CupertinoIcons.chevron_right_circle_fill),
       onTap: () => showModalBottomSheet(
         context: context,
         useSafeArea: true,

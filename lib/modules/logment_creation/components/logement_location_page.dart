@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:geojson_vi/geojson_vi.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/data/models/configs/commune_config.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
 import 'package:immoplus_pro/modules/logment_creation/components/amenities_page.dart';
@@ -18,11 +19,9 @@ import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_m
 import 'package:immoplus_pro/modules/logment_creation/utils/enum_utils.dart';
 import 'package:immoplus_pro/modules/logment_creation/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/modules/ville_selector/commune_selector_listtile.dart';
-import 'package:immoplus_pro/modules/ville_selector/commune_selector_page.dart';
 import 'package:immoplus_pro/modules/ville_selector/ville_selector_listtile.dart';
-import 'package:immoplus_pro/utils/formular_utils.dart';
-import 'package:immoplus_pro/views/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/views/shared_widgets/picker_location_listiletile.dart';
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 
 class LogmentLocationPage extends StatefulWidget {
   const LogmentLocationPage({super.key});
@@ -129,26 +128,66 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             sliver: SliverToBoxAdapter(
-              child: PickerocationListTile(
-                backgroundColor: Colors.white,
-                showCurrentPosition: true,
-                onSeleted: (p0) {
-                  log(p0.toString());
-                  if (p0.properties!['name'] != null) {
-                    ResidenceCreationModelBuilder().adresse =
-                        p0.properties!['name'].toString();
-                    ResidenceCreationModelBuilder().position = PositionModel(
-                        type: 'Point',
-                        coordinates: (p0.geometry as GeoJSONPoint).coordinates);
-                  }
-                },
-                placeHolder: 'Position géographique',
-                leading: CircleAvatar(
+              child: ListTile(
+                leading: const CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: Icon(
                       FontAwesomeIcons.locationDot,
                       color: Colors.blue,
                     )),
+                tileColor: CupertinoColors.systemFill,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                title: Text((ResidenceCreationModelBuilder().adresse.isEmpty)
+                    ? 'Position de la résidence'
+                    : ResidenceCreationModelBuilder().adresse),
+                trailing: const Icon(CupertinoIcons.chevron_right_circle_fill),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    builder: (context) => FractionallySizedBox(
+                      heightFactor: 0.9,
+                      child: FlutterLocationPicker(
+                        mapLanguage: 'fr',
+
+                        initPosition: const LatLong(5.345317, -4.024429),
+                        initZoom: 14,
+                        minZoomLevel: 5,
+                        maxZoomLevel: 16,
+                        //trackMyPosition: true,
+                        selectLocationButtonText: 'Sélectionner cet endroit',
+                        searchBarHintText: 'Rechercher un endroit',
+                        zoomButtonsBackgroundColor: AppColors.primary,
+                        markerIcon: const Icon(
+                          Icons.location_on_sharp,
+                          size: 50,
+                          color: Colors.red,
+                        ),
+                        locationButtonBackgroundColor: AppColors.primary,
+                        searchBarBackgroundColor: Colors.white,
+
+                        onPicked: (pickedData) {
+                          setState(() {
+                            inspect(pickedData);
+                            ResidenceCreationModelBuilder().adresse =
+                                pickedData.address;
+                            ResidenceCreationModelBuilder().position =
+                                PositionModel(type: 'Point', coordinates: [
+                              pickedData.latLong.longitude,
+                              pickedData.latLong.latitude,
+                            ]);
+                          });
+
+                          context.pop();
+                        },
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),

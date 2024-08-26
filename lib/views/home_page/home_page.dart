@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -31,52 +33,45 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: AppColors.scafold,
         actions: [
-          // BlocBuilder<NotificationCubit, AppState>(
-          //   builder: (context, state) => Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       shape: BoxShape.circle,
-          //       border: Border.all(),
-          //       // boxShadow: [
-          //       //   BoxShadow(
-          //       //       blurRadius: 5,
-          //       //       color: Colors.grey.shade400,
-          //       //       spreadRadius: 1)
-          //       // ],
-          //     ),
-          //     child: InkWell(
-          //       onTap: () {
-          //         context.go('/home/notifs');
-          //       },
-          //       child: CircleAvatar(
-          //         backgroundColor: Colors.white,
-          //         child: Badge(
-          //           isLabelVisible: (NotificationsState.numberOfNotifs > 0),
-          //           label: Text(
-          //             (NotificationsState.numberOfNotifs >= 10)
-          //                 ? '+9'
-          //                 : NotificationsState.numberOfNotifs.toString(),
-          //             style: const TextStyle(
-          //               color: Colors.white,
-          //               fontSize: 10,
-          //             ),
-          //           ),
-          //           child: Container(
-          //             padding: EdgeInsets.all(8),
-          //             child: Icon(
-          //               CupertinoIcons.bell,
-          //               color: AppColors.primary,
-          //               size: 20,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          
-          
-          
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              border: Border.all(),
+              // boxShadow: [
+              //   BoxShadow(
+              //       blurRadius: 5,
+              //       color: Colors.grey.shade400,
+              //       spreadRadius: 1)
+              // ],
+            ),
+            child: InkWell(
+              onTap: () {
+                //context.go('/home/notifs');
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Badge(
+                  isLabelVisible: true,
+                  label: const Text(
+                    '+9',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                    ),
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      CupertinoIcons.bell,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           Gap(13),
         ],
         bottom: PreferredSize(

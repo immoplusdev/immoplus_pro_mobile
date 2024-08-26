@@ -1,11 +1,18 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
+import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
+import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/views/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/views/estates/estates_page.dart';
 import 'package:immoplus_pro/views/login_page/login_page.dart';
 import 'package:immoplus_pro/views/residence/residences_page.dart';
 import 'package:shimmer/shimmer.dart';
@@ -37,7 +44,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     borderRadius: BorderRadius.circular(60),
                     child: CachedNetworkImage(
                       imageUrl:
-                          "https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200", //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
+                          "https://www.strasys.uk/wp-content/uploads/2022/02/Depositphotos_484354208_S.jpg",
 
                       placeholder: (context, url) => Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
@@ -56,69 +63,169 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
                 ),
                 Gap(5),
-                Text(
+                AutoSizeText(
                   '${SessionManager().currentUser?.firstName} ${SessionManager().currentUser?.lastName}',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 //Text('test@gmail.com'),
-                Text("+${SessionManager().currentUser?.phoneNumber}"),
-                Text(
+                AutoSizeText("+${SessionManager().currentUser?.phoneNumber}"),
+                AutoSizeText(
                   SessionManager().currentUser?.email ?? "",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),
           ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
           ListTile(
             onTap: () {
-              context.pushNamed(residencesPage.name);
+              context.pushNamed(ResidencesPage.name);
             },
             horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: const Icon(FontAwesomeIcons.buildingUser),
-            title: Text('Mes logements'),
+            leading: Icon(
+              FontAwesomeIcons.key,
+              color: AppColors.primary,
+              size: 20,
+            ),
+            title: const Text('Mes résidences'),
           ),
-          Gap(5),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          ListTile(
+            onTap: () {
+              context.pushNamed(EstatesPage.name);
+            },
+            horizontalTitleGap: 0,
+            leading: Icon(
+              FontAwesomeIcons.buildingUser,
+              color: AppColors.primary,
+              size: 20,
+            ),
+            title: const Text('Mes logements'),
+          ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
           ListTile(
             onTap: () {
               context.pushNamed(EditAccount.name);
             },
             horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: const Icon(FontAwesomeIcons.user),
+            leading: Icon(
+              FontAwesomeIcons.userPen,
+              color: AppColors.primary,
+              size: 20,
+            ),
             title: const Text('Modifier mes informations'),
           ),
-          const Gap(5),
-          const ListTile(
-            horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: Icon(FontAwesomeIcons.moneyBill1Wave),
-            title: Text('Paiements'),
+          const Divider(
+            height: 0,
+            thickness: 1,
           ),
-          Gap(5),
           ListTile(
             horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: Icon(FontAwesomeIcons.lockOpen),
+            leading: Icon(
+              FontAwesomeIcons.userShield,
+              color: AppColors.primary,
+              size: 20,
+            ),
             title: Text('Modifier mot de passe'),
           ),
-          Gap(5),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          const ListTile(
+            horizontalTitleGap: 0,
+            leading: Icon(
+              FontAwesomeIcons.coins,
+              color: Colors.orangeAccent,
+              size: 20,
+            ),
+            title: Text('Paiements'),
+          ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
           ListTile(
             horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: Icon(FontAwesomeIcons.fileContract),
+            leading: Icon(
+              FontAwesomeIcons.fileContract,
+              color: AppColors.primary,
+              size: 20,
+            ),
             title: Text("Condition général d'utilisation"),
           ),
-          Gap(20),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          Expanded(child: SizedBox()),
           ListTile(
             horizontalTitleGap: 0,
-            tileColor: Colors.white,
-            leading: Icon(FontAwesomeIcons.arrowRightFromBracket),
-            title: Text("Se déconnecter"),
+            leading: Icon(
+              FontAwesomeIcons.arrowRightFromBracket,
+              color: Colors.redAccent,
+              size: 20,
+            ),
+            title: Text(
+              "Se déconnecter",
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
             onTap: () {
-              context.goNamed(LoginPage.name);
+              showCupertinoDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CupertinoAlertDialog(
+                    title: Text('Déconnexion'),
+                    content:
+                        Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        isDefaultAction: true,
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pop(); // Ferme la pop-up sans se déconnecter
+                        },
+                        child: Text('Annuler'),
+                      ),
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        onPressed: () {
+                          isarInstance.writeTxnSync(
+                            () {
+                              final result =
+                                  isarInstance.userModelSchemas.deleteSync(1);
+                              if (result) {
+                                context.goNamed(LoginPage.name);
+                              } else {
+                                context.pop();
+                              }
+                            },
+                          );
+                        },
+                        child: const Text('Déconnexion'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
+          Gap(50),
         ],
       ),
     );

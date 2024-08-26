@@ -10,18 +10,18 @@ import 'package:immoplus_pro/views/booking/logic/booking_request_state.dart';
 class BookingCubit extends Cubit<BookingRequestState> {
   BookingCubit() : super(const BookingRequestState.initial());
 
-  getBookings() async {
-    emit(const LOADING_BOOKING_LIST());
-    try {
-      ReservationsResponse reservationModel =
-          await LogmentRepository.getReservationsOwner(
-              id: SessionManager().currentUser!.userId.toString());
-      inspect(reservationModel);
-      emit(BookingRequestState.receive(reservationModel));
-    } catch (e) {
-      emit(BookingRequestState.error(e.toString()));
-    }
-  }
+  // getBookings() async {
+  //   emit(const LOADING_BOOKING_LIST());
+  //   try {
+  //     ReservationsResponse reservationModel =
+  //         await LogmentRepository.getReservationsOwner(
+  //             id: SessionManager().currentUser!.userId.toString());
+  //     inspect(reservationModel);
+  //     emit(BookingRequestState.receive(reservationModel));
+  //   } catch (e) {
+  //     emit(BookingRequestState.error(e.toString()));
+  //   }
+  // }
 
   getBooking({required String id}) async {
     emit(const LOADING_BOOKING());

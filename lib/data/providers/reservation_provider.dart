@@ -21,7 +21,14 @@ abstract class ReservationProvider {
   Future<ReservationsResponse> getBookings(
       @Query("_page") int page, @Query("_per_page") int perPage);
 
-  //@GET("/reservations/data/residence-owner/{id}")
-  @GET("https://api.npoint.io/5298d4a42fc8b74cf43e")
-  Future<ReservationsResponse> getBookingsOwner(@Path() String id);
+  @GET("/reservations/data/residence/owner/{id}")
+  Future<ReservationsResponse> getBookingsOwner(@Path() String id,
+      @Query("_page") int page, @Query("_per_page") int perPage);
+
+  @POST("/reservations/action/annuler/{id}")
+  Future<ReservationResponse> annulerBookings(@Path() String id);
 }
+
+// https://api-v2.immoplus.ci/reservations/data/residence/owner/8c169ebd-7608-4506-a627-6dde3f6d814c
+
+// https://api-v2.immoplus.ci/reservations/data/residence-owner/8c169ebd-7608-4506-a627-6dde3f6d814c

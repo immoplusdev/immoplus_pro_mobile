@@ -4,9 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
+import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
+import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_loading_card.dart';
+import 'package:immoplus_pro/views/home_page/widgets/visit_card.dart';
 import 'package:immoplus_pro/views/visits/logic/booking_cubit.dart';
 import 'package:immoplus_pro/views/visits/logic/visit_request_state.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VisitPage extends StatefulWidget {
   const VisitPage({super.key});
@@ -16,10 +23,38 @@ class VisitPage extends StatefulWidget {
 }
 
 class _VisitPageState extends State<VisitPage> {
+  final PagingController<int, DemandeVisiteModel> _pagingController =
+      PagingController(firstPageKey: 1);
+
+  Future<void> loadPage(int page) async {
+    BienImmobilierRepository.getVisitesOwner(
+            id: SessionManager().currentUser!.userId.toString(),
+            page: page,
+            perPage: 5)
+        .then((value) {
+      if (value.hasNext == true) {
+        _pagingController.appendPage(value.data ?? [], (value.currentPage) + 1);
+      } else {
+        _pagingController.appendLastPage(value.data ?? []);
+      }
+    }).onError((error, stackTrace) {
+      _pagingController.error = error.toString();
+    });
+  }
+
   @override
   void initState() {
-    context.read<VisitCubit>().getVisits();
+    _pagingController.addPageRequestListener((pageKey) {
+      loadPage(pageKey);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _pagingController.dispose();
   }
 
   @override
@@ -31,27 +66,32 @@ class _VisitPageState extends State<VisitPage> {
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              context.read<VisitCubit>().getVisits();
+              _pagingController.refresh();
             },
           ),
-          BlocBuilder<VisitCubit, VisitRequestState>(
-            builder: (context, state) {
-              // if (state is RECEIVE_BOOKINGS) {
-              //   return SliverList.list(
-              //     children: state.reservationModel.data!
-              //         .map(
-              //           (item) => BookingCard(
-              //             reservationModel: item,
-              //           ),
-              //         )
-              //         .toList(),
-              //   );
-              // }
-              return SliverList.builder(
-                itemBuilder: (context, index) => const BookingLoadingCard(),
-                itemCount: 20,
-              );
-            },
+          PagedSliverList<int, DemandeVisiteModel>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+              firstPageProgressIndicatorBuilder: (context) => Padding(
+                padding: EdgeInsets.all(10),
+                child: SizedBox(
+                    //height: 600,
+                    child: Column(
+                  children: List.generate(
+                    20,
+                    (index) => const BookingLoadingCard(),
+                  ),
+                )),
+              ),
+              noItemsFoundIndicatorBuilder: (context) => Center(
+                  child: Text(
+                "Aucune demande de visite",
+                style: Theme.of(context).textTheme.titleLarge,
+              )),
+              itemBuilder: (context, item, index) => VisitCard(
+                demandeVisiteModel: item,
+              ),
+            ),
           ),
         ],
       )),

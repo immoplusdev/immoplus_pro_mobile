@@ -21,4 +21,5 @@ class UserModelSchema {
   String? emailEntreprise;
   String? photoIdentite;
   String? pieceIdentite;
+  String? avatar;
 }

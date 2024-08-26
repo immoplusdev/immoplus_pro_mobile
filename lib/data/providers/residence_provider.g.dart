@@ -12,11 +12,14 @@ class _ResidenceProvider implements ResidenceProvider {
   _ResidenceProvider(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<ResidenceResponse> getResidence(String id) async {
@@ -24,24 +27,30 @@ class _ResidenceProvider implements ResidenceProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ResidenceResponse>(Options(
+    final _options = _setStreamType<ResidenceResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/residences/${id}',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ResidenceResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/residences/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResidenceResponse _value;
+    try {
+      _value = ResidenceResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -51,24 +60,30 @@ class _ResidenceProvider implements ResidenceProvider {
     final queryParameters = <String, dynamic>{r'_page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ResidencesResponse>(Options(
+    final _options = _setStreamType<ResidencesResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/residences',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ResidencesResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/residences',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResidencesResponse _value;
+    try {
+      _value = ResidencesResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -79,24 +94,67 @@ class _ResidenceProvider implements ResidenceProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = residenceCreationModel;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ResidenceResponse>(Options(
+    final _options = _setStreamType<ResidenceResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/residences',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = ResidenceResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/residences',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResidenceResponse _value;
+    try {
+      _value = ResidenceResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResidenceResponse> update(
+    String id,
+    Map<String, dynamic> data,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(data);
+    final _options = _setStreamType<ResidenceResponse>(Options(
+      method: 'PATCH',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/residences/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResidenceResponse _value;
+    try {
+      _value = ResidenceResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

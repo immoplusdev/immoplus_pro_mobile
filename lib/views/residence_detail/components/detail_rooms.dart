@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 
@@ -15,7 +16,7 @@ class DetailLogmentRooms extends StatelessWidget {
               .asMap()
               .map((index, piece) => MapEntry(
                   index,
-                  Text(
+                  AutoSizeText(
                       "${piece.nombre} ${piece.nom} ${(index < logmentModel.pieces!.length - 1) ? '•' : ''} ")))
               .values
               .toList(),

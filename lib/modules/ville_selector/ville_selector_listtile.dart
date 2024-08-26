@@ -29,6 +29,7 @@ class _VilleSelectorListtileState extends State<VilleSelectorListtile> {
       title: Text(
         (villeModel != null) ? villeModel!.name : "Selectioner une ville",
       ),
+      trailing: const Icon(CupertinoIcons.chevron_right_circle_fill),
       onTap: () => showModalBottomSheet(
         context: context,
         useSafeArea: true,

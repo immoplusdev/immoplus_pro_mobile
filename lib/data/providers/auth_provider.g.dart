@@ -12,11 +12,14 @@ class _AuthProvider implements AuthProvider {
   _AuthProvider(
     this._dio, {
     this.baseUrl,
+    this.errorLogger,
   });
 
   final Dio _dio;
 
   String? baseUrl;
+
+  final ParseErrorLogger? errorLogger;
 
   @override
   Future<FileDataModel> uploadImage(File file) async {
@@ -31,25 +34,31 @@ class _AuthProvider implements AuthProvider {
         filename: file.path.split(Platform.pathSeparator).last,
       ),
     ));
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<FileDataModel>(Options(
+    final _options = _setStreamType<FileDataModel>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
       contentType: 'multipart/form-data',
     )
-            .compose(
-              _dio.options,
-              '/files/public',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = FileDataModel.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/files/public',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late FileDataModel _value;
+    try {
+      _value = FileDataModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -59,24 +68,30 @@ class _AuthProvider implements AuthProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = loginBodyModel;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<AccountCreationResponse>(Options(
+    final _options = _setStreamType<AccountCreationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/auth/login',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = AccountCreationResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/auth/login',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AccountCreationResponse _value;
+    try {
+      _value = AccountCreationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -87,24 +102,30 @@ class _AuthProvider implements AuthProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = customRegistrationBody;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<AccountCreationResponse>(Options(
+    final _options = _setStreamType<AccountCreationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/auth/register-customer',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = AccountCreationResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/auth/register-customer',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AccountCreationResponse _value;
+    try {
+      _value = AccountCreationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -115,24 +136,30 @@ class _AuthProvider implements AuthProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = enterpriseRegistrationBody;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<AccountCreationResponse>(Options(
+    final _options = _setStreamType<AccountCreationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/auth/register-pro-entreprise',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = AccountCreationResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/auth/register-pro-entreprise',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AccountCreationResponse _value;
+    try {
+      _value = AccountCreationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 
@@ -143,24 +170,30 @@ class _AuthProvider implements AuthProvider {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = particulierRegistrationBody;
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<AccountCreationResponse>(Options(
+    final _options = _setStreamType<AccountCreationResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              '/auth/register-pro-particulier',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(
-                baseUrl: _combineBaseUrls(
-              _dio.options.baseUrl,
-              baseUrl,
-            ))));
-    final _value = AccountCreationResponse.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          '/auth/register-pro-particulier',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AccountCreationResponse _value;
+    try {
+      _value = AccountCreationResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
     return _value;
   }
 

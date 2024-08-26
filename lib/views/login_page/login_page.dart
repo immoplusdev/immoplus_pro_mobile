@@ -159,11 +159,11 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ResetPassword(),
-                                  ));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => ResetPassword(),
+                              //     ));
                             },
                             child: Text(
                               'Mot de passe oublié',

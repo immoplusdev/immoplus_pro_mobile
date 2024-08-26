@@ -1,15 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
-import 'package:immoplus_pro/utils/utils.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/views/booking/logic/booking_cubit.dart';
-import 'package:immoplus_pro/views/booking/logic/booking_request_state.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_card.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_loading_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -28,7 +24,11 @@ class _BookingPageState extends State<BookingPage> {
       PagingController(firstPageKey: 1);
 
   Future<void> loadPage(int page) async {
-    LogmentRepository.getReservations(page, 5).then((value) {
+    LogmentRepository.getReservationsOwner(
+            id: SessionManager().currentUser!.userId.toString(),
+            page: page,
+            perPage: 5)
+        .then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data, (value.currentPage) + 1);
       } else {
@@ -69,44 +69,44 @@ class _BookingPageState extends State<BookingPage> {
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              context.read<BookingCubit>().getBookings();
+              _pagingController.refresh();
             },
           ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            sliver: SliverToBoxAdapter(
-              child: ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  radius: 20,
-                  child: Icon(FontAwesomeIcons.coins),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                horizontalTitleGap: 3,
-                tileColor: Colors.white,
-                title: const Text('Total des gains'),
-                subtitle: Text(
-                  Utils.formatCurrency(500000000),
-                ),
-                subtitleTextStyle: Theme.of(context)
-                    .textTheme
-                    .headlineSmall!
-                    .copyWith(color: AppColors.primary),
-                titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                trailing: IconButton(
-                  icon: const Icon(
-                    FontAwesomeIcons.eye,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: Divider(),
-          ),
+          // SliverPadding(
+          //   padding: EdgeInsets.symmetric(horizontal: 8),
+          //   sliver: SliverToBoxAdapter(
+          //     child: ListTile(
+          //       leading: const CircleAvatar(
+          //         backgroundColor: Colors.transparent,
+          //         radius: 20,
+          //         child: Icon(FontAwesomeIcons.coins),
+          //       ),
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(10),
+          //       ),
+          //       horizontalTitleGap: 3,
+          //       tileColor: Colors.white,
+          //       title: const Text('Total des gains'),
+          //       subtitle: Text(
+          //         Utils.formatCurrency(500000000),
+          //       ),
+          //       subtitleTextStyle: Theme.of(context)
+          //           .textTheme
+          //           .headlineSmall!
+          //           .copyWith(color: AppColors.primary),
+          //       titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+          //       trailing: IconButton(
+          //         icon: const Icon(
+          //           FontAwesomeIcons.eye,
+          //         ),
+          //         onPressed: () {},
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SliverToBoxAdapter(
+          //   child: Divider(),
+          // ),
           PagedSliverList<int, ReservationModel>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
@@ -117,13 +117,13 @@ class _BookingPageState extends State<BookingPage> {
                     child: Column(
                   children: List.generate(
                     20,
-                    (index) => BookingLoadingCard(),
+                    (index) => const BookingLoadingCard(),
                   ),
                 )),
               ),
               noItemsFoundIndicatorBuilder: (context) => Center(
                   child: Text(
-                "Aucun élément trouvé",
+                "Aucune réservation",
                 style: Theme.of(context).textTheme.titleLarge,
               )),
               itemBuilder: (context, item, index) => BookingCard(
@@ -131,27 +131,6 @@ class _BookingPageState extends State<BookingPage> {
               ),
             ),
           ),
-          // BlocBuilder<BookingCubit, BookingRequestState>(
-          //   buildWhen: (previous, current) => (current is RECEIVE_BOOKINGS ||
-          //       current is LOADING_BOOKING_LIST),
-          //   builder: (context, state) {
-          //     if (state is RECEIVE_BOOKINGS) {
-          //       return SliverList.list(
-          //         children: state.reservationResponse.data
-          //             .map(
-          //               (item) => BookingCard(
-          //                 reservationModel: item,
-          //               ),
-          //             )
-          //             .toList(),
-          //       );
-          //     }
-          //     return SliverList.builder(
-          //       itemBuilder: (context, index) => const BookingLoadingCard(),
-          //       itemCount: 20,
-          //     );
-          //   },
-          // ),
         ],
       )),
       floatingActionButton: FloatingActionButton(onPressed: () {}),

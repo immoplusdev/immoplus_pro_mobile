@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:immoplus_pro/core/dio_client.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_response.dart';
@@ -32,11 +31,30 @@ class LogmentRepository {
   }
 
   static Future<ReservationsResponse> getReservationsOwner(
+      {required String id, required int page, required int perPage}) async {
+    //DioClient().dio.options.queryParameters['meta'] = '*';
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .getBookingsOwner(id, page, perPage);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
+  static Future<ReservationResponse> annulerReservations(
       {required String id}) async {
     //DioClient().dio.options.queryParameters['meta'] = '*';
     try {
       final response =
-          await ReservationProvider(DioClient().dio).getBookingsOwner(id);
+          await ReservationProvider(DioClient().dio).annulerBookings(id);
       inspect(response);
       return response;
     } on DioException catch (dioError) {

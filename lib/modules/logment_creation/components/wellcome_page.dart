@@ -46,7 +46,7 @@ class _WellcommePageState extends State<WellcommePage> {
           SliverAppBar(
             leading: IconButton(
                 onPressed: () {
-                  AppRouter.router.goNamed(residencesPage.name);
+                  AppRouter.router.pop();
                 },
                 icon: const Icon(FontAwesomeIcons.circleChevronLeft)),
           ),

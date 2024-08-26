@@ -5,6 +5,7 @@ import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart'
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 import 'package:immoplus_pro/views/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/views/estates/estates_page.dart';
 import 'package:immoplus_pro/views/home_page/home_page.dart';
 import 'package:immoplus_pro/views/onboarding/onboarding_page.dart';
 import 'package:immoplus_pro/views/place/pages/create_place_page.dart';
@@ -66,8 +67,13 @@ class AppRouter {
       ),
       GoRoute(
         path: '/logments',
-        name: residencesPage.name,
-        builder: (context, state) => residencesPage(),
+        name: ResidencesPage.name,
+        builder: (context, state) => ResidencesPage(),
+      ),
+      GoRoute(
+        path: '/estates',
+        name: EstatesPage.name,
+        builder: (context, state) => const EstatesPage(),
       ),
       GoRoute(
         path: '/logment_page/:id',

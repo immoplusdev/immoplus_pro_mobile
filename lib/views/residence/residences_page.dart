@@ -16,14 +16,14 @@ import 'package:immoplus_pro/views/residence/widgets/logment_list_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class residencesPage extends StatefulWidget {
-  const residencesPage({super.key});
+class ResidencesPage extends StatefulWidget {
+  const ResidencesPage({super.key});
   static String name = 'logment_page';
   @override
-  State<residencesPage> createState() => _residencesPageState();
+  State<ResidencesPage> createState() => _ResidencesPageState();
 }
 
-class _residencesPageState extends State<residencesPage> {
+class _ResidencesPageState extends State<ResidencesPage> {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
 
@@ -88,12 +88,12 @@ class _residencesPageState extends State<residencesPage> {
       backgroundColor: AppColors.scafold,
       appBar: AppBar(
         backgroundColor: AppColors.scafold,
-        title: Text('Mes logements'),
+        title: const Text('Mes résidences'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
           InputChip(
             backgroundColor: AppColors.primary.withOpacity(0.8),
-            label: Text('Ajouter logement'),
+            label: const Text('Ajouter résidence'),
             labelStyle: Theme.of(context)
                 .textTheme
                 .bodySmall!
@@ -108,7 +108,7 @@ class _residencesPageState extends State<residencesPage> {
               size: 15,
               color: Colors.white,
             ),
-            labelPadding: EdgeInsets.symmetric(horizontal: 2),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             onDeleted: () {},
             onPressed: () {
               // _launchURL();
@@ -131,12 +131,14 @@ class _residencesPageState extends State<residencesPage> {
               firstPageProgressIndicatorBuilder: (context) => Padding(
                 padding: EdgeInsets.all(10),
                 child: SizedBox(
-                    //height: 600,
-                    child: Column(
-                  children: [
-                    for (int _i = 0; _i < 5; _i++) LoadingLogmentListCard(),
-                  ],
-                )),
+                  //height: 600,
+                  child: Column(
+                    children: List.generate(
+                      10,
+                      (index) => const LoadingLogmentListCard(),
+                    ),
+                  ),
+                ),
               ),
               noItemsFoundIndicatorBuilder: (context) => Center(
                   child: Text(

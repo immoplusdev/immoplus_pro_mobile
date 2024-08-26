@@ -23,4 +23,8 @@ abstract class ResidenceProvider {
   @POST("/residences")
   Future<ResidenceResponse> createResidence(
       @Body() ResidenceCreationModel residenceCreationModel);
+
+  @PATCH("/residences/{id}")
+  Future<ResidenceResponse> update(
+      @Path() String id, @Body() Map<String, dynamic> data);
 }

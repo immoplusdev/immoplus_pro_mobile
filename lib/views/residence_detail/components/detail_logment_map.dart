@@ -51,7 +51,7 @@ class _DetailLogmentMapState extends State<DetailLogmentMap> {
                     widget.residence.position.coordinates.last,
                     widget.residence.position.coordinates.first,
                   ),
-                  initialZoom: 18.4,
+                  initialZoom: 13.4,
                 ),
                 children: [
                   TileLayer(
@@ -59,13 +59,16 @@ class _DetailLogmentMapState extends State<DetailLogmentMap> {
                         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: const ['a', 'b', 'c'],
                   ),
-                  const MarkerLayer(
+                  MarkerLayer(
                     markers: [
                       Marker(
                         width: 80.0,
                         height: 80.0,
-                        point: LatLng(48.8584, 2.2945), // Position du marqueur
-                        child: Icon(
+                        point: LatLng(
+                          widget.residence.position.coordinates.last,
+                          widget.residence.position.coordinates.first,
+                        ), // Position du marqueur
+                        child: const Icon(
                           Icons.location_on,
                           color: Colors.red,
                           size: 40.0,

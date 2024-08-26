@@ -88,7 +88,7 @@ class _ResidencePageState extends State<ResidencePage> {
                 DetailLogmentInfos(reservation: state.data),
                 //réservation offers
                 DetailDivider(),
-                DetailLogmentTitle2(title: 'Ce que propose ce logement'),
+                const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
                 //offer list
                 DetailLogmentAmentities(residenceModel: state.data),
                 SliverGap(10),
@@ -112,7 +112,7 @@ class _ResidencePageState extends State<ResidencePage> {
                             padding: const EdgeInsets.only(bottom: 20),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: state.data.commodites!
+                              children: state.data.commodites
                                   .map(
                                     (e) => Padding(
                                       padding: const EdgeInsets.only(bottom: 5),

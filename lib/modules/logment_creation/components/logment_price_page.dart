@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/modules/logment_creation/components/description_editor_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart';
@@ -12,6 +15,7 @@ import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_m
 import 'package:immoplus_pro/modules/logment_creation/utils/enum_utils.dart';
 import 'package:immoplus_pro/modules/logment_creation/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:immoplus_pro/views/residence/residences_page.dart';
 
 class LogmentPricePage extends StatefulWidget {
   const LogmentPricePage({super.key});
@@ -128,8 +132,13 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                 _controller.numberValue.toInt();
             await SessionManager().getCurrentUser();
             await LogmentRepository.createResidence(
-                model: ResidenceCreationModelBuilder().build());
-            EasyLoading.dismiss();
+                    model: ResidenceCreationModelBuilder().build())
+                .then(
+              (value) {
+                EasyLoading.dismiss();
+                AppRouter.router.goNamed(ResidencesPage.name);
+              },
+            );
           }
         },
 

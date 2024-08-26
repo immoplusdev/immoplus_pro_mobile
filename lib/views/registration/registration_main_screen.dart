@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/utils/hex_color.dart';
+import 'package:immoplus_pro/views/login_page/login_page.dart';
 import 'package:immoplus_pro/views/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/views/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/views/registration/widgets/main_registration_button.dart';
@@ -18,7 +19,15 @@ class RegistrationMainScreean extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scafold,
       body: CustomScrollView(slivers: [
-        SliverAppBar(),
+        SliverAppBar(
+          backgroundColor: AppColors.scafold,
+          leading: IconButton(
+            icon: const Icon(FontAwesomeIcons.circleChevronLeft),
+            onPressed: () {
+              context.goNamed(LoginPage.name);
+            },
+          ),
+        ),
         SliverSafeArea(
           sliver: SliverToBoxAdapter(
             child: SvgPicture.asset(

@@ -35,7 +35,7 @@ class DetailLogmentAmentities extends StatelessWidget {
             ),
           );
         },
-        childCount: 3,
+        childCount: residenceModel.commodites.length,
       ),
     );
   }

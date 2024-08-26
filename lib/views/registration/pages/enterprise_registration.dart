@@ -69,13 +69,13 @@ class _EnterpriseRegistrationPageState
 
     _formController = FormController(
         productId: 0,
-        enterpriseName: TextEditingController(text: 'Sturne'),
-        enterpriseType: TextEditingController(text: 'SARL'),
+        enterpriseName: TextEditingController(text: ''),
+        enterpriseType: TextEditingController(text: ''),
         //registreCommerce: TextEditingController(text: ''),
-        numeroContribuable: TextEditingController(text: '22334'),
-        phoneNumber: TextEditingController(text: '0701710065'),
-        email: TextEditingController(text: 'satu@gmail.com'),
-        password: TextEditingController(text: 'Satutu@123'));
+        numeroContribuable: TextEditingController(text: ''),
+        phoneNumber: TextEditingController(text: ''),
+        email: TextEditingController(text: ''),
+        password: TextEditingController(text: ''));
 
     super.initState();
   }
