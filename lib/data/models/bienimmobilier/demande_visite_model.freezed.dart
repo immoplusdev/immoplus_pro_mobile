@@ -20,10 +20,10 @@ DemandeVisiteModel _$DemandeVisiteModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$DemandeVisiteModel {
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String? get statusDemandeVisite => throw _privateConstructorUsedError;
   String? get typeDemandeVisite => throw _privateConstructorUsedError;
-  List<DateDemandeVisite>? get datesDemandeVisite =>
+  List<DateDemandeVisite> get datesDemandeVisite =>
       throw _privateConstructorUsedError;
   String? get statusFacture => throw _privateConstructorUsedError;
   bool get retraitProEffectue => throw _privateConstructorUsedError;
@@ -53,10 +53,10 @@ abstract class $DemandeVisiteModelCopyWith<$Res> {
       _$DemandeVisiteModelCopyWithImpl<$Res, DemandeVisiteModel>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String? statusDemandeVisite,
       String? typeDemandeVisite,
-      List<DateDemandeVisite>? datesDemandeVisite,
+      List<DateDemandeVisite> datesDemandeVisite,
       String? statusFacture,
       bool retraitProEffectue,
       int montantTotalDemandeVisite,
@@ -89,10 +89,10 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? statusDemandeVisite = freezed,
     Object? typeDemandeVisite = freezed,
-    Object? datesDemandeVisite = freezed,
+    Object? datesDemandeVisite = null,
     Object? statusFacture = freezed,
     Object? retraitProEffectue = null,
     Object? montantTotalDemandeVisite = null,
@@ -108,10 +108,10 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
     Object? createdBy = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       statusDemandeVisite: freezed == statusDemandeVisite
           ? _value.statusDemandeVisite
           : statusDemandeVisite // ignore: cast_nullable_to_non_nullable
@@ -120,10 +120,10 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
           ? _value.typeDemandeVisite
           : typeDemandeVisite // ignore: cast_nullable_to_non_nullable
               as String?,
-      datesDemandeVisite: freezed == datesDemandeVisite
+      datesDemandeVisite: null == datesDemandeVisite
           ? _value.datesDemandeVisite
           : datesDemandeVisite // ignore: cast_nullable_to_non_nullable
-              as List<DateDemandeVisite>?,
+              as List<DateDemandeVisite>,
       statusFacture: freezed == statusFacture
           ? _value.statusFacture
           : statusFacture // ignore: cast_nullable_to_non_nullable
@@ -226,10 +226,10 @@ abstract class _$$DemandeVisiteModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String? statusDemandeVisite,
       String? typeDemandeVisite,
-      List<DateDemandeVisite>? datesDemandeVisite,
+      List<DateDemandeVisite> datesDemandeVisite,
       String? statusFacture,
       bool retraitProEffectue,
       int montantTotalDemandeVisite,
@@ -263,10 +263,10 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? statusDemandeVisite = freezed,
     Object? typeDemandeVisite = freezed,
-    Object? datesDemandeVisite = freezed,
+    Object? datesDemandeVisite = null,
     Object? statusFacture = freezed,
     Object? retraitProEffectue = null,
     Object? montantTotalDemandeVisite = null,
@@ -282,10 +282,10 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
     Object? createdBy = freezed,
   }) {
     return _then(_$DemandeVisiteModelImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       statusDemandeVisite: freezed == statusDemandeVisite
           ? _value.statusDemandeVisite
           : statusDemandeVisite // ignore: cast_nullable_to_non_nullable
@@ -294,10 +294,10 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
           ? _value.typeDemandeVisite
           : typeDemandeVisite // ignore: cast_nullable_to_non_nullable
               as String?,
-      datesDemandeVisite: freezed == datesDemandeVisite
+      datesDemandeVisite: null == datesDemandeVisite
           ? _value._datesDemandeVisite
           : datesDemandeVisite // ignore: cast_nullable_to_non_nullable
-              as List<DateDemandeVisite>?,
+              as List<DateDemandeVisite>,
       statusFacture: freezed == statusFacture
           ? _value.statusFacture
           : statusFacture // ignore: cast_nullable_to_non_nullable
@@ -359,10 +359,10 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
   _$DemandeVisiteModelImpl(
-      {this.id,
+      {this.id = '',
       this.statusDemandeVisite,
       this.typeDemandeVisite,
-      final List<DateDemandeVisite>? datesDemandeVisite,
+      final List<DateDemandeVisite> datesDemandeVisite = const [],
       this.statusFacture,
       this.retraitProEffectue = false,
       this.montantTotalDemandeVisite = 0,
@@ -382,20 +382,20 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
       _$$DemandeVisiteModelImplFromJson(json);
 
   @override
-  final String? id;
+  @JsonKey()
+  final String id;
   @override
   final String? statusDemandeVisite;
   @override
   final String? typeDemandeVisite;
-  final List<DateDemandeVisite>? _datesDemandeVisite;
+  final List<DateDemandeVisite> _datesDemandeVisite;
   @override
-  List<DateDemandeVisite>? get datesDemandeVisite {
-    final value = _datesDemandeVisite;
-    if (value == null) return null;
+  @JsonKey()
+  List<DateDemandeVisite> get datesDemandeVisite {
     if (_datesDemandeVisite is EqualUnmodifiableListView)
       return _datesDemandeVisite;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_datesDemandeVisite);
   }
 
   @override
@@ -513,10 +513,10 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
 
 abstract class _DemandeVisiteModel implements DemandeVisiteModel {
   factory _DemandeVisiteModel(
-      {final String? id,
+      {final String id,
       final String? statusDemandeVisite,
       final String? typeDemandeVisite,
-      final List<DateDemandeVisite>? datesDemandeVisite,
+      final List<DateDemandeVisite> datesDemandeVisite,
       final String? statusFacture,
       final bool retraitProEffectue,
       final int montantTotalDemandeVisite,
@@ -535,13 +535,13 @@ abstract class _DemandeVisiteModel implements DemandeVisiteModel {
       _$DemandeVisiteModelImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
   String? get statusDemandeVisite;
   @override
   String? get typeDemandeVisite;
   @override
-  List<DateDemandeVisite>? get datesDemandeVisite;
+  List<DateDemandeVisite> get datesDemandeVisite;
   @override
   String? get statusFacture;
   @override

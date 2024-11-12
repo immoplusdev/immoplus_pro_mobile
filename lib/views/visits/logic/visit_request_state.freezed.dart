@@ -21,8 +21,9 @@ mixin _$VisitRequestState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -31,8 +32,8 @@ mixin _$VisitRequestState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -41,8 +42,8 @@ mixin _$VisitRequestState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -139,8 +140,9 @@ class _$INITIAL_VISITSImpl implements INITIAL_VISITS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -152,8 +154,8 @@ class _$INITIAL_VISITSImpl implements INITIAL_VISITS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -165,8 +167,8 @@ class _$INITIAL_VISITSImpl implements INITIAL_VISITS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -265,8 +267,9 @@ class _$LOADING_VISITSImpl implements LOADING_VISITS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -278,8 +281,8 @@ class _$LOADING_VISITSImpl implements LOADING_VISITS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -291,8 +294,8 @@ class _$LOADING_VISITSImpl implements LOADING_VISITS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -392,8 +395,9 @@ class _$LOADING_VISITS_LISTImpl implements LOADING_VISITS_LIST {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
     return loadingList();
@@ -405,8 +409,8 @@ class _$LOADING_VISITS_LISTImpl implements LOADING_VISITS_LIST {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
     return loadingList?.call();
@@ -418,8 +422,8 @@ class _$LOADING_VISITS_LISTImpl implements LOADING_VISITS_LIST {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -483,9 +487,9 @@ abstract class _$$RECEIVE_VISITSImplCopyWith<$Res> {
           $Res Function(_$RECEIVE_VISITSImpl) then) =
       __$$RECEIVE_VISITSImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ReservationModel reservationModel});
+  $Res call({DemandeVisiteModel demandeVisitModel});
 
-  $ReservationModelCopyWith<$Res> get reservationModel;
+  $DemandeVisiteModelCopyWith<$Res> get demandeVisitModel;
 }
 
 /// @nodoc
@@ -499,21 +503,21 @@ class __$$RECEIVE_VISITSImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? reservationModel = null,
+    Object? demandeVisitModel = null,
   }) {
     return _then(_$RECEIVE_VISITSImpl(
-      null == reservationModel
-          ? _value.reservationModel
-          : reservationModel // ignore: cast_nullable_to_non_nullable
-              as ReservationModel,
+      null == demandeVisitModel
+          ? _value.demandeVisitModel
+          : demandeVisitModel // ignore: cast_nullable_to_non_nullable
+              as DemandeVisiteModel,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ReservationModelCopyWith<$Res> get reservationModel {
-    return $ReservationModelCopyWith<$Res>(_value.reservationModel, (value) {
-      return _then(_value.copyWith(reservationModel: value));
+  $DemandeVisiteModelCopyWith<$Res> get demandeVisitModel {
+    return $DemandeVisiteModelCopyWith<$Res>(_value.demandeVisitModel, (value) {
+      return _then(_value.copyWith(demandeVisitModel: value));
     });
   }
 }
@@ -521,14 +525,14 @@ class __$$RECEIVE_VISITSImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
-  const _$RECEIVE_VISITSImpl(this.reservationModel);
+  const _$RECEIVE_VISITSImpl(this.demandeVisitModel);
 
   @override
-  final ReservationModel reservationModel;
+  final DemandeVisiteModel demandeVisitModel;
 
   @override
   String toString() {
-    return 'VisitRequestState.receive(reservationModel: $reservationModel)';
+    return 'VisitRequestState.receive(demandeVisitModel: $demandeVisitModel)';
   }
 
   @override
@@ -536,12 +540,12 @@ class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RECEIVE_VISITSImpl &&
-            (identical(other.reservationModel, reservationModel) ||
-                other.reservationModel == reservationModel));
+            (identical(other.demandeVisitModel, demandeVisitModel) ||
+                other.demandeVisitModel == demandeVisitModel));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, reservationModel);
+  int get hashCode => Object.hash(runtimeType, demandeVisitModel);
 
   @JsonKey(ignore: true)
   @override
@@ -556,11 +560,12 @@ class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
-    return receive(reservationModel);
+    return receive(demandeVisitModel);
   }
 
   @override
@@ -569,11 +574,11 @@ class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
-    return receive?.call(reservationModel);
+    return receive?.call(demandeVisitModel);
   }
 
   @override
@@ -582,13 +587,13 @@ class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (receive != null) {
-      return receive(reservationModel);
+      return receive(demandeVisitModel);
     }
     return orElse();
   }
@@ -638,10 +643,10 @@ class _$RECEIVE_VISITSImpl implements RECEIVE_VISITS {
 }
 
 abstract class RECEIVE_VISITS implements VisitRequestState {
-  const factory RECEIVE_VISITS(final ReservationModel reservationModel) =
+  const factory RECEIVE_VISITS(final DemandeVisiteModel demandeVisitModel) =
       _$RECEIVE_VISITSImpl;
 
-  ReservationModel get reservationModel;
+  DemandeVisiteModel get demandeVisitModel;
   @JsonKey(ignore: true)
   _$$RECEIVE_VISITSImplCopyWith<_$RECEIVE_VISITSImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -653,9 +658,9 @@ abstract class _$$RECEIVE_VISITImplCopyWith<$Res> {
           _$RECEIVE_VISITImpl value, $Res Function(_$RECEIVE_VISITImpl) then) =
       __$$RECEIVE_VISITImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ReservationResponse reservationModelId});
+  $Res call({DemandeVisitResponse demandeVisitResponse});
 
-  $ReservationResponseCopyWith<$Res> get reservationModelId;
+  $DemandeVisitResponseCopyWith<$Res> get demandeVisitResponse;
 }
 
 /// @nodoc
@@ -669,22 +674,22 @@ class __$$RECEIVE_VISITImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? reservationModelId = null,
+    Object? demandeVisitResponse = null,
   }) {
     return _then(_$RECEIVE_VISITImpl(
-      null == reservationModelId
-          ? _value.reservationModelId
-          : reservationModelId // ignore: cast_nullable_to_non_nullable
-              as ReservationResponse,
+      null == demandeVisitResponse
+          ? _value.demandeVisitResponse
+          : demandeVisitResponse // ignore: cast_nullable_to_non_nullable
+              as DemandeVisitResponse,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ReservationResponseCopyWith<$Res> get reservationModelId {
-    return $ReservationResponseCopyWith<$Res>(_value.reservationModelId,
+  $DemandeVisitResponseCopyWith<$Res> get demandeVisitResponse {
+    return $DemandeVisitResponseCopyWith<$Res>(_value.demandeVisitResponse,
         (value) {
-      return _then(_value.copyWith(reservationModelId: value));
+      return _then(_value.copyWith(demandeVisitResponse: value));
     });
   }
 }
@@ -692,14 +697,14 @@ class __$$RECEIVE_VISITImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
-  const _$RECEIVE_VISITImpl(this.reservationModelId);
+  const _$RECEIVE_VISITImpl(this.demandeVisitResponse);
 
   @override
-  final ReservationResponse reservationModelId;
+  final DemandeVisitResponse demandeVisitResponse;
 
   @override
   String toString() {
-    return 'VisitRequestState.receiveId(reservationModelId: $reservationModelId)';
+    return 'VisitRequestState.receiveId(demandeVisitResponse: $demandeVisitResponse)';
   }
 
   @override
@@ -707,12 +712,12 @@ class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RECEIVE_VISITImpl &&
-            (identical(other.reservationModelId, reservationModelId) ||
-                other.reservationModelId == reservationModelId));
+            (identical(other.demandeVisitResponse, demandeVisitResponse) ||
+                other.demandeVisitResponse == demandeVisitResponse));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, reservationModelId);
+  int get hashCode => Object.hash(runtimeType, demandeVisitResponse);
 
   @JsonKey(ignore: true)
   @override
@@ -726,11 +731,12 @@ class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
-    return receiveId(reservationModelId);
+    return receiveId(demandeVisitResponse);
   }
 
   @override
@@ -739,11 +745,11 @@ class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
-    return receiveId?.call(reservationModelId);
+    return receiveId?.call(demandeVisitResponse);
   }
 
   @override
@@ -752,13 +758,13 @@ class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (receiveId != null) {
-      return receiveId(reservationModelId);
+      return receiveId(demandeVisitResponse);
     }
     return orElse();
   }
@@ -808,10 +814,10 @@ class _$RECEIVE_VISITImpl implements RECEIVE_VISIT {
 }
 
 abstract class RECEIVE_VISIT implements VisitRequestState {
-  const factory RECEIVE_VISIT(final ReservationResponse reservationModelId) =
+  const factory RECEIVE_VISIT(final DemandeVisitResponse demandeVisitResponse) =
       _$RECEIVE_VISITImpl;
 
-  ReservationResponse get reservationModelId;
+  DemandeVisitResponse get demandeVisitResponse;
   @JsonKey(ignore: true)
   _$$RECEIVE_VISITImplCopyWith<_$RECEIVE_VISITImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -884,8 +890,9 @@ class _$Error_VISITSSImpl implements Error_VISITSS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationModel reservationModel) receive,
-    required TResult Function(ReservationResponse reservationModelId) receiveId,
+    required TResult Function(DemandeVisiteModel demandeVisitModel) receive,
+    required TResult Function(DemandeVisitResponse demandeVisitResponse)
+        receiveId,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -897,8 +904,8 @@ class _$Error_VISITSSImpl implements Error_VISITSS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationModel reservationModel)? receive,
-    TResult? Function(ReservationResponse reservationModelId)? receiveId,
+    TResult? Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult? Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -910,8 +917,8 @@ class _$Error_VISITSSImpl implements Error_VISITSS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationModel reservationModel)? receive,
-    TResult Function(ReservationResponse reservationModelId)? receiveId,
+    TResult Function(DemandeVisiteModel demandeVisitModel)? receive,
+    TResult Function(DemandeVisitResponse demandeVisitResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {

@@ -41,7 +41,6 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       animauxAutorises: json['animauxAutorises'] as bool? ?? false,
       fetesAutorises: json['fetesAutorises'] as bool? ?? false,
       reglesSupplementaires: json['reglesSupplementaires'] as String? ?? '',
-      proprietaire: json['proprietaire'] as String? ?? '',
       residenceDisponible: json['residenceDisponible'] as bool? ?? true,
     );
 
@@ -70,6 +69,5 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'animauxAutorises': instance.animauxAutorises,
       'fetesAutorises': instance.fetesAutorises,
       'reglesSupplementaires': instance.reglesSupplementaires,
-      'proprietaire': instance.proprietaire,
       'residenceDisponible': instance.residenceDisponible,
     };

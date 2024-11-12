@@ -4,19 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
 import 'package:immoplus_pro/modules/logment_creation/components/type_logment_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/utils/create_logment_router.dart';
 import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
-import 'package:immoplus_pro/modules/ville_selector/ville_selector_listtile.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/lottie_assets.dart';
-import 'package:immoplus_pro/views/residence/residences_page.dart';
-import 'package:immoplus_pro/views/residence_detail/residence_page.dart';
 import 'package:immoplus_pro/views/shared_widgets/custom_text_field.dart';
 
 class WellcommePage extends StatefulWidget {
@@ -33,6 +28,7 @@ class _WellcommePageState extends State<WellcommePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _controller.text = ResidenceCreationModelBuilder().nom;
     PregressStepperLogmentCreating.setStepe(1);
   }
 
@@ -56,7 +52,7 @@ class _WellcommePageState extends State<WellcommePage> {
           //   ),
           // ),
           SliverToBoxAdapter(
-            child: SizedBox(height: 200, child: LottieAssets().house),
+            child: SizedBox(height: 300, child: LottieAssets().house),
           ),
           const SliverPadding(
             padding: EdgeInsets.all(10),
@@ -67,13 +63,16 @@ class _WellcommePageState extends State<WellcommePage> {
               ),
             ),
           ),
-          SliverGap(20),
+          // SliverToBoxAdapter(child: FloatingActionButton(onPressed: () {
+          //   log(ResidenceCreationModelBuilder().nom);
+          // })),
+          const SliverGap(10),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             sliver: SliverToBoxAdapter(
               child: CustomTextField(
                 controller: _controller,
-                prefixIcon: Icon(FontAwesomeIcons.building),
+                prefixIcon: const Icon(FontAwesomeIcons.building),
                 labelText: "Nom de la résidence",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),
@@ -83,10 +82,17 @@ class _WellcommePageState extends State<WellcommePage> {
 
           const SliverGap(50),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
-              child: ListTile(
-                onTap: () {
+              child: InputChip(
+                padding: const EdgeInsets.all(10),
+                onDeleted: () {
+                  if (_formKey.currentState!.validate()) {
+                    ResidenceCreationModelBuilder().nom = _controller.text;
+                    CreateLogmentRouter.router.goNamed(TypeLogmentPage.name);
+                  }
+                },
+                onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     ResidenceCreationModelBuilder().nom = _controller.text;
                     CreateLogmentRouter.router.goNamed(TypeLogmentPage.name);
@@ -94,18 +100,18 @@ class _WellcommePageState extends State<WellcommePage> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                tileColor: AppColors.primary,
-                leading: const Icon(
-                  FontAwesomeIcons.houseChimneyUser,
+                backgroundColor: AppColors.primary,
+                avatar: const Icon(
+                  FontAwesomeIcons.doorOpen,
                   color: Colors.white,
+                  size: 16,
                 ),
-                horizontalTitleGap: 80,
-                title: const Text("Commencer"),
-                titleTextStyle: Theme.of(context)
+                label: const Text("Commencer"),
+                labelStyle: Theme.of(context)
                     .textTheme
-                    .titleLarge
+                    .titleMedium
                     ?.copyWith(color: Colors.white),
-                trailing: const Icon(
+                deleteIcon: const Icon(
                   CupertinoIcons.chevron_right_circle_fill,
                   color: Colors.white,
                 ),

@@ -15,7 +15,7 @@ class LoadingLogmentListCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 7).copyWith(bottom: 10),
       child: Shimmer.fromColors(
         baseColor: Colors.grey.shade300,
         highlightColor: Colors.grey.shade100,
@@ -24,7 +24,7 @@ class LoadingLogmentListCard extends StatelessWidget {
             Flexible(
               flex: 2,
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20)),
                 child: SizedBox(
@@ -43,7 +43,8 @@ class LoadingLogmentListCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                     fit: BoxFit
                         .cover, // or other BoxFit values as per your design
                   ),
@@ -64,11 +65,11 @@ class LoadingLogmentListCard extends StatelessWidget {
                             .titleMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Gap(5),
+                      const Gap(5),
                       SizedBox(
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.location_on_outlined,
                               size: 14,
                             ),
@@ -81,10 +82,10 @@ class LoadingLogmentListCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Gap(5),
+                      const Gap(5),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.villa,
                             size: 14,
                           ),
@@ -92,7 +93,7 @@ class LoadingLogmentListCard extends StatelessWidget {
                             '••••',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          Icon(
+                          const Icon(
                             Icons.star_rate_rounded,
                             size: 14,
                           ),
@@ -103,26 +104,26 @@ class LoadingLogmentListCard extends StatelessWidget {
                         ],
                       ),
                       //Text('2 chambre 3 Sallon 1 cuisine'),
-                      Gap(10),
+                      const Gap(5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Chip(
                             backgroundColor: Colors.green.shade200,
-                            avatar: Icon(
+                            avatar: const Icon(
                               FontAwesomeIcons.doorOpen,
                               size: 18,
                             ),
-                            label: Text('Ouvert'),
+                            label: const Text('Ouvert'),
                           ),
-                          Gap(10),
+                          const Gap(10),
                           Chip(
                             backgroundColor: Colors.red.shade200,
-                            avatar: Icon(
+                            avatar: const Icon(
                               FontAwesomeIcons.doorClosed,
                               size: 18,
                             ),
-                            label: Text('Fermer'),
+                            label: const Text('Fermer'),
                           ),
                         ],
                       ),

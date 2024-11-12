@@ -28,9 +28,9 @@ import 'components/detail_rules.dart';
 
 class ResidencePage extends StatefulWidget {
   const ResidencePage({
-    Key? key,
+    super.key,
     required this.idProduct,
-  }) : super(key: key);
+  });
 
   final String idProduct;
   static String name = 'logment_page';
@@ -63,7 +63,7 @@ class _ResidencePageState extends State<ResidencePage> {
     return BlocBuilder<LogmentCubit, RequestState>(
       builder: (context, state) {
         if (state is REQUEST_LOADING) {
-          return LoadingPage();
+          return const LoadingPage();
         }
 
         if (state is REQUEST_RESIDENCE_DATA) {
@@ -87,11 +87,11 @@ class _ResidencePageState extends State<ResidencePage> {
                 //product adress
                 DetailLogmentInfos(reservation: state.data),
                 //réservation offers
-                DetailDivider(),
+                const DetailDivider(),
                 const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
                 //offer list
                 DetailLogmentAmentities(residenceModel: state.data),
-                SliverGap(10),
+                const SliverGap(10),
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -125,7 +125,7 @@ class _ResidencePageState extends State<ResidencePage> {
                                           ),
                                         ),
                                         tileColor: Colors.white,
-                                        title: Text(e.text!),
+                                        title: Text(e.text),
                                       ),
                                     ),
                                   )
@@ -135,22 +135,22 @@ class _ResidencePageState extends State<ResidencePage> {
                         );
                       },
                       child: Text(
-                          "Voir tout les ${state.data.commodites!.length} commodités"),
+                          "Voir tout les ${state.data.commodites.length} commodités"),
                     ),
                   ),
                 ),
-                DetailDivider(),
+                const DetailDivider(),
                 //vidéo section
                 DetailLogmentVideo(logmentModel: state.data),
                 //description next
                 SliverToBoxAdapter(
                   child: Container(
-                    padding: EdgeInsets.only(top: 5),
+                    padding: const EdgeInsets.only(top: 5),
                     color: Colors.white,
                     height: 100,
                     child: Markdown(
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       data: state.data.description ??
                           '', //state.finishData.data!.description!,
                       //styleSheet: MarkdownStyleSheet(),
@@ -158,7 +158,7 @@ class _ResidencePageState extends State<ResidencePage> {
                   ),
                 ),
                 SeeMoreButton(
-                  text: state.data.description!,
+                  text: state.data.description,
                 ),
 
                 // SliverList(
@@ -184,28 +184,28 @@ class _ResidencePageState extends State<ResidencePage> {
                 //     ),
                 //   ),
                 // ),
-                DetailDivider(),
-                DetailLogmentTitle2(title: 'Jours disponibles'),
+                const DetailDivider(),
+                const DetailLogmentTitle2(title: 'Jours disponibles'),
                 DetailLogmentAvailableDay(
                   reservation: state.data,
                 ),
 
                 //indformation supplementaire
-                SliverToBoxAdapter(
+                const SliverToBoxAdapter(
                   child: Divider(),
                 ),
-                SliverToBoxAdapter(child: Gap(20)),
-                DetailDivider(),
-                DetailLogmentTitle2(title: 'Où se situe le logement'),
+                const SliverToBoxAdapter(child: Gap(20)),
+                const DetailDivider(),
+                const DetailLogmentTitle2(title: 'Où se situe le logement'),
                 DetailLogmentMap(residence: state.data),
-                DetailDivider(),
-                SliverGap(10),
-                DetailLogmentTitle2(title: 'Règles de la maison'),
+                const DetailDivider(),
+                const SliverGap(10),
+                const DetailLogmentTitle2(title: 'Règles de la maison'),
                 DetailLogmentRules(logmentModel: state.data),
 
                 //DetailLogmentTitle2(title: 'Voir aussi'),
                 //SliverToBoxAdapter(child: SimilarProductSection()),
-                SliverToBoxAdapter(child: Gap(15)),
+                const SliverToBoxAdapter(child: Gap(15)),
               ],
             ),
             bottomNavigationBar: LogmentBottomBar(

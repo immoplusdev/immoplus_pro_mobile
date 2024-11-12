@@ -1,5 +1,6 @@
 class SVGMap {
   static Map<String, String> map = {
+    'studio': './assets/svgs/icons/studio.svg',
     'cottage': './assets/svgs/icons/cottage.svg',
     'building-user-solid': './assets/svgs/icons/building-user-solid.svg',
     'bed': './assets/svgs/icons/bed.svg',
@@ -9,6 +10,7 @@ class SVGMap {
     'gmail': './assets/svgs/icons/gmail.svg',
     'fan-solid': './assets/svgs/icons/fan-solid.svg',
     'home': './assets/svgs/icons/home.svg',
+    'bureau': './assets/svgs/icons/bureau.svg',
     'loupe': './assets/svgs/icons/loupe.svg',
     'service': './assets/svgs/icons/service.svg',
     'recent': './assets/svgs/icons/recent.svg',
@@ -20,6 +22,7 @@ class SVGMap {
     'volume_off': './assets/svgs/icons/volume_off.svg',
     'terrain': './assets/svgs/icons/terrain.svg',
     'smile-circle-svgrepo-com': './assets/svgs/icons/smile-circle-svgrepo-com.svg',
+    'land': './assets/svgs/icons/land.svg',
     'visua': './assets/svgs/icons/visua.svg',
     'wifi': './assets/svgs/icons/wifi.svg',
     'resi': './assets/svgs/icons/resi.svg',

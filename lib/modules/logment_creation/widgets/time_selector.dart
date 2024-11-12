@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
 
 class TimeSelector extends StatefulWidget {
@@ -8,10 +7,12 @@ class TimeSelector extends StatefulWidget {
       {super.key,
       required this.icon,
       required this.subtitle,
-      required this.onUpdate});
+      required this.onUpdate,
+      required this.initialValue});
   final Widget icon;
   final String subtitle;
   final void Function(String)? onUpdate;
+  final String initialValue;
   @override
   State<TimeSelector> createState() => _TimeSelectorState();
 }
@@ -34,7 +35,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                       surface: Colors.white, //background
                     ),
                 buttonTheme: ButtonTheme.of(context).copyWith(
-                  colorScheme: ColorScheme.light(
+                  colorScheme: const ColorScheme.light(
                     secondary: Colors
                         .cyan, // Color you want for action buttons (CANCEL and OK)
                   ),
@@ -53,11 +54,12 @@ class _TimeSelectorState extends State<TimeSelector> {
       tileColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       leading: CircleAvatar(
-        child: widget.icon,
         backgroundColor: CupertinoColors.tertiarySystemFill,
+        child: widget.icon,
       ),
-      title: Text(
-          (_selectedTime == null) ? '00:00' : _selectedTime!.format(context)),
+      title: Text((_selectedTime == null)
+          ? widget.initialValue
+          : _selectedTime!.format(context)),
       subtitle: Text(widget.subtitle),
       titleTextStyle: Theme.of(context).textTheme.headlineMedium,
       subtitleTextStyle: Theme.of(context).textTheme.bodySmall,

@@ -17,4 +17,17 @@ class LogmentCubit extends Cubit<RequestState> {
       emit(RequestState.error(error: e.toString()));
     }
   }
+
+  updateResidence(
+      {required String id, required Map<String, dynamic> datas}) async {
+    emit(const REQUEST_LOADING());
+    try {
+      ResidenceResponse residenceResponse =
+          await LogmentRepository.updateResidence(id: id, fields: datas);
+
+      emit(RequestState.residence(data: residenceResponse.data));
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
 }

@@ -4,6 +4,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/detail_product_cubit/carousel_cubit.dart';
 import 'package:immoplus_pro/cubits/refresh_cubit.dart';
 import 'package:immoplus_pro/views/booking/logic/booking_cubit.dart';
+import 'package:immoplus_pro/views/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus_pro/views/residence_detail/cubit/logment_cubit.dart';
 import 'package:immoplus_pro/views/visits/logic/booking_cubit.dart';
 
@@ -29,6 +30,9 @@ class BlocsManager {
     ),
     BlocProvider<RgistrationCubitCubit>(
       create: (context) => RgistrationCubitCubit(),
+    ),
+    BlocProvider<EstateCubit>(
+      create: (context) => EstateCubit(),
     ),
   ];
 }

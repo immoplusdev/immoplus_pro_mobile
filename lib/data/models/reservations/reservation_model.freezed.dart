@@ -32,8 +32,8 @@ mixin _$ReservationModel {
   String get notes => throw _privateConstructorUsedError;
   String get clientPhoneNumber => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
-  String get updatedAt => throw _privateConstructorUsedError;
-  String get createdBy => throw _privateConstructorUsedError;
+  String get updatedAt =>
+      throw _privateConstructorUsedError; //@Default('') String createdBy,
   ResidenceModel get residence => throw _privateConstructorUsedError;
   ClientModel get client => throw _privateConstructorUsedError;
   ProprietaireModel get proprietaire => throw _privateConstructorUsedError;
@@ -62,7 +62,6 @@ abstract class $ReservationModelCopyWith<$Res> {
       String clientPhoneNumber,
       String createdAt,
       String updatedAt,
-      String createdBy,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -96,7 +95,6 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? clientPhoneNumber = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? createdBy = null,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -145,10 +143,6 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
       updatedAt: null == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdBy: null == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
               as String,
       residence: null == residence
           ? _value.residence
@@ -210,7 +204,6 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       String clientPhoneNumber,
       String createdAt,
       String updatedAt,
-      String createdBy,
       ResidenceModel residence,
       ClientModel client,
       ProprietaireModel proprietaire});
@@ -245,7 +238,6 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? clientPhoneNumber = null,
     Object? createdAt = null,
     Object? updatedAt = null,
-    Object? createdBy = null,
     Object? residence = null,
     Object? client = null,
     Object? proprietaire = null,
@@ -295,10 +287,6 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as String,
-      createdBy: null == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
       residence: null == residence
           ? _value.residence
           : residence // ignore: cast_nullable_to_non_nullable
@@ -330,7 +318,6 @@ class _$ReservationModelImpl implements _ReservationModel {
       this.clientPhoneNumber = '',
       this.createdAt = '',
       this.updatedAt = '',
-      this.createdBy = '',
       this.residence = const ResidenceModel(),
       this.client = const ClientModel(),
       this.proprietaire = const ProprietaireModel()})
@@ -379,9 +366,7 @@ class _$ReservationModelImpl implements _ReservationModel {
   @override
   @JsonKey()
   final String updatedAt;
-  @override
-  @JsonKey()
-  final String createdBy;
+//@Default('') String createdBy,
   @override
   @JsonKey()
   final ResidenceModel residence;
@@ -394,7 +379,7 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @override
   String toString() {
-    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, statusReservation: $statusReservation, datesReservation: $datesReservation, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, residence: $residence, client: $client, proprietaire: $proprietaire)';
   }
 
   @override
@@ -425,8 +410,6 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
             (identical(other.residence, residence) ||
                 other.residence == residence) &&
             (identical(other.client, client) || other.client == client) &&
@@ -449,7 +432,6 @@ class _$ReservationModelImpl implements _ReservationModel {
       clientPhoneNumber,
       createdAt,
       updatedAt,
-      createdBy,
       residence,
       client,
       proprietaire);
@@ -482,7 +464,6 @@ abstract class _ReservationModel implements ReservationModel {
       final String clientPhoneNumber,
       final String createdAt,
       final String updatedAt,
-      final String createdBy,
       final ResidenceModel residence,
       final ClientModel client,
       final ProprietaireModel proprietaire}) = _$ReservationModelImpl;
@@ -512,9 +493,7 @@ abstract class _ReservationModel implements ReservationModel {
   String get createdAt;
   @override
   String get updatedAt;
-  @override
-  String get createdBy;
-  @override
+  @override //@Default('') String createdBy,
   ResidenceModel get residence;
   @override
   ClientModel get client;

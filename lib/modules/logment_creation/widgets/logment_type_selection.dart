@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 
 class LogmentTypeSelection extends StatefulWidget {
@@ -35,6 +36,19 @@ class _LogmentTypeSelectionState extends State<LogmentTypeSelection> {
   }
 
   @override
+  void initState() {
+    if (ResidenceCreationModelBuilder().typeResidence.isNotEmpty) {
+      selectedChoice = selectabeChoice.firstWhere(
+        (element) =>
+            (element['text'] as String).toLowerCase() ==
+            ResidenceCreationModelBuilder().typeResidence.toLowerCase(),
+      );
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -63,7 +77,8 @@ class _LogmentTypeSelectionState extends State<LogmentTypeSelection> {
                 widget.onSlect!(selectedChoice);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,

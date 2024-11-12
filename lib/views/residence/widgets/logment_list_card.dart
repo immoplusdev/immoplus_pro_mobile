@@ -29,13 +29,13 @@ class ResidenceListCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
         child: Row(
           children: [
             Flexible(
               flex: 2,
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20)),
                 child: Container(
@@ -52,14 +52,15 @@ class ResidenceListCard extends StatelessWidget {
                       placeholder: (context, url) => Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade400,
-                        period: Duration(milliseconds: 500),
+                        period: const Duration(milliseconds: 500),
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
                           color: Colors.white,
                         ),
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                       fit: BoxFit
                           .cover, // or other BoxFit values as per your design
                     ),
@@ -81,28 +82,32 @@ class ResidenceListCard extends StatelessWidget {
                             .titleSmall!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Gap(5),
+                      const Gap(5),
 
                       SizedBox(
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.location_on_outlined,
                               size: 14,
                             ),
                             Flexible(
-                              child: AutoSizeText(
-                                residence.adresse ?? '',
-                                style: Theme.of(context).textTheme.bodySmall,
+                              child: SizedBox(
+                                height: 30,
+                                child: AutoSizeText(
+                                  overflow: TextOverflow.clip,
+                                  residence.adresse ?? '',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Gap(5),
+                      const Gap(5),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.villa,
                             size: 14,
                           ),
@@ -121,29 +126,41 @@ class ResidenceListCard extends StatelessWidget {
                         ],
                       ),
                       //Text('2 chambre 3 Sallon 1 cuisine'),
-                      Gap(5),
+                      const Gap(5),
                       Text(
                         Utils.formatCurrency(residence.prixReservation),
                         style: Theme.of(context).textTheme.titleMedium!,
                       ),
-                      Gap(5),
+                      const Gap(5),
                       if (residence.residenceDisponible)
-                        Chip(
-                          backgroundColor: Colors.green.shade200,
-                          avatar: Icon(
-                            FontAwesomeIcons.doorOpen,
-                            size: 18,
-                          ),
-                          label: Text('Ouvert'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Chip(
+                              backgroundColor: Colors.green.shade200,
+                              avatar: const Icon(
+                                FontAwesomeIcons.doorOpen,
+                                size: 18,
+                              ),
+                              label: const Text('Ouvert'),
+                            ),
+                          ],
                         ),
                       if (!(residence.residenceDisponible))
-                        Chip(
-                          backgroundColor: Colors.red.shade200,
-                          avatar: Icon(
-                            FontAwesomeIcons.doorClosed,
-                            size: 18,
-                          ),
-                          label: Text('Fermer'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Chip(
+                                backgroundColor: Colors.red.shade200,
+                                avatar: const Icon(
+                                  FontAwesomeIcons.doorClosed,
+                                  size: 18,
+                                ),
+                                label: const Text('Fermer'),
+                              ),
+                            ),
+                          ],
                         ),
                     ],
                   ),

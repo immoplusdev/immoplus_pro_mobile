@@ -24,7 +24,7 @@ class ResidenceCreationModel with _$ResidenceCreationModel {
     @Default([]) List<PieceModel> pieces,
     @Default(0) int dureeMinSejour,
     @Default(0) int dureeMaxSejour,
-    @Default({}) Map<String, dynamic> metadata,
+    //@Default({}) Map<String, dynamic> metadata,
     @Default('') String heureEntree,
     @Default('') String heureDepart,
     @Default(0) int nombreMaxOccupants,

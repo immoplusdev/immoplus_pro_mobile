@@ -28,6 +28,8 @@ RequestState _$RequestStateFromJson(Map<String, dynamic> json) {
       return REQUEST_ERROR.fromJson(json);
     case 'residence':
       return REQUEST_RESIDENCE_DATA.fromJson(json);
+    case 'bienImmobilier':
+      return REQUEST_BIEN_IMMOBILIER_DATA.fromJson(json);
     case 'residences':
       return REQUEST_RESIDENCES_DATA.fromJson(json);
     case 'villes':
@@ -51,6 +53,7 @@ mixin _$RequestState {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -64,6 +67,7 @@ mixin _$RequestState {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -77,6 +81,7 @@ mixin _$RequestState {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -91,6 +96,8 @@ mixin _$RequestState {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -104,6 +111,7 @@ mixin _$RequestState {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -117,6 +125,7 @@ mixin _$RequestState {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -195,6 +204,7 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -211,6 +221,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -227,6 +238,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -247,6 +259,8 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -263,6 +277,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -279,6 +294,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -357,6 +373,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -373,6 +390,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -389,6 +407,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -409,6 +428,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -425,6 +446,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -441,6 +463,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -519,6 +542,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -535,6 +559,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -551,6 +576,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -571,6 +597,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -587,6 +615,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -603,6 +632,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -681,6 +711,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -697,6 +728,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -713,6 +745,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -733,6 +766,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -749,6 +784,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -765,6 +801,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -869,6 +906,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -885,6 +923,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -901,6 +940,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -921,6 +961,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -937,6 +979,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -953,6 +996,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1076,6 +1120,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -1092,6 +1137,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -1108,6 +1154,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -1128,6 +1175,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -1144,6 +1193,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1160,6 +1210,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1189,6 +1240,226 @@ abstract class REQUEST_RESIDENCE_DATA implements RequestState {
   ResidenceModel get data;
   @JsonKey(ignore: true)
   _$$REQUEST_RESIDENCE_DATAImplCopyWith<_$REQUEST_RESIDENCE_DATAImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<$Res> {
+  factory _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith(
+          _$REQUEST_BIEN_IMMOBILIER_DATAImpl value,
+          $Res Function(_$REQUEST_BIEN_IMMOBILIER_DATAImpl) then) =
+      __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({BienImmobilierModel data});
+
+  $BienImmobilierModelCopyWith<$Res> get data;
+}
+
+/// @nodoc
+class __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl<$Res>
+    extends _$RequestStateCopyWithImpl<$Res, _$REQUEST_BIEN_IMMOBILIER_DATAImpl>
+    implements _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<$Res> {
+  __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl(
+      _$REQUEST_BIEN_IMMOBILIER_DATAImpl _value,
+      $Res Function(_$REQUEST_BIEN_IMMOBILIER_DATAImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$REQUEST_BIEN_IMMOBILIER_DATAImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as BienImmobilierModel,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BienImmobilierModelCopyWith<$Res> get data {
+    return $BienImmobilierModelCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
+    implements REQUEST_BIEN_IMMOBILIER_DATA {
+  const _$REQUEST_BIEN_IMMOBILIER_DATAImpl(
+      {required this.data, final String? $type})
+      : $type = $type ?? 'bienImmobilier';
+
+  factory _$REQUEST_BIEN_IMMOBILIER_DATAImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$$REQUEST_BIEN_IMMOBILIER_DATAImplFromJson(json);
+
+  @override
+  final BienImmobilierModel data;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RequestState.bienImmobilier(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$REQUEST_BIEN_IMMOBILIER_DATAImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<
+          _$REQUEST_BIEN_IMMOBILIER_DATAImpl>
+      get copyWith => __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl<
+          _$REQUEST_BIEN_IMMOBILIER_DATAImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function() $default, {
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(String error) error,
+    required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
+    required TResult Function(List<ResidenceModel> data) residences,
+    required TResult Function(List<VilleModel> data) villes,
+    required TResult Function(List<CommuneModel> data) communes,
+  }) {
+    return bienImmobilier(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function()? $default, {
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(String error)? error,
+    TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
+    TResult? Function(List<ResidenceModel> data)? residences,
+    TResult? Function(List<VilleModel> data)? villes,
+    TResult? Function(List<CommuneModel> data)? communes,
+  }) {
+    return bienImmobilier?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function()? $default, {
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(String error)? error,
+    TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
+    TResult Function(List<ResidenceModel> data)? residences,
+    TResult Function(List<VilleModel> data)? villes,
+    TResult Function(List<CommuneModel> data)? communes,
+    required TResult orElse(),
+  }) {
+    if (bienImmobilier != null) {
+      return bienImmobilier(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_RequestState value) $default, {
+    required TResult Function(REQUEST_INITIAL value) initial,
+    required TResult Function(REQUEST_LOADING value) loading,
+    required TResult Function(REQUEST_SUCCESS value) success,
+    required TResult Function(REQUEST_ERROR value) error,
+    required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
+    required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
+    required TResult Function(REQUEST_VILLES_DATA value) villes,
+    required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+  }) {
+    return bienImmobilier(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_RequestState value)? $default, {
+    TResult? Function(REQUEST_INITIAL value)? initial,
+    TResult? Function(REQUEST_LOADING value)? loading,
+    TResult? Function(REQUEST_SUCCESS value)? success,
+    TResult? Function(REQUEST_ERROR value)? error,
+    TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult? Function(REQUEST_VILLES_DATA value)? villes,
+    TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+  }) {
+    return bienImmobilier?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_RequestState value)? $default, {
+    TResult Function(REQUEST_INITIAL value)? initial,
+    TResult Function(REQUEST_LOADING value)? loading,
+    TResult Function(REQUEST_SUCCESS value)? success,
+    TResult Function(REQUEST_ERROR value)? error,
+    TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult Function(REQUEST_VILLES_DATA value)? villes,
+    TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    required TResult orElse(),
+  }) {
+    if (bienImmobilier != null) {
+      return bienImmobilier(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$REQUEST_BIEN_IMMOBILIER_DATAImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class REQUEST_BIEN_IMMOBILIER_DATA implements RequestState {
+  const factory REQUEST_BIEN_IMMOBILIER_DATA(
+          {required final BienImmobilierModel data}) =
+      _$REQUEST_BIEN_IMMOBILIER_DATAImpl;
+
+  factory REQUEST_BIEN_IMMOBILIER_DATA.fromJson(Map<String, dynamic> json) =
+      _$REQUEST_BIEN_IMMOBILIER_DATAImpl.fromJson;
+
+  BienImmobilierModel get data;
+  @JsonKey(ignore: true)
+  _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<
+          _$REQUEST_BIEN_IMMOBILIER_DATAImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1281,6 +1552,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -1297,6 +1569,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -1313,6 +1586,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -1333,6 +1607,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -1349,6 +1625,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1365,6 +1642,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1485,6 +1763,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -1501,6 +1780,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -1517,6 +1797,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -1537,6 +1818,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -1553,6 +1836,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1569,6 +1853,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1689,6 +1974,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function() success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
@@ -1705,6 +1991,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function()? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
@@ -1721,6 +2008,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function()? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
@@ -1741,6 +2029,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(REQUEST_SUCCESS value) success,
     required TResult Function(REQUEST_ERROR value) error,
     required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
@@ -1757,6 +2047,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(REQUEST_SUCCESS value)? success,
     TResult? Function(REQUEST_ERROR value)? error,
     TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
@@ -1773,6 +2064,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(REQUEST_SUCCESS value)? success,
     TResult Function(REQUEST_ERROR value)? error,
     TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,

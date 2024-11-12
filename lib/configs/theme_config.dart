@@ -27,10 +27,14 @@ class ThemeConfig {
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
+
           // focusedBorder: OutlineInputBorder(
           //   borderSide: BorderSide(color: Colors.blue),
           // ),
         ),
+        timePickerTheme: Theme.of(context).timePickerTheme.copyWith(
+              backgroundColor: Colors.white,
+            ),
         appBarTheme: const AppBarTheme(
             centerTitle: false,
             backgroundColor: CupertinoColors.white,

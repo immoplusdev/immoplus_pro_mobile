@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
-import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -16,21 +15,21 @@ class BienImmoblierListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        context.push('/logment_page/${bienImmobilierModel.id}');
+        context.push('/estate_page/${bienImmobilierModel.id}');
       },
       child: Container(
-        height: 165,
+        height: 143,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
-        margin: EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 10),
         child: Row(
           children: [
             Flexible(
               flex: 2,
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20)),
                 child: Container(
@@ -48,14 +47,15 @@ class BienImmoblierListCard extends StatelessWidget {
                       placeholder: (context, url) => Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade400,
-                        period: Duration(milliseconds: 500),
+                        period: const Duration(milliseconds: 500),
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
                           color: Colors.white,
                         ),
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                       fit: BoxFit
                           .cover, // or other BoxFit values as per your design
                     ),
@@ -69,6 +69,7 @@ class BienImmoblierListCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       AutoSizeText(
                         bienImmobilierModel.nom ?? '',
@@ -77,12 +78,13 @@ class BienImmoblierListCard extends StatelessWidget {
                             .titleSmall!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Gap(5),
+                      const Gap(5),
 
                       SizedBox(
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.location_on_outlined,
                               size: 14,
                             ),
@@ -97,19 +99,47 @@ class BienImmoblierListCard extends StatelessWidget {
                       ),
 
                       //Text('2 chambre 3 Sallon 1 cuisine'),
-                      Gap(5),
+                      const Gap(5),
                       Text(
-                        Utils.formatCurrency(bienImmobilierModel.prix),
+                        "${Utils.formatCurrency(bienImmobilierModel.prix)} / ${bienImmobilierModel.typeLocation}",
                         style: Theme.of(context).textTheme.titleMedium!,
                       ),
 
-                      Chip(
-                        backgroundColor: Colors.red.shade200,
-                        avatar: Icon(
-                          FontAwesomeIcons.doorClosed,
-                          size: 18,
+                      Visibility(
+                        visible: !bienImmobilierModel.bienImmobilierDisponible,
+                        replacement: Material(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Chip(
+                                backgroundColor: Colors.green.shade200,
+                                avatar: const Icon(
+                                  FontAwesomeIcons.eye,
+                                  size: 18,
+                                  color: Colors.green,
+                                ),
+                                label: const Text('Disponible'),
+                                labelStyle: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.green),
+                              ),
+                            ],
+                          ),
                         ),
-                        label: Text('Indisponible'),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Chip(
+                              backgroundColor: Colors.red.shade200,
+                              avatar: const Icon(
+                                FontAwesomeIcons.eyeSlash,
+                                size: 18,
+                              ),
+                              label: const Text('Indisponible'),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -1,18 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
-import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_loading_card.dart';
 import 'package:immoplus_pro/views/home_page/widgets/visit_card.dart';
-import 'package:immoplus_pro/views/visits/logic/booking_cubit.dart';
-import 'package:immoplus_pro/views/visits/logic/visit_request_state.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class VisitPage extends StatefulWidget {
@@ -28,10 +21,15 @@ class _VisitPageState extends State<VisitPage> {
 
   Future<void> loadPage(int page) async {
     BienImmobilierRepository.getVisitesOwner(
-            id: SessionManager().currentUser!.userId.toString(),
-            page: page,
-            perPage: 5)
-        .then((value) {
+      id: SessionManager().currentUser!.userId.toString(),
+      page: page,
+      perPage: 5,
+      where: {
+        '_where': [
+          '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+        ],
+      },
+    ).then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data ?? [], (value.currentPage) + 1);
       } else {
@@ -95,9 +93,6 @@ class _VisitPageState extends State<VisitPage> {
           ),
         ],
       )),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        //inspect(UserModel.singleton);
-      }),
     );
   }
 }

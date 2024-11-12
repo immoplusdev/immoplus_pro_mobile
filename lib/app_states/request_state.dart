@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/models/configs/commune_model.dart';
 import 'package:immoplus_pro/data/models/configs/ville_model.dart';
-import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 
 part 'request_state.freezed.dart';
@@ -16,6 +16,8 @@ class RequestState with _$RequestState {
   const factory RequestState.error({required String error}) = REQUEST_ERROR;
   const factory RequestState.residence({required ResidenceModel data}) =
       REQUEST_RESIDENCE_DATA;
+  const factory RequestState.bienImmobilier(
+      {required BienImmobilierModel data}) = REQUEST_BIEN_IMMOBILIER_DATA;
   const factory RequestState.residences({required List<ResidenceModel> data}) =
       REQUEST_RESIDENCES_DATA;
   const factory RequestState.villes({required List<VilleModel> data}) =

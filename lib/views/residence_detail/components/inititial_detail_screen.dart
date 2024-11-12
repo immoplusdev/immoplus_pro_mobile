@@ -1,10 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/app_states/services_state.dart';
-import 'package:immoplus_pro/cubits/cubits.dart';
-import 'package:immoplus_pro/request_path.dart';
 import 'package:immoplus_pro/views/residence_detail/cubit/logment_cubit.dart';
 
 class InitialDetailLogmentScreen extends StatelessWidget {
@@ -14,11 +10,11 @@ class InitialDetailLogmentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              context.go('/homePage');
-            },
-            icon: Icon(Icons.chevron_left)),
+        // leading: IconButton(
+        //     onPressed: () {
+        //       context.go('/homePage');
+        //     },
+        //     icon: const Icon(Icons.chevron_left)),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -28,11 +24,11 @@ class InitialDetailLogmentScreen extends StatelessWidget {
         },
         child: SingleChildScrollView(
           child: Column(children: [
-            Container(
+            SizedBox(
               //color: Colors.red,
               height: MediaQuery.of(context).size.height + 10,
               width: double.infinity,
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(

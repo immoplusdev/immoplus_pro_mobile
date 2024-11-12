@@ -31,18 +31,18 @@ class DetailLogmentAppBar extends StatelessWidget {
           iconSize: 20,
           onPressed: () {
             print(Constantes.tempPage);
-            //context.goNamed(ResidencesPage.name);
-            context.pop();
+            context.goNamed(ResidencesPage.name);
+            //context.pop();
           },
           style: IconButton.styleFrom(
             iconSize: 20,
-            fixedSize: Size(18, 18),
+            fixedSize: const Size(18, 18),
             padding: EdgeInsets.zero,
           ),
           icon: Container(
               width: 30,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
               child: Center(
                   child: Icon(
                 CupertinoIcons.chevron_back,
@@ -63,13 +63,13 @@ class DetailLogmentAppBar extends StatelessWidget {
             },
             style: IconButton.styleFrom(
               iconSize: 25,
-              fixedSize: Size(18, 18),
+              fixedSize: const Size(18, 18),
               padding: EdgeInsets.zero,
             ),
             icon: Container(
               width: 30,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
               child: Center(
                 child: Icon(
                   CupertinoIcons.share,
@@ -108,7 +108,7 @@ class DetailLogmentAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         //title: Text('SliverAppBar'),
         background: FlutterCarousel(
-          items: logmentModel.images!
+          items: logmentModel.images
               .map<Widget>(
                 (e) => GestureDetector(
                   onTap: () {
@@ -139,7 +139,7 @@ class DetailLogmentAppBar extends StatelessWidget {
                           ],
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          stops: [0, 0.4],
+                          stops: const [0, 0.4],
                         ),
                       ),
                       width: double.infinity,
@@ -150,14 +150,15 @@ class DetailLogmentAppBar extends StatelessWidget {
                         placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade400,
-                          period: Duration(milliseconds: 500),
+                          period: const Duration(milliseconds: 500),
                           child: Container(
                             width: double.infinity,
                             height: double.infinity,
                             color: Colors.white,
                           ),
                         ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                         fit: BoxFit
                             .cover, // or other BoxFit values as per your design
                       ),
@@ -189,7 +190,7 @@ class DetailLogmentAppBar extends StatelessWidget {
             disableCenter: false,
             showIndicator: true,
             indicatorMargin: 20,
-            slideIndicator: CircularSlideIndicator(
+            slideIndicator: const CircularSlideIndicator(
                 // indicatorRadius: 3,
                 // itemSpacing: 10,
                 ),

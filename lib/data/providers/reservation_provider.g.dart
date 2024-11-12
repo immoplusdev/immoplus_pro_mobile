@@ -55,18 +55,25 @@ class _ReservationProvider implements ReservationProvider {
   }
 
   @override
-  Future<ReservationsResponse> getBookings(
+  Future<ReservationsCollection> getBookings(
     int page,
+    Map<String, dynamic>? where,
     int perPage,
+    String? orderBy,
+    String? orderDir,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_page': page,
       r'_per_page': perPage,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ReservationsResponse>(Options(
+    final _options = _setStreamType<ReservationsCollection>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -83,9 +90,9 @@ class _ReservationProvider implements ReservationProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ReservationsResponse _value;
+    late ReservationsCollection _value;
     try {
-      _value = ReservationsResponse.fromJson(_result.data!);
+      _value = ReservationsCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -94,19 +101,26 @@ class _ReservationProvider implements ReservationProvider {
   }
 
   @override
-  Future<ReservationsResponse> getBookingsOwner(
+  Future<ReservationsCollection> getBookingsOwner(
     String id,
+    String? where,
     int page,
     int perPage,
+    String? orderBy,
+    String? orderDir,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
+      r'_where': where,
       r'_page': page,
       r'_per_page': perPage,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ReservationsResponse>(Options(
+    final _options = _setStreamType<ReservationsCollection>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -123,9 +137,9 @@ class _ReservationProvider implements ReservationProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ReservationsResponse _value;
+    late ReservationsCollection _value;
     try {
-      _value = ReservationsResponse.fromJson(_result.data!);
+      _value = ReservationsCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

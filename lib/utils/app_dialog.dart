@@ -45,21 +45,24 @@ class AppDialog {
         barrierDismissible: false,
         context: context,
         builder: (context) => CupertinoAlertDialog(
-          title: Icon(CupertinoIcons.exclamationmark_triangle),
+          title: const Icon(
+            CupertinoIcons.exclamationmark_triangle,
+            color: Colors.red,
+          ),
           content: Text(content),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text('Retour'),
+              child: const Text('Retour'),
               onPressed: () {
                 context.pop();
               },
             ),
             CupertinoDialogAction(
-              child: Text('Confirmer'),
               onPressed: rollback ??
                   () {
                     context.pop();
                   },
+              child: const Text('Confirmer'),
             ),
           ],
         ),

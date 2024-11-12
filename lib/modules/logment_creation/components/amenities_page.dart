@@ -37,7 +37,7 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
               child: Text('Que proposez vous dans votre logement ?',
                   style: Theme.of(context).textTheme.headlineSmall),

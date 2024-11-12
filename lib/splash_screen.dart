@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    _getData(context: this.context);
+    _getData(context: context);
     // TODO: implement initState
     super.initState();
   }

@@ -5,6 +5,8 @@ import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart'
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 import 'package:immoplus_pro/views/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/views/estate_creation/create_estate_page.dart';
+import 'package:immoplus_pro/views/estate_detail/estate_page.dart';
 import 'package:immoplus_pro/views/estates/estates_page.dart';
 import 'package:immoplus_pro/views/home_page/home_page.dart';
 import 'package:immoplus_pro/views/onboarding/onboarding_page.dart';
@@ -41,6 +43,11 @@ class AppRouter {
         name: CreatePlace.name,
       ),
       GoRoute(
+        path: '/create_estate',
+        builder: (context, state) => const CreateEstatePage(),
+        name: CreateEstatePage.name,
+      ),
+      GoRoute(
         path: '/registration',
         builder: (context, state) => RegistrationMainScreean(),
         name: RegistrationMainScreean.name,
@@ -74,6 +81,12 @@ class AppRouter {
         path: '/estates',
         name: EstatesPage.name,
         builder: (context, state) => const EstatesPage(),
+      ),
+      GoRoute(
+        path: '/estate_page/:id',
+        builder: (context, state) => EstatePage(
+          idProduct: state.pathParameters['id'].toString(),
+        ),
       ),
       GoRoute(
         path: '/logment_page/:id',

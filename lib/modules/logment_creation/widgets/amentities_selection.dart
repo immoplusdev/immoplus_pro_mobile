@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 
 class AmentitiesSelection extends StatefulWidget {
@@ -74,6 +75,27 @@ class _AmentitiesSelectionState extends State<AmentitiesSelection> {
   }
 
   @override
+  void initState() {
+    if (ResidenceCreationModelBuilder().commodites.isNotEmpty) {
+      final data = List.generate(
+        ResidenceCreationModelBuilder().commodites.length,
+        (index) => ResidenceCreationModelBuilder().commodites[index].toJson(),
+      );
+      setState(() {
+        for (var i = 0; i < listEmentities.length; i++) {
+          for (var saved in data) {
+            if (listEmentities[i]['icon'] == saved['icon']) {
+              listEmentities[i]['selected'] = true;
+            }
+          }
+        }
+      });
+    }
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -102,7 +124,8 @@ class _AmentitiesSelectionState extends State<AmentitiesSelection> {
                 widget.onSlect!(listEmentities);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   child: Container(
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Icon(
                       CupertinoIcons.bell,
                       color: AppColors.primary,
@@ -72,18 +72,18 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Gap(13),
+          const Gap(13),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50),
+          preferredSize: const Size.fromHeight(50),
           child: ValueListenableBuilder(
               valueListenable: HomePage.selectedSection,
               builder: (context, state, child) {
                 return Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 8).copyWith(bottom: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8)
+                      .copyWith(bottom: 8),
                   color: AppColors.scafold,
-                  height: 50,
+                  //height: 50,
                   child: SegmentedButton<BookingSection>(
                     showSelectedIcon: false,
                     style: SegmentedButton.styleFrom(
@@ -97,9 +97,9 @@ class _HomePageState extends State<HomePage> {
                     segments: [
                       ButtonSegment<BookingSection>(
                         value: BookingSection.in_progress,
-                        label: Text('Réservations'),
+                        label: const Text('Réservations'),
                         icon: Icon(
-                          FontAwesomeIcons.suitcaseRolling,
+                          FontAwesomeIcons.key,
                           color: (HomePage.selectedSection.value ==
                                   BookingSection.in_progress)
                               ? Colors.white
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ButtonSegment<BookingSection>(
                         value: BookingSection.visit,
-                        label: Text('Visites'),
+                        label: const Text('Visites'),
                         icon: Icon(
                           FontAwesomeIcons.personWalkingLuggage,
                           color: (HomePage.selectedSection.value ==
@@ -131,6 +131,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                     selected: <BookingSection>{HomePage.selectedSection.value},
                     onSelectionChanged: (p0) {
+                      Vibrate.feedback(FeedbackType.impact);
                       HomePage.selectedSection.value = p0.first;
                       if (HomePage.selectedSection.value ==
                           BookingSection.in_progress) {

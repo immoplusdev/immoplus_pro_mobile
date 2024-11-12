@@ -22,6 +22,7 @@ BienImmobilierCreationModel _$BienImmobilierCreationModelFromJson(
 /// @nodoc
 mixin _$BienImmobilierCreationModel {
   String get miniature => throw _privateConstructorUsedError;
+  String get typeLocation => throw _privateConstructorUsedError;
   String? get nom => throw _privateConstructorUsedError;
   String? get typeBienImmobilier => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
@@ -33,13 +34,10 @@ mixin _$BienImmobilierCreationModel {
   String? get commune => throw _privateConstructorUsedError;
   String? get adresse => throw _privateConstructorUsedError;
   PositionModel? get position => throw _privateConstructorUsedError;
-  int? get prix =>
-      throw _privateConstructorUsedError; //@Default(Metadata()) Metadata metadata,
-  int? get nombreMaxOccupants => throw _privateConstructorUsedError;
-  bool? get animauxAutorises => throw _privateConstructorUsedError;
+  int? get prix => throw _privateConstructorUsedError;
   bool? get bienImmobilierDisponible => throw _privateConstructorUsedError;
-  bool? get fetesAutorises => throw _privateConstructorUsedError;
-  String? get reglesSupplementaires => throw _privateConstructorUsedError;
+  List<PieceModel> get pieces => throw _privateConstructorUsedError;
+  bool get aLouer => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,6 +55,7 @@ abstract class $BienImmobilierCreationModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String miniature,
+      String typeLocation,
       String? nom,
       String? typeBienImmobilier,
       String? description,
@@ -69,11 +68,9 @@ abstract class $BienImmobilierCreationModelCopyWith<$Res> {
       String? adresse,
       PositionModel? position,
       int? prix,
-      int? nombreMaxOccupants,
-      bool? animauxAutorises,
       bool? bienImmobilierDisponible,
-      bool? fetesAutorises,
-      String? reglesSupplementaires});
+      List<PieceModel> pieces,
+      bool aLouer});
 
   $PositionModelCopyWith<$Res>? get position;
 }
@@ -93,6 +90,7 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? miniature = null,
+    Object? typeLocation = null,
     Object? nom = freezed,
     Object? typeBienImmobilier = freezed,
     Object? description = freezed,
@@ -105,16 +103,18 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
     Object? adresse = freezed,
     Object? position = freezed,
     Object? prix = freezed,
-    Object? nombreMaxOccupants = freezed,
-    Object? animauxAutorises = freezed,
     Object? bienImmobilierDisponible = freezed,
-    Object? fetesAutorises = freezed,
-    Object? reglesSupplementaires = freezed,
+    Object? pieces = null,
+    Object? aLouer = null,
   }) {
     return _then(_value.copyWith(
       miniature: null == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
+              as String,
+      typeLocation: null == typeLocation
+          ? _value.typeLocation
+          : typeLocation // ignore: cast_nullable_to_non_nullable
               as String,
       nom: freezed == nom
           ? _value.nom
@@ -164,26 +164,18 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
           ? _value.prix
           : prix // ignore: cast_nullable_to_non_nullable
               as int?,
-      nombreMaxOccupants: freezed == nombreMaxOccupants
-          ? _value.nombreMaxOccupants
-          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
-              as int?,
-      animauxAutorises: freezed == animauxAutorises
-          ? _value.animauxAutorises
-          : animauxAutorises // ignore: cast_nullable_to_non_nullable
-              as bool?,
       bienImmobilierDisponible: freezed == bienImmobilierDisponible
           ? _value.bienImmobilierDisponible
           : bienImmobilierDisponible // ignore: cast_nullable_to_non_nullable
               as bool?,
-      fetesAutorises: freezed == fetesAutorises
-          ? _value.fetesAutorises
-          : fetesAutorises // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      reglesSupplementaires: freezed == reglesSupplementaires
-          ? _value.reglesSupplementaires
-          : reglesSupplementaires // ignore: cast_nullable_to_non_nullable
-              as String?,
+      pieces: null == pieces
+          ? _value.pieces
+          : pieces // ignore: cast_nullable_to_non_nullable
+              as List<PieceModel>,
+      aLouer: null == aLouer
+          ? _value.aLouer
+          : aLouer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -211,6 +203,7 @@ abstract class _$$BienImmobilierCreationModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String miniature,
+      String typeLocation,
       String? nom,
       String? typeBienImmobilier,
       String? description,
@@ -223,11 +216,9 @@ abstract class _$$BienImmobilierCreationModelImplCopyWith<$Res>
       String? adresse,
       PositionModel? position,
       int? prix,
-      int? nombreMaxOccupants,
-      bool? animauxAutorises,
       bool? bienImmobilierDisponible,
-      bool? fetesAutorises,
-      String? reglesSupplementaires});
+      List<PieceModel> pieces,
+      bool aLouer});
 
   @override
   $PositionModelCopyWith<$Res>? get position;
@@ -247,6 +238,7 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? miniature = null,
+    Object? typeLocation = null,
     Object? nom = freezed,
     Object? typeBienImmobilier = freezed,
     Object? description = freezed,
@@ -259,16 +251,18 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
     Object? adresse = freezed,
     Object? position = freezed,
     Object? prix = freezed,
-    Object? nombreMaxOccupants = freezed,
-    Object? animauxAutorises = freezed,
     Object? bienImmobilierDisponible = freezed,
-    Object? fetesAutorises = freezed,
-    Object? reglesSupplementaires = freezed,
+    Object? pieces = null,
+    Object? aLouer = null,
   }) {
     return _then(_$BienImmobilierCreationModelImpl(
       miniature: null == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
+              as String,
+      typeLocation: null == typeLocation
+          ? _value.typeLocation
+          : typeLocation // ignore: cast_nullable_to_non_nullable
               as String,
       nom: freezed == nom
           ? _value.nom
@@ -318,26 +312,18 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
           ? _value.prix
           : prix // ignore: cast_nullable_to_non_nullable
               as int?,
-      nombreMaxOccupants: freezed == nombreMaxOccupants
-          ? _value.nombreMaxOccupants
-          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
-              as int?,
-      animauxAutorises: freezed == animauxAutorises
-          ? _value.animauxAutorises
-          : animauxAutorises // ignore: cast_nullable_to_non_nullable
-              as bool?,
       bienImmobilierDisponible: freezed == bienImmobilierDisponible
           ? _value.bienImmobilierDisponible
           : bienImmobilierDisponible // ignore: cast_nullable_to_non_nullable
               as bool?,
-      fetesAutorises: freezed == fetesAutorises
-          ? _value.fetesAutorises
-          : fetesAutorises // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      reglesSupplementaires: freezed == reglesSupplementaires
-          ? _value.reglesSupplementaires
-          : reglesSupplementaires // ignore: cast_nullable_to_non_nullable
-              as String?,
+      pieces: null == pieces
+          ? _value._pieces
+          : pieces // ignore: cast_nullable_to_non_nullable
+              as List<PieceModel>,
+      aLouer: null == aLouer
+          ? _value.aLouer
+          : aLouer // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -348,7 +334,8 @@ class _$BienImmobilierCreationModelImpl
     implements _BienImmobilierCreationModel {
   const _$BienImmobilierCreationModelImpl(
       {this.miniature = '',
-      this.nom = 'Unnamed Property',
+      this.typeLocation = '',
+      this.nom = '',
       this.typeBienImmobilier = 'Unknown Type',
       this.description = 'No Description',
       final List<CommoditeModel>? amentities = const [],
@@ -360,14 +347,13 @@ class _$BienImmobilierCreationModelImpl
       this.adresse = '',
       this.position = const PositionModel(),
       this.prix = 0,
-      this.nombreMaxOccupants = 1,
-      this.animauxAutorises = false,
       this.bienImmobilierDisponible = true,
-      this.fetesAutorises = false,
-      this.reglesSupplementaires = ''})
+      final List<PieceModel> pieces = const [],
+      this.aLouer = false})
       : _amentities = amentities,
         _tags = tags,
-        _images = images;
+        _images = images,
+        _pieces = pieces;
 
   factory _$BienImmobilierCreationModelImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -376,6 +362,9 @@ class _$BienImmobilierCreationModelImpl
   @override
   @JsonKey()
   final String miniature;
+  @override
+  @JsonKey()
+  final String typeLocation;
   @override
   @JsonKey()
   final String? nom;
@@ -436,26 +425,25 @@ class _$BienImmobilierCreationModelImpl
   @override
   @JsonKey()
   final int? prix;
-//@Default(Metadata()) Metadata metadata,
-  @override
-  @JsonKey()
-  final int? nombreMaxOccupants;
-  @override
-  @JsonKey()
-  final bool? animauxAutorises;
   @override
   @JsonKey()
   final bool? bienImmobilierDisponible;
+  final List<PieceModel> _pieces;
   @override
   @JsonKey()
-  final bool? fetesAutorises;
+  List<PieceModel> get pieces {
+    if (_pieces is EqualUnmodifiableListView) return _pieces;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_pieces);
+  }
+
   @override
   @JsonKey()
-  final String? reglesSupplementaires;
+  final bool aLouer;
 
   @override
   String toString() {
-    return 'BienImmobilierCreationModel(miniature: $miniature, nom: $nom, typeBienImmobilier: $typeBienImmobilier, description: $description, amentities: $amentities, tags: $tags, images: $images, video: $video, ville: $ville, commune: $commune, adresse: $adresse, position: $position, prix: $prix, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, bienImmobilierDisponible: $bienImmobilierDisponible, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires)';
+    return 'BienImmobilierCreationModel(miniature: $miniature, typeLocation: $typeLocation, nom: $nom, typeBienImmobilier: $typeBienImmobilier, description: $description, amentities: $amentities, tags: $tags, images: $images, video: $video, ville: $ville, commune: $commune, adresse: $adresse, position: $position, prix: $prix, bienImmobilierDisponible: $bienImmobilierDisponible, pieces: $pieces, aLouer: $aLouer)';
   }
 
   @override
@@ -465,6 +453,8 @@ class _$BienImmobilierCreationModelImpl
             other is _$BienImmobilierCreationModelImpl &&
             (identical(other.miniature, miniature) ||
                 other.miniature == miniature) &&
+            (identical(other.typeLocation, typeLocation) ||
+                other.typeLocation == typeLocation) &&
             (identical(other.nom, nom) || other.nom == nom) &&
             (identical(other.typeBienImmobilier, typeBienImmobilier) ||
                 other.typeBienImmobilier == typeBienImmobilier) &&
@@ -481,17 +471,11 @@ class _$BienImmobilierCreationModelImpl
             (identical(other.position, position) ||
                 other.position == position) &&
             (identical(other.prix, prix) || other.prix == prix) &&
-            (identical(other.nombreMaxOccupants, nombreMaxOccupants) ||
-                other.nombreMaxOccupants == nombreMaxOccupants) &&
-            (identical(other.animauxAutorises, animauxAutorises) ||
-                other.animauxAutorises == animauxAutorises) &&
             (identical(
                     other.bienImmobilierDisponible, bienImmobilierDisponible) ||
                 other.bienImmobilierDisponible == bienImmobilierDisponible) &&
-            (identical(other.fetesAutorises, fetesAutorises) ||
-                other.fetesAutorises == fetesAutorises) &&
-            (identical(other.reglesSupplementaires, reglesSupplementaires) ||
-                other.reglesSupplementaires == reglesSupplementaires));
+            const DeepCollectionEquality().equals(other._pieces, _pieces) &&
+            (identical(other.aLouer, aLouer) || other.aLouer == aLouer));
   }
 
   @JsonKey(ignore: true)
@@ -499,6 +483,7 @@ class _$BienImmobilierCreationModelImpl
   int get hashCode => Object.hash(
       runtimeType,
       miniature,
+      typeLocation,
       nom,
       typeBienImmobilier,
       description,
@@ -511,11 +496,9 @@ class _$BienImmobilierCreationModelImpl
       adresse,
       position,
       prix,
-      nombreMaxOccupants,
-      animauxAutorises,
       bienImmobilierDisponible,
-      fetesAutorises,
-      reglesSupplementaires);
+      const DeepCollectionEquality().hash(_pieces),
+      aLouer);
 
   @JsonKey(ignore: true)
   @override
@@ -536,6 +519,7 @@ abstract class _BienImmobilierCreationModel
     implements BienImmobilierCreationModel {
   const factory _BienImmobilierCreationModel(
       {final String miniature,
+      final String typeLocation,
       final String? nom,
       final String? typeBienImmobilier,
       final String? description,
@@ -548,17 +532,17 @@ abstract class _BienImmobilierCreationModel
       final String? adresse,
       final PositionModel? position,
       final int? prix,
-      final int? nombreMaxOccupants,
-      final bool? animauxAutorises,
       final bool? bienImmobilierDisponible,
-      final bool? fetesAutorises,
-      final String? reglesSupplementaires}) = _$BienImmobilierCreationModelImpl;
+      final List<PieceModel> pieces,
+      final bool aLouer}) = _$BienImmobilierCreationModelImpl;
 
   factory _BienImmobilierCreationModel.fromJson(Map<String, dynamic> json) =
       _$BienImmobilierCreationModelImpl.fromJson;
 
   @override
   String get miniature;
+  @override
+  String get typeLocation;
   @override
   String? get nom;
   @override
@@ -583,16 +567,12 @@ abstract class _BienImmobilierCreationModel
   PositionModel? get position;
   @override
   int? get prix;
-  @override //@Default(Metadata()) Metadata metadata,
-  int? get nombreMaxOccupants;
-  @override
-  bool? get animauxAutorises;
   @override
   bool? get bienImmobilierDisponible;
   @override
-  bool? get fetesAutorises;
+  List<PieceModel> get pieces;
   @override
-  String? get reglesSupplementaires;
+  bool get aLouer;
   @override
   @JsonKey(ignore: true)
   _$$BienImmobilierCreationModelImplCopyWith<_$BienImmobilierCreationModelImpl>

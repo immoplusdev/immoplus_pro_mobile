@@ -10,7 +10,8 @@ _$BienImmobilierCreationModelImpl _$$BienImmobilierCreationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$BienImmobilierCreationModelImpl(
       miniature: json['miniature'] as String? ?? '',
-      nom: json['nom'] as String? ?? 'Unnamed Property',
+      typeLocation: json['typeLocation'] as String? ?? '',
+      nom: json['nom'] as String? ?? '',
       typeBienImmobilier:
           json['typeBienImmobilier'] as String? ?? 'Unknown Type',
       description: json['description'] as String? ?? 'No Description',
@@ -33,18 +34,20 @@ _$BienImmobilierCreationModelImpl _$$BienImmobilierCreationModelImplFromJson(
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
       prix: (json['prix'] as num?)?.toInt() ?? 0,
-      nombreMaxOccupants: (json['nombreMaxOccupants'] as num?)?.toInt() ?? 1,
-      animauxAutorises: json['animauxAutorises'] as bool? ?? false,
       bienImmobilierDisponible:
           json['bienImmobilierDisponible'] as bool? ?? true,
-      fetesAutorises: json['fetesAutorises'] as bool? ?? false,
-      reglesSupplementaires: json['reglesSupplementaires'] as String? ?? '',
+      pieces: (json['pieces'] as List<dynamic>?)
+              ?.map((e) => PieceModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      aLouer: json['aLouer'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$BienImmobilierCreationModelImplToJson(
         _$BienImmobilierCreationModelImpl instance) =>
     <String, dynamic>{
       'miniature': instance.miniature,
+      'typeLocation': instance.typeLocation,
       'nom': instance.nom,
       'typeBienImmobilier': instance.typeBienImmobilier,
       'description': instance.description,
@@ -57,9 +60,7 @@ Map<String, dynamic> _$$BienImmobilierCreationModelImplToJson(
       'adresse': instance.adresse,
       'position': instance.position,
       'prix': instance.prix,
-      'nombreMaxOccupants': instance.nombreMaxOccupants,
-      'animauxAutorises': instance.animauxAutorises,
       'bienImmobilierDisponible': instance.bienImmobilierDisponible,
-      'fetesAutorises': instance.fetesAutorises,
-      'reglesSupplementaires': instance.reglesSupplementaires,
+      'pieces': instance.pieces,
+      'aLouer': instance.aLouer,
     };

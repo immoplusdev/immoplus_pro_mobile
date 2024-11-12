@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:immoplus_pro/views/booking/logic/booking_cubit.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_card.dart';
 import 'package:immoplus_pro/views/home_page/widgets/booking_loading_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -25,10 +23,13 @@ class _BookingPageState extends State<BookingPage> {
 
   Future<void> loadPage(int page) async {
     LogmentRepository.getReservationsOwner(
-            id: SessionManager().currentUser!.userId.toString(),
-            page: page,
-            perPage: 5)
-        .then((value) {
+      id: SessionManager().currentUser!.userId.toString(),
+      page: page,
+      perPage: 5,
+      orderBy: 'createdAt',
+      orderDir: 'desc',
+      where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+    ).then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data, (value.currentPage) + 1);
       } else {
@@ -111,7 +112,7 @@ class _BookingPageState extends State<BookingPage> {
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
               firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
                     //height: 600,
                     child: Column(
@@ -133,7 +134,6 @@ class _BookingPageState extends State<BookingPage> {
           ),
         ],
       )),
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
     );
   }
 }

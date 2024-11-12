@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -36,13 +38,13 @@ class _TypeLogmentPageState extends State<TypeLogmentPage> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
               child: Text('Décrivez nous votre logement',
                   style: Theme.of(context).textTheme.headlineMedium),
             ),
           ),
-          SliverGap(20),
+          const SliverGap(20),
           LogmentTypeSelection(
             onSlect: (p0) {
               setState(() {
@@ -51,19 +53,26 @@ class _TypeLogmentPageState extends State<TypeLogmentPage> {
               });
             },
           ),
-          SliverGap(20),
+          const SliverGap(20),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             sliver: SliverToBoxAdapter(
               child: Text('Nombre de pièces du logement',
                   style: Theme.of(context).textTheme.headlineSmall),
             ),
           ),
-          SliverGap(10),
-          ListPieceSection(),
-          SliverToBoxAdapter(),
+          const SliverGap(10),
+          const ListPieceSection(),
+          const SliverToBoxAdapter(),
         ],
       ),
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   final data = List.generate(
+      //     ResidenceCreationModelBuilder().pieces.length,
+      //     (index) => ResidenceCreationModelBuilder().pieces[index].toJson(),
+      //   );
+      //   print(data);
+      // }),
       bottomNavigationBar: StepBottomButton(
         onPreview: () {
           CreateLogmentRouter.router.goNamed(WellcommePage.name);

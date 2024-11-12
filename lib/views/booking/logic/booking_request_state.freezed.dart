@@ -21,7 +21,8 @@ mixin _$BookingRequestState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -32,7 +33,7 @@ mixin _$BookingRequestState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) =>
@@ -42,7 +43,7 @@ mixin _$BookingRequestState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -140,7 +141,8 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -154,7 +156,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -167,7 +169,7 @@ class _$INITIAL_BOOKINGImpl implements INITIAL_BOOKING {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -267,7 +269,8 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -281,7 +284,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -294,7 +297,7 @@ class _$LOADING_BOOKINGImpl implements LOADING_BOOKING {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -395,7 +398,8 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -409,7 +413,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -422,7 +426,7 @@ class _$LOADING_BOOKING_LISTImpl implements LOADING_BOOKING_LIST {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -487,9 +491,9 @@ abstract class _$$RECEIVE_BOOKINGSImplCopyWith<$Res> {
           $Res Function(_$RECEIVE_BOOKINGSImpl) then) =
       __$$RECEIVE_BOOKINGSImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({ReservationsResponse reservationResponse});
+  $Res call({ReservationsCollection reservationResponse});
 
-  $ReservationsResponseCopyWith<$Res> get reservationResponse;
+  $ReservationsCollectionCopyWith<$Res> get reservationResponse;
 }
 
 /// @nodoc
@@ -509,14 +513,14 @@ class __$$RECEIVE_BOOKINGSImplCopyWithImpl<$Res>
       null == reservationResponse
           ? _value.reservationResponse
           : reservationResponse // ignore: cast_nullable_to_non_nullable
-              as ReservationsResponse,
+              as ReservationsCollection,
     ));
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $ReservationsResponseCopyWith<$Res> get reservationResponse {
-    return $ReservationsResponseCopyWith<$Res>(_value.reservationResponse,
+  $ReservationsCollectionCopyWith<$Res> get reservationResponse {
+    return $ReservationsCollectionCopyWith<$Res>(_value.reservationResponse,
         (value) {
       return _then(_value.copyWith(reservationResponse: value));
     });
@@ -529,7 +533,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
   const _$RECEIVE_BOOKINGSImpl(this.reservationResponse);
 
   @override
-  final ReservationsResponse reservationResponse;
+  final ReservationsCollection reservationResponse;
 
   @override
   String toString() {
@@ -561,7 +565,8 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -575,7 +580,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -588,7 +593,7 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -645,9 +650,10 @@ class _$RECEIVE_BOOKINGSImpl implements RECEIVE_BOOKINGS {
 
 abstract class RECEIVE_BOOKINGS implements BookingRequestState {
   const factory RECEIVE_BOOKINGS(
-      final ReservationsResponse reservationResponse) = _$RECEIVE_BOOKINGSImpl;
+          final ReservationsCollection reservationResponse) =
+      _$RECEIVE_BOOKINGSImpl;
 
-  ReservationsResponse get reservationResponse;
+  ReservationsCollection get reservationResponse;
   @JsonKey(ignore: true)
   _$$RECEIVE_BOOKINGSImplCopyWith<_$RECEIVE_BOOKINGSImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -733,7 +739,8 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -747,7 +754,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -760,7 +767,7 @@ class _$RECEIVE_BOOKINGImpl implements RECEIVE_BOOKING {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -893,7 +900,8 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() loadingList,
-    required TResult Function(ReservationsResponse reservationResponse) receive,
+    required TResult Function(ReservationsCollection reservationResponse)
+        receive,
     required TResult Function(ReservationResponse reservationResponse)
         receiveId,
     required TResult Function(String message) error,
@@ -907,7 +915,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? loadingList,
-    TResult? Function(ReservationsResponse reservationResponse)? receive,
+    TResult? Function(ReservationsCollection reservationResponse)? receive,
     TResult? Function(ReservationResponse reservationResponse)? receiveId,
     TResult? Function(String message)? error,
   }) {
@@ -920,7 +928,7 @@ class _$Error_BOOKINGSImpl implements Error_BOOKINGS {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? loadingList,
-    TResult Function(ReservationsResponse reservationResponse)? receive,
+    TResult Function(ReservationsCollection reservationResponse)? receive,
     TResult Function(ReservationResponse reservationResponse)? receiveId,
     TResult Function(String message)? error,
     required TResult orElse(),

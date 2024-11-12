@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +12,12 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/views/home_page/home_page.dart';
+import 'package:immoplus_pro/views/home_page/utils/custom_popup.dart';
+
+enum Roles {
+  pro_particulier,
+  pro_entreprise,
+}
 
 class LoginCubit extends Cubit<LoginCubitState> {
   LoginCubit() : super(const LoginCubitState.initial());
@@ -18,32 +26,41 @@ class LoginCubit extends Cubit<LoginCubitState> {
     emit(const LOGIN_LOADING());
     try {
       AccountCreationResponse response = await AuthRepository.login(body: body);
-
-      await SessionManager().saveUser(
-        UserModelSchema()
-          ..id = 1
-          ..userId = response.data.user.id
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..accessToken = response.data.accessToken
-          ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
-      );
-      await SessionManager().getCurrentUser();
-      DioClient.token = response.data.accessToken;
-      DioClient().dio.options.headers['Authorization'] =
-          'Bearer ${SessionManager().currentUser!.accessToken}';
-      emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
+      if ([
+        Roles.pro_entreprise.name,
+        Roles.pro_particulier.name,
+      ].contains(response.data.user.role.id)) {
+        await SessionManager().saveUser(
+          UserModelSchema()
+            ..id = 1
+            ..userId = response.data.user.id
+            ..firstName = response.data.user.firstName
+            ..lastName = response.data.user.lastName
+            ..phoneNumber = response.data.user.phoneNumber
+            ..email = response.data.user.email
+            ..accessToken = response.data.accessToken
+            ..refreshToken = response.data.refreshToken
+            ..roleName = response.data.user.role.name
+            ..activite = response.data.user.additionalData.activite
+            ..nomEntreprise = response.data.user.additionalData.nomEntreprise
+            ..photoIdentite = response.data.user.additionalData.photoIdentiteId
+            ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
+            ..emailEntreprise =
+                response.data.user.additionalData.emailEntreprise,
+        );
+        await SessionManager().getCurrentUser();
+        DioClient.token = response.data.accessToken;
+        DioClient().dio.options.headers['Authorization'] =
+            'Bearer ${SessionManager().currentUser!.accessToken}';
+        emit(const LoginCubitState.success());
+        NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
+      } else {
+        CustomPopup.showErrorToast(
+            text: "Seuls les professionnels peuvent accéder à l'application");
+        emit(const LoginCubitState.initial());
+      }
     } catch (e) {
-      emit(LoginCubitState.initial());
+      emit(const LoginCubitState.initial());
     }
   }
 }

@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
-import 'package:immoplus_pro/data/models/reservations/reservations_response.dart';
+import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/views/booking/logic/booking_request_state.dart';

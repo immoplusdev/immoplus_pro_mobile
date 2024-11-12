@@ -9,12 +9,14 @@ part of 'demande_visite_model.dart';
 _$DemandeVisiteModelImpl _$$DemandeVisiteModelImplFromJson(
         Map<String, dynamic> json) =>
     _$DemandeVisiteModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String? ?? '',
       statusDemandeVisite: json['statusDemandeVisite'] as String?,
       typeDemandeVisite: json['typeDemandeVisite'] as String?,
       datesDemandeVisite: (json['datesDemandeVisite'] as List<dynamic>?)
-          ?.map((e) => DateDemandeVisite.fromJson(e as Map<String, dynamic>))
-          .toList(),
+              ?.map(
+                  (e) => DateDemandeVisite.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       statusFacture: json['statusFacture'] as String?,
       retraitProEffectue: json['retraitProEffectue'] as bool? ?? false,
       montantTotalDemandeVisite:

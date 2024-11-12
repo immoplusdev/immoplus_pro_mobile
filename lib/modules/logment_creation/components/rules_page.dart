@@ -38,55 +38,58 @@ class _RulesPageState extends State<RulesPage> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
               child: Text('Les règles de la maison',
                   style: Theme.of(context).textTheme.headlineMedium),
             ),
           ),
-          SliverGap(20),
+          const SliverGap(20),
           SliverToBoxAdapter(
             child: TimeSelector(
+              initialValue: ResidenceCreationModelBuilder().heureEntree,
               onUpdate: (p0) {
                 setState(() {
                   ResidenceCreationModelBuilder().heureEntree = p0;
                 });
               },
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.doorOpen,
                 color: Colors.black,
               ),
               subtitle: 'Heur a partir de laquelle le client peut venir',
             ),
           ),
-          SliverGap(10),
+          const SliverGap(10),
           SliverToBoxAdapter(
             child: TimeSelector(
+              initialValue: ResidenceCreationModelBuilder().heureDepart,
               onUpdate: (p0) {
                 setState(() {
                   ResidenceCreationModelBuilder().heureDepart = p0;
                 });
               },
-              icon: Icon(
+              icon: const Icon(
                 FontAwesomeIcons.doorClosed,
                 color: Colors.black,
               ),
               subtitle: 'Heur avant laquelle le client doit partir',
             ),
           ),
-          SliverGap(10),
+          const SliverGap(10),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              padding: EdgeInsets.all(5),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Durée minimum de séjour'),
+                  const Text('Durée minimum de séjour'),
                   IncreaseListTile(
                     title: 'Jour',
+                    itemCount: ResidenceCreationModelBuilder().dureeMinSejour,
                     onUpdate: (p0, p1) {
                       setState(() {
                         ResidenceCreationModelBuilder().dureeMinSejour = p1;
@@ -97,19 +100,20 @@ class _RulesPageState extends State<RulesPage> {
               ),
             ),
           ),
-          SliverGap(10),
+          const SliverGap(10),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8),
-              padding: EdgeInsets.all(5),
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Durée maximum de séjour'),
+                  const Text('Durée maximum de séjour'),
                   IncreaseListTile(
                     title: 'Jour',
+                    itemCount: ResidenceCreationModelBuilder().dureeMaxSejour,
                     onUpdate: (p0, p1) {
                       setState(() {
                         ResidenceCreationModelBuilder().dureeMaxSejour = p1;
@@ -120,9 +124,9 @@ class _RulesPageState extends State<RulesPage> {
               ),
             ),
           ),
-          SliverGap(10),
-          ListRuleSection(),
-          SliverToBoxAdapter(),
+          const SliverGap(10),
+          const ListRuleSection(),
+          const SliverToBoxAdapter(),
         ],
       ),
       bottomNavigationBar: StepBottomButton(

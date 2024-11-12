@@ -7,7 +7,7 @@ import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 
 class DetailLogmentInfos extends StatelessWidget {
-  DetailLogmentInfos({super.key, required this.reservation});
+  const DetailLogmentInfos({super.key, required this.reservation});
   final ResidenceModel reservation;
 
   @override
@@ -18,6 +18,7 @@ class DetailLogmentInfos extends StatelessWidget {
         child: SizedBox(
           width: 100,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.location_on_outlined,
@@ -26,7 +27,7 @@ class DetailLogmentInfos extends StatelessWidget {
               ),
               Flexible(
                 child: AutoSizeText(
-                  " ${reservation.nom}  ${reservation.commune} ${reservation.adresse}",
+                  " ${reservation.adresse}",
                   style: TextStyle(color: AppColors.primary),
                 ),
               ),

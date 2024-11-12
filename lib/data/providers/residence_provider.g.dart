@@ -55,12 +55,23 @@ class _ResidenceProvider implements ResidenceProvider {
   }
 
   @override
-  Future<ResidencesResponse> getResidences(int page) async {
+  Future<ResidencesCollection> getResidences(
+    Map<String, dynamic>? where,
+    int page,
+    String? orderBy,
+    String? orderDir,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'_page': page};
+    final queryParameters = <String, dynamic>{
+      r'_page': page,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
+    };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ResidencesResponse>(Options(
+    final _options = _setStreamType<ResidencesCollection>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -77,9 +88,9 @@ class _ResidenceProvider implements ResidenceProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResidencesResponse _value;
+    late ResidencesCollection _value;
     try {
-      _value = ResidencesResponse.fromJson(_result.data!);
+      _value = ResidencesCollection.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -124,13 +135,13 @@ class _ResidenceProvider implements ResidenceProvider {
   @override
   Future<ResidenceResponse> update(
     String id,
-    Map<String, dynamic> data,
+    Map<String, dynamic> fields,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(data);
+    _data.addAll(fields);
     final _options = _setStreamType<ResidenceResponse>(Options(
       method: 'PATCH',
       headers: _headers,

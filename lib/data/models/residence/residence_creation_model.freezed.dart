@@ -35,8 +35,8 @@ mixin _$ResidenceCreationModel {
   List<CommoditeModel> get commodites => throw _privateConstructorUsedError;
   List<PieceModel> get pieces => throw _privateConstructorUsedError;
   int get dureeMinSejour => throw _privateConstructorUsedError;
-  int get dureeMaxSejour => throw _privateConstructorUsedError;
-  Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
+  int get dureeMaxSejour =>
+      throw _privateConstructorUsedError; //@Default({}) Map<String, dynamic> metadata,
   String get heureEntree => throw _privateConstructorUsedError;
   String get heureDepart => throw _privateConstructorUsedError;
   int get nombreMaxOccupants => throw _privateConstructorUsedError;
@@ -73,7 +73,6 @@ abstract class $ResidenceCreationModelCopyWith<$Res> {
       List<PieceModel> pieces,
       int dureeMinSejour,
       int dureeMaxSejour,
-      Map<String, dynamic> metadata,
       String heureEntree,
       String heureDepart,
       int nombreMaxOccupants,
@@ -114,7 +113,6 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
     Object? pieces = null,
     Object? dureeMinSejour = null,
     Object? dureeMaxSejour = null,
-    Object? metadata = null,
     Object? heureEntree = null,
     Object? heureDepart = null,
     Object? nombreMaxOccupants = null,
@@ -184,10 +182,6 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
           ? _value.dureeMaxSejour
           : dureeMaxSejour // ignore: cast_nullable_to_non_nullable
               as int,
-      metadata: null == metadata
-          ? _value.metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
       heureEntree: null == heureEntree
           ? _value.heureEntree
           : heureEntree // ignore: cast_nullable_to_non_nullable
@@ -253,7 +247,6 @@ abstract class _$$ResidenceCreationModelImplCopyWith<$Res>
       List<PieceModel> pieces,
       int dureeMinSejour,
       int dureeMaxSejour,
-      Map<String, dynamic> metadata,
       String heureEntree,
       String heureDepart,
       int nombreMaxOccupants,
@@ -294,7 +287,6 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
     Object? pieces = null,
     Object? dureeMinSejour = null,
     Object? dureeMaxSejour = null,
-    Object? metadata = null,
     Object? heureEntree = null,
     Object? heureDepart = null,
     Object? nombreMaxOccupants = null,
@@ -364,10 +356,6 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
           ? _value.dureeMaxSejour
           : dureeMaxSejour // ignore: cast_nullable_to_non_nullable
               as int,
-      metadata: null == metadata
-          ? _value._metadata
-          : metadata // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
       heureEntree: null == heureEntree
           ? _value.heureEntree
           : heureEntree // ignore: cast_nullable_to_non_nullable
@@ -419,7 +407,6 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
       final List<PieceModel> pieces = const [],
       this.dureeMinSejour = 0,
       this.dureeMaxSejour = 0,
-      final Map<String, dynamic> metadata = const {},
       this.heureEntree = '',
       this.heureDepart = '',
       this.nombreMaxOccupants = 0,
@@ -429,8 +416,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
       this.residenceDisponible = true})
       : _images = images,
         _commodites = commodites,
-        _pieces = pieces,
-        _metadata = metadata;
+        _pieces = pieces;
 
   factory _$ResidenceCreationModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResidenceCreationModelImplFromJson(json);
@@ -498,15 +484,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
   @override
   @JsonKey()
   final int dureeMaxSejour;
-  final Map<String, dynamic> _metadata;
-  @override
-  @JsonKey()
-  Map<String, dynamic> get metadata {
-    if (_metadata is EqualUnmodifiableMapView) return _metadata;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_metadata);
-  }
-
+//@Default({}) Map<String, dynamic> metadata,
   @override
   @JsonKey()
   final String heureEntree;
@@ -531,7 +509,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
 
   @override
   String toString() {
-    return 'ResidenceCreationModel(miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, metadata: $metadata, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceCreationModel(miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
   }
 
   @override
@@ -562,7 +540,6 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
                 other.dureeMinSejour == dureeMinSejour) &&
             (identical(other.dureeMaxSejour, dureeMaxSejour) ||
                 other.dureeMaxSejour == dureeMaxSejour) &&
-            const DeepCollectionEquality().equals(other._metadata, _metadata) &&
             (identical(other.heureEntree, heureEntree) ||
                 other.heureEntree == heureEntree) &&
             (identical(other.heureDepart, heureDepart) ||
@@ -598,7 +575,6 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
         const DeepCollectionEquality().hash(_pieces),
         dureeMinSejour,
         dureeMaxSejour,
-        const DeepCollectionEquality().hash(_metadata),
         heureEntree,
         heureDepart,
         nombreMaxOccupants,
@@ -640,7 +616,6 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
       final List<PieceModel> pieces,
       final int dureeMinSejour,
       final int dureeMaxSejour,
-      final Map<String, dynamic> metadata,
       final String heureEntree,
       final String heureDepart,
       final int nombreMaxOccupants,
@@ -682,9 +657,7 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   int get dureeMinSejour;
   @override
   int get dureeMaxSejour;
-  @override
-  Map<String, dynamic> get metadata;
-  @override
+  @override //@Default({}) Map<String, dynamic> metadata,
   String get heureEntree;
   @override
   String get heureDepart;

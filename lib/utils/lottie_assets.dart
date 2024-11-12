@@ -2,27 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieAssets {
-  LottieBuilder _success = Lottie.asset(
+  final LottieBuilder _success = Lottie.asset(
     'assets/lotties/success.json',
     repeat: false,
   );
-  LottieBuilder _fail = Lottie.asset(
+  final LottieBuilder _fail = Lottie.asset(
     'assets/lotties/fail.json',
     repeat: false,
   );
-  LottieBuilder _cheking = Lottie.asset(
+  final LottieBuilder _cheking = Lottie.asset(
     'assets/lotties/cheking.json',
     repeat: true,
   );
-  LottieBuilder _orderChecking = Lottie.asset(
+  final LottieBuilder _orderChecking = Lottie.asset(
     'assets/lotties/orderChecking.json',
     repeat: true,
   );
-  LottieBuilder _deliveryProgress = Lottie.asset(
+  final LottieBuilder _deliveryProgress = Lottie.asset(
     'assets/lotties/delivery_progress.json',
     repeat: true,
   );
-  LottieBuilder _house = Lottie.asset(
+  final LottieBuilder _house = Lottie.asset(
     'assets/lotties/house.json',
     repeat: true,
   );

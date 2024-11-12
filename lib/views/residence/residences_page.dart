@@ -1,20 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart';
-import 'package:immoplus_pro/request_path.dart';
+import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
+import 'package:immoplus_pro/views/home_page/home_page.dart';
 import 'package:immoplus_pro/views/residence/widgets/loading_logment_list_card.dart';
 import 'package:immoplus_pro/views/residence/widgets/logment_list_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ResidencesPage extends StatefulWidget {
   const ResidencesPage({super.key});
@@ -27,15 +24,10 @@ class _ResidencesPageState extends State<ResidencesPage> {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
 
-  void _launchURL() async {
-    final Uri url = Uri.parse("${RequestPath.baseUrl}/admin/content/logements");
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
-  }
-
   Future<void> loadPage(int page) async {
-    LogmentRepository.getResidences(page: page).then((value) {
+    LogmentRepository.getResidences(
+            page: page, orderBy: 'createdAt', orderDir: 'desc')
+        .then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(
             value.data ?? [], (value.currentPage)! + 1);
@@ -47,25 +39,6 @@ class _ResidencesPageState extends State<ResidencesPage> {
       _pagingController.error = error.toString();
     });
   }
-
-  // Future<void> loadPage(int page) async {
-  //   List<LogmentModel> newDatas =
-  //       await Repository<LogmentModel>(LogmentModel()).fetchListData(
-  //           requestInfo: galleryAdapter.getLogments(
-  //             path: RequestPath.logments,
-  //             limit: 3,
-  //             page: page,
-  //           ),
-  //           context: context) as List<LogmentModel>;
-  //   inspect(newDatas);
-  //   final isLastPage = newDatas.length < _limit;
-  //   if (isLastPage) {
-  //     _pagingController.appendLastPage(newDatas);
-  //   } else {
-  //     int nextPageKey = page + newDatas.length;
-  //     _pagingController.appendPage(newDatas, nextPageKey);
-  //   }
-  // }
 
   @override
   void initState() {
@@ -87,6 +60,12 @@ class _ResidencesPageState extends State<ResidencesPage> {
     return Scaffold(
       backgroundColor: AppColors.scafold,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(FontAwesomeIcons.chevronLeft),
+          onPressed: () {
+            context.goNamed(HomePage.name);
+          },
+        ),
         backgroundColor: AppColors.scafold,
         title: const Text('Mes résidences'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
@@ -111,11 +90,11 @@ class _ResidencesPageState extends State<ResidencesPage> {
             labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             onDeleted: () {},
             onPressed: () {
-              // _launchURL();
+              ResidenceCreationModelBuilder().reset();
               context.pushNamed(CreateLodgmentPage.name);
             },
           ),
-          Gap(7),
+          const Gap(7),
         ],
       ),
       body: CustomScrollView(
@@ -129,7 +108,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
               firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
                   //height: 600,
                   child: Column(

@@ -2,6 +2,7 @@ import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
 import 'package:immoplus_pro/data/models/residence/piece_model.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
+import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class ResidenceCreationModelBuilder {
@@ -17,7 +18,7 @@ class ResidenceCreationModelBuilder {
   String adresse = '';
   String ville = '';
   String commune = '';
-  PositionModel position = PositionModel();
+  PositionModel position = const PositionModel();
   String video = '';
   List<String> images = [];
   List<CommoditeModel> commodites = [];
@@ -32,6 +33,8 @@ class ResidenceCreationModelBuilder {
   bool fetesAutorises = false;
   String reglesSupplementaires = 'string';
   bool residenceDisponible = true;
+  bool editing = false;
+  String id = '';
 
   // Private constructor
   ResidenceCreationModelBuilder._internal();
@@ -40,6 +43,7 @@ class ResidenceCreationModelBuilder {
   factory ResidenceCreationModelBuilder() {
     return _instance;
   }
+
   ResidenceCreationModel build() {
     return ResidenceCreationModel(
       miniature: miniature,
@@ -57,7 +61,7 @@ class ResidenceCreationModelBuilder {
       pieces: List<PieceModel>.from(pieces),
       dureeMinSejour: dureeMinSejour,
       dureeMaxSejour: dureeMaxSejour,
-      metadata: Map<String, dynamic>.from(metadata),
+      //metadata: Map<String, dynamic>.from(metadata),
       heureEntree: heureEntree,
       heureDepart: heureDepart,
       nombreMaxOccupants: nombreMaxOccupants,
@@ -66,6 +70,33 @@ class ResidenceCreationModelBuilder {
       reglesSupplementaires: reglesSupplementaires,
       residenceDisponible: residenceDisponible,
     );
+  }
+
+  void fromModel(ResidenceModel model) {
+    miniature = model.miniature;
+    nom = model.nom;
+    typeResidence = model.typeResidence;
+    description = model.description;
+    prixReservation = model.prixReservation;
+    adresse = model.adresse;
+    ville = model.ville;
+    commune = model.commune;
+    position = model.position;
+    video = model.video;
+    images = List<String>.from(model.images);
+    commodites = List<CommoditeModel>.from(model.commodites);
+    pieces = List<PieceModel>.from(model.pieces);
+    dureeMinSejour = model.dureeMinSejour;
+    dureeMaxSejour = model.dureeMaxSejour;
+    heureEntree = model.heureEntree;
+    heureDepart = model.heureDepart;
+    nombreMaxOccupants = model.nombreMaxOccupants;
+    animauxAutorises = model.animauxAutorises;
+    fetesAutorises = model.fetesAutorises;
+    reglesSupplementaires = model.reglesSupplementaires;
+    residenceDisponible = model.residenceDisponible;
+    editing = true;
+    id = model.id;
   }
 
   // Method to reset all values to default
@@ -78,7 +109,7 @@ class ResidenceCreationModelBuilder {
     adresse = '';
     ville = '';
     commune = '';
-    position = PositionModel();
+    position = const PositionModel();
     video = '';
     images = [];
     commodites = [];
@@ -93,5 +124,7 @@ class ResidenceCreationModelBuilder {
     fetesAutorises = false;
     reglesSupplementaires = '';
     residenceDisponible = true;
+    editing = false;
+    id = '';
   }
 }

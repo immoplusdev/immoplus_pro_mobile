@@ -9,10 +9,10 @@ part 'demande_visite_model.g.dart';
 @freezed
 class DemandeVisiteModel with _$DemandeVisiteModel {
   factory DemandeVisiteModel({
-    String? id,
+    @Default('') String id,
     String? statusDemandeVisite,
     String? typeDemandeVisite,
-    List<DateDemandeVisite>? datesDemandeVisite,
+    @Default([]) List<DateDemandeVisite> datesDemandeVisite,
     String? statusFacture,
     @Default(false) bool retraitProEffectue,
     @Default(0) int montantTotalDemandeVisite,

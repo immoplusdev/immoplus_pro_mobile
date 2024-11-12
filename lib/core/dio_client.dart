@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/request_path.dart';
+import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/views/login_page/login_page.dart';
 
 class DioClient {
   static final DioClient _instance = DioClient._internal();
@@ -55,6 +58,11 @@ class DioClient {
       },
       onError: (DioException error, handler) {
         log(error.response!.data.toString(), name: "Response Error");
+        if (error.response != null) {
+          if (error.response!.statusCode == 401) {
+            AppRouter.router.goNamed(LoginPage.name);
+          }
+        }
 
         if (error.response!.data['message'] != null) {
           EasyLoading.instance.backgroundColor = Colors.red.shade400;

@@ -7,7 +7,9 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart';
+import 'package:immoplus_pro/views/estate_creation/create_estate_page.dart';
 import 'package:immoplus_pro/views/estates/widgets/logment_list_card.dart';
+import 'package:immoplus_pro/views/home_page/home_page.dart';
 import 'package:immoplus_pro/views/residence/widgets/loading_logment_list_card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -23,7 +25,10 @@ class _EstatesPageState extends State<EstatesPage> {
       PagingController(firstPageKey: 1);
 
   Future<void> loadPage(int page) async {
-    BienImmobilierRepository.getBiensImmobiliers(page, 5).then((value) {
+    BienImmobilierRepository.getBiensImmobiliers(
+      page: page,
+      perPage: 5,
+    ).then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(
             value.data ?? [], (value.currentPage)! + 1);
@@ -41,6 +46,7 @@ class _EstatesPageState extends State<EstatesPage> {
     _pagingController.addPageRequestListener((pageKey) {
       loadPage(pageKey);
     });
+
     super.initState();
   }
 
@@ -56,13 +62,19 @@ class _EstatesPageState extends State<EstatesPage> {
     return Scaffold(
       backgroundColor: AppColors.scafold,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(FontAwesomeIcons.chevronLeft),
+          onPressed: () {
+            context.goNamed(HomePage.name);
+          },
+        ),
         backgroundColor: AppColors.scafold,
-        title: Text('Mes logements'),
+        title: const Text('Mes biens immobileir'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
           InputChip(
             backgroundColor: AppColors.primary.withOpacity(0.8),
-            label: Text('Ajouter logement'),
+            label: const Text('Ajouter bien'),
             labelStyle: Theme.of(context)
                 .textTheme
                 .bodySmall!
@@ -77,13 +89,13 @@ class _EstatesPageState extends State<EstatesPage> {
               size: 15,
               color: Colors.white,
             ),
-            labelPadding: EdgeInsets.symmetric(horizontal: 2),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             onDeleted: () {},
             onPressed: () {
-              //context.pushNamed(CreateLodgmentPage.name);
+              context.pushNamed(CreateEstatePage.name);
             },
           ),
-          Gap(7),
+          const Gap(7),
         ],
       ),
       body: CustomScrollView(
@@ -94,10 +106,11 @@ class _EstatesPageState extends State<EstatesPage> {
             },
           ),
           PagedSliverList<int, BienImmobilierModel>(
+            addAutomaticKeepAlives: false,
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
               firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
                   //height: 600,
                   child: Column(

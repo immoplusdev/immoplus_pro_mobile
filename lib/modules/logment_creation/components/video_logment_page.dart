@@ -1,23 +1,20 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/files/file_data_model.dart';
-import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/modules/logment_creation/components/pictures_logment_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/components/rules_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/create_lodgment_page.dart';
 import 'package:immoplus_pro/modules/logment_creation/utils/create_logment_router.dart';
 import 'package:immoplus_pro/modules/logment_creation/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/modules/logment_creation/widgets/step_bottom_button.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:smooth_video_progress/smooth_video_progress.dart';
+import 'package:immoplus_pro/views/shared_widgets/upload_video_page.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoLogmentPage extends StatefulWidget {
@@ -29,35 +26,92 @@ class VideoLogmentPage extends StatefulWidget {
 }
 
 class _VideoLogmentPageState extends State<VideoLogmentPage> {
-  String videoPath = '';
-  void _changeVideo(String newPath) {
-    // Arrêter la vidéo actuelle et libérer les ressources
-    _controller.pause();
-    _controller.dispose();
-
-    // Créer un nouveau contrôleur pour le nouveau chemin de vidéo
-    _controller = VideoPlayerController.file(File(newPath))
-      ..initialize().then((_) {
-        // Lorsque la vidéo est prête, rafraîchir l'interface pour afficher la première image
-        setState(() {});
-      });
-
-    // Optionnel: Démarrer la vidéo automatiquement
-    _controller.play();
-  }
-
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller; // Rendre nullable
+  ChewieController? _chewieController;
+  bool _isLoading = true;
+  String? _localVideoPath;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     PregressStepperLogmentCreating.setStepe(6);
-    _controller = VideoPlayerController.file(File(videoPath))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
+    // Télécharger et jouer la vidéo s'il y a une vidéo associée
+    if (ResidenceCreationModelBuilder().video.isNotEmpty) {
+      _downloadAndPlayVideo(
+          "https://api-v2.immoplus.ci/files/raw/public/${ResidenceCreationModelBuilder().video}.mp4");
+    } else {
+      // Si aucune vidéo, ne pas afficher le loader
+      _isLoading = false;
+    }
+  }
+
+  Future<void> _downloadAndPlayVideo(String videoUrl) async {
+    log("Téléchargement de la vidéo depuis : $videoUrl");
+    try {
+      final http.Response response = await http.get(Uri.parse(videoUrl));
+      if (response.statusCode == 200) {
+        final Directory tempDir = await getTemporaryDirectory();
+        final String tempPath = tempDir.path;
+        final File videoFile = File('$tempPath/temp_video.mp4');
+
+        // Écrire la vidéo téléchargée dans un fichier local
+        await videoFile.writeAsBytes(response.bodyBytes);
+
+        setState(() {
+          _localVideoPath = videoFile.path;
+        });
+
+        // Initialiser VideoPlayerController avec le fichier local
+        _controller = VideoPlayerController.file(videoFile)
+          ..initialize().then((_) {
+            _initializeChewieController();
+            setState(() {
+              _isLoading = false;
+            });
+          });
+      } else {
+        throw Exception('Erreur lors du téléchargement de la vidéo');
+      }
+    } catch (e) {
+      log('Erreur : $e');
+      setState(() {
+        _isLoading = false;
       });
+    }
+  }
+
+  void _initializeChewieController() {
+    if (_controller != null && _controller!.value.isInitialized) {
+      _chewieController = ChewieController(
+        videoPlayerController: _controller!,
+        aspectRatio: _controller!.value.aspectRatio,
+        autoPlay: false,
+        looping: false,
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    // Supprimer la vidéo locale si elle a été téléchargée
+    if (_localVideoPath != null) {
+      final File videoFile = File(_localVideoPath!);
+      if (videoFile.existsSync()) {
+        videoFile.deleteSync();
+        print('Vidéo supprimée : $_localVideoPath');
+      }
+    }
+    _controller?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,143 +125,108 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
               delegate: PregressStepperLogmentCreating(),
             ),
           ),
-          // SliverGap(50),
-          Visibility(
-            visible: videoPath.isNotEmpty,
-            replacement: SliverFillRemaining(
-              hasScrollBody: false,
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.video,
-                      size: 100,
-                    ),
-                    Gap(10),
-                    Text(
-                      "Partagez votre espace avec nous ! Sélectionnez une vidéo bien retouchée de votre logement, couvrant toutes les pièces et accompagnée d'une belle musique de fond. Montrez-nous ce qui rend votre chez-vous unique et captivant.",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              )),
-            ),
-            child: SliverToBoxAdapter(
-              child: _controller.value.isInitialized
-                  ? GestureDetector(
-                      onTap: () async {
-                        setState(() async {
-                          _controller.value.isPlaying
-                              ? await _controller.pause()
-                              : await _controller.play();
-                        });
-                      },
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(_controller),
-                            ),
-                          ),
-                          Positioned.fill(
-                            // bottom: 0,
-                            // right: 150,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Visibility(
-                                visible: !_controller.value.isPlaying,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: CupertinoColors.systemFill,
-                                  child: Icon(
-                                    _controller.value.isPlaying
-                                        ? CupertinoIcons.pause
-                                        : CupertinoIcons.play_arrow_solid,
-                                    size: 40,
-                                    color: Colors.white,
-                                  ),
+          ResidenceCreationModelBuilder().video.isNotEmpty
+              ? SliverToBoxAdapter(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : (_controller != null &&
+                              _controller!.value.isInitialized)
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _controller!.value.isPlaying
+                                      ? _chewieController?.pause()
+                                      : _chewieController?.play();
+                                });
+                              },
+                              child: AspectRatio(
+                                aspectRatio: _controller!.value.aspectRatio,
+                                child: Chewie(controller: _chewieController!),
+                              ),
+                            )
+                          : const Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.video,
+                                      size: 100,
+                                    ),
+                                    Gap(10),
+                                    Text(
+                                      "Aucune vidéo n'a encore été téléchargée. Sélectionnez une vidéo bien retouchée de votre logement.",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          )
+                )
+              : const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.video,
+                            size: 100,
+                          ),
+                          Gap(10),
+                          Text(
+                            "Aucune vidéo n'a encore été téléchargée. Sélectionnez une vidéo bien retouchée de votre logement.",
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
-                    )
-                  : Shimmer.fromColors(
-                      baseColor: (Colors.grey[300])!,
-                      highlightColor: Colors.white,
-                      child: Card(
-                        elevation: 0,
-                        margin: EdgeInsets.zero,
-                        clipBehavior: Clip.antiAlias,
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 250,
-                        ),
-                      ),
                     ),
-            ),
-          ),
-          Visibility(
-            visible: videoPath.isNotEmpty,
-            replacement: SliverToBoxAdapter(),
-            child: SliverToBoxAdapter(
-              child: SmoothVideoProgress(
-                controller: _controller,
-                builder: (context, position, duration, child) => Slider(
-                  mouseCursor: MouseCursor.defer,
-                  // onChangeStart: (_) => controller.pause(),
-                  // onChangeEnd: (_) => controller.play(),
-                  onChanged: (value) =>
-                      _controller.seekTo(Duration(milliseconds: value.toInt())),
-                  value: position.inMilliseconds.toDouble(),
-                  min: 0,
-                  max: duration.inMilliseconds.toDouble(),
+                  ),
                 ),
-              ),
-            ),
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primary,
-        child: Icon(Icons.video_call),
+        child: const Icon(Icons.video_call),
         onPressed: () async {
-          final ImagePicker picker = ImagePicker();
-          await picker.pickVideo(source: ImageSource.gallery).then((value) {
-            videoPath = value!.path;
-            _changeVideo(value.path);
-          }
-              // Pick multiple images.
-              );
+          showModalBottomSheet<String>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            builder: (context) => const FractionallySizedBox(
+              heightFactor: 0.9,
+              child: UploadVideoPage(),
+            ),
+          ).then(
+            (value) {
+              setState(() {
+                ResidenceCreationModelBuilder().video = value ?? '';
+                if (value != null && value.isNotEmpty) {
+                  // Redémarrer le téléchargement de la nouvelle vidéo
+                  _isLoading = true;
+                  _downloadAndPlayVideo(
+                      "https://api-v2.immoplus.ci/files/raw/public/${ResidenceCreationModelBuilder().video}.mp4");
+                }
+              });
+            },
+          );
         },
       ),
       bottomNavigationBar: StepBottomButton(
         onPreview: () {
           CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
         },
-        onNext: videoPath.isEmpty
-            ? null
-            : () async {
-                EasyLoading.show(status: "Envoie de la vidéo");
-
-                FileDataModel response =
-                    await AuthRepository.uplaodFile(file: File(videoPath));
-                if (response.data != null) {
-                  ResidenceCreationModelBuilder().video =
-                      response.data!.id ?? "";
-                }
-
-                EasyLoading.dismiss();
-                log(ResidenceCreationModelBuilder().video.toString(),
-                    name: 'VIDEO');
-                CreateLogmentRouter.router.goNamed(RulesPage.name);
-              },
+        onNext: () {
+          CreateLogmentRouter.router.goNamed(RulesPage.name);
+        },
       ),
     );
   }

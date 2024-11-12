@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('Connexion ou inscription'),
+          title: const Text('Connexion ou inscription'),
           titleTextStyle:
               Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20),
           centerTitle: false,
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             height: double.infinity,
             width: double.infinity,
-            padding: EdgeInsets.only(left: 15, right: 15),
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               child: Form(
@@ -92,14 +92,14 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _formController.email,
                       labelText: 'Email',
                       textInputType: TextInputType.emailAddress,
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         CupertinoIcons.mail,
                         size: 19,
                       ),
                       validator: (value) =>
                           FormUtils.emailValidator(email: value),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     ValueListenableBuilder<bool>(
@@ -108,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                           return CustomTextField(
                             controller: _formController.password,
                             obscureText: !_passwordNotifier.value,
-                            prefixIcon: Icon(CupertinoIcons.lock),
+                            prefixIcon: const Icon(CupertinoIcons.lock),
                             sufixIcon: IconButton(
                               onPressed: () {
                                 _passwordNotifier.value =
@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -182,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                             )),
                       ],
                     ),
-                    Row(
+                    const Row(
                       children: [
                         Flexible(
                           child: SizedBox(
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Text('ou'),
                         ),
                         Flexible(
@@ -234,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        bottomNavigationBar: SizedBox(
+        bottomNavigationBar: const SizedBox(
             height: 50,
             child: Center(
               child: Text(

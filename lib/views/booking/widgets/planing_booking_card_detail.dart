@@ -22,28 +22,30 @@ class PlaningBookingCardDetail extends StatelessWidget {
           Flexible(
             child: ListTile(
               dense: true,
-              title: Text('ARRIVÉE'),
+              title: const Text('ARRIVÉE'),
               titleTextStyle: GoogleFonts.inter(
                   fontWeight: FontWeight.bold, color: Colors.black),
-              subtitle: (reservationModel.datesReservation!.isNotEmpty)
+              subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? Text(
-                      "${formatDate.format(reservationModel.datesReservation!.first.date!)} à ${reservationModel.residence!.heureEntree}")
+                      "${formatDate.format(reservationModel.datesReservation.first.date!)} à ${reservationModel.residence.heureEntree}")
                   : null,
             ),
           ),
-          VerticalDivider(
+          const VerticalDivider(
             thickness: 1,
             color: Colors.grey,
           ),
           Flexible(
             child: ListTile(
               dense: true,
-              title: Text('DÉPART'),
+              title: const Text('DÉPART'),
               titleTextStyle: GoogleFonts.inter(
                   fontWeight: FontWeight.bold, color: Colors.black),
-              subtitle: (reservationModel.datesReservation!.isNotEmpty)
+              subtitle: (reservationModel.datesReservation.isNotEmpty)
                   ? Text(
-                      "${formatDate.format(reservationModel.datesReservation!.last.date!)} avant ${reservationModel.residence!.heureDepart} ")
+                      "${formatDate.format(reservationModel.datesReservation.last.date!)} avant ${reservationModel.residence.heureDepart} ",
+                      style: const TextStyle(fontSize: 10),
+                    )
                   : null,
             ),
           ),

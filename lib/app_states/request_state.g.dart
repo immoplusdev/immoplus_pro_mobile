@@ -78,6 +78,20 @@ Map<String, dynamic> _$$REQUEST_RESIDENCE_DATAImplToJson(
       'runtimeType': instance.$type,
     };
 
+_$REQUEST_BIEN_IMMOBILIER_DATAImpl _$$REQUEST_BIEN_IMMOBILIER_DATAImplFromJson(
+        Map<String, dynamic> json) =>
+    _$REQUEST_BIEN_IMMOBILIER_DATAImpl(
+      data: BienImmobilierModel.fromJson(json['data'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$REQUEST_BIEN_IMMOBILIER_DATAImplToJson(
+        _$REQUEST_BIEN_IMMOBILIER_DATAImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'runtimeType': instance.$type,
+    };
+
 _$REQUEST_RESIDENCES_DATAImpl _$$REQUEST_RESIDENCES_DATAImplFromJson(
         Map<String, dynamic> json) =>
     _$REQUEST_RESIDENCES_DATAImpl(

@@ -28,6 +28,18 @@ enum OPERATOR_NAME {
 }
 
 class Utils {
+  static void makePhoneCall(String phoneNumber) async {
+    final Uri phoneUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
   static String getCurrentLocation() =>
       AppRouter.router.routerDelegate.currentConfiguration.uri.toString();
 
@@ -46,11 +58,11 @@ class Utils {
       "${RequestPath.baseUrl}/files/raw/public/$id";
 
   static Widget getImageWidget({required String id}) => CachedNetworkImage(
-        imageUrl: "${RequestPath.baseUrl}/api/file/$id",
+        imageUrl: "${RequestPath.baseUrl}/files/raw/public/$id",
         placeholder: (context, url) => Shimmer.fromColors(
           baseColor: (Colors.grey[300])!,
           highlightColor: Colors.white,
-          period: Duration(milliseconds: 600),
+          period: const Duration(milliseconds: 600),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.grey,
@@ -61,7 +73,7 @@ class Utils {
         errorWidget: (context, url, error) => Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.red,
               image: DecorationImage(
                 fit: BoxFit.cover,
@@ -158,7 +170,23 @@ class Utils {
   }
 
   static String formatDate({required DateTime dateTime}) {
-    String formattedDate = DateFormat('d/MM/yyy').format(dateTime);
+    String formattedDate = DateFormat('dd/MM/yyy').format(dateTime);
+    return formattedDate;
+  }
+
+  static String formatDateTime({required DateTime dateTime}) {
+    String formattedDate =
+        DateFormat("dd MMMM yyy  à HH'h':mm").format(dateTime);
+    return formattedDate;
+  }
+
+  static String formatDatenly({required DateTime dateTime}) {
+    String formattedDate = DateFormat("dd MMMM yyy").format(dateTime);
+    return formattedDate;
+  }
+
+  static String formatTimeOnly({required DateTime dateTime}) {
+    String formattedDate = DateFormat("à HH'h':mm").format(dateTime);
     return formattedDate;
   }
 
@@ -193,10 +221,10 @@ class Utils {
   }
 
   static ssdPayment({required String paymentType}) async {
-    String _code = getSSD(paymentType: paymentType);
+    String code = getSSD(paymentType: paymentType);
     await launchUrl(Uri(
       scheme: 'tel',
-      path: _code,
+      path: code,
     ));
   }
 
@@ -351,7 +379,7 @@ class Utils {
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.85,
-            child: LoginPage()),
+            child: const LoginPage()),
       ),
     );
   }
@@ -381,7 +409,7 @@ class Utils {
 
     // Ajouter la partie décimale si elle existe
     if (hasDecimal) {
-      formattedAmount += '.' + parts[1];
+      formattedAmount += '.${parts[1]}';
     }
 
     // Ajouter le symbole de la monnaie
@@ -408,7 +436,7 @@ class Utils {
 
     // Ajouter la partie décimale si elle existe
     if (hasDecimal) {
-      formattedAmount += '.' + parts[1];
+      formattedAmount += '.${parts[1]}';
     }
 
     return formattedAmount;

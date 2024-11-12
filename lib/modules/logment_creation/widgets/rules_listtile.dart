@@ -15,9 +15,20 @@ class RuleListTile extends StatefulWidget {
 class _RuleListTileState extends State<RuleListTile> {
   final List<bool> _selectedOption = <bool>[false, true];
   final List<Widget> fruits = <Widget>[
-    Text('OUI'),
-    Text('NON'),
+    const Text('OUI'),
+    const Text('NON'),
   ];
+
+  getElement(int index) {
+    if (widget.id == 1) {
+      return ResidenceCreationModelBuilder().animauxAutorises;
+    } else if (widget.id == 2) {
+      return ResidenceCreationModelBuilder().animauxAutorises;
+    } else if (widget.id == 3) {
+      return ResidenceCreationModelBuilder().animauxAutorises;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +53,7 @@ class _RuleListTileState extends State<RuleListTile> {
               ResidenceCreationModelBuilder().animauxAutorises =
                   _selectedOption[0];
             }
-            inspect(ResidenceCreationModelBuilder());
+            //inspect(ResidenceCreationModelBuilder());
           });
         },
         borderRadius: const BorderRadius.all(Radius.circular(8)),

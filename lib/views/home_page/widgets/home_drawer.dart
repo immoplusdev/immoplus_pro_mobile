@@ -13,6 +13,7 @@ import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/views/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/views/estates/estates_page.dart';
+import 'package:immoplus_pro/views/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/views/login_page/login_page.dart';
 import 'package:immoplus_pro/views/residence/residences_page.dart';
 import 'package:shimmer/shimmer.dart';
@@ -49,20 +50,21 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       placeholder: (context, url) => Shimmer.fromColors(
                         baseColor: Colors.grey.shade300,
                         highlightColor: Colors.grey.shade400,
-                        period: Duration(milliseconds: 500),
+                        period: const Duration(milliseconds: 500),
                         child: Container(
                           width: double.infinity,
                           height: double.infinity,
                           color: Colors.white,
                         ),
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                       fit: BoxFit
                           .cover, // or other BoxFit values as per your design
                     ),
                   ),
                 ),
-                Gap(5),
+                const Gap(5),
                 AutoSizeText(
                   '${SessionManager().currentUser?.firstName} ${SessionManager().currentUser?.lastName}',
                   style: Theme.of(context).textTheme.titleMedium,
@@ -106,7 +108,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               color: AppColors.primary,
               size: 20,
             ),
-            title: const Text('Mes logements'),
+            title: const Text('Biens immobilier'),
           ),
           const Divider(
             height: 0,
@@ -135,7 +137,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               color: AppColors.primary,
               size: 20,
             ),
-            title: Text('Modifier mot de passe'),
+            title: const Text('Modifier mot de passe'),
           ),
           const Divider(
             height: 0,
@@ -159,27 +161,32 @@ class _HomeDrawerState extends State<HomeDrawer> {
             thickness: 1,
           ),
           ListTile(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const GeneralConditionPage(),
+              ));
+            },
             horizontalTitleGap: 0,
             leading: Icon(
               FontAwesomeIcons.fileContract,
               color: AppColors.primary,
               size: 20,
             ),
-            title: Text("Condition général d'utilisation"),
+            title: const Text("Condition général d'utilisation"),
           ),
           const Divider(
             height: 0,
             thickness: 1,
           ),
-          Expanded(child: SizedBox()),
+          const Expanded(child: SizedBox()),
           ListTile(
             horizontalTitleGap: 0,
-            leading: Icon(
+            leading: const Icon(
               FontAwesomeIcons.arrowRightFromBracket,
               color: Colors.redAccent,
               size: 20,
             ),
-            title: Text(
+            title: const Text(
               "Se déconnecter",
               style: TextStyle(
                 color: Colors.redAccent,
@@ -190,9 +197,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 context: context,
                 builder: (BuildContext context) {
                   return CupertinoAlertDialog(
-                    title: Text('Déconnexion'),
-                    content:
-                        Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+                    title: const Text('Déconnexion'),
+                    content: const Text(
+                        'Êtes-vous sûr de vouloir vous déconnecter ?'),
                     actions: <Widget>[
                       CupertinoDialogAction(
                         isDefaultAction: true,
@@ -200,7 +207,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           Navigator.of(context)
                               .pop(); // Ferme la pop-up sans se déconnecter
                         },
-                        child: Text('Annuler'),
+                        child: const Text('Annuler'),
                       ),
                       CupertinoDialogAction(
                         isDestructiveAction: true,
@@ -225,7 +232,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               );
             },
           ),
-          Gap(50),
+          const Gap(50),
         ],
       ),
     );

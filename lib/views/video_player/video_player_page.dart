@@ -1,128 +1,120 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:immoplus_pro/request_path.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:smooth_video_progress/smooth_video_progress.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class VideoPlayerPage extends StatefulWidget {
-  VideoPlayerPage({
-    super.key,
-    required this.videoURL,
-  });
-  final String videoURL;
+  final String videoID;
+
+  const VideoPlayerPage({super.key, required this.videoID});
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  bool _isLoadinng = true;
-  VideoPlayerController? controller;
+  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  String? _localVideoPath;
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(
-      Uri.parse("${RequestPath.baseUrl}/api/file/${widget.videoURL}"),
-      // Uri.parse(
-      //     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
-      videoPlayerOptions: VideoPlayerOptions(
-        mixWithOthers: true,
-      ),
-    )..initialize().then((_) {
-        setState(() {
-          _isLoadinng == false;
-          controller!.pause();
-        });
-      });
+    _downloadAndPlayVideo();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<VideoPlayerValue>(
-        valueListenable: controller!,
-        builder: (context, value, _) {
-          print(value.position.inSeconds);
-          return Column(
-            children: [
-              controller!.value.isInitialized
-                  ? GestureDetector(
-                      onTap: () async {
-                        controller!.value.isPlaying
-                            ? await controller!.pause()
-                            : await controller!.play();
-                      },
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: AspectRatio(
-                              aspectRatio: controller!.value.aspectRatio,
-                              child: VideoPlayer(controller!),
-                            ),
-                          ),
-                          Positioned.fill(
-                            // bottom: 0,
-                            // right: 150,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Visibility(
-                                visible: !controller!.value.isPlaying,
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: CupertinoColors.systemFill,
-                                  child: Icon(
-                                    controller!.value.isPlaying
-                                        ? CupertinoIcons.pause
-                                        : CupertinoIcons.play_arrow_solid,
-                                    size: 40,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  : Shimmer.fromColors(
-                      baseColor: (Colors.grey[300])!,
-                      highlightColor: Colors.white,
-                      child: Card(
-                        elevation: 0,
-                        margin: EdgeInsets.zero,
-                        clipBehavior: Clip.antiAlias,
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 250,
-                        ),
-                      ),
-                    ),
-              SmoothVideoProgress(
-                controller: controller!,
-                builder: (context, position, duration, child) => Slider(
-                  mouseCursor: MouseCursor.defer,
-                  // onChangeStart: (_) => controller.pause(),
-                  // onChangeEnd: (_) => controller.play(),
-                  onChanged: (value) =>
-                      controller!.seekTo(Duration(milliseconds: value.toInt())),
-                  value: position.inMilliseconds.toDouble(),
-                  min: 0,
-                  max: duration.inMilliseconds.toDouble(),
-                ),
-              ),
-            ],
-          );
-        });
+  Future<void> _downloadAndPlayVideo() async {
+    log("https://api-v2.immoplus.ci/files/raw/public/${widget.videoID}.mp4");
+    try {
+      // Télécharger la vidéo depuis l'URL et la stocker localement
+      final http.Response response = await http.get(Uri.parse(
+          "https://api-v2.immoplus.ci/files/raw/public/${widget.videoID}.mp4"));
+      if (response.statusCode == 200) {
+        final Directory tempDir = await getTemporaryDirectory();
+        final String tempPath = tempDir.path;
+        final File videoFile = File('$tempPath/temp_video.mp4');
+
+        // Écrire les données vidéo dans un fichier local
+        await videoFile.writeAsBytes(response.bodyBytes);
+
+        // Initialiser VideoPlayerController avec le fichier local
+        _videoPlayerController = VideoPlayerController.file(videoFile)
+          ..initialize().then((_) {
+            setState(() {
+              _isLoading = false;
+              _localVideoPath = videoFile.path;
+
+              // Initialiser ChewieController
+              _chewieController = ChewieController(
+                videoPlayerController: _videoPlayerController,
+                autoPlay: true,
+                looping: false,
+              );
+            });
+          });
+      } else {
+        throw Exception('Erreur lors du téléchargement de la vidéo');
+      }
+    } catch (e) {
+      log(_videoPlayerController.value.errorDescription!);
+      print('Erreur: $e');
+    }
   }
 
   @override
   void dispose() {
-    () async {
-      await controller!.pause();
-      await controller!.dispose();
-    }();
+    // Supprimer la vidéo locale si elle a été téléchargée
+    if (_localVideoPath != null) {
+      final File videoFile = File(_localVideoPath!);
+      if (videoFile.existsSync()) {
+        videoFile.deleteSync();
+        print('Vidéo supprimée : $_localVideoPath');
+      }
+    }
 
+    // Nettoyer les contrôleurs
+    _chewieController?.dispose();
+    _videoPlayerController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? _buildShimmerEffect() // Affiche l'effet Shimmer pendant le chargement
+        : SizedBox(height: 300, child: Chewie(controller: _chewieController!));
+  }
+
+  // Simuler un effet Shimmer avec des containers en gradients
+  Widget _buildShimmerEffect() {
+    return Container(
+      width: double.infinity,
+      height: 250.0,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.grey.shade300,
+            Colors.grey.shade100,
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: const [0.3, 0.7],
+        ),
+      ),
+      child: const Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox(
+            width: 80,
+            height: 80,
+            child: CircularProgressIndicator(),
+          ),
+        ],
+      ),
+    );
   }
 }

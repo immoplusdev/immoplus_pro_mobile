@@ -22,12 +22,12 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<BienImmobilierModel> getImmobilier(String id) async {
+  Future<BienImmobilierSingle> getImmobilier(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<BienImmobilierModel>(Options(
+    final _options = _setStreamType<BienImmobilierSingle>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -44,9 +44,9 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BienImmobilierModel _value;
+    late BienImmobilierSingle _value;
     try {
-      _value = BienImmobilierModel.fromJson(_result.data!);
+      _value = BienImmobilierSingle.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -57,13 +57,20 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   @override
   Future<BienImmobilierCollection> getImmobiliers(
     int page,
+    Map<String, dynamic>? where,
     int perPage,
+    String? orderBy,
+    String? orderDir,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_page': page,
       r'_per_page': perPage,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<BienImmobilierCollection>(Options(
@@ -94,13 +101,13 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<BienImmobilierModel> createBienImmobilier(
+  Future<BienImmobilierSingle> createBienImmobilier(
       BienImmobilierCreationModel bienImmobilier) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = bienImmobilier;
-    final _options = _setStreamType<BienImmobilierModel>(Options(
+    final _options = _setStreamType<BienImmobilierSingle>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -117,9 +124,9 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late BienImmobilierModel _value;
+    late BienImmobilierSingle _value;
     try {
-      _value = BienImmobilierModel.fromJson(_result.data!);
+      _value = BienImmobilierSingle.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -128,20 +135,23 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<ResidenceResponse> update(
-      ResidenceCreationModel bienImmobilier) async {
+  Future<BienImmobilierSingle> update(
+    String id,
+    Map<String, dynamic> fields,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = bienImmobilier;
-    final _options = _setStreamType<ResidenceResponse>(Options(
+    final _data = <String, dynamic>{};
+    _data.addAll(fields);
+    final _options = _setStreamType<BienImmobilierSingle>(Options(
       method: 'PATCH',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/biens-immobiliers',
+          '/biens-immobiliers/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -151,9 +161,9 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ResidenceResponse _value;
+    late BienImmobilierSingle _value;
     try {
-      _value = ResidenceResponse.fromJson(_result.data!);
+      _value = BienImmobilierSingle.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -162,12 +172,12 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<DemandeVisiteModel> getVisite(String id) async {
+  Future<DemandeVisitResponse> getVisite(String id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DemandeVisiteModel>(Options(
+    final _options = _setStreamType<DemandeVisitResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -184,9 +194,9 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late DemandeVisiteModel _value;
+    late DemandeVisitResponse _value;
     try {
-      _value = DemandeVisiteModel.fromJson(_result.data!);
+      _value = DemandeVisitResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
@@ -197,14 +207,21 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   @override
   Future<DemandeVisiteCollection> getVisiteOwner(
     String id,
+    Map<String, dynamic>? where,
     int page,
     int perPage,
+    String? orderBy,
+    String? orderDir,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_page': page,
       r'_per_page': perPage,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<DemandeVisiteCollection>(Options(
@@ -237,13 +254,20 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   @override
   Future<DemandeVisiteCollection> getVisites(
     int page,
+    Map<String, dynamic>? where,
     int perPage,
+    String? orderBy,
+    String? orderDir,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_page': page,
       r'_per_page': perPage,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<DemandeVisiteCollection>(Options(
@@ -308,20 +332,22 @@ class _BienImmobilierProvider implements BienImmobilierProvider {
   }
 
   @override
-  Future<DemandeVisiteModel> updateVisite(
-      DemandeVisiteBodyModel demandes) async {
+  Future<DemandeVisiteModel> programmer(
+    String id,
+    VisitProgrammerBody programmer,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = demandes;
+    final _data = programmer;
     final _options = _setStreamType<DemandeVisiteModel>(Options(
-      method: 'PATCH',
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/demandes-visites',
+          '/demandes-visites/action/programmer/${id}',
           queryParameters: queryParameters,
           data: _data,
         )

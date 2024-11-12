@@ -10,6 +10,9 @@ import 'package:immoplus_pro/modules/logment_creation/utils/enum_utils.dart';
 import 'package:immoplus_pro/modules/logment_creation/widgets/step_bottom_button.dart';
 import 'package:delta_to_html/delta_to_html.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:markdown_quill/markdown_quill.dart';
+import 'package:markdown/markdown.dart' as md;
 
 class DescriptionEditorPage extends StatefulWidget {
   const DescriptionEditorPage({super.key});
@@ -20,15 +23,42 @@ class DescriptionEditorPage extends StatefulWidget {
 
 class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
   late SelectionCardData currentSlected;
-  late QuillController _controller;
+  late QuillController _controller = _controller = QuillController.basic();
 
   @override
   void initState() {
     super.initState();
     PregressStepperLogmentCreating.setStepe(8);
-    _controller = QuillController.basic();
+    if (ResidenceCreationModelBuilder().description.isNotEmpty) {
+      final mdDocument = md.Document(encodeHtml: false);
+      final mdToDelta = MarkdownToDelta(markdownDocument: mdDocument);
+      // Convertir Markdown en Delta
+      final delta =
+          mdToDelta.convert(ResidenceCreationModelBuilder().description);
+
+      // Initialiser le QuillController avec le Delta
+      _controller = quill.QuillController(
+        document: quill.Document.fromDelta(delta),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    }
+    //  Future.delayed(const Duration(seconds: 1),(){
+
+    //  }),
+    _controller.addListener(
+      () {
+        List deltaJson = _controller.document.toDelta().toJson();
+
+        final html = DeltaToHTML.encodeJson(deltaJson).toString();
+        ResidenceCreationModelBuilder().description = html2md.convert(html);
+      },
+    );
   }
 
+  // @override
+  // void dispose() {
+  //   //_controller.removeListener(listener)
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +71,7 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
               child: Text('Decrivez votre logement',
                   style: Theme.of(context).textTheme.headlineSmall),
@@ -73,14 +103,15 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
           ),
           SliverToBoxAdapter(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              padding: EdgeInsets.all(5),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.all(5),
               color: Colors.white,
               height: 500,
               child: QuillEditor.basic(
                 configurations: QuillEditorConfigurations(
                   showCursor: true,
                   controller: _controller,
+
                   //readOnly: false,
                   sharedConfigurations: const QuillSharedConfigurations(),
                 ),
