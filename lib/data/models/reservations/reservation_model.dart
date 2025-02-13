@@ -20,7 +20,6 @@ class ReservationModel with _$ReservationModel {
     @Default('') String clientPhoneNumber,
     @Default('') String createdAt,
     @Default('') String updatedAt,
-    //@Default('') String createdBy,
     @Default(ResidenceModel()) ResidenceModel residence,
     @Default(ClientModel()) ClientModel client,
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,

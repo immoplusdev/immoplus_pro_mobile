@@ -1,120 +1,106 @@
-import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geojson_vi/geojson_vi.dart';
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
+import 'dart:async';
+import 'dart:io';
+
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:get/get.dart';
+import 'package:immoplus_pro/features/location_module/data/geocoding_api_repository.dart';
+import 'package:immoplus_pro/features/location_module/data/places_api_repository.dart';
+import 'package:immoplus_pro/features/location_module/location_page.dart';
+import 'package:location/location.dart' as loc;
 
-class LocationService {
-  static Position? currentPosition;
+abstract class AppLocationSettings {
+  static const int getLocationTimeLimit = 20; //in seconds
+  static const int locationChangeInterval = 5; //in seconds
+  static const int locationChangeDistance = 250; //in meters
+}
 
-  static Future<Position?> getCurrentLocation(
-      {required BuildContext context}) async {
-    // Check if location services are enabled
-    bool locationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!locationServiceEnabled) {
-      // Location services are not enabled, show a dialog to request permission
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Location Services Disabled'),
-          content: Text(
-              'Please enable location services to access your current location.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context, false),
-            ),
-            TextButton(
-              child: Text('Settings'),
-              onPressed: () => openAppSettings(),
-            ),
-          ],
-        ),
-      );
-    }
+class LocationService extends GetxService {
+  StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
+  bool positionStreamStarted = false;
 
-    // Check if location permission is granted
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      // Location permission is not granted, show a dialog to request permission
-      showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Location Permission Denied'),
-          content: Text(
-              'Please grant location permission to access your current location.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () => Navigator.pop(context, false),
-            ),
-            TextButton(
-              child: Text('Settings'),
-              onPressed: () => openAppSettings(),
-            ),
-          ],
-        ),
-      );
-    }
+  late LocationSettings locationSettings;
 
-    // Get the current location
-    currentPosition = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+  // ignore: unused_field
+  Position? _previousPosition;
 
-    return currentPosition;
+  GeocodingApiRepository geocodingApiRepository = GeocodingApiRepository();
+  PlacesApiRepository placesApiRepository = PlacesApiRepository();
+
+  @override
+  void onInit() {
+    super.onInit();
+    //_toggleServiceStatusStream();
+    _init();
   }
 
-  Future<GeoJSONFeature?> getCurrentPosition() async {
-    // Demande de permission d'accès à la position
+  @override
+  void onClose() {
+    if (_positionStreamSubscription != null) {
+      _positionStreamSubscription?.cancel();
+    }
+  }
+
+  _init() async {
+    // locationServiceStatus.listen((p0) {
+    //   if (p0 &&
+    //       [LocationPermission.always, LocationPermission.whileInUse]
+    //           .any((p0) => p0 == locationPermissionStatus.value)) {
+    //     listen();
+    //   } else {
+    //     stopListen();
+    //   }
+    // });
+
+    // locationPermissionStatus.listen((status) {
+    //   if (locationServiceStatus.isTrue &&
+    //       [LocationPermission.always, LocationPermission.whileInUse]
+    //           .any((p0) => p0 == status)) {
+    //     listen();
+    //   } else {
+    //     stopListen();
+    //   }
+
+    //   if ([LocationPermission.always, LocationPermission.whileInUse]
+    //       .any((p0) => p0 == status)) {
+    //     GetStorage().remove(Constants.locationPermission);
+    //   }
+    // });
+
+    // if (locationServiceStatus.isTrue &&
+    //     [LocationPermission.always, LocationPermission.whileInUse]
+    //         .any((p0) => p0 == locationPermissionStatus.value)) {
+    //   listen();
+    // }
+  }
+
+  // Get current position
+  static Future<Position> getCurrentPosition() async {
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationServiceEnabled) {
+      throw Exception('Location services are disabled.');
+    }
+
     LocationPermission locationPermission = await Geolocator.checkPermission();
-    if (locationPermission == LocationPermission.denied) {
+    if (locationPermission == LocationPermission.denied ||
+        locationPermission == LocationPermission.deniedForever) {
       locationPermission = await Geolocator.requestPermission();
     }
-
-    // Si la permission est refusée, retourne null
-    if (locationPermission == LocationPermission.deniedForever) {
-      return null;
-    }
-
-    // Obtention de la position actuelle
-    final position = await Geolocator.getCurrentPosition();
-    Map<String, dynamic> locality =
-        await _getAddressName(position.latitude, position.longitude);
-    // Conversion de la position en GeoJSONFeature
-    final feature = GeoJSONFeature(
-      GeoJSONPoint([position.longitude, position.latitude]),
-      properties: locality,
-    );
-
-    return feature;
-  }
-
-  /// Fonction pour obtenir le nom de la position à partir des coordonnées
-
-  Future<Map<String, dynamic>> _getAddressName(
-      double latitude, double longitude) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-
-      if (placemarks != null && placemarks.isNotEmpty) {
-        Placemark place = placemarks[0];
-        return {
-          "title": "${place.name}",
-          "subtitle": "${place.subLocality}",
-          "name": "${place.name} ${place.subLocality}",
-        };
-      } else {
-        return {
-          "title": "",
-          "subtitle": "",
-          "name": "",
-        };
-      }
-    } catch (e) {
-      return {};
+    if ([
+      LocationPermission.always,
+      LocationPermission.whileInUse,
+    ].any((element) => element == locationPermission)) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      currentPosition(currentPosition.value.copyWith(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      ));
+      return position;
+    } else {
+      throw Exception('Location permissions are denied.');
     }
   }
 }

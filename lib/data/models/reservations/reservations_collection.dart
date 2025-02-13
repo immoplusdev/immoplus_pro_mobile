@@ -8,9 +8,9 @@ part 'reservations_collection.g.dart';
 class ReservationsCollection with _$ReservationsCollection {
   factory ReservationsCollection({
     @Default([]) List<ReservationModel> data,
-    @Default(1) int currentPage,
-    @Default(1) int totalPages,
-    @Default(10) int pageSize,
+    @Default(0) int currentPage,
+    @Default(0) int totalPages,
+    @Default(0) int pageSize,
     @Default(0) int totalCount,
     @Default(false) bool hasNext,
     @Default(false) bool hasPrevious,

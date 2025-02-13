@@ -29,8 +29,12 @@ mixin _$ReservationsCollection {
   bool get hasNext => throw _privateConstructorUsedError;
   bool get hasPrevious => throw _privateConstructorUsedError;
 
+  /// Serializes this ReservationsCollection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ReservationsCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ReservationsCollectionCopyWith<ReservationsCollection> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -62,6 +66,8 @@ class _$ReservationsCollectionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ReservationsCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +141,8 @@ class __$$ReservationsCollectionImplCopyWithImpl<$Res>
       $Res Function(_$ReservationsCollectionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ReservationsCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -184,9 +192,9 @@ class __$$ReservationsCollectionImplCopyWithImpl<$Res>
 class _$ReservationsCollectionImpl implements _ReservationsCollection {
   _$ReservationsCollectionImpl(
       {final List<ReservationModel> data = const [],
-      this.currentPage = 1,
-      this.totalPages = 1,
-      this.pageSize = 10,
+      this.currentPage = 0,
+      this.totalPages = 0,
+      this.pageSize = 0,
       this.totalCount = 0,
       this.hasNext = false,
       this.hasPrevious = false})
@@ -247,7 +255,7 @@ class _$ReservationsCollectionImpl implements _ReservationsCollection {
                 other.hasPrevious == hasPrevious));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -259,7 +267,9 @@ class _$ReservationsCollectionImpl implements _ReservationsCollection {
       hasNext,
       hasPrevious);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ReservationsCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ReservationsCollectionImplCopyWith<_$ReservationsCollectionImpl>
@@ -301,8 +311,11 @@ abstract class _ReservationsCollection implements ReservationsCollection {
   bool get hasNext;
   @override
   bool get hasPrevious;
+
+  /// Create a copy of ReservationsCollection
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ReservationsCollectionImplCopyWith<_$ReservationsCollectionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

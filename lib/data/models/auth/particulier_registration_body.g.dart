@@ -9,6 +9,7 @@ part of 'particulier_registration_body.dart';
 _$ParticulierRegistrationBodyImpl _$$ParticulierRegistrationBodyImplFromJson(
         Map<String, dynamic> json) =>
     _$ParticulierRegistrationBodyImpl(
+      avatar: json['avatar'] as String?,
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
       email: json['email'] as String?,
@@ -22,6 +23,7 @@ _$ParticulierRegistrationBodyImpl _$$ParticulierRegistrationBodyImplFromJson(
 Map<String, dynamic> _$$ParticulierRegistrationBodyImplToJson(
         _$ParticulierRegistrationBodyImpl instance) =>
     <String, dynamic>{
+      'avatar': instance.avatar,
       'firstName': instance.firstName,
       'lastName': instance.lastName,
       'email': instance.email,

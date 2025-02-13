@@ -139,3 +139,18 @@ Map<String, dynamic> _$$REQUEST_COMMUNES_DATAImplToJson(
       'data': instance.data,
       'runtimeType': instance.$type,
     };
+
+_$BOOKING_WITHDRAW_HISTORYImpl _$$BOOKING_WITHDRAW_HISTORYImplFromJson(
+        Map<String, dynamic> json) =>
+    _$BOOKING_WITHDRAW_HISTORYImpl(
+      data: WithdrawBookingHistoryDto.fromJson(
+          json['data'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$BOOKING_WITHDRAW_HISTORYImplToJson(
+        _$BOOKING_WITHDRAW_HISTORYImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'runtimeType': instance.$type,
+    };

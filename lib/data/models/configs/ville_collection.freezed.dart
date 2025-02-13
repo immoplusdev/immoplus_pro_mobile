@@ -28,8 +28,12 @@ mixin _$VilleCollection {
   bool get hasNext => throw _privateConstructorUsedError;
   bool get hasPrevious => throw _privateConstructorUsedError;
 
+  /// Serializes this VilleCollection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of VilleCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VilleCollectionCopyWith<VilleCollection> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +64,8 @@ class _$VilleCollectionCopyWithImpl<$Res, $Val extends VilleCollection>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of VilleCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,6 +136,8 @@ class __$$VilleCollectionImplCopyWithImpl<$Res>
       _$VilleCollectionImpl _value, $Res Function(_$VilleCollectionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of VilleCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -244,7 +252,7 @@ class _$VilleCollectionImpl implements _VilleCollection {
                 other.hasPrevious == hasPrevious));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -256,7 +264,9 @@ class _$VilleCollectionImpl implements _VilleCollection {
       hasNext,
       hasPrevious);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of VilleCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VilleCollectionImplCopyWith<_$VilleCollectionImpl> get copyWith =>
@@ -298,8 +308,11 @@ abstract class _VilleCollection implements VilleCollection {
   bool get hasNext;
   @override
   bool get hasPrevious;
+
+  /// Create a copy of VilleCollection
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VilleCollectionImplCopyWith<_$VilleCollectionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

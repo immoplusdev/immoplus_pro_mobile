@@ -55,6 +55,39 @@ class _ReservationProvider implements ReservationProvider {
   }
 
   @override
+  Future<WithdrawBookingHistoryDto> withDrawHistory(String id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<WithdrawBookingHistoryDto>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/reservations/data/historique-retrait/residence/owner/${id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late WithdrawBookingHistoryDto _value;
+    try {
+      _value = WithdrawBookingHistoryDto.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ReservationsCollection> getBookings(
     int page,
     Map<String, dynamic>? where,
@@ -103,7 +136,7 @@ class _ReservationProvider implements ReservationProvider {
   @override
   Future<ReservationsCollection> getBookingsOwner(
     String id,
-    String? where,
+    Map<String, dynamic>? where,
     int page,
     int perPage,
     String? orderBy,
@@ -111,12 +144,12 @@ class _ReservationProvider implements ReservationProvider {
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'_where': where,
       r'_page': page,
       r'_per_page': perPage,
       r'_order_by': orderBy,
       r'_order_dir': orderDir,
     };
+    queryParameters.addAll(where ?? <String, dynamic>{});
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;

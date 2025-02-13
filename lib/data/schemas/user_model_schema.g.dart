@@ -77,13 +77,18 @@ const UserModelSchemaSchema = CollectionSchema(
       name: r'refreshToken',
       type: IsarType.string,
     ),
-    r'roleName': PropertySchema(
+    r'role': PropertySchema(
       id: 12,
+      name: r'role',
+      type: IsarType.string,
+    ),
+    r'roleName': PropertySchema(
+      id: 13,
       name: r'roleName',
       type: IsarType.string,
     ),
     r'userId': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'userId',
       type: IsarType.string,
     )
@@ -126,7 +131,7 @@ const UserModelSchemaSchema = CollectionSchema(
   getId: _userModelSchemaGetId,
   getLinks: _userModelSchemaGetLinks,
   attach: _userModelSchemaAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _userModelSchemaEstimateSize(
@@ -208,6 +213,12 @@ int _userModelSchemaEstimateSize(
     }
   }
   {
+    final value = object.role;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.roleName;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -240,8 +251,9 @@ void _userModelSchemaSerialize(
   writer.writeString(offsets[9], object.photoIdentite);
   writer.writeString(offsets[10], object.pieceIdentite);
   writer.writeString(offsets[11], object.refreshToken);
-  writer.writeString(offsets[12], object.roleName);
-  writer.writeString(offsets[13], object.userId);
+  writer.writeString(offsets[12], object.role);
+  writer.writeString(offsets[13], object.roleName);
+  writer.writeString(offsets[14], object.userId);
 }
 
 UserModelSchema _userModelSchemaDeserialize(
@@ -264,8 +276,9 @@ UserModelSchema _userModelSchemaDeserialize(
   object.photoIdentite = reader.readStringOrNull(offsets[9]);
   object.pieceIdentite = reader.readStringOrNull(offsets[10]);
   object.refreshToken = reader.readStringOrNull(offsets[11]);
-  object.roleName = reader.readStringOrNull(offsets[12]);
-  object.userId = reader.readStringOrNull(offsets[13]);
+  object.role = reader.readStringOrNull(offsets[12]);
+  object.roleName = reader.readStringOrNull(offsets[13]);
+  object.userId = reader.readStringOrNull(offsets[14]);
   return object;
 }
 
@@ -303,6 +316,8 @@ P _userModelSchemaDeserializeProp<P>(
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
+      return (reader.readStringOrNull(offset)) as P;
+    case 14:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2551,6 +2566,160 @@ extension UserModelSchemaQueryFilter
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'role',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'role',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'role',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'role',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'role',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'role',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      roleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'role',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
       roleNameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3033,6 +3202,19 @@ extension UserModelSchemaQuerySortBy
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy> sortByRole() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'role', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByRoleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'role', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       sortByRoleName() {
     return QueryBuilder.apply(this, (query) {
@@ -3241,6 +3423,19 @@ extension UserModelSchemaQuerySortThenBy
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy> thenByRole() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'role', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByRoleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'role', Sort.desc);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       thenByRoleName() {
     return QueryBuilder.apply(this, (query) {
@@ -3359,6 +3554,13 @@ extension UserModelSchemaQueryWhereDistinct
     });
   }
 
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct> distinctByRole(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'role', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<UserModelSchema, UserModelSchema, QDistinct> distinctByRoleName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -3458,6 +3660,12 @@ extension UserModelSchemaQueryProperty
       refreshTokenProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'refreshToken');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations> roleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'role');
     });
   }
 

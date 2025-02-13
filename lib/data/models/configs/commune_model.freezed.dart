@@ -28,8 +28,12 @@ mixin _$CommuneModel {
   String? get createdBy => throw _privateConstructorUsedError;
   String get villeId => throw _privateConstructorUsedError;
 
+  /// Serializes this CommuneModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CommuneModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CommuneModelCopyWith<CommuneModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +64,8 @@ class _$CommuneModelCopyWithImpl<$Res, $Val extends CommuneModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CommuneModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -130,6 +136,8 @@ class __$$CommuneModelImplCopyWithImpl<$Res>
       _$CommuneModelImpl _value, $Res Function(_$CommuneModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CommuneModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -234,12 +242,14 @@ class _$CommuneModelImpl implements _CommuneModel {
             (identical(other.villeId, villeId) || other.villeId == villeId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, createdAt, updatedAt,
       deletedAt, createdBy, villeId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CommuneModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CommuneModelImplCopyWith<_$CommuneModelImpl> get copyWith =>
@@ -280,8 +290,11 @@ abstract class _CommuneModel implements CommuneModel {
   String? get createdBy;
   @override
   String get villeId;
+
+  /// Create a copy of CommuneModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CommuneModelImplCopyWith<_$CommuneModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

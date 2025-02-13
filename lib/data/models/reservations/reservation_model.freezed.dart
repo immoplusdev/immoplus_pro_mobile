@@ -32,14 +32,17 @@ mixin _$ReservationModel {
   String get notes => throw _privateConstructorUsedError;
   String get clientPhoneNumber => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
-  String get updatedAt =>
-      throw _privateConstructorUsedError; //@Default('') String createdBy,
+  String get updatedAt => throw _privateConstructorUsedError;
   ResidenceModel get residence => throw _privateConstructorUsedError;
   ClientModel get client => throw _privateConstructorUsedError;
   ProprietaireModel get proprietaire => throw _privateConstructorUsedError;
 
+  /// Serializes this ReservationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ReservationModelCopyWith<ReservationModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -81,6 +84,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -159,6 +164,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     ) as $Val);
   }
 
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ResidenceModelCopyWith<$Res> get residence {
@@ -167,6 +174,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     });
   }
 
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ClientModelCopyWith<$Res> get client {
@@ -175,6 +184,8 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     });
   }
 
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ProprietaireModelCopyWith<$Res> get proprietaire {
@@ -224,6 +235,8 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
       $Res Function(_$ReservationModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -366,7 +379,6 @@ class _$ReservationModelImpl implements _ReservationModel {
   @override
   @JsonKey()
   final String updatedAt;
-//@Default('') String createdBy,
   @override
   @JsonKey()
   final ResidenceModel residence;
@@ -417,7 +429,7 @@ class _$ReservationModelImpl implements _ReservationModel {
                 other.proprietaire == proprietaire));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -436,7 +448,9 @@ class _$ReservationModelImpl implements _ReservationModel {
       client,
       proprietaire);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ReservationModelImplCopyWith<_$ReservationModelImpl> get copyWith =>
@@ -493,14 +507,17 @@ abstract class _ReservationModel implements ReservationModel {
   String get createdAt;
   @override
   String get updatedAt;
-  @override //@Default('') String createdBy,
+  @override
   ResidenceModel get residence;
   @override
   ClientModel get client;
   @override
   ProprietaireModel get proprietaire;
+
+  /// Create a copy of ReservationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ReservationModelImplCopyWith<_$ReservationModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

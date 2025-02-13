@@ -23,8 +23,12 @@ mixin _$DataWrapper {
   @JsonKey(name: 'data')
   DataModel get data => throw _privateConstructorUsedError;
 
+  /// Serializes this DataWrapper to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DataWrapperCopyWith<DataWrapper> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$DataWrapperCopyWithImpl<$Res, $Val extends DataWrapper>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -63,6 +69,8 @@ class _$DataWrapperCopyWithImpl<$Res, $Val extends DataWrapper>
     ) as $Val);
   }
 
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DataModelCopyWith<$Res> get data {
@@ -94,6 +102,8 @@ class __$$DataWrapperImplCopyWithImpl<$Res>
       _$DataWrapperImpl _value, $Res Function(_$DataWrapperImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,11 +143,13 @@ class _$DataWrapperImpl implements _DataWrapper {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DataWrapperImplCopyWith<_$DataWrapperImpl> get copyWith =>
@@ -162,8 +174,11 @@ abstract class _DataWrapper implements DataWrapper {
   @override
   @JsonKey(name: 'data')
   DataModel get data;
+
+  /// Create a copy of DataWrapper
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DataWrapperImplCopyWith<_$DataWrapperImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

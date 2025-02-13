@@ -11,7 +11,7 @@ class CountryPhonrNumberPopup extends StatefulWidget {
 class _CountryPhonrNumberPopupState extends State<CountryPhonrNumberPopup> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: CountryCodePicker(
         onChanged: print,
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')

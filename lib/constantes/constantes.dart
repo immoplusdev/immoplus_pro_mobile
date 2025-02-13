@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus_pro/utils/hex_color.dart';
@@ -29,15 +31,13 @@ class Constantes {
   Constantes({required this.context});
   static ColorScheme colorScheme = ColorScheme(
     primary: HexColor.fromHex("#2072ca"),
-    secondary: Color(0xFFABABAB),
-    surface: Color.fromARGB(255, 166, 173, 180),
-    background: Color(0xFFFFFFFF),
-    error: Color(0xFFFFFFFF),
-    onPrimary: Color(0xFFFFFFFF),
+    secondary: const Color(0xFFABABAB),
+    surface: const Color.fromARGB(255, 166, 173, 180),
+    error: const Color(0xFFFFFFFF),
+    onPrimary: const Color(0xFFFFFFFF),
     onSecondary: HexColor.fromHex("04b4fc"),
-    onSurface: Color(0xFF3E3C3C),
-    onBackground: Color.fromARGB(255, 255, 241, 211),
-    onError: Color(0xFFFFFFFF),
+    onSurface: const Color(0xFF3E3C3C),
+    onError: const Color(0xFFFFFFFF),
     brightness: Brightness.light,
   );
 
@@ -66,6 +66,11 @@ enum ServiceType {
   visite,
 }
 
+enum ServicesCollection {
+  demandes_visites,
+  reservations,
+}
+
 enum ServiceStatus {
   pending,
   successful,
@@ -78,9 +83,11 @@ enum PaymentStatus {
   payment_required,
   processing,
   action_required,
+  waiting_for_validation,
   pending,
   failed,
   successful,
+  paye,
 }
 
 enum DeliveryMethod {

@@ -5,7 +5,7 @@ import 'package:immoplus_pro/utils/hex_color.dart';
 
 class ThemeConfig {
   static ThemeData lightTheme({required BuildContext context}) => ThemeData(
-        textTheme: GoogleFonts.interTextTheme().apply(
+        textTheme: GoogleFonts.senTextTheme().apply(
             // decorationColor: Colors.red,
             // bodyColor: CupertinoColors.black,
             // displayColor: Colors.blue,
@@ -16,10 +16,10 @@ class ThemeConfig {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.secondarySystemFill,
-          labelStyle: TextStyle(color: CupertinoColors.black),
+          labelStyle: const TextStyle(color: CupertinoColors.black),
 
-          prefixStyle: TextStyle(color: CupertinoColors.systemGrey),
-          hintStyle: TextStyle(color: const Color.fromARGB(179, 92, 90, 90)),
+          prefixStyle: const TextStyle(color: CupertinoColors.systemGrey),
+          hintStyle: const TextStyle(color: Color.fromARGB(179, 92, 90, 90)),
           // enabledBorder: OutlineInputBorder(
           //   borderSide: BorderSide(color: Colors.white),
           // ),
@@ -53,15 +53,14 @@ class ThemeConfig {
           ),
         ),
         checkboxTheme: CheckboxThemeData(
-          fillColor: MaterialStateProperty.all(HexColor.fromHex('#2172cb')),
+          fillColor: WidgetStateProperty.all(HexColor.fromHex('#2172cb')),
         ),
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: HexColor.fromHex('#2172cb'),
               secondaryContainer: CupertinoColors.white,
               onPrimary: CupertinoColors.white,
-              background: HexColor.fromHex('#2172cb'),
               surface: CupertinoColors.systemGrey,
-              secondary: Color.fromARGB(255, 229, 228, 228),
+              secondary: const Color.fromARGB(255, 229, 228, 228),
               onSecondary: CupertinoColors.white,
             ),
       );
@@ -69,7 +68,7 @@ class ThemeConfig {
   static ThemeData darkTheme({required BuildContext context}) =>
       ThemeData.dark().copyWith(
         primaryColor: CupertinoColors.systemFill,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyLarge: TextStyle(
             color: CupertinoColors.white,
           ),
@@ -94,10 +93,10 @@ class ThemeConfig {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: CupertinoColors.systemFill.darkColor,
-          labelStyle: TextStyle(color: CupertinoColors.white),
+          labelStyle: const TextStyle(color: CupertinoColors.white),
 
-          prefixStyle: TextStyle(color: CupertinoColors.systemGrey3),
-          hintStyle: TextStyle(color: Colors.white70),
+          prefixStyle: const TextStyle(color: CupertinoColors.systemGrey3),
+          hintStyle: const TextStyle(color: Colors.white70),
           // enabledBorder: OutlineInputBorder(
           //   borderSide: BorderSide(color: Colors.white),
           // ),
@@ -114,13 +113,12 @@ class ThemeConfig {
         ),
         checkboxTheme: CheckboxThemeData(
           fillColor:
-              MaterialStateProperty.all(CupertinoColors.darkBackgroundGray),
+              WidgetStateProperty.all(CupertinoColors.darkBackgroundGray),
         ),
         //primarySwatch: Colors.green,
         colorScheme: Theme.of(context).colorScheme.copyWith(
               primary: CupertinoColors.darkBackgroundGray,
               secondaryContainer: CupertinoColors.darkBackgroundGray,
-              background: HexColor.fromHex('#2172cb'),
               surface: CupertinoColors.white,
               onPrimary: CupertinoColors.systemGrey5.darkColor,
               secondary: Colors.transparent,

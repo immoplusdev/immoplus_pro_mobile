@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:immoplus_pro/core/dio_client.dart';
+import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/data/models/configs/commune_collection.dart';
 import 'package:immoplus_pro/data/models/configs/ville_collection.dart';
 import 'package:immoplus_pro/data/providers/configs_provider.dart';

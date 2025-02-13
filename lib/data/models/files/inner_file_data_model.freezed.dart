@@ -47,8 +47,12 @@ mixin _$InnerFileDataModel {
   DateTime? get modifiedOn => throw _privateConstructorUsedError;
   DateTime? get deletedOn => throw _privateConstructorUsedError;
 
+  /// Serializes this InnerFileDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of InnerFileDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InnerFileDataModelCopyWith<InnerFileDataModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -98,6 +102,8 @@ class _$InnerFileDataModelCopyWithImpl<$Res, $Val extends InnerFileDataModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InnerFileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -282,6 +288,8 @@ class __$$InnerFileDataModelImplCopyWithImpl<$Res>
       $Res Function(_$InnerFileDataModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InnerFileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -560,7 +568,7 @@ class _$InnerFileDataModelImpl implements _InnerFileDataModel {
                 other.deletedOn == deletedOn));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -592,7 +600,9 @@ class _$InnerFileDataModelImpl implements _InnerFileDataModel {
         deletedOn
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InnerFileDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InnerFileDataModelImplCopyWith<_$InnerFileDataModelImpl> get copyWith =>
@@ -691,8 +701,11 @@ abstract class _InnerFileDataModel implements InnerFileDataModel {
   DateTime? get modifiedOn;
   @override
   DateTime? get deletedOn;
+
+  /// Create a copy of InnerFileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InnerFileDataModelImplCopyWith<_$InnerFileDataModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -20,7 +20,7 @@ _$ResidenceCreationModelImpl _$$ResidenceCreationModelImplFromJson(
       position: json['position'] == null
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
-      video: json['video'] as String? ?? '',
+      video: json['video'] as String?,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

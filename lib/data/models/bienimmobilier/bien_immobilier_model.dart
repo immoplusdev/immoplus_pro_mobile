@@ -22,7 +22,7 @@ class BienImmobilierModel with _$BienImmobilierModel {
     @Default('') String statusValidation,
     @Default(0) int prix,
     @Default(false) bool featured,
-    @Default(true) bool bienImmobilierDisponible,
+    @Default(false) bool bienImmobilierDisponible,
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? deletedAt,

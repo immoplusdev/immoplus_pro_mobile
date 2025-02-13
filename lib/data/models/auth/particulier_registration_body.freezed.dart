@@ -21,6 +21,7 @@ ParticulierRegistrationBody _$ParticulierRegistrationBodyFromJson(
 
 /// @nodoc
 mixin _$ParticulierRegistrationBody {
+  String? get avatar => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName =>
       throw _privateConstructorUsedError; //@JsonKey(name: 'city') String? city,
@@ -31,8 +32,12 @@ mixin _$ParticulierRegistrationBody {
   String? get photoIdentiteId => throw _privateConstructorUsedError;
   String? get pieceIdentiteId => throw _privateConstructorUsedError;
 
+  /// Serializes this ParticulierRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ParticulierRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ParticulierRegistrationBodyCopyWith<ParticulierRegistrationBody>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -46,7 +51,8 @@ abstract class $ParticulierRegistrationBodyCopyWith<$Res> {
           ParticulierRegistrationBody>;
   @useResult
   $Res call(
-      {String? firstName,
+      {String? avatar,
+      String? firstName,
       String? lastName,
       String? email,
       String? phoneNumber,
@@ -67,9 +73,12 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ParticulierRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? avatar = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? email = freezed,
@@ -80,6 +89,10 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
     Object? pieceIdentiteId = freezed,
   }) {
     return _then(_value.copyWith(
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -126,7 +139,8 @@ abstract class _$$ParticulierRegistrationBodyImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? firstName,
+      {String? avatar,
+      String? firstName,
       String? lastName,
       String? email,
       String? phoneNumber,
@@ -146,9 +160,12 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
       $Res Function(_$ParticulierRegistrationBodyImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ParticulierRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? avatar = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
     Object? email = freezed,
@@ -159,6 +176,10 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
     Object? pieceIdentiteId = freezed,
   }) {
     return _then(_$ParticulierRegistrationBodyImpl(
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
+              as String?,
       firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
@@ -200,7 +221,8 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
 class _$ParticulierRegistrationBodyImpl
     implements _ParticulierRegistrationBody {
   _$ParticulierRegistrationBodyImpl(
-      {this.firstName,
+      {this.avatar,
+      this.firstName,
       this.lastName,
       this.email,
       this.phoneNumber,
@@ -213,6 +235,8 @@ class _$ParticulierRegistrationBodyImpl
           Map<String, dynamic> json) =>
       _$$ParticulierRegistrationBodyImplFromJson(json);
 
+  @override
+  final String? avatar;
   @override
   final String? firstName;
   @override
@@ -233,7 +257,7 @@ class _$ParticulierRegistrationBodyImpl
 
   @override
   String toString() {
-    return 'ParticulierRegistrationBody(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId)';
+    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId)';
   }
 
   @override
@@ -241,6 +265,7 @@ class _$ParticulierRegistrationBodyImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ParticulierRegistrationBodyImpl &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.firstName, firstName) ||
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
@@ -258,12 +283,14 @@ class _$ParticulierRegistrationBodyImpl
                 other.pieceIdentiteId == pieceIdentiteId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, firstName, lastName, email,
-      phoneNumber, password, activite, photoIdentiteId, pieceIdentiteId);
+  int get hashCode => Object.hash(runtimeType, avatar, firstName, lastName,
+      email, phoneNumber, password, activite, photoIdentiteId, pieceIdentiteId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ParticulierRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ParticulierRegistrationBodyImplCopyWith<_$ParticulierRegistrationBodyImpl>
@@ -281,7 +308,8 @@ class _$ParticulierRegistrationBodyImpl
 abstract class _ParticulierRegistrationBody
     implements ParticulierRegistrationBody {
   factory _ParticulierRegistrationBody(
-      {final String? firstName,
+      {final String? avatar,
+      final String? firstName,
       final String? lastName,
       final String? email,
       final String? phoneNumber,
@@ -294,10 +322,12 @@ abstract class _ParticulierRegistrationBody
       _$ParticulierRegistrationBodyImpl.fromJson;
 
   @override
+  String? get avatar;
+  @override
   String? get firstName;
   @override
-  String? get lastName;
-  @override //@JsonKey(name: 'city') String? city,
+  String? get lastName; //@JsonKey(name: 'city') String? city,
+  @override
   String? get email;
   @override
   String? get phoneNumber;
@@ -309,8 +339,11 @@ abstract class _ParticulierRegistrationBody
   String? get photoIdentiteId;
   @override
   String? get pieceIdentiteId;
+
+  /// Create a copy of ParticulierRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ParticulierRegistrationBodyImplCopyWith<_$ParticulierRegistrationBodyImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

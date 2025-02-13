@@ -26,6 +26,11 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Immo Plus nécessite l'accès à la caméra pour que vous puissiez personnaliser votre page.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -34,6 +39,8 @@
 	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Cette application a besoin d'accéder au microphone pour [raison spécifique].</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Immo Plus nécessite l'accès à la photothèque pour que vous puissiez personnaliser votre page.</string>
 	<key>NSPrivacyAccessedAPITypes</key>
@@ -79,6 +86,7 @@
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>external-accessory</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -96,7 +104,5 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Cette application a besoin d'accéder au microphone pour [raison spécifique].</string>
 </dict>
 </plist>

@@ -27,8 +27,12 @@ mixin _$CustomerRegistrationBody {
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
 
+  /// Serializes this CustomerRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CustomerRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CustomerRegistrationBodyCopyWith<CustomerRegistrationBody> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -58,6 +62,8 @@ class _$CustomerRegistrationBodyCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CustomerRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,6 +125,8 @@ class __$$CustomerRegistrationBodyImplCopyWithImpl<$Res>
       $Res Function(_$CustomerRegistrationBodyImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CustomerRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -198,12 +206,14 @@ class _$CustomerRegistrationBodyImpl implements _CustomerRegistrationBody {
                 other.password == password));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, firstName, lastName, email, phoneNumber, password);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CustomerRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CustomerRegistrationBodyImplCopyWith<_$CustomerRegistrationBodyImpl>
@@ -239,8 +249,11 @@ abstract class _CustomerRegistrationBody implements CustomerRegistrationBody {
   String? get phoneNumber;
   @override
   String? get password;
+
+  /// Create a copy of CustomerRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CustomerRegistrationBodyImplCopyWith<_$CustomerRegistrationBodyImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

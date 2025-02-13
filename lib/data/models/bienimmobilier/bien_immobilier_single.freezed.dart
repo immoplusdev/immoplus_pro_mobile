@@ -22,8 +22,12 @@ BienImmobilierSingle _$BienImmobilierSingleFromJson(Map<String, dynamic> json) {
 mixin _$BienImmobilierSingle {
   BienImmobilierModel? get data => throw _privateConstructorUsedError;
 
+  /// Serializes this BienImmobilierSingle to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BienImmobilierSingleCopyWith<BienImmobilierSingle> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$BienImmobilierSingleCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -63,6 +69,8 @@ class _$BienImmobilierSingleCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BienImmobilierModelCopyWith<$Res>? get data {
@@ -98,6 +106,8 @@ class __$$BienImmobilierSingleImplCopyWithImpl<$Res>
       $Res Function(_$BienImmobilierSingleImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,11 +146,13 @@ class _$BienImmobilierSingleImpl implements _BienImmobilierSingle {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BienImmobilierSingleImplCopyWith<_$BienImmobilierSingleImpl>
@@ -165,8 +177,11 @@ abstract class _BienImmobilierSingle implements BienImmobilierSingle {
 
   @override
   BienImmobilierModel? get data;
+
+  /// Create a copy of BienImmobilierSingle
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BienImmobilierSingleImplCopyWith<_$BienImmobilierSingleImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

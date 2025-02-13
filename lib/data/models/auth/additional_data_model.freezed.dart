@@ -32,8 +32,12 @@ mixin _$AdditionalDataModel {
   String? get numeroContribuable => throw _privateConstructorUsedError;
   String? get typeEntreprise => throw _privateConstructorUsedError;
 
+  /// Serializes this AdditionalDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AdditionalDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AdditionalDataModelCopyWith<AdditionalDataModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -68,6 +72,8 @@ class _$AdditionalDataModelCopyWithImpl<$Res, $Val extends AdditionalDataModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AdditionalDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -162,6 +168,8 @@ class __$$AdditionalDataModelImplCopyWithImpl<$Res>
       $Res Function(_$AdditionalDataModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AdditionalDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -300,7 +308,7 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
                 other.typeEntreprise == typeEntreprise));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -316,7 +324,9 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
       numeroContribuable,
       typeEntreprise);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AdditionalDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AdditionalDataModelImplCopyWith<_$AdditionalDataModelImpl> get copyWith =>
@@ -370,8 +380,11 @@ abstract class _AdditionalDataModel implements AdditionalDataModel {
   String? get numeroContribuable;
   @override
   String? get typeEntreprise;
+
+  /// Create a copy of AdditionalDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AdditionalDataModelImplCopyWith<_$AdditionalDataModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

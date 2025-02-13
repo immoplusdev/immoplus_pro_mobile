@@ -25,8 +25,12 @@ mixin _$DataModel {
   String? get expires => throw _privateConstructorUsedError;
   String? get refreshToken => throw _privateConstructorUsedError;
 
+  /// Serializes this DataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DataModelCopyWith<DataModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$DataModelCopyWithImpl<$Res, $Val extends DataModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -83,6 +89,8 @@ class _$DataModelCopyWithImpl<$Res, $Val extends DataModel>
     ) as $Val);
   }
 
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get user {
@@ -118,6 +126,8 @@ class __$$DataModelImplCopyWithImpl<$Res>
       _$DataModelImpl _value, $Res Function(_$DataModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -183,12 +193,14 @@ class _$DataModelImpl implements _DataModel {
                 other.refreshToken == refreshToken));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, user, accessToken, expires, refreshToken);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DataModelImplCopyWith<_$DataModelImpl> get copyWith =>
@@ -220,8 +232,11 @@ abstract class _DataModel implements DataModel {
   String? get expires;
   @override
   String? get refreshToken;
+
+  /// Create a copy of DataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DataModelImplCopyWith<_$DataModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

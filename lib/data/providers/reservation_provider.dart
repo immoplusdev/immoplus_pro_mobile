@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart' hide Headers;
+import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
 import 'package:retrofit/retrofit.dart';
@@ -15,6 +16,9 @@ abstract class ReservationProvider {
   @GET("/reservations/{id}")
   Future<ReservationResponse> getBooking(@Path() String id);
 
+  @GET("/reservations/data/historique-retrait/residence/owner/{id}")
+  Future<WithdrawBookingHistoryDto> withDrawHistory(@Path() String id);
+
   //@GET("https://api.npoint.io/5298d4a42fc8b74cf43e")
   @GET("/reservations")
   Future<ReservationsCollection> getBookings(
@@ -27,7 +31,7 @@ abstract class ReservationProvider {
   @GET("/reservations/data/residence/owner/{id}")
   Future<ReservationsCollection> getBookingsOwner(
       @Path() String id,
-      @Query('_where') String? where,
+      @Queries() Map<String, dynamic>? where,
       @Query("_page") int page,
       @Query("_per_page") int perPage,
       @Query("_order_by") String? orderBy,

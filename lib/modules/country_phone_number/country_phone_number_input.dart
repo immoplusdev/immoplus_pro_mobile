@@ -14,12 +14,12 @@ class _CountryPhoneNumberInputState extends State<CountryPhoneNumberInput> {
     return CustomTextField(
       fillColor: Colors.white,
       textInputType:
-          TextInputType.numberWithOptions(signed: true, decimal: true),
+          const TextInputType.numberWithOptions(signed: true, decimal: true),
       textInputAction: TextInputAction.done,
       labelText: 'Numéro de téléphone',
       controller: widget.controller,
-      sufixIcon: Icon(FontAwesomeIcons.whatsapp),
-      prefixIcon: CountryCodePicker(
+      sufixIcon: const Icon(FontAwesomeIcons.whatsapp),
+      prefixIcon: const CountryCodePicker(
         onChanged: print,
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
         initialSelection: 'CI',

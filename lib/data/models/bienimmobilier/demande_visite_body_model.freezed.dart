@@ -28,8 +28,12 @@ mixin _$DemandeVisiteBodyModel {
   String get clientPhoneNumber => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
 
+  /// Serializes this DemandeVisiteBodyModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemandeVisiteBodyModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemandeVisiteBodyModelCopyWith<DemandeVisiteBodyModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,6 +63,8 @@ class _$DemandeVisiteBodyModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemandeVisiteBodyModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,6 +126,8 @@ class __$$DemandeVisiteBodyModelImplCopyWithImpl<$Res>
       $Res Function(_$DemandeVisiteBodyModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemandeVisiteBodyModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -212,7 +220,7 @@ class _$DemandeVisiteBodyModelImpl implements _DemandeVisiteBodyModel {
             (identical(other.notes, notes) || other.notes == notes));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -222,7 +230,9 @@ class _$DemandeVisiteBodyModelImpl implements _DemandeVisiteBodyModel {
       clientPhoneNumber,
       notes);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemandeVisiteBodyModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemandeVisiteBodyModelImplCopyWith<_$DemandeVisiteBodyModelImpl>
@@ -258,8 +268,11 @@ abstract class _DemandeVisiteBodyModel implements DemandeVisiteBodyModel {
   String get clientPhoneNumber;
   @override
   String get notes;
+
+  /// Create a copy of DemandeVisiteBodyModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemandeVisiteBodyModelImplCopyWith<_$DemandeVisiteBodyModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

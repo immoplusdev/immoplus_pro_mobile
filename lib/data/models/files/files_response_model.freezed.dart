@@ -23,8 +23,12 @@ mixin _$FileResponseModel {
   @JsonKey(name: 'data')
   FileDataModel? get data => throw _privateConstructorUsedError;
 
+  /// Serializes this FileResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FileResponseModelCopyWith<FileResponseModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$FileResponseModelCopyWithImpl<$Res, $Val extends FileResponseModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -63,6 +69,8 @@ class _$FileResponseModelCopyWithImpl<$Res, $Val extends FileResponseModel>
     ) as $Val);
   }
 
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FileDataModelCopyWith<$Res>? get data {
@@ -98,6 +106,8 @@ class __$$FileResponseModelImplCopyWithImpl<$Res>
       $Res Function(_$FileResponseModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -137,11 +147,13 @@ class _$FileResponseModelImpl implements _FileResponseModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FileResponseModelImplCopyWith<_$FileResponseModelImpl> get copyWith =>
@@ -167,8 +179,11 @@ abstract class _FileResponseModel implements FileResponseModel {
   @override
   @JsonKey(name: 'data')
   FileDataModel? get data;
+
+  /// Create a copy of FileResponseModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FileResponseModelImplCopyWith<_$FileResponseModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

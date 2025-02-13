@@ -14,7 +14,7 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:immoplus_pro/views/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_page/home_page.dart';
 
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit() : super(const RegistrationCubitState.initial());
@@ -82,6 +82,9 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
         UserModelSchema()
           ..id = 1
           ..userId = response.data.user.id
+          ..avatar = response.data.user.avatar
+          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
+          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
           ..firstName = response.data.user.firstName
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber

@@ -13,9 +13,9 @@ _$ReservationsCollectionImpl _$$ReservationsCollectionImplFromJson(
               ?.map((e) => ReservationModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      currentPage: (json['currentPage'] as num?)?.toInt() ?? 1,
-      totalPages: (json['totalPages'] as num?)?.toInt() ?? 1,
-      pageSize: (json['pageSize'] as num?)?.toInt() ?? 10,
+      currentPage: (json['currentPage'] as num?)?.toInt() ?? 0,
+      totalPages: (json['totalPages'] as num?)?.toInt() ?? 0,
+      pageSize: (json['pageSize'] as num?)?.toInt() ?? 0,
       totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
       hasNext: json['hasNext'] as bool? ?? false,
       hasPrevious: json['hasPrevious'] as bool? ?? false,

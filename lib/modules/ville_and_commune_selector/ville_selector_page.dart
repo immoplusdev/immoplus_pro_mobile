@@ -49,12 +49,12 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scafold,
+      backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             title: const Text('Sélectionner une ville'),
-            backgroundColor: AppColors.scafold,
+            backgroundColor: AppColors.whiteBackground,
             centerTitle: true,
           ),
           CupertinoSliverRefreshControl(
@@ -66,7 +66,7 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
               firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: SizedBox(
                     //height: 600,
                     child: Column(
@@ -94,13 +94,14 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  tileColor: AppColors.primaryLite,
+                  leading: const Icon(FontAwesomeIcons.treeCity),
+                  tileColor: AppColors.scafold,
                   title: Text(item.name),
                   titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   onTap: () {
                     context.pop<VilleModel>(item);
                   },
-                  trailing: Icon(FontAwesomeIcons.circleArrowRight),
+                  trailing: const Icon(FontAwesomeIcons.circleArrowRight),
                 ),
               ),
             ),

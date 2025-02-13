@@ -83,6 +83,8 @@ mixin _$LoginCubitState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this LoginCubitState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -102,6 +104,9 @@ class _$LoginCubitStateCopyWithImpl<$Res, $Val extends LoginCubitState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of LoginCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -118,6 +123,9 @@ class __$$LoginCubitStateImplCopyWithImpl<$Res>
   __$$LoginCubitStateImplCopyWithImpl(
       _$LoginCubitStateImpl _value, $Res Function(_$LoginCubitStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -142,7 +150,7 @@ class _$LoginCubitStateImpl implements _LoginCubitState {
         (other.runtimeType == runtimeType && other is _$LoginCubitStateImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -249,6 +257,9 @@ class __$$LOGIN_INITIALImplCopyWithImpl<$Res>
   __$$LOGIN_INITIALImplCopyWithImpl(
       _$LOGIN_INITIALImpl _value, $Res Function(_$LOGIN_INITIALImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -273,7 +284,7 @@ class _$LOGIN_INITIALImpl implements LOGIN_INITIAL {
         (other.runtimeType == runtimeType && other is _$LOGIN_INITIALImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -380,6 +391,9 @@ class __$$LOGIN_LOADINGImplCopyWithImpl<$Res>
   __$$LOGIN_LOADINGImplCopyWithImpl(
       _$LOGIN_LOADINGImpl _value, $Res Function(_$LOGIN_LOADINGImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -404,7 +418,7 @@ class _$LOGIN_LOADINGImpl implements LOGIN_LOADING {
         (other.runtimeType == runtimeType && other is _$LOGIN_LOADINGImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -511,6 +525,9 @@ class __$$LOGIN_SUCCESSImplCopyWithImpl<$Res>
   __$$LOGIN_SUCCESSImplCopyWithImpl(
       _$LOGIN_SUCCESSImpl _value, $Res Function(_$LOGIN_SUCCESSImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -535,7 +552,7 @@ class _$LOGIN_SUCCESSImpl implements LOGIN_SUCCESS {
         (other.runtimeType == runtimeType && other is _$LOGIN_SUCCESSImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 

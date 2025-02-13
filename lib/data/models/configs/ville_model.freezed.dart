@@ -26,8 +26,12 @@ mixin _$VilleModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
 
+  /// Serializes this VilleModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of VilleModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VilleModelCopyWith<VilleModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$VilleModelCopyWithImpl<$Res, $Val extends VilleModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of VilleModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$VilleModelImplCopyWithImpl<$Res>
       _$VilleModelImpl _value, $Res Function(_$VilleModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of VilleModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -197,12 +205,14 @@ class _$VilleModelImpl implements _VilleModel {
                 other.deletedAt == deletedAt));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, name, createdAt, updatedAt, deletedAt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of VilleModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VilleModelImplCopyWith<_$VilleModelImpl> get copyWith =>
@@ -237,8 +247,11 @@ abstract class _VilleModel implements VilleModel {
   DateTime? get updatedAt;
   @override
   DateTime? get deletedAt;
+
+  /// Create a copy of VilleModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VilleModelImplCopyWith<_$VilleModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

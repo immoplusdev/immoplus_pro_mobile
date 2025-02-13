@@ -22,8 +22,12 @@ DemandeVisitResponse _$DemandeVisitResponseFromJson(Map<String, dynamic> json) {
 mixin _$DemandeVisitResponse {
   DemandeVisiteModel get data => throw _privateConstructorUsedError;
 
+  /// Serializes this DemandeVisitResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemandeVisitResponseCopyWith<DemandeVisitResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$DemandeVisitResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -63,6 +69,8 @@ class _$DemandeVisitResponseCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DemandeVisiteModelCopyWith<$Res> get data {
@@ -94,6 +102,8 @@ class __$$DemandeVisitResponseImplCopyWithImpl<$Res>
       $Res Function(_$DemandeVisitResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,11 +142,13 @@ class _$DemandeVisitResponseImpl implements _DemandeVisitResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemandeVisitResponseImplCopyWith<_$DemandeVisitResponseImpl>
@@ -161,8 +173,11 @@ abstract class _DemandeVisitResponse implements DemandeVisitResponse {
 
   @override
   DemandeVisiteModel get data;
+
+  /// Create a copy of DemandeVisitResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemandeVisitResponseImplCopyWith<_$DemandeVisitResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -11,6 +11,7 @@ class UserModel with _$UserModel {
     @JsonKey(name: 'id') String? id,
     String? firstName,
     String? lastName,
+    String? avatar,
     String? email,
     String? password,
     String? language,

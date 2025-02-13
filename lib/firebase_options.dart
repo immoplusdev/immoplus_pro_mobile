@@ -51,10 +51,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU',
-    appId: '1:1003203724496:android:1d88f8a5a8c44832458ad5',
+    appId: '1:1003203724496:android:d45c4df5d54e8ca7458ad5',
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
-    storageBucket: 'immo-plus.appspot.com',
+    storageBucket: 'immo-plus.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

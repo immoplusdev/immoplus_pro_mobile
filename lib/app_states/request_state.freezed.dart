@@ -36,6 +36,8 @@ RequestState _$RequestStateFromJson(Map<String, dynamic> json) {
       return REQUEST_VILLES_DATA.fromJson(json);
     case 'communes':
       return REQUEST_COMMUNES_DATA.fromJson(json);
+    case 'bookingWithdrowhistory':
+      return BOOKING_WITHDRAW_HISTORY.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'RequestState',
@@ -57,6 +59,8 @@ mixin _$RequestState {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -71,6 +75,7 @@ mixin _$RequestState {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -85,6 +90,7 @@ mixin _$RequestState {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -101,6 +107,8 @@ mixin _$RequestState {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -115,6 +123,7 @@ mixin _$RequestState {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -129,9 +138,12 @@ mixin _$RequestState {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this RequestState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -151,6 +163,9 @@ class _$RequestStateCopyWithImpl<$Res, $Val extends RequestState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -167,6 +182,9 @@ class __$$RequestStateImplCopyWithImpl<$Res>
   __$$RequestStateImplCopyWithImpl(
       _$RequestStateImpl _value, $Res Function(_$RequestStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -191,7 +209,7 @@ class _$RequestStateImpl implements _RequestState {
         (other.runtimeType == runtimeType && other is _$RequestStateImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -208,6 +226,8 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return $default();
   }
@@ -225,6 +245,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return $default?.call();
   }
@@ -242,6 +263,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -264,6 +286,8 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return $default(this);
   }
@@ -281,6 +305,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return $default?.call(this);
   }
@@ -298,6 +323,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -335,6 +361,9 @@ class __$$REQUEST_INITIALImplCopyWithImpl<$Res>
   __$$REQUEST_INITIALImplCopyWithImpl(
       _$REQUEST_INITIALImpl _value, $Res Function(_$REQUEST_INITIALImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -360,7 +389,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
         (other.runtimeType == runtimeType && other is _$REQUEST_INITIALImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -377,6 +406,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return initial();
   }
@@ -394,6 +425,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return initial?.call();
   }
@@ -411,6 +443,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -433,6 +466,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return initial(this);
   }
@@ -450,6 +485,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return initial?.call(this);
   }
@@ -467,6 +503,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -504,6 +541,9 @@ class __$$REQUEST_LOADINGImplCopyWithImpl<$Res>
   __$$REQUEST_LOADINGImplCopyWithImpl(
       _$REQUEST_LOADINGImpl _value, $Res Function(_$REQUEST_LOADINGImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -529,7 +569,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
         (other.runtimeType == runtimeType && other is _$REQUEST_LOADINGImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -546,6 +586,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return loading();
   }
@@ -563,6 +605,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return loading?.call();
   }
@@ -580,6 +623,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -602,6 +646,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return loading(this);
   }
@@ -619,6 +665,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return loading?.call(this);
   }
@@ -636,6 +683,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -673,6 +721,9 @@ class __$$REQUEST_SUCCESSImplCopyWithImpl<$Res>
   __$$REQUEST_SUCCESSImplCopyWithImpl(
       _$REQUEST_SUCCESSImpl _value, $Res Function(_$REQUEST_SUCCESSImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -698,7 +749,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
         (other.runtimeType == runtimeType && other is _$REQUEST_SUCCESSImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -715,6 +766,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return success();
   }
@@ -732,6 +785,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return success?.call();
   }
@@ -749,6 +803,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -771,6 +826,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return success(this);
   }
@@ -788,6 +845,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return success?.call(this);
   }
@@ -805,6 +863,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -845,6 +904,8 @@ class __$$REQUEST_ERRORImplCopyWithImpl<$Res>
       _$REQUEST_ERRORImpl _value, $Res Function(_$REQUEST_ERRORImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -887,11 +948,13 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
             (identical(other.error, error) || other.error == error));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_ERRORImplCopyWith<_$REQUEST_ERRORImpl> get copyWith =>
@@ -910,6 +973,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return error(this.error);
   }
@@ -927,6 +992,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return error?.call(this.error);
   }
@@ -944,6 +1010,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -966,6 +1033,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return error(this);
   }
@@ -983,6 +1052,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return error?.call(this);
   }
@@ -1000,6 +1070,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1024,7 +1095,10 @@ abstract class REQUEST_ERROR implements RequestState {
       _$REQUEST_ERRORImpl.fromJson;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_ERRORImplCopyWith<_$REQUEST_ERRORImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1050,6 +1124,8 @@ class __$$REQUEST_RESIDENCE_DATAImplCopyWithImpl<$Res>
       $Res Function(_$REQUEST_RESIDENCE_DATAImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1063,6 +1139,8 @@ class __$$REQUEST_RESIDENCE_DATAImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ResidenceModelCopyWith<$Res> get data {
@@ -1100,11 +1178,13 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_RESIDENCE_DATAImplCopyWith<_$REQUEST_RESIDENCE_DATAImpl>
@@ -1124,6 +1204,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return residence(data);
   }
@@ -1141,6 +1223,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return residence?.call(data);
   }
@@ -1158,6 +1241,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1180,6 +1264,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return residence(this);
   }
@@ -1197,6 +1283,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return residence?.call(this);
   }
@@ -1214,6 +1301,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1238,7 +1326,10 @@ abstract class REQUEST_RESIDENCE_DATA implements RequestState {
       _$REQUEST_RESIDENCE_DATAImpl.fromJson;
 
   ResidenceModel get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_RESIDENCE_DATAImplCopyWith<_$REQUEST_RESIDENCE_DATAImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1264,6 +1355,8 @@ class __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl<$Res>
       $Res Function(_$REQUEST_BIEN_IMMOBILIER_DATAImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1277,6 +1370,8 @@ class __$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BienImmobilierModelCopyWith<$Res> get data {
@@ -1317,11 +1412,13 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<
@@ -1342,6 +1439,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return bienImmobilier(data);
   }
@@ -1359,6 +1458,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return bienImmobilier?.call(data);
   }
@@ -1376,6 +1476,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1398,6 +1499,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return bienImmobilier(this);
   }
@@ -1415,6 +1518,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return bienImmobilier?.call(this);
   }
@@ -1432,6 +1536,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1457,7 +1562,10 @@ abstract class REQUEST_BIEN_IMMOBILIER_DATA implements RequestState {
       _$REQUEST_BIEN_IMMOBILIER_DATAImpl.fromJson;
 
   BienImmobilierModel get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_BIEN_IMMOBILIER_DATAImplCopyWith<
           _$REQUEST_BIEN_IMMOBILIER_DATAImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -1482,6 +1590,8 @@ class __$$REQUEST_RESIDENCES_DATAImplCopyWithImpl<$Res>
       $Res Function(_$REQUEST_RESIDENCES_DATAImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1531,12 +1641,14 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_RESIDENCES_DATAImplCopyWith<_$REQUEST_RESIDENCES_DATAImpl>
@@ -1556,6 +1668,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return residences(data);
   }
@@ -1573,6 +1687,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return residences?.call(data);
   }
@@ -1590,6 +1705,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1612,6 +1728,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return residences(this);
   }
@@ -1629,6 +1747,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return residences?.call(this);
   }
@@ -1646,6 +1765,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1671,7 +1791,10 @@ abstract class REQUEST_RESIDENCES_DATA implements RequestState {
       _$REQUEST_RESIDENCES_DATAImpl.fromJson;
 
   List<ResidenceModel> get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_RESIDENCES_DATAImplCopyWith<_$REQUEST_RESIDENCES_DATAImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1693,6 +1816,8 @@ class __$$REQUEST_VILLES_DATAImplCopyWithImpl<$Res>
       $Res Function(_$REQUEST_VILLES_DATAImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1742,12 +1867,14 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_VILLES_DATAImplCopyWith<_$REQUEST_VILLES_DATAImpl> get copyWith =>
@@ -1767,6 +1894,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return villes(data);
   }
@@ -1784,6 +1913,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return villes?.call(data);
   }
@@ -1801,6 +1931,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -1823,6 +1954,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return villes(this);
   }
@@ -1840,6 +1973,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return villes?.call(this);
   }
@@ -1857,6 +1991,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -1881,7 +2016,10 @@ abstract class REQUEST_VILLES_DATA implements RequestState {
       _$REQUEST_VILLES_DATAImpl.fromJson;
 
   List<VilleModel> get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_VILLES_DATAImplCopyWith<_$REQUEST_VILLES_DATAImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1904,6 +2042,8 @@ class __$$REQUEST_COMMUNES_DATAImplCopyWithImpl<$Res>
       $Res Function(_$REQUEST_COMMUNES_DATAImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1953,12 +2093,14 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REQUEST_COMMUNES_DATAImplCopyWith<_$REQUEST_COMMUNES_DATAImpl>
@@ -1978,6 +2120,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
   }) {
     return communes(data);
   }
@@ -1995,6 +2139,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
   }) {
     return communes?.call(data);
   }
@@ -2012,6 +2157,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2034,6 +2180,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
   }) {
     return communes(this);
   }
@@ -2051,6 +2199,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
   }) {
     return communes?.call(this);
   }
@@ -2068,6 +2217,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2092,7 +2242,243 @@ abstract class REQUEST_COMMUNES_DATA implements RequestState {
       _$REQUEST_COMMUNES_DATAImpl.fromJson;
 
   List<CommuneModel> get data;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REQUEST_COMMUNES_DATAImplCopyWith<_$REQUEST_COMMUNES_DATAImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<$Res> {
+  factory _$$BOOKING_WITHDRAW_HISTORYImplCopyWith(
+          _$BOOKING_WITHDRAW_HISTORYImpl value,
+          $Res Function(_$BOOKING_WITHDRAW_HISTORYImpl) then) =
+      __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({WithdrawBookingHistoryDto data});
+
+  $WithdrawBookingHistoryDtoCopyWith<$Res> get data;
+}
+
+/// @nodoc
+class __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>
+    extends _$RequestStateCopyWithImpl<$Res, _$BOOKING_WITHDRAW_HISTORYImpl>
+    implements _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<$Res> {
+  __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl(
+      _$BOOKING_WITHDRAW_HISTORYImpl _value,
+      $Res Function(_$BOOKING_WITHDRAW_HISTORYImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$BOOKING_WITHDRAW_HISTORYImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as WithdrawBookingHistoryDto,
+    ));
+  }
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WithdrawBookingHistoryDtoCopyWith<$Res> get data {
+    return $WithdrawBookingHistoryDtoCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
+  const _$BOOKING_WITHDRAW_HISTORYImpl(
+      {required this.data, final String? $type})
+      : $type = $type ?? 'bookingWithdrowhistory';
+
+  factory _$BOOKING_WITHDRAW_HISTORYImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BOOKING_WITHDRAW_HISTORYImplFromJson(json);
+
+  @override
+  final WithdrawBookingHistoryDto data;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RequestState.bookingWithdrowhistory(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BOOKING_WITHDRAW_HISTORYImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<_$BOOKING_WITHDRAW_HISTORYImpl>
+      get copyWith => __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<
+          _$BOOKING_WITHDRAW_HISTORYImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function() $default, {
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(String error) error,
+    required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
+    required TResult Function(List<ResidenceModel> data) residences,
+    required TResult Function(List<VilleModel> data) villes,
+    required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WithdrawBookingHistoryDto data)
+        bookingWithdrowhistory,
+  }) {
+    return bookingWithdrowhistory(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function()? $default, {
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(String error)? error,
+    TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
+    TResult? Function(List<ResidenceModel> data)? residences,
+    TResult? Function(List<VilleModel> data)? villes,
+    TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+  }) {
+    return bookingWithdrowhistory?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function()? $default, {
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(String error)? error,
+    TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
+    TResult Function(List<ResidenceModel> data)? residences,
+    TResult Function(List<VilleModel> data)? villes,
+    TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    required TResult orElse(),
+  }) {
+    if (bookingWithdrowhistory != null) {
+      return bookingWithdrowhistory(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_RequestState value) $default, {
+    required TResult Function(REQUEST_INITIAL value) initial,
+    required TResult Function(REQUEST_LOADING value) loading,
+    required TResult Function(REQUEST_SUCCESS value) success,
+    required TResult Function(REQUEST_ERROR value) error,
+    required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
+    required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
+    required TResult Function(REQUEST_VILLES_DATA value) villes,
+    required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
+        bookingWithdrowhistory,
+  }) {
+    return bookingWithdrowhistory(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_RequestState value)? $default, {
+    TResult? Function(REQUEST_INITIAL value)? initial,
+    TResult? Function(REQUEST_LOADING value)? loading,
+    TResult? Function(REQUEST_SUCCESS value)? success,
+    TResult? Function(REQUEST_ERROR value)? error,
+    TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult? Function(REQUEST_VILLES_DATA value)? villes,
+    TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+  }) {
+    return bookingWithdrowhistory?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_RequestState value)? $default, {
+    TResult Function(REQUEST_INITIAL value)? initial,
+    TResult Function(REQUEST_LOADING value)? loading,
+    TResult Function(REQUEST_SUCCESS value)? success,
+    TResult Function(REQUEST_ERROR value)? error,
+    TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult Function(REQUEST_VILLES_DATA value)? villes,
+    TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    required TResult orElse(),
+  }) {
+    if (bookingWithdrowhistory != null) {
+      return bookingWithdrowhistory(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BOOKING_WITHDRAW_HISTORYImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class BOOKING_WITHDRAW_HISTORY implements RequestState {
+  const factory BOOKING_WITHDRAW_HISTORY(
+          {required final WithdrawBookingHistoryDto data}) =
+      _$BOOKING_WITHDRAW_HISTORYImpl;
+
+  factory BOOKING_WITHDRAW_HISTORY.fromJson(Map<String, dynamic> json) =
+      _$BOOKING_WITHDRAW_HISTORYImpl.fromJson;
+
+  WithdrawBookingHistoryDto get data;
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<_$BOOKING_WITHDRAW_HISTORYImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

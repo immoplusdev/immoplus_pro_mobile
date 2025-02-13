@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FileUploader extends StatefulWidget {
@@ -18,12 +20,14 @@ class FileUploader extends StatefulWidget {
     this.width,
     this.height,
     this.iconPlaceholder,
+    this.placeholderImageId,
   });
   final FileUploaderController fileUploaderController;
   final String? title;
   final double? width;
   final double? height;
   final IconData? iconPlaceholder;
+  final String? placeholderImageId;
   @override
   State<FileUploader> createState() => _FileUploaderState();
 }
@@ -43,14 +47,14 @@ class _FileUploaderState extends State<FileUploader> {
               tileColor: Colors.white,
               onTap: () {
                 ImagePicker()
-                    .pickImage(source: ImageSource.gallery, imageQuality: 40)
+                    .pickImage(source: ImageSource.camera, imageQuality: 40)
                     .then(
                   (value) {
                     Navigator.pop(context, value);
                   },
                 );
               },
-              leading: Icon(FontAwesomeIcons.camera),
+              leading: const Icon(FontAwesomeIcons.camera),
               title: const Text("À partir de la caméra"),
             ),
             const Divider(),
@@ -65,7 +69,7 @@ class _FileUploaderState extends State<FileUploader> {
                   },
                 );
               },
-              leading: Icon(FontAwesomeIcons.folder),
+              leading: const Icon(FontAwesomeIcons.folder),
               title: const Text("À partir de la gallérie"),
             ),
             const Gap(30),
@@ -139,20 +143,45 @@ class _FileUploaderState extends State<FileUploader> {
                                 fit: BoxFit.cover,
                               ),
                       ),
-                      child: (widget.fileUploaderController.filePath == null)
-                          ? Center(
-                              child: Icon(
-                                widget.iconPlaceholder ??
-                                    FontAwesomeIcons.camera,
-                                size: 50,
-                                color: Colors.grey.shade500,
+                      child: (widget.placeholderImageId != null &&
+                              widget.fileUploaderController.filePath == null)
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: CachedNetworkImage(
+                                imageUrl: Utils.getImagePath(
+                                    id: widget.placeholderImageId!),
+
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade400,
+                                  period: const Duration(milliseconds: 500),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                                fit: BoxFit
+                                    .cover, // or other BoxFit values as per your design
                               ),
                             )
-                          : null,
+                          : (widget.fileUploaderController.filePath == null)
+                              ? Center(
+                                  child: Icon(
+                                    widget.iconPlaceholder ??
+                                        FontAwesomeIcons.camera,
+                                    size: 50,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                )
+                              : null,
                     ),
             ),
           ),
-          Gap(5),
+          const Gap(5),
           Text(
             widget.title ?? 'Selectionner une image',
             style: Theme.of(context)

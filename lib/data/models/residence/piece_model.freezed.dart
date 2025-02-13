@@ -23,8 +23,12 @@ mixin _$PieceModel {
   String get nom => throw _privateConstructorUsedError;
   int get nombre => throw _privateConstructorUsedError;
 
+  /// Serializes this PieceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PieceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PieceModelCopyWith<PieceModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$PieceModelCopyWithImpl<$Res, $Val extends PieceModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PieceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$PieceModelImplCopyWithImpl<$Res>
       _$PieceModelImpl _value, $Res Function(_$PieceModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PieceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -134,11 +142,13 @@ class _$PieceModelImpl implements _PieceModel {
             (identical(other.nombre, nombre) || other.nombre == nombre));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, nom, nombre);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PieceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PieceModelImplCopyWith<_$PieceModelImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _PieceModel implements PieceModel {
   String get nom;
   @override
   int get nombre;
+
+  /// Create a copy of PieceModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PieceModelImplCopyWith<_$PieceModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

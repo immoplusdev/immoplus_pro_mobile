@@ -22,4 +22,5 @@ class UserModelSchema {
   String? photoIdentite;
   String? pieceIdentite;
   String? avatar;
+  String? role;
 }

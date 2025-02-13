@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:immoplus_pro/core/dio_client.dart';
+import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_collection.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_creation_model.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_single.dart';

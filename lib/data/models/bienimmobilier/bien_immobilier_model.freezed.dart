@@ -44,8 +44,12 @@ mixin _$BienImmobilierModel {
   String get video => throw _privateConstructorUsedError;
   bool get aLouer => throw _privateConstructorUsedError;
 
+  /// Serializes this BienImmobilierModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BienImmobilierModelCopyWith<BienImmobilierModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -94,6 +98,8 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -217,6 +223,8 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
     ) as $Val);
   }
 
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PositionModelCopyWith<$Res> get position {
@@ -271,6 +279,8 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
       $Res Function(_$BienImmobilierModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -412,7 +422,7 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
       this.statusValidation = '',
       this.prix = 0,
       this.featured = false,
-      this.bienImmobilierDisponible = true,
+      this.bienImmobilierDisponible = false,
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
@@ -569,7 +579,7 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             (identical(other.aLouer, aLouer) || other.aLouer == aLouer));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -598,7 +608,9 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
         aLouer
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BienImmobilierModelImplCopyWith<_$BienImmobilierModelImpl> get copyWith =>
@@ -688,8 +700,11 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   String get video;
   @override
   bool get aLouer;
+
+  /// Create a copy of BienImmobilierModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BienImmobilierModelImplCopyWith<_$BienImmobilierModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

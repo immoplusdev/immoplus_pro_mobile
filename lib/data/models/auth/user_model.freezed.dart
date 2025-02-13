@@ -24,6 +24,7 @@ mixin _$UserModel {
   String? get id => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
+  String? get avatar => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   String? get language => throw _privateConstructorUsedError;
@@ -47,8 +48,12 @@ mixin _$UserModel {
   RoleModel get role => throw _privateConstructorUsedError;
   AdditionalDataModel get additionalData => throw _privateConstructorUsedError;
 
+  /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserModelCopyWith<UserModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -62,6 +67,7 @@ abstract class $UserModelCopyWith<$Res> {
       {@JsonKey(name: 'id') String? id,
       String? firstName,
       String? lastName,
+      String? avatar,
       String? email,
       String? password,
       String? language,
@@ -99,12 +105,15 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? avatar = freezed,
     Object? email = freezed,
     Object? password = freezed,
     Object? language = freezed,
@@ -140,6 +149,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
       email: freezed == email
           ? _value.email
@@ -232,6 +245,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     ) as $Val);
   }
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $RoleModelCopyWith<$Res> get role {
@@ -240,6 +255,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     });
   }
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AdditionalDataModelCopyWith<$Res> get additionalData {
@@ -261,6 +278,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       {@JsonKey(name: 'id') String? id,
       String? firstName,
       String? lastName,
+      String? avatar,
       String? email,
       String? password,
       String? language,
@@ -298,12 +316,15 @@ class __$$UserModelImplCopyWithImpl<$Res>
       _$UserModelImpl _value, $Res Function(_$UserModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? avatar = freezed,
     Object? email = freezed,
     Object? password = freezed,
     Object? language = freezed,
@@ -339,6 +360,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
       lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      avatar: freezed == avatar
+          ? _value.avatar
+          : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
       email: freezed == email
           ? _value.email
@@ -439,6 +464,7 @@ class _$UserModelImpl implements _UserModel {
       {@JsonKey(name: 'id') this.id,
       this.firstName,
       this.lastName,
+      this.avatar,
       this.email,
       this.password,
       this.language,
@@ -472,6 +498,8 @@ class _$UserModelImpl implements _UserModel {
   final String? firstName;
   @override
   final String? lastName;
+  @override
+  final String? avatar;
   @override
   final String? email;
   @override
@@ -519,7 +547,7 @@ class _$UserModelImpl implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, firstName: $firstName, lastName: $lastName, email: $email, password: $password, language: $language, phoneNumber: $phoneNumber, otp: $otp, otpExpiration: $otpExpiration, country: $country, state: $state, city: $city, commune: $commune, address: $address, address2: $address2, currency: $currency, identityVerified: $identityVerified, emailVerified: $emailVerified, phoneNumberVerified: $phoneNumberVerified, authLoginAttempts: $authLoginAttempts, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, role: $role, additionalData: $additionalData)';
+    return 'UserModel(id: $id, firstName: $firstName, lastName: $lastName, avatar: $avatar, email: $email, password: $password, language: $language, phoneNumber: $phoneNumber, otp: $otp, otpExpiration: $otpExpiration, country: $country, state: $state, city: $city, commune: $commune, address: $address, address2: $address2, currency: $currency, identityVerified: $identityVerified, emailVerified: $emailVerified, phoneNumberVerified: $phoneNumberVerified, authLoginAttempts: $authLoginAttempts, status: $status, createdAt: $createdAt, updatedAt: $updatedAt, role: $role, additionalData: $additionalData)';
   }
 
   @override
@@ -532,6 +560,7 @@ class _$UserModelImpl implements _UserModel {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
+            (identical(other.avatar, avatar) || other.avatar == avatar) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
@@ -569,13 +598,14 @@ class _$UserModelImpl implements _UserModel {
                 other.additionalData == additionalData));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
         id,
         firstName,
         lastName,
+        avatar,
         email,
         password,
         language,
@@ -600,7 +630,9 @@ class _$UserModelImpl implements _UserModel {
         additionalData
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
@@ -619,6 +651,7 @@ abstract class _UserModel implements UserModel {
       {@JsonKey(name: 'id') final String? id,
       final String? firstName,
       final String? lastName,
+      final String? avatar,
       final String? email,
       final String? password,
       final String? language,
@@ -652,6 +685,8 @@ abstract class _UserModel implements UserModel {
   String? get firstName;
   @override
   String? get lastName;
+  @override
+  String? get avatar;
   @override
   String? get email;
   @override
@@ -696,8 +731,11 @@ abstract class _UserModel implements UserModel {
   RoleModel get role;
   @override
   AdditionalDataModel get additionalData;
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

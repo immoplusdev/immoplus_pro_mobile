@@ -33,7 +33,7 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
       prix: (json['prix'] as num?)?.toInt() ?? 0,
       featured: json['featured'] as bool? ?? false,
       bienImmobilierDisponible:
-          json['bienImmobilierDisponible'] as bool? ?? true,
+          json['bienImmobilierDisponible'] as bool? ?? false,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),

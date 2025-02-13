@@ -23,8 +23,12 @@ mixin _$CommoditeModel {
   String get text => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
 
+  /// Serializes this CommoditeModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CommoditeModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CommoditeModelCopyWith<CommoditeModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$CommoditeModelCopyWithImpl<$Res, $Val extends CommoditeModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CommoditeModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$CommoditeModelImplCopyWithImpl<$Res>
       _$CommoditeModelImpl _value, $Res Function(_$CommoditeModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CommoditeModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -134,11 +142,13 @@ class _$CommoditeModelImpl implements _CommoditeModel {
             (identical(other.icon, icon) || other.icon == icon));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, text, icon);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CommoditeModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CommoditeModelImplCopyWith<_$CommoditeModelImpl> get copyWith =>
@@ -164,8 +174,11 @@ abstract class _CommoditeModel implements CommoditeModel {
   String get text;
   @override
   String get icon;
+
+  /// Create a copy of CommoditeModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CommoditeModelImplCopyWith<_$CommoditeModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

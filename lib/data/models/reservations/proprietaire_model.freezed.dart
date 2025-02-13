@@ -26,8 +26,12 @@ mixin _$ProprietaireModel {
   String get lastName => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
 
+  /// Serializes this ProprietaireModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ProprietaireModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ProprietaireModelCopyWith<ProprietaireModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$ProprietaireModelCopyWithImpl<$Res, $Val extends ProprietaireModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ProprietaireModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$ProprietaireModelImplCopyWithImpl<$Res>
       $Res Function(_$ProprietaireModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProprietaireModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -197,12 +205,14 @@ class _$ProprietaireModelImpl implements _ProprietaireModel {
                 other.phoneNumber == phoneNumber));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, email, firstName, lastName, phoneNumber);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProprietaireModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ProprietaireModelImplCopyWith<_$ProprietaireModelImpl> get copyWith =>
@@ -238,8 +248,11 @@ abstract class _ProprietaireModel implements ProprietaireModel {
   String get lastName;
   @override
   String get phoneNumber;
+
+  /// Create a copy of ProprietaireModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProprietaireModelImplCopyWith<_$ProprietaireModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

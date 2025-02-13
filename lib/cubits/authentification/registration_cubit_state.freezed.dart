@@ -88,6 +88,8 @@ mixin _$RegistrationCubitState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this RegistrationCubitState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -108,6 +110,9 @@ class _$RegistrationCubitStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -125,6 +130,9 @@ class __$$REGISTRATION_INITIALImplCopyWithImpl<$Res>
   __$$REGISTRATION_INITIALImplCopyWithImpl(_$REGISTRATION_INITIALImpl _value,
       $Res Function(_$REGISTRATION_INITIALImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -151,7 +159,7 @@ class _$REGISTRATION_INITIALImpl implements REGISTRATION_INITIAL {
             other is _$REGISTRATION_INITIALImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -260,6 +268,9 @@ class __$$REGISTRATION_LOADINGImplCopyWithImpl<$Res>
   __$$REGISTRATION_LOADINGImplCopyWithImpl(_$REGISTRATION_LOADINGImpl _value,
       $Res Function(_$REGISTRATION_LOADINGImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -286,7 +297,7 @@ class _$REGISTRATION_LOADINGImpl implements REGISTRATION_LOADING {
             other is _$REGISTRATION_LOADINGImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -394,6 +405,9 @@ class __$$REGISTRATION_ERRORImplCopyWithImpl<$Res>
   __$$REGISTRATION_ERRORImplCopyWithImpl(_$REGISTRATION_ERRORImpl _value,
       $Res Function(_$REGISTRATION_ERRORImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -419,7 +433,7 @@ class _$REGISTRATION_ERRORImpl implements REGISTRATION_ERROR {
         (other.runtimeType == runtimeType && other is _$REGISTRATION_ERRORImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -533,6 +547,8 @@ class __$$REGISTRATION_SUCCESSImplCopyWithImpl<$Res>
       $Res Function(_$REGISTRATION_SUCCESSImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -546,6 +562,8 @@ class __$$REGISTRATION_SUCCESSImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AccountCreationResponseCopyWith<$Res> get accountCreationResponse {
@@ -587,11 +605,13 @@ class _$REGISTRATION_SUCCESSImpl implements REGISTRATION_SUCCESS {
                 other.accountCreationResponse == accountCreationResponse));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, accountCreationResponse);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$REGISTRATION_SUCCESSImplCopyWith<_$REGISTRATION_SUCCESSImpl>
@@ -691,7 +711,10 @@ abstract class REGISTRATION_SUCCESS implements RegistrationCubitState {
       _$REGISTRATION_SUCCESSImpl.fromJson;
 
   AccountCreationResponse get accountCreationResponse;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RegistrationCubitState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$REGISTRATION_SUCCESSImplCopyWith<_$REGISTRATION_SUCCESSImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

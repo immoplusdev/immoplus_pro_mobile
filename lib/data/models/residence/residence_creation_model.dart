@@ -18,7 +18,7 @@ class ResidenceCreationModel with _$ResidenceCreationModel {
     @Default('') String ville,
     @Default('') String commune,
     @Default(PositionModel()) PositionModel position,
-    @Default('') String video,
+    String? video,
     @Default([]) List<String> images,
     @Default([]) List<CommoditeModel> commodites,
     @Default([]) List<PieceModel> pieces,

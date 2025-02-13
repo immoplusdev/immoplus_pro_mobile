@@ -36,7 +36,7 @@ class _VilleSelectorListtileState extends State<VilleSelectorListtile> {
         useSafeArea: true,
         isScrollControlled: true,
         isDismissible: true,
-        backgroundColor: AppColors.scafold,
+        backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),

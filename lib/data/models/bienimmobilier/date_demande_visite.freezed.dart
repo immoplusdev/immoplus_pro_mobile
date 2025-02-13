@@ -22,8 +22,12 @@ DateDemandeVisite _$DateDemandeVisiteFromJson(Map<String, dynamic> json) {
 mixin _$DateDemandeVisite {
   DateTime? get date => throw _privateConstructorUsedError;
 
+  /// Serializes this DateDemandeVisite to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DateDemandeVisite
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DateDemandeVisiteCopyWith<DateDemandeVisite> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$DateDemandeVisiteCopyWithImpl<$Res, $Val extends DateDemandeVisite>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DateDemandeVisite
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class __$$DateDemandeVisiteImplCopyWithImpl<$Res>
       $Res Function(_$DateDemandeVisiteImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DateDemandeVisite
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,11 +126,13 @@ class _$DateDemandeVisiteImpl implements _DateDemandeVisite {
             (identical(other.date, date) || other.date == date));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, date);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DateDemandeVisite
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DateDemandeVisiteImplCopyWith<_$DateDemandeVisiteImpl> get copyWith =>
@@ -146,8 +156,11 @@ abstract class _DateDemandeVisite implements DateDemandeVisite {
 
   @override
   DateTime? get date;
+
+  /// Create a copy of DateDemandeVisite
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DateDemandeVisiteImplCopyWith<_$DateDemandeVisiteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

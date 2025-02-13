@@ -27,8 +27,12 @@ mixin _$ResidencesCollection {
   bool? get hasNext => throw _privateConstructorUsedError;
   bool? get hasPrevious => throw _privateConstructorUsedError;
 
+  /// Serializes this ResidencesCollection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResidencesCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResidencesCollectionCopyWith<ResidencesCollection> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,6 +63,8 @@ class _$ResidencesCollectionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResidencesCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -123,6 +129,8 @@ class __$$ResidencesCollectionImplCopyWithImpl<$Res>
       $Res Function(_$ResidencesCollectionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResidencesCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -226,7 +234,7 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
                 other.hasPrevious == hasPrevious));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -237,7 +245,9 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
       hasNext,
       hasPrevious);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResidencesCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResidencesCollectionImplCopyWith<_$ResidencesCollectionImpl>
@@ -277,8 +287,11 @@ abstract class _ResidencesCollection implements ResidencesCollection {
   bool? get hasNext;
   @override
   bool? get hasPrevious;
+
+  /// Create a copy of ResidencesCollection
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResidencesCollectionImplCopyWith<_$ResidencesCollectionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

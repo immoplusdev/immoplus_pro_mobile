@@ -3,10 +3,12 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/detail_product_cubit/carousel_cubit.dart';
 import 'package:immoplus_pro/cubits/refresh_cubit.dart';
-import 'package:immoplus_pro/views/booking/logic/booking_cubit.dart';
-import 'package:immoplus_pro/views/estate_detail/cubit/estate_cubit.dart';
-import 'package:immoplus_pro/views/residence_detail/cubit/logment_cubit.dart';
-import 'package:immoplus_pro/views/visits/logic/booking_cubit.dart';
+import 'package:immoplus_pro/features/booking/logic/booking_cubit.dart';
+import 'package:immoplus_pro/features/estate_detail/cubit/estate_cubit.dart';
+import 'package:immoplus_pro/features/payment_module/bloc/payment_cubit.dart';
+import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
+import 'package:immoplus_pro/features/residence_detail/cubit/logment_cubit.dart';
+import 'package:immoplus_pro/features/visits/logic/booking_cubit.dart';
 
 class BlocsManager {
   static List<BlocProvider> listBlocProviders = [
@@ -33,6 +35,12 @@ class BlocsManager {
     ),
     BlocProvider<EstateCubit>(
       create: (context) => EstateCubit(),
+    ),
+    BlocProvider<PaymentCubit>(
+      create: (context) => PaymentCubit(),
+    ),
+    BlocProvider<WalletCubit>(
+      create: (context) => WalletCubit(),
     ),
   ];
 }

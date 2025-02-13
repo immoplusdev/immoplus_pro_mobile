@@ -24,8 +24,12 @@ mixin _$AccountCreationResponse {
   @JsonKey(name: 'data')
   DataModel get data => throw _privateConstructorUsedError;
 
+  /// Serializes this AccountCreationResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AccountCreationResponseCopyWith<AccountCreationResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +56,8 @@ class _$AccountCreationResponseCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -65,6 +71,8 @@ class _$AccountCreationResponseCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DataModelCopyWith<$Res> get data {
@@ -99,6 +107,8 @@ class __$$AccountCreationResponseImplCopyWithImpl<$Res>
       $Res Function(_$AccountCreationResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -139,11 +149,13 @@ class _$AccountCreationResponseImpl implements _AccountCreationResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AccountCreationResponseImplCopyWith<_$AccountCreationResponseImpl>
@@ -169,8 +181,11 @@ abstract class _AccountCreationResponse implements AccountCreationResponse {
   @override
   @JsonKey(name: 'data')
   DataModel get data;
+
+  /// Create a copy of AccountCreationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AccountCreationResponseImplCopyWith<_$AccountCreationResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

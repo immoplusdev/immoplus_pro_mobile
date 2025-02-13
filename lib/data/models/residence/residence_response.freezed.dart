@@ -22,8 +22,12 @@ ResidenceResponse _$ResidenceResponseFromJson(Map<String, dynamic> json) {
 mixin _$ResidenceResponse {
   ResidenceModel get data => throw _privateConstructorUsedError;
 
+  /// Serializes this ResidenceResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResidenceResponseCopyWith<ResidenceResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$ResidenceResponseCopyWithImpl<$Res, $Val extends ResidenceResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -62,6 +68,8 @@ class _$ResidenceResponseCopyWithImpl<$Res, $Val extends ResidenceResponse>
     ) as $Val);
   }
 
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ResidenceModelCopyWith<$Res> get data {
@@ -93,6 +101,8 @@ class __$$ResidenceResponseImplCopyWithImpl<$Res>
       $Res Function(_$ResidenceResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,11 +141,13 @@ class _$ResidenceResponseImpl implements _ResidenceResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResidenceResponseImplCopyWith<_$ResidenceResponseImpl> get copyWith =>
@@ -159,8 +171,11 @@ abstract class _ResidenceResponse implements ResidenceResponse {
 
   @override
   ResidenceModel get data;
+
+  /// Create a copy of ResidenceResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResidenceResponseImplCopyWith<_$ResidenceResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

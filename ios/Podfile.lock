@@ -50,8 +50,6 @@ PODS:
     - GooglePlaces (~> 8.5.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - flutter_vibrate (0.0.1):
-    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -59,10 +57,21 @@ PODS:
     - Flutter
   - geolocator_apple (1.2.0):
     - Flutter
+  - Google-Maps-iOS-Utils (5.0.0):
+    - GoogleMaps (~> 8.0)
+  - google_maps_flutter_ios (0.0.1):
+    - Flutter
+    - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
+    - GoogleMaps (< 10.0, >= 8.4)
   - GoogleDataTransport (9.4.1):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30911.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMaps (8.4.0):
+    - GoogleMaps/Maps (= 8.4.0)
+  - GoogleMaps/Base (8.4.0)
+  - GoogleMaps/Maps (8.4.0):
+    - GoogleMaps/Base
   - GooglePlaces (8.5.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
@@ -95,6 +104,9 @@ PODS:
     - Flutter
   - just_audio (0.0.1):
     - Flutter
+  - libphonenumber_plugin (0.0.1):
+    - Flutter
+    - PhoneNumberKit (~> 3.7.8)
   - location (0.0.1):
     - Flutter
   - map_launcher (0.0.1):
@@ -106,12 +118,12 @@ PODS:
     - nanopb/encode (= 2.30910.0)
   - nanopb/decode (2.30910.0)
   - nanopb/encode (2.30910.0)
-  - onesignal_flutter (5.2.6):
+  - onesignal_flutter (5.2.7):
     - Flutter
-    - OneSignalXCFramework (= 5.2.5)
-  - OneSignalXCFramework (5.2.5):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.5)
-  - OneSignalXCFramework/OneSignal (5.2.5):
+    - OneSignalXCFramework (= 5.2.7)
+  - OneSignalXCFramework (5.2.7):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.7)
+  - OneSignalXCFramework/OneSignal (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -119,38 +131,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.5):
+  - OneSignalXCFramework/OneSignalComplete (5.2.7):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.5)
-  - OneSignalXCFramework/OneSignalExtension (5.2.5):
+  - OneSignalXCFramework/OneSignalCore (5.2.7)
+  - OneSignalXCFramework/OneSignalExtension (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.5):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.5):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.5):
+  - OneSignalXCFramework/OneSignalLocation (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.5):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.5):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.7):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.5):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.7):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.5):
+  - OneSignalXCFramework/OneSignalUser (5.2.7):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -162,10 +174,18 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
+  - PhoneNumberKit (3.7.11):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.7.11)
+    - PhoneNumberKit/UIKit (= 3.7.11)
+  - PhoneNumberKit/PhoneNumberKitCore (3.7.11)
+  - PhoneNumberKit/UIKit (3.7.11):
+    - PhoneNumberKit/PhoneNumberKitCore
   - pointer_interceptor_ios (0.0.1):
     - Flutter
   - PromisesObjC (2.4.0)
   - share_plus (0.0.1):
+    - Flutter
+  - sms_autofill (0.0.1):
     - Flutter
   - sqflite_darwin (0.0.4):
     - Flutter
@@ -194,13 +214,14 @@ DEPENDENCIES:
   - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
   - flutter_google_places_sdk_ios (from `.symlinks/plugins/flutter_google_places_sdk_ios/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
+  - google_maps_flutter_ios (from `.symlinks/plugins/google_maps_flutter_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - libphonenumber_plugin (from `.symlinks/plugins/libphonenumber_plugin/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - motion_sensors (from `.symlinks/plugins/motion_sensors/ios`)
@@ -210,6 +231,7 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - pointer_interceptor_ios (from `.symlinks/plugins/pointer_interceptor_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -225,11 +247,14 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseInstallations
     - FirebaseMessaging
+    - Google-Maps-iOS-Utils
     - GoogleDataTransport
+    - GoogleMaps
     - GooglePlaces
     - GoogleUtilities
     - nanopb
     - OneSignalXCFramework
+    - PhoneNumberKit
     - PromisesObjC
     - Toast
 
@@ -252,20 +277,22 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_google_places_sdk_ios/ios"
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  flutter_vibrate:
-    :path: ".symlinks/plugins/flutter_vibrate/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geocoding_ios:
     :path: ".symlinks/plugins/geocoding_ios/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
+  google_maps_flutter_ios:
+    :path: ".symlinks/plugins/google_maps_flutter_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
   just_audio:
     :path: ".symlinks/plugins/just_audio/ios"
+  libphonenumber_plugin:
+    :path: ".symlinks/plugins/libphonenumber_plugin/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   map_launcher:
@@ -284,6 +311,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pointer_interceptor_ios/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
+  sms_autofill:
+    :path: ".symlinks/plugins/sms_autofill/ios"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
   uni_links:
@@ -313,29 +342,34 @@ SPEC CHECKSUMS:
   flutter_compass: cbbd285cea1584c7ac9c4e0c3e1f17cbea55e855
   flutter_google_places_sdk_ios: 76e1260ead0522ef09c206563a7288aa3c77202e
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
-  flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   geocoding_ios: d7460f56e80e118d57678efe5c2cdc888739ff18
   geolocator_apple: 6cbaf322953988e009e5ecb481f07efece75c450
+  Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
+  google_maps_flutter_ios: e31555a04d1986ab130f2b9f24b6cdc861acc6d3
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
+  GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
   GooglePlaces: 426efb69051e7b460e16300ba63598687d10fa1a
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  libphonenumber_plugin: 642b004d6fe3ea35c7919f664b7f3f886d25b087
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
   map_launcher: 5fde49ac9a52672bf99da746599f507b4490d7b5
   motion_sensors: 03f55b7c637a7e365a0b5f9697a449f9059d5d91
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
-  onesignal_flutter: f441aaefa112988a1e786c695a30695ad0291763
-  OneSignalXCFramework: 76ca508fc2b941317729d13fdec96817f8ef5b3b
-  package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  onesignal_flutter: fe89f59e6f0c06a9c0f3aff8309db83b89c40de3
+  OneSignalXCFramework: c56f9470a6fb23048baf55e02740a09cfd32863c
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
+  PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
   pointer_interceptor_ios: 508241697ff0947f853c061945a8b822463947c1
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
-  sqflite_darwin: a553b1fd6fe66f53bbb0fe5b4f5bab93f08d7a13
+  sms_autofill: c461043483362c3f1709ee76eaae6eb570b31686
+  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
   Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
@@ -345,4 +379,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1959d098c91d8a792531a723c4a9d7e9f6a01e38
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

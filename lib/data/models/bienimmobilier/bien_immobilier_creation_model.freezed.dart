@@ -39,8 +39,12 @@ mixin _$BienImmobilierCreationModel {
   List<PieceModel> get pieces => throw _privateConstructorUsedError;
   bool get aLouer => throw _privateConstructorUsedError;
 
+  /// Serializes this BienImmobilierCreationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BienImmobilierCreationModelCopyWith<BienImmobilierCreationModel>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -86,6 +90,8 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -179,6 +185,8 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PositionModelCopyWith<$Res>? get position {
@@ -234,6 +242,8 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
       $Res Function(_$BienImmobilierCreationModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -478,7 +488,7 @@ class _$BienImmobilierCreationModelImpl
             (identical(other.aLouer, aLouer) || other.aLouer == aLouer));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -500,7 +510,9 @@ class _$BienImmobilierCreationModelImpl
       const DeepCollectionEquality().hash(_pieces),
       aLouer);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BienImmobilierCreationModelImplCopyWith<_$BienImmobilierCreationModelImpl>
@@ -573,8 +585,11 @@ abstract class _BienImmobilierCreationModel
   List<PieceModel> get pieces;
   @override
   bool get aLouer;
+
+  /// Create a copy of BienImmobilierCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BienImmobilierCreationModelImplCopyWith<_$BienImmobilierCreationModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

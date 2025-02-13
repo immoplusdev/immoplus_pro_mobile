@@ -21,6 +21,7 @@ EnterpriseRegistrationResponse _$EnterpriseRegistrationResponseFromJson(
 
 /// @nodoc
 mixin _$EnterpriseRegistrationResponse {
+  /// Serializes this EnterpriseRegistrationResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
@@ -43,6 +44,9 @@ class _$EnterpriseRegistrationResponseCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EnterpriseRegistrationResponse
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -62,6 +66,9 @@ class __$$EnterpriseRegistrationResponseImplCopyWithImpl<$Res>
       _$EnterpriseRegistrationResponseImpl _value,
       $Res Function(_$EnterpriseRegistrationResponseImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EnterpriseRegistrationResponse
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -86,7 +93,7 @@ class _$EnterpriseRegistrationResponseImpl
             other is _$EnterpriseRegistrationResponseImpl);
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => runtimeType.hashCode;
 

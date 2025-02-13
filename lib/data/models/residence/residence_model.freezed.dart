@@ -23,6 +23,7 @@ mixin _$ResidenceModel {
   String get id => throw _privateConstructorUsedError;
   String get miniature => throw _privateConstructorUsedError;
   String get nom => throw _privateConstructorUsedError;
+  String get statusValidation => throw _privateConstructorUsedError;
   String get typeResidence => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   int get prixReservation => throw _privateConstructorUsedError;
@@ -44,8 +45,12 @@ mixin _$ResidenceModel {
   String get reglesSupplementaires => throw _privateConstructorUsedError;
   bool get residenceDisponible => throw _privateConstructorUsedError;
 
+  /// Serializes this ResidenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResidenceModelCopyWith<ResidenceModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +65,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       {String id,
       String miniature,
       String nom,
+      String statusValidation,
       String typeResidence,
       String description,
       int prixReservation,
@@ -94,12 +100,15 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? miniature = null,
     Object? nom = null,
+    Object? statusValidation = null,
     Object? typeResidence = null,
     Object? description = null,
     Object? prixReservation = null,
@@ -133,6 +142,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       typeResidence: null == typeResidence
           ? _value.typeResidence
@@ -217,6 +230,8 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     ) as $Val);
   }
 
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PositionModelCopyWith<$Res> get position {
@@ -238,6 +253,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       {String id,
       String miniature,
       String nom,
+      String statusValidation,
       String typeResidence,
       String description,
       int prixReservation,
@@ -271,12 +287,15 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
       _$ResidenceModelImpl _value, $Res Function(_$ResidenceModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? miniature = null,
     Object? nom = null,
+    Object? statusValidation = null,
     Object? typeResidence = null,
     Object? description = null,
     Object? prixReservation = null,
@@ -310,6 +329,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
+              as String,
+      statusValidation: null == statusValidation
+          ? _value.statusValidation
+          : statusValidation // ignore: cast_nullable_to_non_nullable
               as String,
       typeResidence: null == typeResidence
           ? _value.typeResidence
@@ -402,7 +425,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       {this.id = '',
       this.miniature = '',
       this.nom = '',
-      this.typeResidence = 'Appartement',
+      this.statusValidation = '',
+      this.typeResidence = '',
       this.description = '',
       this.prixReservation = 0,
       this.adresse = '',
@@ -438,6 +462,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final String nom;
+  @override
+  @JsonKey()
+  final String statusValidation;
   @override
   @JsonKey()
   final String typeResidence;
@@ -519,7 +546,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, statusValidation: $statusValidation, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
   }
 
   @override
@@ -531,6 +558,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.miniature, miniature) ||
                 other.miniature == miniature) &&
             (identical(other.nom, nom) || other.nom == nom) &&
+            (identical(other.statusValidation, statusValidation) ||
+                other.statusValidation == statusValidation) &&
             (identical(other.typeResidence, typeResidence) ||
                 other.typeResidence == typeResidence) &&
             (identical(other.description, description) ||
@@ -567,13 +596,14 @@ class _$ResidenceModelImpl implements _ResidenceModel {
                 other.residenceDisponible == residenceDisponible));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
         id,
         miniature,
         nom,
+        statusValidation,
         typeResidence,
         description,
         prixReservation,
@@ -596,7 +626,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         residenceDisponible
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResidenceModelImplCopyWith<_$ResidenceModelImpl> get copyWith =>
@@ -616,6 +648,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       {final String id,
       final String miniature,
       final String nom,
+      final String statusValidation,
       final String typeResidence,
       final String description,
       final int prixReservation,
@@ -646,6 +679,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get miniature;
   @override
   String get nom;
+  @override
+  String get statusValidation;
   @override
   String get typeResidence;
   @override
@@ -686,8 +721,11 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get reglesSupplementaires;
   @override
   bool get residenceDisponible;
+
+  /// Create a copy of ResidenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResidenceModelImplCopyWith<_$ResidenceModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

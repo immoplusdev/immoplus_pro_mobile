@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:immoplus_pro/app_router.dart';
-import 'package:immoplus_pro/core/dio_client.dart';
+import 'package:immoplus_pro/core/network/dio_client.dart';
+import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/services/permission_services.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:immoplus_pro/views/home_page/home_page.dart';
-import 'package:immoplus_pro/views/shared_widgets/loading_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -22,8 +22,12 @@ ReservationResponse _$ReservationResponseFromJson(Map<String, dynamic> json) {
 mixin _$ReservationResponse {
   ReservationModel get data => throw _privateConstructorUsedError;
 
+  /// Serializes this ReservationResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ReservationResponseCopyWith<ReservationResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$ReservationResponseCopyWithImpl<$Res, $Val extends ReservationResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -62,6 +68,8 @@ class _$ReservationResponseCopyWithImpl<$Res, $Val extends ReservationResponse>
     ) as $Val);
   }
 
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ReservationModelCopyWith<$Res> get data {
@@ -93,6 +101,8 @@ class __$$ReservationResponseImplCopyWithImpl<$Res>
       $Res Function(_$ReservationResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,11 +141,13 @@ class _$ReservationResponseImpl implements _ReservationResponse {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ReservationResponseImplCopyWith<_$ReservationResponseImpl> get copyWith =>
@@ -159,8 +171,11 @@ abstract class _ReservationResponse implements ReservationResponse {
 
   @override
   ReservationModel get data;
+
+  /// Create a copy of ReservationResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ReservationResponseImplCopyWith<_$ReservationResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

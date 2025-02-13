@@ -22,8 +22,12 @@ FileDataModel _$FileDataModelFromJson(Map<String, dynamic> json) {
 mixin _$FileDataModel {
   InnerFileDataModel? get data => throw _privateConstructorUsedError;
 
+  /// Serializes this FileDataModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FileDataModelCopyWith<FileDataModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$FileDataModelCopyWithImpl<$Res, $Val extends FileDataModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -62,6 +68,8 @@ class _$FileDataModelCopyWithImpl<$Res, $Val extends FileDataModel>
     ) as $Val);
   }
 
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $InnerFileDataModelCopyWith<$Res>? get data {
@@ -97,6 +105,8 @@ class __$$FileDataModelImplCopyWithImpl<$Res>
       _$FileDataModelImpl _value, $Res Function(_$FileDataModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,11 +145,13 @@ class _$FileDataModelImpl implements _FileDataModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FileDataModelImplCopyWith<_$FileDataModelImpl> get copyWith =>
@@ -162,8 +174,11 @@ abstract class _FileDataModel implements FileDataModel {
 
   @override
   InnerFileDataModel? get data;
+
+  /// Create a copy of FileDataModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FileDataModelImplCopyWith<_$FileDataModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

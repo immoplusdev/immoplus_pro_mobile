@@ -1,7 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:immoplus_pro/core/dio_client.dart';
+import 'package:immoplus_pro/core/network/dio_client.dart';
+import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
@@ -41,12 +42,32 @@ class LogmentRepository {
     required int perPage,
     String? orderBy,
     String? orderDir,
-    String? where,
+    Map<String, dynamic>? where,
   }) async {
     //DioClient().dio.options.queryParameters['meta'] = '*';
     try {
       final response = await ReservationProvider(DioClient().dio)
           .getBookingsOwner(id, where, page, perPage, orderBy, orderDir);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
+  static Future<WithdrawBookingHistoryDto> getWithdrawReservations({
+    required String userId,
+  }) async {
+    //DioClient().dio.options.queryParameters['meta'] = '*';
+    try {
+      final response =
+          await ReservationProvider(DioClient().dio).withDrawHistory(userId);
       inspect(response);
       return response;
     } on DioException catch (dioError) {

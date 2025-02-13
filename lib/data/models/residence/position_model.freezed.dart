@@ -23,8 +23,12 @@ mixin _$PositionModel {
   String get type => throw _privateConstructorUsedError;
   List<double> get coordinates => throw _privateConstructorUsedError;
 
+  /// Serializes this PositionModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PositionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PositionModelCopyWith<PositionModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$PositionModelCopyWithImpl<$Res, $Val extends PositionModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PositionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$PositionModelImplCopyWithImpl<$Res>
       _$PositionModelImpl _value, $Res Function(_$PositionModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PositionModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,12 +150,14 @@ class _$PositionModelImpl implements _PositionModel {
                 .equals(other._coordinates, _coordinates));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, type, const DeepCollectionEquality().hash(_coordinates));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PositionModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PositionModelImplCopyWith<_$PositionModelImpl> get copyWith =>
@@ -173,8 +183,11 @@ abstract class _PositionModel implements PositionModel {
   String get type;
   @override
   List<double> get coordinates;
+
+  /// Create a copy of PositionModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PositionModelImplCopyWith<_$PositionModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -23,8 +23,12 @@ mixin _$VisitProgrammerBody {
   List<DateDemandeVisite> get datesDemandeVisite =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this VisitProgrammerBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of VisitProgrammerBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VisitProgrammerBodyCopyWith<VisitProgrammerBody> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$VisitProgrammerBodyCopyWithImpl<$Res, $Val extends VisitProgrammerBody>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of VisitProgrammerBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +87,8 @@ class __$$VisitProgrammerBodyImplCopyWithImpl<$Res>
       $Res Function(_$VisitProgrammerBodyImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of VisitProgrammerBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -128,12 +136,14 @@ class _$VisitProgrammerBodyImpl implements _VisitProgrammerBody {
                 .equals(other._datesDemandeVisite, _datesDemandeVisite));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_datesDemandeVisite));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of VisitProgrammerBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VisitProgrammerBodyImplCopyWith<_$VisitProgrammerBodyImpl> get copyWith =>
@@ -158,8 +168,11 @@ abstract class _VisitProgrammerBody implements VisitProgrammerBody {
 
   @override
   List<DateDemandeVisite> get datesDemandeVisite;
+
+  /// Create a copy of VisitProgrammerBody
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VisitProgrammerBodyImplCopyWith<_$VisitProgrammerBodyImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

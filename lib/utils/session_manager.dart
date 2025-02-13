@@ -30,7 +30,7 @@ class SessionManager {
   Future<UserModelSchema?> getCurrentUser() async {
     print('Get User');
     if (currentUser == null) {
-      final user = await isarInstance.userModelSchemas.get(1);
+      final user = await isarInstance.userModelSchemas.where().findFirst();
       if (user != null) {
         currentUser = user;
       }

@@ -43,7 +43,7 @@ class _CommuneSelectorListtileState extends State<CommuneSelectorListtile> {
         useSafeArea: true,
         isScrollControlled: true,
         isDismissible: true,
-        backgroundColor: AppColors.scafold,
+        backgroundColor: AppColors.whiteBackground,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),

@@ -30,7 +30,7 @@ mixin _$ResidenceCreationModel {
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
-  String get video => throw _privateConstructorUsedError;
+  String? get video => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   List<CommoditeModel> get commodites => throw _privateConstructorUsedError;
   List<PieceModel> get pieces => throw _privateConstructorUsedError;
@@ -45,8 +45,12 @@ mixin _$ResidenceCreationModel {
   String get reglesSupplementaires => throw _privateConstructorUsedError;
   bool get residenceDisponible => throw _privateConstructorUsedError;
 
+  /// Serializes this ResidenceCreationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ResidenceCreationModelCopyWith<ResidenceCreationModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -67,7 +71,7 @@ abstract class $ResidenceCreationModelCopyWith<$Res> {
       String ville,
       String commune,
       PositionModel position,
-      String video,
+      String? video,
       List<String> images,
       List<CommoditeModel> commodites,
       List<PieceModel> pieces,
@@ -95,6 +99,8 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -107,7 +113,7 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
     Object? ville = null,
     Object? commune = null,
     Object? position = null,
-    Object? video = null,
+    Object? video = freezed,
     Object? images = null,
     Object? commodites = null,
     Object? pieces = null,
@@ -158,10 +164,10 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
-      video: null == video
+      video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -213,6 +219,8 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PositionModelCopyWith<$Res> get position {
@@ -241,7 +249,7 @@ abstract class _$$ResidenceCreationModelImplCopyWith<$Res>
       String ville,
       String commune,
       PositionModel position,
-      String video,
+      String? video,
       List<String> images,
       List<CommoditeModel> commodites,
       List<PieceModel> pieces,
@@ -269,6 +277,8 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
       $Res Function(_$ResidenceCreationModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -281,7 +291,7 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
     Object? ville = null,
     Object? commune = null,
     Object? position = null,
-    Object? video = null,
+    Object? video = freezed,
     Object? images = null,
     Object? commodites = null,
     Object? pieces = null,
@@ -332,10 +342,10 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
-      video: null == video
+      video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -401,7 +411,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
       this.ville = '',
       this.commune = '',
       this.position = const PositionModel(),
-      this.video = '',
+      this.video,
       final List<String> images = const [],
       final List<CommoditeModel> commodites = const [],
       final List<PieceModel> pieces = const [],
@@ -449,8 +459,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
   @JsonKey()
   final PositionModel position;
   @override
-  @JsonKey()
-  final String video;
+  final String? video;
   final List<String> _images;
   @override
   @JsonKey()
@@ -556,7 +565,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
                 other.residenceDisponible == residenceDisponible));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -584,7 +593,9 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
         residenceDisponible
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ResidenceCreationModelImplCopyWith<_$ResidenceCreationModelImpl>
@@ -610,7 +621,7 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
       final String ville,
       final String commune,
       final PositionModel position,
-      final String video,
+      final String? video,
       final List<String> images,
       final List<CommoditeModel> commodites,
       final List<PieceModel> pieces,
@@ -646,7 +657,7 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   @override
   PositionModel get position;
   @override
-  String get video;
+  String? get video;
   @override
   List<String> get images;
   @override
@@ -656,8 +667,8 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   @override
   int get dureeMinSejour;
   @override
-  int get dureeMaxSejour;
-  @override //@Default({}) Map<String, dynamic> metadata,
+  int get dureeMaxSejour; //@Default({}) Map<String, dynamic> metadata,
+  @override
   String get heureEntree;
   @override
   String get heureDepart;
@@ -671,8 +682,11 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   String get reglesSupplementaires;
   @override
   bool get residenceDisponible;
+
+  /// Create a copy of ResidenceCreationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ResidenceCreationModelImplCopyWith<_$ResidenceCreationModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

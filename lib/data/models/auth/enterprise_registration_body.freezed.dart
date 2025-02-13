@@ -30,8 +30,12 @@ mixin _$EnterpriseRegistrationBody {
   String? get numeroContribuable => throw _privateConstructorUsedError;
   String? get typeEntreprise => throw _privateConstructorUsedError;
 
+  /// Serializes this EnterpriseRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EnterpriseRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EnterpriseRegistrationBodyCopyWith<EnterpriseRegistrationBody>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -65,6 +69,8 @@ class _$EnterpriseRegistrationBodyCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EnterpriseRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -144,6 +150,8 @@ class __$$EnterpriseRegistrationBodyImplCopyWithImpl<$Res>
       $Res Function(_$EnterpriseRegistrationBodyImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EnterpriseRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -254,7 +262,7 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
                 other.typeEntreprise == typeEntreprise));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -267,7 +275,9 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
       numeroContribuable,
       typeEntreprise);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EnterpriseRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EnterpriseRegistrationBodyImplCopyWith<_$EnterpriseRegistrationBodyImpl>
@@ -313,8 +323,11 @@ abstract class _EnterpriseRegistrationBody
   String? get numeroContribuable;
   @override
   String? get typeEntreprise;
+
+  /// Create a copy of EnterpriseRegistrationBody
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EnterpriseRegistrationBodyImplCopyWith<_$EnterpriseRegistrationBodyImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/models/configs/commune_model.dart';
 import 'package:immoplus_pro/data/models/configs/ville_model.dart';
@@ -25,6 +26,9 @@ class RequestState with _$RequestState {
 
   const factory RequestState.communes({required List<CommuneModel> data}) =
       REQUEST_COMMUNES_DATA;
+
+  const factory RequestState.bookingWithdrowhistory(
+      {required WithdrawBookingHistoryDto data}) = BOOKING_WITHDRAW_HISTORY;
 
   factory RequestState.fromJson(Map<String, dynamic> json) =>
       _$RequestStateFromJson(json);

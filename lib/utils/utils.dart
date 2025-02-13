@@ -12,7 +12,7 @@ import 'package:immoplus_pro/constantes/constantes.dart';
 
 import 'package:immoplus_pro/request_path.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
-import 'package:immoplus_pro/views/login_page/login_page.dart';
+import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -105,6 +105,8 @@ class Utils {
         return 'Demande de visite';
       case Constantes.booking:
         return 'Réservation';
+      case 'reservations':
+        return 'Réservation';
       case Constantes.toOrder:
         return 'Commande';
       case Constantes.service:
@@ -186,7 +188,7 @@ class Utils {
   }
 
   static String formatTimeOnly({required DateTime dateTime}) {
-    String formattedDate = DateFormat("à HH'h':mm").format(dateTime);
+    String formattedDate = DateFormat("HH'h':mm").format(dateTime);
     return formattedDate;
   }
 
@@ -206,6 +208,7 @@ class Utils {
     } else if (status == 'canceled') {
       return CupertinoColors.destructiveRed;
     }
+
     return CupertinoColors.inactiveGray;
   }
 

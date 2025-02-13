@@ -29,8 +29,12 @@ mixin _$DemandeVisiteCollection {
   bool get hasPrevious => throw _privateConstructorUsedError;
   bool get hasNext => throw _privateConstructorUsedError;
 
+  /// Serializes this DemandeVisiteCollection to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemandeVisiteCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemandeVisiteCollectionCopyWith<DemandeVisiteCollection> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -62,6 +66,8 @@ class _$DemandeVisiteCollectionCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemandeVisiteCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +141,8 @@ class __$$DemandeVisiteCollectionImplCopyWithImpl<$Res>
       $Res Function(_$DemandeVisiteCollectionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemandeVisiteCollection
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -249,7 +257,7 @@ class _$DemandeVisiteCollectionImpl implements _DemandeVisiteCollection {
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -261,7 +269,9 @@ class _$DemandeVisiteCollectionImpl implements _DemandeVisiteCollection {
       hasPrevious,
       hasNext);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemandeVisiteCollection
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemandeVisiteCollectionImplCopyWith<_$DemandeVisiteCollectionImpl>
@@ -303,8 +313,11 @@ abstract class _DemandeVisiteCollection implements DemandeVisiteCollection {
   bool get hasPrevious;
   @override
   bool get hasNext;
+
+  /// Create a copy of DemandeVisiteCollection
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemandeVisiteCollectionImplCopyWith<_$DemandeVisiteCollectionImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

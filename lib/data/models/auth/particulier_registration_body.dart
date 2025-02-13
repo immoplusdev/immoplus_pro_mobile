@@ -6,6 +6,7 @@ part 'particulier_registration_body.g.dart';
 @freezed
 class ParticulierRegistrationBody with _$ParticulierRegistrationBody {
   factory ParticulierRegistrationBody({
+    String? avatar,
     String? firstName,
     String? lastName,
     //@JsonKey(name: 'city') String? city,

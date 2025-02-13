@@ -40,8 +40,12 @@ mixin _$DemandeVisiteModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   String? get createdBy => throw _privateConstructorUsedError;
 
+  /// Serializes this DemandeVisiteModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DemandeVisiteModelCopyWith<DemandeVisiteModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -86,6 +90,8 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -180,6 +186,8 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
     ) as $Val);
   }
 
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BienImmobilierModelCopyWith<$Res>? get bienImmobilier {
@@ -192,6 +200,8 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
     });
   }
 
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ClientModelCopyWith<$Res>? get client {
@@ -204,6 +214,8 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
     });
   }
 
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ClientModelCopyWith<$Res>? get proprietaire {
@@ -260,6 +272,8 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
       $Res Function(_$DemandeVisiteModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -474,7 +488,7 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
                 other.createdBy == createdBy));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -496,7 +510,9 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
       updatedAt,
       createdBy);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DemandeVisiteModelImplCopyWith<_$DemandeVisiteModelImpl> get copyWith =>
@@ -568,8 +584,11 @@ abstract class _DemandeVisiteModel implements DemandeVisiteModel {
   DateTime? get updatedAt;
   @override
   String? get createdBy;
+
+  /// Create a copy of DemandeVisiteModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DemandeVisiteModelImplCopyWith<_$DemandeVisiteModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
