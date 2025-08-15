@@ -12,6 +12,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_amenities_
 import 'package:immoplus_pro/features/create_estate/components/estate_pictures_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/location_module/location_page.dart';
@@ -40,6 +41,9 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -140,20 +144,22 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
           )
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateAmentitiesPage.name);
-        },
-        onNext: (EstateCreationModelBuilder().adresse.isNotEmpty &&
-                EstateCreationModelBuilder().commune.isNotEmpty &&
-                EstateCreationModelBuilder().ville.isNotEmpty)
-            ? () {
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onPreview: () {
                 CreationEstateNavigation.goToPage(
-                    pageName: EstatePicturesLogmentPage.name);
-              }
-            : null,
-      ),
+                    pageName: EstateAmentitiesPage.name);
+              },
+              onNext: (EstateCreationModelBuilder().adresse.isNotEmpty &&
+                      EstateCreationModelBuilder().commune.isNotEmpty &&
+                      EstateCreationModelBuilder().ville.isNotEmpty)
+                  ? () {
+                      CreationEstateNavigation.goToPage(
+                          pageName: EstatePicturesLogmentPage.name);
+                    }
+                  : null,
+            ),
     );
   }
 }

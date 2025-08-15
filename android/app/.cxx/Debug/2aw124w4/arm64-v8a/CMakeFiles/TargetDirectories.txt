@@ -1,0 +1,2 @@
+/Users/macpro/WORKSPACE/immoplus_pro/android/app/.cxx/Debug/2aw124w4/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/macpro/WORKSPACE/immoplus_pro/android/app/.cxx/Debug/2aw124w4/arm64-v8a/CMakeFiles/rebuild_cache.dir

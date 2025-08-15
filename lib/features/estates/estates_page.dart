@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +9,7 @@ import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.da
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
+import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/estates/widgets/bien_immobilier_list_card.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
@@ -69,7 +71,7 @@ class _EstatesPageState extends State<EstatesPage> {
             context.goNamed(HomePage.name);
           },
         ),
-        title: const Text('Mes biens immobileir'),
+        title: const Text('Mes biens immobiliers'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
           InputChip(
@@ -99,6 +101,9 @@ class _EstatesPageState extends State<EstatesPage> {
         ],
       ),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
@@ -122,11 +127,43 @@ class _EstatesPageState extends State<EstatesPage> {
                   ),
                 ),
               ),
-              noItemsFoundIndicatorBuilder: (context) => Center(
-                  child: Text(
-                "Aucun élément trouvé",
-                style: Theme.of(context).textTheme.titleLarge,
-              )),
+              noItemsFoundIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Gap(100),
+                    SvgPicture.asset(
+                      "assets/svgs/undraw/house.svg",
+                      width: 200,
+                    ),
+                    const Gap(30),
+                    Text(
+                      "Aucune bien immobilier trouvés",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const Gap(30),
+                    const Text(
+                      "Vous n’avez pas encore ajouté de biens immobiliers sur ImmoPlus. Commencez dès maintenant en ajoutant vos biens selon les critères requis.",
+                      textAlign: TextAlign.center,
+                    ),
+                    Gap(20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {
+                        ResidenceCreationModelBuilder().reset();
+                        context.pushNamed(CreateLodgmentPage.name);
+                      },
+                      child: Text('Ajouter une résidence'),
+                    ),
+                  ],
+                ),
+              ),
               itemBuilder: (context, item, index) => BienImmoblierListCard(
                 bienImmobilierModel: item,
               ),

@@ -36,8 +36,10 @@ RequestState _$RequestStateFromJson(Map<String, dynamic> json) {
       return REQUEST_VILLES_DATA.fromJson(json);
     case 'communes':
       return REQUEST_COMMUNES_DATA.fromJson(json);
-    case 'bookingWithdrowhistory':
-      return BOOKING_WITHDRAW_HISTORY.fromJson(json);
+    case 'wallet':
+      return WALLET.fromJson(json);
+    case 'withdrawalRequest':
+      return WITHDRAWAL_REQUEST.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'RequestState',
@@ -59,8 +61,8 @@ mixin _$RequestState {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -75,7 +77,8 @@ mixin _$RequestState {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -90,7 +93,8 @@ mixin _$RequestState {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -107,8 +111,8 @@ mixin _$RequestState {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -123,7 +127,8 @@ mixin _$RequestState {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -138,7 +143,8 @@ mixin _$RequestState {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -226,8 +232,8 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return $default();
   }
@@ -245,7 +251,8 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return $default?.call();
   }
@@ -263,7 +270,8 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -286,8 +294,8 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return $default(this);
   }
@@ -305,7 +313,8 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return $default?.call(this);
   }
@@ -323,7 +332,8 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -406,8 +416,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return initial();
   }
@@ -425,7 +435,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return initial?.call();
   }
@@ -443,7 +454,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -466,8 +478,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return initial(this);
   }
@@ -485,7 +497,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return initial?.call(this);
   }
@@ -503,7 +516,8 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -586,8 +600,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return loading();
   }
@@ -605,7 +619,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return loading?.call();
   }
@@ -623,7 +638,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -646,8 +662,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return loading(this);
   }
@@ -665,7 +681,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return loading?.call(this);
   }
@@ -683,7 +700,8 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -766,8 +784,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return success();
   }
@@ -785,7 +803,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return success?.call();
   }
@@ -803,7 +822,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -826,8 +846,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return success(this);
   }
@@ -845,7 +865,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return success?.call(this);
   }
@@ -863,7 +884,8 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -973,8 +995,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return error(this.error);
   }
@@ -992,7 +1014,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return error?.call(this.error);
   }
@@ -1010,7 +1033,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1033,8 +1057,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return error(this);
   }
@@ -1052,7 +1076,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return error?.call(this);
   }
@@ -1070,7 +1095,8 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1204,8 +1230,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return residence(data);
   }
@@ -1223,7 +1249,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return residence?.call(data);
   }
@@ -1241,7 +1268,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1264,8 +1292,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return residence(this);
   }
@@ -1283,7 +1311,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return residence?.call(this);
   }
@@ -1301,7 +1330,8 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1439,8 +1469,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return bienImmobilier(data);
   }
@@ -1458,7 +1488,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return bienImmobilier?.call(data);
   }
@@ -1476,7 +1507,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1499,8 +1531,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return bienImmobilier(this);
   }
@@ -1518,7 +1550,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return bienImmobilier?.call(this);
   }
@@ -1536,7 +1569,8 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1668,8 +1702,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return residences(data);
   }
@@ -1687,7 +1721,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return residences?.call(data);
   }
@@ -1705,7 +1740,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1728,8 +1764,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return residences(this);
   }
@@ -1747,7 +1783,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return residences?.call(this);
   }
@@ -1765,7 +1802,8 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1894,8 +1932,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return villes(data);
   }
@@ -1913,7 +1951,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return villes?.call(data);
   }
@@ -1931,7 +1970,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -1954,8 +1994,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return villes(this);
   }
@@ -1973,7 +2013,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return villes?.call(this);
   }
@@ -1991,7 +2032,8 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -2120,8 +2162,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
     return communes(data);
   }
@@ -2139,7 +2181,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
     return communes?.call(data);
   }
@@ -2157,7 +2200,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2180,8 +2224,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
     return communes(this);
   }
@@ -2199,7 +2243,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
     return communes?.call(this);
   }
@@ -2217,7 +2262,8 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2251,24 +2297,22 @@ abstract class REQUEST_COMMUNES_DATA implements RequestState {
 }
 
 /// @nodoc
-abstract class _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<$Res> {
-  factory _$$BOOKING_WITHDRAW_HISTORYImplCopyWith(
-          _$BOOKING_WITHDRAW_HISTORYImpl value,
-          $Res Function(_$BOOKING_WITHDRAW_HISTORYImpl) then) =
-      __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>;
+abstract class _$$WALLETImplCopyWith<$Res> {
+  factory _$$WALLETImplCopyWith(
+          _$WALLETImpl value, $Res Function(_$WALLETImpl) then) =
+      __$$WALLETImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({WithdrawBookingHistoryDto data});
+  $Res call({WalletModel data});
 
-  $WithdrawBookingHistoryDtoCopyWith<$Res> get data;
+  $WalletModelCopyWith<$Res> get data;
 }
 
 /// @nodoc
-class __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>
-    extends _$RequestStateCopyWithImpl<$Res, _$BOOKING_WITHDRAW_HISTORYImpl>
-    implements _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<$Res> {
-  __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl(
-      _$BOOKING_WITHDRAW_HISTORYImpl _value,
-      $Res Function(_$BOOKING_WITHDRAW_HISTORYImpl) _then)
+class __$$WALLETImplCopyWithImpl<$Res>
+    extends _$RequestStateCopyWithImpl<$Res, _$WALLETImpl>
+    implements _$$WALLETImplCopyWith<$Res> {
+  __$$WALLETImplCopyWithImpl(
+      _$WALLETImpl _value, $Res Function(_$WALLETImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of RequestState
@@ -2278,11 +2322,11 @@ class __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$BOOKING_WITHDRAW_HISTORYImpl(
+    return _then(_$WALLETImpl(
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as WithdrawBookingHistoryDto,
+              as WalletModel,
     ));
   }
 
@@ -2290,8 +2334,8 @@ class __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $WithdrawBookingHistoryDtoCopyWith<$Res> get data {
-    return $WithdrawBookingHistoryDtoCopyWith<$Res>(_value.data, (value) {
+  $WalletModelCopyWith<$Res> get data {
+    return $WalletModelCopyWith<$Res>(_value.data, (value) {
       return _then(_value.copyWith(data: value));
     });
   }
@@ -2299,30 +2343,29 @@ class __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
-  const _$BOOKING_WITHDRAW_HISTORYImpl(
-      {required this.data, final String? $type})
-      : $type = $type ?? 'bookingWithdrowhistory';
+class _$WALLETImpl implements WALLET {
+  const _$WALLETImpl({required this.data, final String? $type})
+      : $type = $type ?? 'wallet';
 
-  factory _$BOOKING_WITHDRAW_HISTORYImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BOOKING_WITHDRAW_HISTORYImplFromJson(json);
+  factory _$WALLETImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WALLETImplFromJson(json);
 
   @override
-  final WithdrawBookingHistoryDto data;
+  final WalletModel data;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'RequestState.bookingWithdrowhistory(data: $data)';
+    return 'RequestState.wallet(data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BOOKING_WITHDRAW_HISTORYImpl &&
+            other is _$WALLETImpl &&
             (identical(other.data, data) || other.data == data));
   }
 
@@ -2335,9 +2378,8 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<_$BOOKING_WITHDRAW_HISTORYImpl>
-      get copyWith => __$$BOOKING_WITHDRAW_HISTORYImplCopyWithImpl<
-          _$BOOKING_WITHDRAW_HISTORYImpl>(this, _$identity);
+  _$$WALLETImplCopyWith<_$WALLETImpl> get copyWith =>
+      __$$WALLETImplCopyWithImpl<_$WALLETImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2352,10 +2394,10 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     required TResult Function(List<ResidenceModel> data) residences,
     required TResult Function(List<VilleModel> data) villes,
     required TResult Function(List<CommuneModel> data) communes,
-    required TResult Function(WithdrawBookingHistoryDto data)
-        bookingWithdrowhistory,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
-    return bookingWithdrowhistory(data);
+    return wallet(data);
   }
 
   @override
@@ -2371,9 +2413,10 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     TResult? Function(List<ResidenceModel> data)? residences,
     TResult? Function(List<VilleModel> data)? villes,
     TResult? Function(List<CommuneModel> data)? communes,
-    TResult? Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
-    return bookingWithdrowhistory?.call(data);
+    return wallet?.call(data);
   }
 
   @override
@@ -2389,11 +2432,12 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     TResult Function(List<ResidenceModel> data)? residences,
     TResult Function(List<VilleModel> data)? villes,
     TResult Function(List<CommuneModel> data)? communes,
-    TResult Function(WithdrawBookingHistoryDto data)? bookingWithdrowhistory,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
     required TResult orElse(),
   }) {
-    if (bookingWithdrowhistory != null) {
-      return bookingWithdrowhistory(data);
+    if (wallet != null) {
+      return wallet(data);
     }
     return orElse();
   }
@@ -2412,10 +2456,10 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
     required TResult Function(REQUEST_VILLES_DATA value) villes,
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
-    required TResult Function(BOOKING_WITHDRAW_HISTORY value)
-        bookingWithdrowhistory,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
   }) {
-    return bookingWithdrowhistory(this);
+    return wallet(this);
   }
 
   @override
@@ -2431,9 +2475,10 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult? Function(REQUEST_VILLES_DATA value)? villes,
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult? Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
   }) {
-    return bookingWithdrowhistory?.call(this);
+    return wallet?.call(this);
   }
 
   @override
@@ -2449,36 +2494,268 @@ class _$BOOKING_WITHDRAW_HISTORYImpl implements BOOKING_WITHDRAW_HISTORY {
     TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
     TResult Function(REQUEST_VILLES_DATA value)? villes,
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
-    TResult Function(BOOKING_WITHDRAW_HISTORY value)? bookingWithdrowhistory,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
     required TResult orElse(),
   }) {
-    if (bookingWithdrowhistory != null) {
-      return bookingWithdrowhistory(this);
+    if (wallet != null) {
+      return wallet(this);
     }
     return orElse();
   }
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BOOKING_WITHDRAW_HISTORYImplToJson(
+    return _$$WALLETImplToJson(
       this,
     );
   }
 }
 
-abstract class BOOKING_WITHDRAW_HISTORY implements RequestState {
-  const factory BOOKING_WITHDRAW_HISTORY(
-          {required final WithdrawBookingHistoryDto data}) =
-      _$BOOKING_WITHDRAW_HISTORYImpl;
+abstract class WALLET implements RequestState {
+  const factory WALLET({required final WalletModel data}) = _$WALLETImpl;
 
-  factory BOOKING_WITHDRAW_HISTORY.fromJson(Map<String, dynamic> json) =
-      _$BOOKING_WITHDRAW_HISTORYImpl.fromJson;
+  factory WALLET.fromJson(Map<String, dynamic> json) = _$WALLETImpl.fromJson;
 
-  WithdrawBookingHistoryDto get data;
+  WalletModel get data;
 
   /// Create a copy of RequestState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$BOOKING_WITHDRAW_HISTORYImplCopyWith<_$BOOKING_WITHDRAW_HISTORYImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$WALLETImplCopyWith<_$WALLETImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$WITHDRAWAL_REQUESTImplCopyWith<$Res> {
+  factory _$$WITHDRAWAL_REQUESTImplCopyWith(_$WITHDRAWAL_REQUESTImpl value,
+          $Res Function(_$WITHDRAWAL_REQUESTImpl) then) =
+      __$$WITHDRAWAL_REQUESTImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({WithdrawalRequestResponse data});
+
+  $WithdrawalRequestResponseCopyWith<$Res> get data;
+}
+
+/// @nodoc
+class __$$WITHDRAWAL_REQUESTImplCopyWithImpl<$Res>
+    extends _$RequestStateCopyWithImpl<$Res, _$WITHDRAWAL_REQUESTImpl>
+    implements _$$WITHDRAWAL_REQUESTImplCopyWith<$Res> {
+  __$$WITHDRAWAL_REQUESTImplCopyWithImpl(_$WITHDRAWAL_REQUESTImpl _value,
+      $Res Function(_$WITHDRAWAL_REQUESTImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$WITHDRAWAL_REQUESTImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as WithdrawalRequestResponse,
+    ));
+  }
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WithdrawalRequestResponseCopyWith<$Res> get data {
+    return $WithdrawalRequestResponseCopyWith<$Res>(_value.data, (value) {
+      return _then(_value.copyWith(data: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
+  const _$WITHDRAWAL_REQUESTImpl({required this.data, final String? $type})
+      : $type = $type ?? 'withdrawalRequest';
+
+  factory _$WITHDRAWAL_REQUESTImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WITHDRAWAL_REQUESTImplFromJson(json);
+
+  @override
+  final WithdrawalRequestResponse data;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RequestState.withdrawalRequest(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$WITHDRAWAL_REQUESTImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$WITHDRAWAL_REQUESTImplCopyWith<_$WITHDRAWAL_REQUESTImpl> get copyWith =>
+      __$$WITHDRAWAL_REQUESTImplCopyWithImpl<_$WITHDRAWAL_REQUESTImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function() $default, {
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() success,
+    required TResult Function(String error) error,
+    required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
+    required TResult Function(List<ResidenceModel> data) residences,
+    required TResult Function(List<VilleModel> data) villes,
+    required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+  }) {
+    return withdrawalRequest(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function()? $default, {
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? success,
+    TResult? Function(String error)? error,
+    TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
+    TResult? Function(List<ResidenceModel> data)? residences,
+    TResult? Function(List<VilleModel> data)? villes,
+    TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+  }) {
+    return withdrawalRequest?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function()? $default, {
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? success,
+    TResult Function(String error)? error,
+    TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
+    TResult Function(List<ResidenceModel> data)? residences,
+    TResult Function(List<VilleModel> data)? villes,
+    TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    required TResult orElse(),
+  }) {
+    if (withdrawalRequest != null) {
+      return withdrawalRequest(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_RequestState value) $default, {
+    required TResult Function(REQUEST_INITIAL value) initial,
+    required TResult Function(REQUEST_LOADING value) loading,
+    required TResult Function(REQUEST_SUCCESS value) success,
+    required TResult Function(REQUEST_ERROR value) error,
+    required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
+    required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
+    required TResult Function(REQUEST_VILLES_DATA value) villes,
+    required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+  }) {
+    return withdrawalRequest(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_RequestState value)? $default, {
+    TResult? Function(REQUEST_INITIAL value)? initial,
+    TResult? Function(REQUEST_LOADING value)? loading,
+    TResult? Function(REQUEST_SUCCESS value)? success,
+    TResult? Function(REQUEST_ERROR value)? error,
+    TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult? Function(REQUEST_VILLES_DATA value)? villes,
+    TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+  }) {
+    return withdrawalRequest?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_RequestState value)? $default, {
+    TResult Function(REQUEST_INITIAL value)? initial,
+    TResult Function(REQUEST_LOADING value)? loading,
+    TResult Function(REQUEST_SUCCESS value)? success,
+    TResult Function(REQUEST_ERROR value)? error,
+    TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult Function(REQUEST_VILLES_DATA value)? villes,
+    TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    required TResult orElse(),
+  }) {
+    if (withdrawalRequest != null) {
+      return withdrawalRequest(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WITHDRAWAL_REQUESTImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class WITHDRAWAL_REQUEST implements RequestState {
+  const factory WITHDRAWAL_REQUEST(
+          {required final WithdrawalRequestResponse data}) =
+      _$WITHDRAWAL_REQUESTImpl;
+
+  factory WITHDRAWAL_REQUEST.fromJson(Map<String, dynamic> json) =
+      _$WITHDRAWAL_REQUESTImpl.fromJson;
+
+  WithdrawalRequestResponse get data;
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$WITHDRAWAL_REQUESTImplCopyWith<_$WITHDRAWAL_REQUESTImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

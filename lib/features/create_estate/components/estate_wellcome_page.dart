@@ -7,6 +7,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_estate/components/estate_type_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/lottie_assets.dart';
@@ -106,7 +107,10 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
                 ),
               ),
             ),
-          )
+          ),
+          EstateCreationModelBuilder().editing
+              ? SliverToBoxAdapter(child: SavingEstateButton())
+              : SliverToBoxAdapter(),
         ],
       ),
     );

@@ -9,7 +9,7 @@ import 'package:immoplus_pro/features/estate_detail/estate_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
-import 'package:immoplus_pro/features/onboarding/onboarding_page.dart';
+import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
@@ -19,6 +19,7 @@ import 'package:immoplus_pro/features/registration/pages/particulier_registratio
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_page.dart';
+import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 
@@ -41,11 +42,11 @@ class AppRouter {
         name: HomePage.name,
         builder: (context, state) => const HomePage(),
       ),
-      // GoRoute(
-      //   path: '/create_plage',
-      //   builder: (context, state) => const CreatePlace(),
-      //   name: CreatePlace.name,
-      // ),
+      GoRoute(
+        path: '/onboarding',
+        name: OnboardingNewPage.name,
+        builder: (context, state) => OnboardingNewPage(),
+      ),
       GoRoute(
         path: '/create_estate',
         builder: (context, state) => const CreateEstatePage(),
@@ -108,10 +109,7 @@ class AppRouter {
           idProduct: state.pathParameters['id'].toString(),
         ),
       ),
-      GoRoute(
-        path: '/onboarding',
-        builder: (context, state) => OnBoardingPage(),
-      ),
+
       GoRoute(
         path: '/editAccount',
         name: EditAccount.name,
@@ -134,6 +132,12 @@ class AppRouter {
         name: BookingHistoryPage.name,
         builder: (context, state) => const BookingHistoryPage(),
       ),
+      GoRoute(
+        path: '/visitHistory',
+        name: VisitHistoryPage.name,
+        builder: (context, state) => const VisitHistoryPage(),
+      ),
+
       // GoRoute(
       //     path: '/order/:idProduct',
       //     builder: (BuildContext context, GoRouterState state) {

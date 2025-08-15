@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_logement_l
 import 'package:immoplus_pro/features/create_estate/components/estate_video_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/residence_detail/components/logment_viewer_image.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_images_pages.dart';
@@ -36,6 +37,9 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           Visibility(
             visible: EstateCreationModelBuilder().images.isNotEmpty,
@@ -166,18 +170,20 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
           );
         },
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateLogmentLocationPage.name);
-        },
-        onNext: EstateCreationModelBuilder().images.isNotEmpty
-            ? () async {
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onPreview: () {
                 CreationEstateNavigation.goToPage(
-                    pageName: EstateVideoLogmentPage.name);
-              }
-            : null,
-      ),
+                    pageName: EstateLogmentLocationPage.name);
+              },
+              onNext: EstateCreationModelBuilder().images.isNotEmpty
+                  ? () async {
+                      CreationEstateNavigation.goToPage(
+                          pageName: EstateVideoLogmentPage.name);
+                    }
+                  : null,
+            ),
     );
   }
 }

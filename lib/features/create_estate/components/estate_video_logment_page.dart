@@ -11,6 +11,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_pictures_l
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_video_page.dart';
 import 'package:path_provider/path_provider.dart';
@@ -35,7 +36,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
     super.initState();
     //PregressStepperEstateCreating.setStepe(6);
     // Télécharger et jouer la vidéo s'il y a une vidéo associée
-    if (EstateCreationModelBuilder().video.isNotEmpty) {
+    if (EstateCreationModelBuilder().video != null) {
       _downloadAndPlayVideo(
           "https://api-v2.immoplus.ci/files/raw/public/${EstateCreationModelBuilder().video}.mp4");
     } else {
@@ -118,8 +119,11 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
-          EstateCreationModelBuilder().video.isNotEmpty
+          (EstateCreationModelBuilder().video != null)
               ? SliverToBoxAdapter(
                   child: _isLoading
                       ? const Center(
@@ -214,16 +218,18 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
           );
         },
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstatePicturesLogmentPage.name);
-        },
-        onNext: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateDescriptionEditorPage.name);
-        },
-      ),
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onPreview: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstatePicturesLogmentPage.name);
+              },
+              onNext: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateDescriptionEditorPage.name);
+              },
+            ),
     );
   }
 }

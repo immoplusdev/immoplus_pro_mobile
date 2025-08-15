@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
+import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
+import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
+import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_card.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
@@ -32,7 +39,8 @@ class _BookingPageState extends State<BookingPage> {
       orderDir: 'desc',
       where: {
         '_where': [
-          '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+          //'{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+          '{"_field": "statusFacture", "_op": "eq", "_val": "paye"}',
           //'{"_field": "dateReservation", "_op": "gt", "_val": "${DateTime.now().toIso8601String()}"}',
         ],
       },
@@ -74,48 +82,17 @@ class _BookingPageState extends State<BookingPage> {
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               _pagingController.refresh();
+              context.read<WalletCubit>().onGetWallet();
             },
           ),
           const SliverGap(15),
-          // SliverPadding(
-          //   padding: EdgeInsets.symmetric(horizontal: 8),
-          //   sliver: SliverToBoxAdapter(
-          //     child: ListTile(
-          //       leading: const CircleAvatar(
-          //         backgroundColor: Colors.transparent,
-          //         radius: 20,
-          //         child: Icon(FontAwesomeIcons.coins),
-          //       ),
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //       ),
-          //       horizontalTitleGap: 3,
-          //       tileColor: Colors.white,
-          //       title: const Text('Total des gains'),
-          //       subtitle: Text(
-          //         Utils.formatCurrency(500000000),
-          //       ),
-          //       subtitleTextStyle: Theme.of(context)
-          //           .textTheme
-          //           .headlineSmall!
-          //           .copyWith(color: AppColors.primary),
-          //       titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-          //       trailing: IconButton(
-          //         icon: const Icon(
-          //           FontAwesomeIcons.eye,
-          //         ),
-          //         onPressed: () {},
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SliverToBoxAdapter(
-          //   child: Divider(),
-          // ),
           PagedSliverList<int, ReservationModel>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
@@ -151,6 +128,18 @@ class _BookingPageState extends State<BookingPage> {
                     const Text(
                       "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
                       textAlign: TextAlign.center,
+                    ),
+                    Gap(20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {
+                        ResidenceCreationModelBuilder().reset();
+                        AppRouter.router.pushNamed(CreateLodgmentPage.name);
+                      },
+                      child: Text('Ajouter une résidence'),
                     ),
                   ],
                 ),

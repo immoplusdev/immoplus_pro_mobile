@@ -70,6 +70,9 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {

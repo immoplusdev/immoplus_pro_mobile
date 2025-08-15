@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:immoplus_pro/data/schemas/onboarding_schema.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
+import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -55,5 +59,20 @@ class SessionManager {
       name: 'second',
     );
     return await isar.userModelSchemas.get(1);
+  }
+
+  Future<bool> appIsAlreadyOpened() async {
+    return isarInstance.writeTxn<bool>(
+      () async {
+        final data = await isarInstance.onboardingEntitys.get(1);
+        if (data != null) {
+          log("OPENED TRUE");
+          return true;
+        } else {
+          log("OPENED FALSE");
+          return false;
+        }
+      },
+    );
   }
 }

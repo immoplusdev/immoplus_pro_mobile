@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
 import 'package:immoplus_pro/features/create_residence/screens/pictures_logment_page.dart';
 import 'package:immoplus_pro/features/create_residence/screens/wellcome_page.dart';
-import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
-import 'package:immoplus_pro/features/create_residence/utils/create_logment_router.dart';
+import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/place/widgets/selectable_card.dart';
 
@@ -49,6 +49,9 @@ class _HomeRulesPageState extends State<HomeRulesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverSafeArea(
             sliver: SliverPersistentHeader(
@@ -84,17 +87,20 @@ class _HomeRulesPageState extends State<HomeRulesPage> {
           ),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNext: () {
-          //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
-          CreationResidenceNavigation.goToPage(
-              pageName: PicturesLogmentPage.name);
-        },
-        onPreview: () {
-          //CreateLogmentRouter.router.goNamed(WellcommePage.name);
-          CreationResidenceNavigation.goToPage(pageName: WellcommePage.name);
-        },
-      ),
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onNext: () {
+                //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
+                CreationResidenceNavigation.goToPage(
+                    pageName: PicturesLogmentPage.name);
+              },
+              onPreview: () {
+                //CreateLogmentRouter.router.goNamed(WellcommePage.name);
+                CreationResidenceNavigation.goToPage(
+                    pageName: WellcommePage.name);
+              },
+            ),
     );
   }
 }

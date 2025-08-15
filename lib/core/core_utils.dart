@@ -1,36 +1,38 @@
-import 'dart:io';
+//?flutter_native_video_trimmer 1.1.9
 
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
-import 'package:flutter/foundation.dart';
+// import 'dart:io';
 
-class CoreUtils {
-  static Future<File?> convertirEtCompresserVideo(String cheminEntree) async {
-    String cheminSortie = cheminEntree.replaceFirst(
-      RegExp(r'\.\w+$'),
-      '.mp4',
-    );
+// import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+// import 'package:ffmpeg_kit_flutter/return_code.dart';
+// import 'package:flutter/foundation.dart';
 
-    String commandeFFmpeg =
-        '-i "$cheminEntree" -vcodec mpeg4 -b:v 1500k -acodec aac -b:a 128k "$cheminSortie"';
+// class CoreUtils {
+//   static Future<File?> convertirEtCompresserVideo(String cheminEntree) async {
+//     String cheminSortie = cheminEntree.replaceFirst(
+//       RegExp(r'\.\w+$'),
+//       '.mp4',
+//     );
 
-    final session = await FFmpegKit.execute(commandeFFmpeg);
-    final returnCode = await session.getReturnCode();
-    final logs = await session.getAllLogsAsString();
+//     String commandeFFmpeg =
+//         '-i "$cheminEntree" -vcodec mpeg4 -b:v 1500k -acodec aac -b:a 128k "$cheminSortie"';
 
-    if (ReturnCode.isSuccess(returnCode)) {
-      if (kDebugMode) {
-        print('Vidéo convertie en MP4 avec succès.');
-      }
+//     final session = await FFmpegKit.execute(commandeFFmpeg);
+//     final returnCode = await session.getReturnCode();
+//     final logs = await session.getAllLogsAsString();
 
-      return File(cheminSortie);
-    } else {
-      if (kDebugMode) {
-        print('Erreur lors de la conversion de la vidéo :');
-        print(logs);
-      }
+//     if (ReturnCode.isSuccess(returnCode)) {
+//       if (kDebugMode) {
+//         print('Vidéo convertie en MP4 avec succès.');
+//       }
 
-      return null;
-    }
-  }
-}
+//       return File(cheminSortie);
+//     } else {
+//       if (kDebugMode) {
+//         print('Erreur lors de la conversion de la vidéo :');
+//         print(logs);
+//       }
+
+//       return null;
+//     }
+//   }
+// }

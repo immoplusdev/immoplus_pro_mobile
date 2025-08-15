@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
@@ -25,15 +26,22 @@ class InternationalPhoneInput extends StatefulWidget {
 
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   final TextEditingController _controller = TextEditingController();
-  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'CI');
-  bool? _isValid;
+  late PhoneNumber _phoneNumber;
+  final ValueNotifier<bool?> _isValidNotifier = ValueNotifier<bool?>(null);
 
   @override
   void initState() {
     super.initState();
     _phoneNumber = PhoneNumber(
-        isoCode: widget.initialCountryCode,
-        phoneNumber: widget.initialPhoneNumber);
+      isoCode: widget.initialCountryCode,
+      phoneNumber: widget.initialPhoneNumber,
+    );
+  }
+
+  @override
+  void dispose() {
+    _isValidNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,18 +52,17 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         children: [
           ListTile(
             tileColor: HexColor("#eff5fb"),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
-                setState(() {
-                  _phoneNumber = number;
-                });
+                _phoneNumber = number;
               },
               onInputValidated: (bool value) {
-                setState(() {
-                  _isValid = value;
-                });
+                if (_isValidNotifier.value != value) {
+                  _isValidNotifier.value = value;
+                }
                 if (value && widget.onValidPhoneNumber != null) {
                   widget.onValidPhoneNumber!(_phoneNumber.phoneNumber ?? '');
                 }
@@ -77,30 +84,43 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               keyboardAction: TextInputAction.done,
               inputBorder: InputBorder.none,
               selectorConfig: const SelectorConfig(
-                leadingPadding: 5,
+                leadingPadding: 0,
+                setSelectorButtonAsPrefixIcon: true,
                 selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                 trailingSpace: false,
               ),
+              selectorTextStyle: Theme.of(context).textTheme.bodyLarge,
               inputDecoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                prefixIcon: const Text('|'),
+                hintStyle: Theme.of(context).textTheme.bodyMedium,
+                suffixIcon: const Icon(
+                  FontAwesomeIcons.whatsapp,
+                  size: 20,
+                  color: Colors.green,
+                ),
                 fillColor: HexColor("#eff5fb"),
                 border: InputBorder.none,
+                focusedBorder: InputBorder.none,
                 hintText: "Numéro de téléphone",
                 errorStyle: const TextStyle(height: 0),
               ),
             ),
           ),
-          if (_isValid != null)
-            if (!_isValid!)
-              Text(
-                _isValid!
-                    ? 'Le numéro de téléphone est valide.'
-                    : 'Le numéro de téléphone est invalide.',
+          ValueListenableBuilder<bool?>(
+            valueListenable: _isValidNotifier,
+            builder: (context, isValid, child) {
+              if ((isValid == null) || (isValid == true)) {
+                return const SizedBox.shrink();
+              }
+              return const Text(
+                'Le numéro de téléphone est invalide.',
                 style: TextStyle(
-                  color: _isValid! ? Colors.green : Colors.red,
+                  color: Colors.red,
                   fontSize: 14,
                 ),
-              ),
+              );
+            },
+          ),
         ],
       ),
     );

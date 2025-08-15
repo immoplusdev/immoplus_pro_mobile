@@ -89,6 +89,9 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           Visibility(
             visible: videoPath.isNotEmpty,
@@ -145,20 +148,26 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
         child: ElevatedButton.icon(
           onPressed: () async {
             CustomPopup.showLoagingToast(text: "Traitement vidéo...");
-            if (videoPath.isNotEmpty) {
-              File? fileToSend =
-                  await CoreUtils.convertirEtCompresserVideo(videoPath);
+            try {
+              if (videoPath.isNotEmpty) {
+                // File? fileToSend =
+                //     await CoreUtils.convertirEtCompresserVideo(videoPath);
 
-              CustomPopup.showLoagingToast(text: "Envoi de la vidéo...");
+                CustomPopup.showLoagingToast(text: "Envoi de la vidéo...");
 
-              FileDataModel response = await AuthRepository.uplaodFile(
-                  file: fileToSend ?? File(videoPath));
-              if (response.data != null) {
-                context.pop<String>(response.data!.id);
-                EasyLoading.dismiss();
+                FileDataModel response =
+                    await AuthRepository.uplaodFile(file: File(videoPath));
+                if (response.data != null) {
+                  context.pop<String>(response.data!.id);
+                  EasyLoading.dismiss();
+                }
+              } else {
+                CustomPopup.showErrorToast(text: "Envoi échoué");
               }
-            } else {
-              CustomPopup.showErrorToast(text: "Envoi échoué");
+            } catch (e) {
+              EasyLoading.dismiss();
+              // CustomPopup.showErrorToast(
+              //     text: "Envoi échoué", dismissOnTap: true);
             }
           },
           label: const Text("Envoyer la vidéo"),

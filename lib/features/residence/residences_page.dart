@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -98,6 +100,9 @@ class _ResidencesPageState extends State<ResidencesPage> {
         ],
       ),
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
@@ -120,11 +125,43 @@ class _ResidencesPageState extends State<ResidencesPage> {
                   ),
                 ),
               ),
-              noItemsFoundIndicatorBuilder: (context) => Center(
-                  child: Text(
-                "Aucun élément trouvé",
-                style: Theme.of(context).textTheme.titleLarge,
-              )),
+              noItemsFoundIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Gap(100),
+                    SvgPicture.asset(
+                      "assets/svgs/undraw/house.svg",
+                      width: 200,
+                    ),
+                    const Gap(30),
+                    Text(
+                      "Aucune résidence trouvée",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const Gap(30),
+                    const Text(
+                      "Vous n’avez pas encore ajouté de résidence sur ImmoPlus. Commencez dès maintenant en ajoutant vos biens selon les critères requis.",
+                      textAlign: TextAlign.center,
+                    ),
+                    Gap(20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {
+                        ResidenceCreationModelBuilder().reset();
+                        context.pushNamed(CreateLodgmentPage.name);
+                      },
+                      child: Text('Ajouter une résidence'),
+                    ),
+                  ],
+                ),
+              ),
               itemBuilder: (context, item, index) => ResidenceListCard(
                 residence: item,
               ),

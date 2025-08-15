@@ -240,34 +240,37 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       ),
                     ),
                   const SliverToBoxAdapter(child: Divider()),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(
-                            20,
-                          ),
-                          topRight: Radius.circular(
-                            20,
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    sliver: SliverToBoxAdapter(
+                      child: ListTile(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              20,
+                            ),
+                            topRight: Radius.circular(
+                              20,
+                            ),
                           ),
                         ),
-                      ),
-                      tileColor: Colors.white,
-                      onTap: () {},
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.key,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      title: const AutoSizeText(
-                        'Contacter nous',
-                        maxLines: 1,
-                      ),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
+                        tileColor: Colors.white,
+                        onTap: () {},
+                        horizontalTitleGap: 0,
+                        leading: Icon(
+                          FontAwesomeIcons.key,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        title: const AutoSizeText(
+                          'Contacter nous',
+                          maxLines: 1,
+                        ),
+                        trailing: Icon(
+                          FontAwesomeIcons.circleChevronRight,
+                          size: 15,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),
@@ -277,36 +280,39 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       thickness: 0.8,
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: ListTile(
-                      tileColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    sliver: SliverToBoxAdapter(
+                      child: ListTile(
+                        tileColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(
+                              20,
+                            ),
+                            bottomLeft: Radius.circular(
+                              20,
+                            ),
                           ),
                         ),
-                      ),
-                      onTap: () {
-                        ContactUtils.showContact(id: widget.id);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.buildingUser,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      title: const AutoSizeText(
-                        'Contacter le client',
-                        maxLines: 1,
-                      ),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
+                        onTap: () {
+                          ContactUtils.showContact(id: widget.id);
+                        },
+                        horizontalTitleGap: 0,
+                        leading: Icon(
+                          FontAwesomeIcons.buildingUser,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        title: const AutoSizeText(
+                          'Contacter le client',
+                          maxLines: 1,
+                        ),
+                        trailing: Icon(
+                          FontAwesomeIcons.circleChevronRight,
+                          size: 15,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),

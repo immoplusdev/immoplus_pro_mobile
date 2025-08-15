@@ -14,12 +14,12 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/utils/phone_number_handler.dart';
-import 'package:immoplus_pro/utils/status_code_handler.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
+import 'package:immoplus_pro/utils/phone_number_handler.dart';
+import 'package:immoplus_pro/utils/status_code_handler.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   final PageController pageController;
@@ -65,6 +65,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               child: InternationalPhoneInput(
                 onValidPhoneNumber: (value) {
                   phoneNumber = value;
+                  OTPState.phoneNumber = phoneNumber;
                   // Le numéro valide est traité ici si nécessaire
                   // print(phoneNumber);
                 },
@@ -94,19 +95,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     ),
                   ),
                   useWidthAnimation: true,
-
                   useEqualLoadingStateWidgetDimension: true,
-
                   // If you want a fullwidth size, set this to double.infinity
                   width: double.infinity,
-
                   height: 55.0,
                   borderRadius: 20.0,
-
                   elevation: 0.0,
-
                   contentGap: 6.0,
-
                   buttonColor: isPhoneNumberValid
                       ? AppColors.primary
                       : Colors.blueGrey.shade200,

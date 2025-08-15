@@ -8,6 +8,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_logment_pr
 import 'package:immoplus_pro/features/create_estate/components/estate_video_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
@@ -65,6 +66,9 @@ class _EstateDescriptionEditorPageState
     return Scaffold(
       backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -116,21 +120,24 @@ class _EstateDescriptionEditorPageState
           ),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNext: () {
-          _controller.document.toDelta();
-          List deltaJson = _controller.document.toDelta().toJson();
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onNext: () {
+                _controller.document.toDelta();
+                List deltaJson = _controller.document.toDelta().toJson();
 
-          final html = DeltaToHTML.encodeJson(deltaJson).toString();
-          EstateCreationModelBuilder().description = html2md.convert(html);
-          CreationEstateNavigation.goToPage(
-              pageName: EstateLogmentPricePage.name);
-        },
-        onPreview: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateVideoLogmentPage.name);
-        },
-      ),
+                final html = DeltaToHTML.encodeJson(deltaJson).toString();
+                EstateCreationModelBuilder().description =
+                    html2md.convert(html);
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateLogmentPricePage.name);
+              },
+              onPreview: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateVideoLogmentPage.name);
+              },
+            ),
     );
   }
 }

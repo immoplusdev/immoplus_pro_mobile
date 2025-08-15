@@ -64,7 +64,7 @@ class RegistrationMainScreean extends StatelessWidget {
                       icon: FontAwesomeIcons.treeCity,
                       title: "Entreprise",
                       onTap: () {
-                        context.goNamed(EnterpriseRegistrationPage.name);
+                        context.pushNamed(EnterpriseRegistrationPage.name);
                       },
                     ),
                   ),
@@ -74,7 +74,7 @@ class RegistrationMainScreean extends StatelessWidget {
                       icon: FontAwesomeIcons.userTie,
                       title: "Indépendant",
                       onTap: () {
-                        context.goNamed(ParticulierRegistration.name);
+                        context.pushNamed(ParticulierRegistration.name);
                       },
                     ),
                   ),

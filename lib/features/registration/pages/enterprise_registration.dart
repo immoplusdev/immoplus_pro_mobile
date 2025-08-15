@@ -89,52 +89,49 @@ class _EnterpriseRegistrationPageState
           backgroundColor: AppColors.scafold,
           title: const Text('Incription entreprise'),
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              size: 30,
-            ),
-            onPressed: () async {
-              context.goNamed(RegistrationMainScreean.name);
-            },
-          ),
           actions: const [
             Icon(FontAwesomeIcons.treeCity),
             Gap(20),
           ],
           centerTitle: true,
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            padding: const EdgeInsets.only(left: 25, right: 25),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CustomTextField(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Form(
+            key: _formKey,
+            child: CustomScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: CustomTextField(
                     controller: _formController.enterpriseName,
                     prefixIcon: const Icon(FontAwesomeIcons.buildingUser),
                     labelText: "Nom de l'entreprise",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
-                  CustomTextField(
+                ),
+                SliverToBoxAdapter(
+                  child: CustomTextField(
                     controller: _formController.enterpriseType,
                     prefixIcon: const Icon(CupertinoIcons.building_2_fill),
                     labelText: "Type d'entreprise",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
-                  CustomTextField(
+                ),
+                SliverToBoxAdapter(
+                  child: CustomTextField(
                     controller: _formController.numeroContribuable,
                     prefixIcon: const Icon(CupertinoIcons.number_circle),
                     labelText: "Numero contribuable",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
-                  CustomTextField(
+                ),
+                SliverToBoxAdapter(
+                  child: CustomTextField(
                     controller: _formController.phoneNumber,
                     textInputType: TextInputType.number,
                     labelText: 'Numéro de téléphone',
@@ -145,11 +142,12 @@ class _EnterpriseRegistrationPageState
                       MaskTextInputFormatter(
                         mask: '##########',
                         filter: {'#': RegExp(r'[0-9]')},
-                        //initialText: '+225 ', // Optionnel: préfixe par défaut
                       ),
                     ],
                   ),
-                  CustomTextField(
+                ),
+                SliverToBoxAdapter(
+                  child: CustomTextField(
                     controller: _formController.email,
                     prefixIcon: const Icon(CupertinoIcons.mail),
                     labelText: 'Email',
@@ -157,100 +155,114 @@ class _EnterpriseRegistrationPageState
                     validator: (String? value) =>
                         FormUtils.emailValidator(email: value),
                   ),
-                  ValueListenableBuilder<bool>(
-                      valueListenable: _passwordNotifier,
-                      builder: (BuildContext context, bool value, child) {
-                        return CustomTextField(
-                          prefixIcon: const Icon(CupertinoIcons.lock),
-                          controller: _formController.password,
-                          obscureText: !_passwordNotifier.value,
-                          sufixIcon: IconButton(
-                              onPressed: () {
-                                _passwordNotifier.value =
-                                    !_passwordNotifier.value;
-                              },
-                              icon: Icon(
-                                (value)
-                                    ? Icons.visibility_off_rounded
-                                    : Icons.visibility_rounded,
-                              )),
-                          labelText: 'Mot de passe',
-                          validator: (String? value) =>
-                              FormUtils.passwordValidator(password: value),
-                        );
-                      }),
-                  ValueListenableBuilder<bool>(
-                      valueListenable: _passworConfirmdNotifier,
-                      builder: (BuildContext context, bool value, child) {
-                        return CustomTextField(
-                          prefixIcon: const Icon(CupertinoIcons.lock),
-                          obscureText: !_passworConfirmdNotifier.value,
-                          sufixIcon: IconButton(
-                              onPressed: () {
-                                _passworConfirmdNotifier.value =
-                                    !_passworConfirmdNotifier.value;
-                              },
-                              icon: Icon(
-                                (value)
-                                    ? Icons.visibility_off_rounded
-                                    : Icons.visibility_rounded,
-                              )),
-                          labelText: 'Confirmation du mot de passe ',
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'veillez entrer un mot de passe';
-                            } else if (value !=
-                                _formController.password!.text) {
-                              return 'le mot de passe ne correspond pas';
-                            }
-
-                            return null;
+                ),
+                SliverToBoxAdapter(
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _passwordNotifier,
+                    builder: (BuildContext context, bool value, child) {
+                      return CustomTextField(
+                        prefixIcon: const Icon(CupertinoIcons.lock),
+                        controller: _formController.password,
+                        obscureText: !value,
+                        sufixIcon: IconButton(
+                          onPressed: () {
+                            _passwordNotifier.value = !value;
                           },
-                        );
-                      }),
-                  ValueListenableBuilder<bool>(
-                      valueListenable: _cguNotifier,
-                      builder: (BuildContext context, bool value, child) {
-                        return Row(
-                          children: [
-                            Checkbox(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                value: value,
-                                fillColor: value
-                                    ? WidgetStateProperty.all(
-                                        Theme.of(context).colorScheme.primary)
-                                    : WidgetStateProperty.all(Colors.white),
-                                onChanged: (val) {
-                                  _cguNotifier.value = !_cguNotifier.value;
-                                }),
-                            const Text("j'approuve les"),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const GeneralConditionPage(),
-                                      ));
-                                },
-                                child: Text(
-                                  'Termes & conditions',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                ))
-                          ],
-                        );
-                      }),
-                  FileUploader(
+                          icon: Icon(
+                            value
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded,
+                          ),
+                        ),
+                        labelText: 'Mot de passe',
+                        validator: (String? value) =>
+                            FormUtils.passwordValidator(password: value),
+                      );
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _passworConfirmdNotifier,
+                    builder: (BuildContext context, bool value, child) {
+                      return CustomTextField(
+                        prefixIcon: const Icon(CupertinoIcons.lock),
+                        obscureText: !value,
+                        sufixIcon: IconButton(
+                          onPressed: () {
+                            _passworConfirmdNotifier.value = !value;
+                          },
+                          icon: Icon(
+                            value
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded,
+                          ),
+                        ),
+                        labelText: 'Confirmation du mot de passe',
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Veuillez entrer un mot de passe';
+                          } else if (value != _formController.password!.text) {
+                            return 'Le mot de passe ne correspond pas';
+                          }
+                          return null;
+                        },
+                      );
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _cguNotifier,
+                    builder: (BuildContext context, bool value, child) {
+                      return Row(
+                        children: [
+                          Checkbox(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            value: value,
+                            fillColor: value
+                                ? WidgetStateProperty.all(
+                                    Theme.of(context).colorScheme.primary)
+                                : WidgetStateProperty.all(Colors.white),
+                            onChanged: (val) {
+                              _cguNotifier.value = !_cguNotifier.value;
+                            },
+                          ),
+                          const Text("j'approuve les"),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const GeneralConditionPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Termes & conditions',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: FileUploader(
                     fileUploaderController: fileUploaderController,
                     title: "Registre de Commerce",
                   ),
-                  const Gap(10),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
+                ),
+                const SliverGap(10),
+                SliverPadding(
+                  padding: const EdgeInsets.all(5.0),
+                  sliver: SliverToBoxAdapter(
                     child: BlocBuilder<RgistrationCubitCubit,
                         RegistrationCubitState>(
                       builder: (context, state) {
@@ -315,11 +327,11 @@ class _EnterpriseRegistrationPageState
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+                ),
+                SliverGap(
+                  10,
+                ),
+              ],
             ),
           ),
         ),

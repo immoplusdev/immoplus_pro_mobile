@@ -37,7 +37,7 @@ class BookingCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20)),
                   context: context,
                   builder: (context) => SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.85,
+                      height: MediaQuery.of(context).size.height * 0.70,
                       child: BookingDetailPage(
                         id: reservationModel.id,
                       )),
@@ -64,19 +64,23 @@ class BookingCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomChip(
-                    icon: BookingUtils.isDateInPastOrToday(
-                            reservationModel.datesReservation.first.date!)
+                    icon: (BookingUtils.getBookingStatus(
+                                reservationModel.datesReservation.first.date!,
+                                reservationModel.datesReservation.last.date!) ==
+                            BookingStatus.ongoing)
                         ? FontAwesomeIcons.suitcaseRolling
                         : CupertinoIcons.calendar_today,
                     iconSize: 14,
-                    backgroundColor: BookingUtils.isDateInPastOrToday(
-                            reservationModel.datesReservation.first.date!)
-                        ? Colors.green.shade100
-                        : Colors.blueGrey.shade200,
-                    label: BookingUtils.isDateInPastOrToday(
-                            reservationModel.datesReservation.first.date!)
-                        ? 'Séjour en cours'
-                        : 'Séjour à venir',
+                    backgroundColor: (BookingUtils.getBookingStatus(
+                                reservationModel.datesReservation.first.date!,
+                                reservationModel.datesReservation.last.date!) !=
+                            BookingStatus.ongoing)
+                        ? Colors.blueGrey.shade200
+                        : Colors.green.shade100,
+                    label: BookingUtils.getStatusText(
+                        startDate:
+                            reservationModel.datesReservation.first.date!,
+                        endDate: reservationModel.datesReservation.last.date!),
                   ),
                   CustomChip(
                     icon: CupertinoIcons.home,

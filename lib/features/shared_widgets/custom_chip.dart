@@ -6,7 +6,7 @@ class CustomChip extends StatelessWidget {
   final Color iconColor;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsetsGeometry padding;
-  final IconData icon;
+  final IconData? icon;
   final double iconSize;
   final String label;
   final TextStyle? labelStyle;
@@ -17,8 +17,8 @@ class CustomChip extends StatelessWidget {
     this.backgroundColor = Colors.grey,
     this.iconColor = Colors.black,
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
-    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-    this.icon = Icons.telegram,
+    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+    this.icon,
     this.iconSize = 20,
     this.label = '',
     this.labelStyle,
@@ -34,14 +34,19 @@ class CustomChip extends StatelessWidget {
         borderRadius: borderRadius,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: icon != null
+            ? MainAxisAlignment.spaceBetween
+            : MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: iconPadding,
-            child: Icon(
-              icon,
-              size: iconSize,
-              color: iconColor,
+          Visibility(
+            visible: icon != null,
+            child: Padding(
+              padding: iconPadding,
+              child: Icon(
+                icon,
+                size: iconSize,
+                color: iconColor,
+              ),
             ),
           ),
           AutoSizeText(

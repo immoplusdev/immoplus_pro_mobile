@@ -119,6 +119,17 @@ class Utils {
     }
   }
 
+  static String getTransctionType(String type) {
+    switch (type) {
+      case 'DEBIT':
+        return 'Retrait';
+      case 'CREDIT':
+        return 'Rechargement';
+      default:
+        return 'Inconnu';
+    }
+  }
+
   static String getPoductTarget(String type) {
     switch (type) {
       case Constantes.visitToAsk:

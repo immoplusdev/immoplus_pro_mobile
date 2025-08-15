@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_residence/screens/description_editor_page.dart';
 import 'package:immoplus_pro/features/create_residence/screens/video_logment_page.dart';
-import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
-import 'package:immoplus_pro/features/create_residence/utils/create_logment_router.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/increase_listtile.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/list_rule_section.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/time_selector.dart';
 
@@ -33,6 +30,9 @@ class _RulesPageState extends State<RulesPage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverSafeArea(
           //   sliver: SliverPersistentHeader(
@@ -135,22 +135,25 @@ class _RulesPageState extends State<RulesPage> {
           const SliverToBoxAdapter(),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationResidenceNavigation.goToPage(pageName: VideoLogmentPage.name);
-          // CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
-        },
-        onNext: (ResidenceCreationModelBuilder().dureeMaxSejour == 0 ||
-                ResidenceCreationModelBuilder().dureeMinSejour == 0 ||
-                ResidenceCreationModelBuilder().heureDepart.isEmpty ||
-                ResidenceCreationModelBuilder().heureEntree.isEmpty)
-            ? null
-            : () {
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onPreview: () {
                 CreationResidenceNavigation.goToPage(
-                    pageName: DescriptionEditorPage.name);
-                //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
+                    pageName: VideoLogmentPage.name);
+                // CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
               },
-      ),
+              onNext: (ResidenceCreationModelBuilder().dureeMaxSejour == 0 ||
+                      ResidenceCreationModelBuilder().dureeMinSejour == 0 ||
+                      ResidenceCreationModelBuilder().heureDepart.isEmpty ||
+                      ResidenceCreationModelBuilder().heureEntree.isEmpty)
+                  ? null
+                  : () {
+                      CreationResidenceNavigation.goToPage(
+                          pageName: DescriptionEditorPage.name);
+                      //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
+                    },
+            ),
     );
   }
 }

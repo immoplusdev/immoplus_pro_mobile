@@ -16,6 +16,8 @@ import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dar
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
+import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -39,6 +41,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         child: Column(
           children: [
             Container(
+              height: 230,
               width: double.infinity,
               color: AppColors.scafold,
               child: DrawerHeader(
@@ -102,10 +105,25 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
             Expanded(
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: [
+                  UnconstrainedBox(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: CustomChip(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                        backgroundColor: Colors.yellow.shade700,
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        label: getRoleDescription(
+                            SessionManager().currentUser?.role ?? ''),
+                      ),
+                    ),
+                  ),
+                  Gap(8),
                   ListTile(
                     shape: RoundedRectangleBorder(
                       borderRadius: (SessionManager().currentUser!.roleName ==
@@ -231,7 +249,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           ),
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        context.pushNamed(VisitHistoryPage.name);
+                      },
                       horizontalTitleGap: 0,
                       leading: Icon(
                         FontAwesomeIcons.route,

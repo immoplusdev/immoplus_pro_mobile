@@ -1,9 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/models/configs/commune_model.dart';
 import 'package:immoplus_pro/data/models/configs/ville_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
+import 'package:immoplus_pro/features/payments/data/models/wallet_model.dart';
+import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_response.dart';
 
 part 'request_state.freezed.dart';
 part 'request_state.g.dart';
@@ -27,9 +28,9 @@ class RequestState with _$RequestState {
   const factory RequestState.communes({required List<CommuneModel> data}) =
       REQUEST_COMMUNES_DATA;
 
-  const factory RequestState.bookingWithdrowhistory(
-      {required WithdrawBookingHistoryDto data}) = BOOKING_WITHDRAW_HISTORY;
-
+  const factory RequestState.wallet({required WalletModel data}) = WALLET;
+  const factory RequestState.withdrawalRequest(
+      {required WithdrawalRequestResponse data}) = WITHDRAWAL_REQUEST;
   factory RequestState.fromJson(Map<String, dynamic> json) =>
       _$RequestStateFromJson(json);
 }

@@ -7,6 +7,7 @@ import 'package:immoplus_pro/features/create_residence/screens/type_logment_page
 import 'package:immoplus_pro/features/create_residence/utils/create_logment_router.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/lottie_assets.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
@@ -107,7 +108,12 @@ class _WellcommePageState extends State<WellcommePage> {
                   ),
                 ),
               ),
-            )
+            ),
+
+            SliverGap(20),
+            (ResidenceCreationModelBuilder().editing)
+                ? SliverToBoxAdapter(child: SavingButton())
+                : SliverToBoxAdapter()
           ],
         ),
       ),

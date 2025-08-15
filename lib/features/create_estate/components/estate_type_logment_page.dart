@@ -7,6 +7,7 @@ import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manage
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/list_piece_section.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/logment_type_selection.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 class EstateTypePage extends StatefulWidget {
@@ -28,6 +29,9 @@ class _EstateTypePageState extends State<EstateTypePage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -58,17 +62,21 @@ class _EstateTypePageState extends State<EstateTypePage> {
           const SliverToBoxAdapter(),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationEstateNavigation.goToPage(pageName: EstateWellcommePage.name);
-        },
-        onNext: (EstateCreationModelBuilder().typeBienImmobilier.isNotEmpty)
-            ? () {
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onPreview: () {
                 CreationEstateNavigation.goToPage(
-                    pageName: EstateAmentitiesPage.name);
-              }
-            : null,
-      ),
+                    pageName: EstateWellcommePage.name);
+              },
+              onNext:
+                  (EstateCreationModelBuilder().typeBienImmobilier.isNotEmpty)
+                      ? () {
+                          CreationEstateNavigation.goToPage(
+                              pageName: EstateAmentitiesPage.name);
+                        }
+                      : null,
+            ),
     );
   }
 }

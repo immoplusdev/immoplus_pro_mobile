@@ -77,6 +77,9 @@ class _WithdrawableBookingPageState extends State<WithdrawableBookingPage> {
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {

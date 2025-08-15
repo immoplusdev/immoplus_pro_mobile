@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/features/payment_module/components/wave/wave_validator_page.dart';
@@ -75,12 +76,17 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
-                FontAwesomeIcons.moneyBill,
-                color: Colors.green,
+              leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: const Icon(
+                  FontAwesomeIcons.moneyBill,
+                  color: Colors.green,
+                ),
               ),
               title:
                   Text(Utils.formatCurrency(PaymentData.of(context)!.amount)),
+              subtitle: Text(
+                  "${OrderPaymentController.selectedOperator.fee}% frais opérateur"),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
@@ -104,7 +110,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
             CustomButtom(
               isLoading: loadingButton,
               text: 'Confirmer',
-              onClick: () {
+              onClick: () async {
                 // WavePaymentRouter.pageStateNotifier.value =
                 //     WaveValidatorPage.name;
                 // WavePaymentRouter.router.goNamed(WaveValidatorPage.name,
@@ -114,7 +120,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
                   setState(() {
                     loadingButton = true;
                   });
-                  PaymentServices.initPaymentRequest(
+                  await PaymentServices.initPaymentRequest(
                     context: context,
                     number:
                         _formController.phoneNumber!.text.replaceAll(' ', ''),
@@ -137,9 +143,9 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
                       );
                     },
                     onFailed: () {
-                      // setState(() {
-                      //   loadingButton = false;
-                      // });
+                      setState(() {
+                        loadingButton = false;
+                      });
                     },
                   );
                 }

@@ -8,6 +8,7 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/amentities_selection.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 class AmentitiesPage extends StatefulWidget {
@@ -29,6 +30,9 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverSafeArea(
           //   sliver: SliverPersistentHeader(
@@ -59,19 +63,22 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
           ),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNext: ResidenceCreationModelBuilder().commodites.isNotEmpty
-            ? () {
-                //CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onNext: ResidenceCreationModelBuilder().commodites.isNotEmpty
+                  ? () {
+                      //CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
+                      CreationResidenceNavigation.goToPage(
+                          pageName: LogmentLocationPage.name);
+                    }
+                  : null,
+              onPreview: () {
+                //CreateLogmentRouter.router.goNamed(TypeLogmentPage.name);
                 CreationResidenceNavigation.goToPage(
-                    pageName: LogmentLocationPage.name);
-              }
-            : null,
-        onPreview: () {
-          //CreateLogmentRouter.router.goNamed(TypeLogmentPage.name);
-          CreationResidenceNavigation.goToPage(pageName: TypeLogmentPage.name);
-        },
-      ),
+                    pageName: TypeLogmentPage.name);
+              },
+            ),
     );
   }
 }

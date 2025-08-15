@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_residence/screens/pictures_logment_
 import 'package:immoplus_pro/features/create_residence/screens/rules_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_video_page.dart';
 import 'package:video_player/video_player.dart';
@@ -89,6 +90,9 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverToBoxAdapter(
           //   child: Text(
@@ -198,15 +202,17 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
           );
         },
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationResidenceNavigation.goToPage(
-              pageName: PicturesLogmentPage.name);
-        },
-        onNext: () {
-          CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
-        },
-      ),
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onPreview: () {
+                CreationResidenceNavigation.goToPage(
+                    pageName: PicturesLogmentPage.name);
+              },
+              onNext: () {
+                CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
+              },
+            ),
     );
   }
 }

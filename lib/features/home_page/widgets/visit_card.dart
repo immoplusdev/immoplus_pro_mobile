@@ -92,7 +92,7 @@ class VisitCard extends StatelessWidget {
                         size: 15,
                       ),
                       const Gap(5),
-                      Text("+${demandeVisiteModel.clientPhoneNumber}")
+                      Text("${demandeVisiteModel.clientPhoneNumber}")
                     ],
                   ),
                   AutoSizeText(

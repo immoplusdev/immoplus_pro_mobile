@@ -140,16 +140,27 @@ Map<String, dynamic> _$$REQUEST_COMMUNES_DATAImplToJson(
       'runtimeType': instance.$type,
     };
 
-_$BOOKING_WITHDRAW_HISTORYImpl _$$BOOKING_WITHDRAW_HISTORYImplFromJson(
+_$WALLETImpl _$$WALLETImplFromJson(Map<String, dynamic> json) => _$WALLETImpl(
+      data: WalletModel.fromJson(json['data'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$WALLETImplToJson(_$WALLETImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'runtimeType': instance.$type,
+    };
+
+_$WITHDRAWAL_REQUESTImpl _$$WITHDRAWAL_REQUESTImplFromJson(
         Map<String, dynamic> json) =>
-    _$BOOKING_WITHDRAW_HISTORYImpl(
-      data: WithdrawBookingHistoryDto.fromJson(
+    _$WITHDRAWAL_REQUESTImpl(
+      data: WithdrawalRequestResponse.fromJson(
           json['data'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$BOOKING_WITHDRAW_HISTORYImplToJson(
-        _$BOOKING_WITHDRAW_HISTORYImpl instance) =>
+Map<String, dynamic> _$$WITHDRAWAL_REQUESTImplToJson(
+        _$WITHDRAWAL_REQUESTImpl instance) =>
     <String, dynamic>{
       'data': instance.data,
       'runtimeType': instance.$type,

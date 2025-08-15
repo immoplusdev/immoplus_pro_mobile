@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
 import 'package:immoplus_pro/utils/booking_utils.dart';
 import 'package:immoplus_pro/utils/contact_utils.dart';
 import 'package:immoplus_pro/utils/currency_formatter.dart';
@@ -58,8 +59,62 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   SliverToBoxAdapter(
                       child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: LogmentInfo(
-                        logmentModel: state.reservationResponse.data.residence),
+                    child: ListTile(
+                      visualDensity: const VisualDensity(vertical: -4),
+                      tileColor: CupertinoColors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      leading: CircleAvatar(
+                        backgroundImage: Utils.getImage(
+                            id: state.reservationResponse.data.residence.images
+                                .first),
+                      ),
+                      title: Text(
+                          state.reservationResponse.data.residence.nom ??
+                              'no name'),
+                      subtitle: RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: Utils.formatCurrency(state.reservationResponse
+                                .data.residence.prixReservation),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700)),
+                        TextSpan(
+                            text: ' Par nuit',
+                            style: TextStyle(color: Colors.grey.shade600))
+                      ])),
+                      trailing: UnconstrainedBox(
+                        child: CustomChip(
+                          icon: (BookingUtils.getBookingStatus(
+                                      state.reservationResponse.data
+                                          .datesReservation.first.date!,
+                                      state.reservationResponse.data
+                                          .datesReservation.last.date!) ==
+                                  BookingStatus.ongoing)
+                              ? FontAwesomeIcons.suitcaseRolling
+                              : CupertinoIcons.calendar_today,
+                          iconSize: 12,
+                          backgroundColor: (BookingUtils.getBookingStatus(
+                                      state.reservationResponse.data
+                                          .datesReservation.first.date!,
+                                      state.reservationResponse.data
+                                          .datesReservation.last.date!) !=
+                                  BookingStatus.ongoing)
+                              ? Colors.blueGrey.shade200
+                              : Colors.green.shade100,
+                          label: BookingUtils.getStatusText(
+                              startDate: state.reservationResponse.data
+                                  .datesReservation.first.date!,
+                              endDate: state.reservationResponse.data
+                                  .datesReservation.last.date!),
+                          labelStyle: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: 10),
+                        ),
+                      ),
+                    ),
                   )),
                   const SliverGap(10),
                   SliverToBoxAdapter(
@@ -183,134 +238,6 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                               .split('-');
                           Utils.makePhoneCall(phone.last);
                         },
-                      ),
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: ListTile(
-                        tileColor:
-                            state.reservationResponse.data.retraitProEffectue
-                                ? Colors.white
-                                : Colors.green.shade100,
-                        onTap: state.reservationResponse.data.retraitProEffectue
-                            ? null
-                            : () {
-                                context.pushNamed(OperatorsSelectorPage.name,
-                                    extra: PaymentPageAdapter(
-                                        itemId:
-                                            state.reservationResponse.data.id,
-                                        collection: 'reservation',
-                                        amount: state.reservationResponse.data
-                                            .montantTotalReservation
-                                            .toInt()));
-                              },
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              state.reservationResponse.data.retraitProEffectue
-                                  ? BorderRadius.circular(20)
-                                  : const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20)),
-                        ),
-                        dense: true,
-                        title: Text(
-                          "Total pour ${state.reservationResponse.data.datesReservation.length} ${(state.reservationResponse.data.datesReservation.length >= 1) ? 'Jour' : 'Jours'}",
-                        ),
-                        trailing: Text(
-                          "${CurrencyFormatter.format(state.reservationResponse.data.montantTotalReservation.toInt().toString())} F",
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(
-                                  color: Colors.green.shade700,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (!state.reservationResponse.data.retraitProEffectue)
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(bottom: 10),
-                        child: ListTile(
-                          onTap: () {
-                            context.pushNamed(OperatorsSelectorPage.name,
-                                extra: PaymentPageAdapter(
-                                    itemId: state.reservationResponse.data.id,
-                                    collection: 'reservation',
-                                    amount: state.reservationResponse.data
-                                        .montantTotalReservation
-                                        .toInt()));
-                            // showModalBottomSheet(
-                            //   isScrollControlled: true,
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(20)),
-                            //   context: context,
-                            //   builder: (context) => FractionallySizedBox(
-                            //     heightFactor: 0.9,
-                            //     child: OperatorsSelectorPage(
-                            //         paymentPageAdapter: PaymentPageAdapter(
-                            //             itemId:
-                            //                 state.reservationResponse.data.id,
-                            //             collection: 'reservation',
-                            //             amount: state.reservationResponse.data
-                            //                 .montantTotalReservation
-                            //                 .toInt())),
-                            //   ),
-                            // );
-                          },
-                          tileColor:
-                              state.reservationResponse.data.retraitProEffectue
-                                  ? Colors.white
-                                  : Colors.green.shade100,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20))),
-                          title: const Text(
-                            "Retirer l'argent",
-                          ),
-                          leading: Icon(
-                            FontAwesomeIcons.moneyBills,
-                            color: Colors.green.shade500,
-                          ),
-                          trailing: Icon(
-                            FontAwesomeIcons.circleChevronRight,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: Chip(
-                        avatar: Icon(
-                          BookingUtils.isDateInPastOrToday(
-                            state.reservationResponse.data.datesReservation
-                                .first.date!,
-                          )
-                              ? FontAwesomeIcons.personWalkingLuggage
-                              : FontAwesomeIcons.calendarCheck,
-                          color: AppColors.primary,
-                          size: 18,
-                        ),
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        label: Text(BookingUtils.isDateInPastOrToday(state
-                                .reservationResponse
-                                .data
-                                .datesReservation
-                                .first
-                                .date!)
-                            ? 'Séjour en cours'
-                            : 'Séjour à venir'),
                       ),
                     ),
                   ),

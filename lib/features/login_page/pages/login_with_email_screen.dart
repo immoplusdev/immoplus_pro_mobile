@@ -39,8 +39,8 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
     // TODO: implement initState
     _formController = FormController(
       productId: 0,
-      email: TextEditingController(text: ''), //'satu1@gmail.com'
-      password: TextEditingController(text: ''), //'satu@123'
+      email: TextEditingController(text: ''), //pro-entreprise@immoplus.ci'
+      password: TextEditingController(text: ''), //"@Admin2019"
     );
     _passwordNotifier = ValueNotifier<bool>(false);
     _formKey = GlobalKey<FormState>();

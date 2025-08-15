@@ -17,7 +17,6 @@ class ThemeConfig {
           filled: true,
           fillColor: CupertinoColors.secondarySystemFill,
           labelStyle: const TextStyle(color: CupertinoColors.black),
-
           prefixStyle: const TextStyle(color: CupertinoColors.systemGrey),
           hintStyle: const TextStyle(color: Color.fromARGB(179, 92, 90, 90)),
           // enabledBorder: OutlineInputBorder(

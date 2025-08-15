@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:immoplus_pro/utils/hex_color.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField({
-    Key? key,
+    super.key,
     this.labelText,
     this.sufixIcon,
     this.onTap,
@@ -24,7 +23,8 @@ class CustomTextField extends StatefulWidget {
     this.fontSize,
     this.fillColor,
     this.autofocus = false,
-  }) : super(key: key);
+    this.isEnabled = true,
+  });
   final String? labelText;
   final Widget? sufixIcon;
   final Widget? prefixIcon;
@@ -44,30 +44,14 @@ class CustomTextField extends StatefulWidget {
   final double? fontSize;
   final Color? fillColor;
   final bool? autofocus;
+  final bool? isEnabled;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  FocusNode _textFieldFocus = FocusNode();
-  Color _color = Color.fromARGB(158, 234, 234, 234);
-  Color _iconColor = Color.fromARGB(236, 74, 74, 74);
   @override
   void initState() {
-    _textFieldFocus.addListener(() {
-      if (_textFieldFocus.hasFocus) {
-        setState(() {
-          _color = HexColor.fromHex('#2072ca').withOpacity(0.1);
-          _iconColor = HexColor.fromHex('#2072ca');
-        });
-      } else {
-        setState(() {
-          _color = Color.fromARGB(158, 234, 234, 234);
-          _iconColor = Color.fromARGB(236, 74, 74, 74);
-          ;
-        });
-      }
-    });
     super.initState();
   }
 
@@ -76,6 +60,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
+        enabled: widget.isEnabled ?? true,
         style: (widget.fontSize != null)
             ? TextStyle(fontSize: widget.fontSize)
             : null,
@@ -94,10 +79,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         keyboardType: widget.textInputType,
         cursorColor: Theme.of(context).colorScheme.onSurface,
         cursorRadius: Radius.circular(5),
-        //focusNode: widget.focusNode,
+        focusNode: widget.focusNode,
         inputFormatters: widget.inputFormatters,
         cursorHeight: 16,
-        focusNode: _textFieldFocus,
         decoration: InputDecoration(
           errorStyle: TextStyle(color: Colors.redAccent),
           contentPadding: EdgeInsets.all(0).copyWith(left: 10),

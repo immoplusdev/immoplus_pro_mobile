@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_residence/screens/rules_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
@@ -63,6 +64,9 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverSafeArea(
           //   sliver: SliverPersistentHeader(
@@ -122,22 +126,26 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
           ),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNext: () {
-          _controller.document.toDelta();
-          List deltaJson = _controller.document.toDelta().toJson();
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onNext: () {
+                _controller.document.toDelta();
+                List deltaJson = _controller.document.toDelta().toJson();
 
-          final html = DeltaToHTML.encodeJson(deltaJson).toString();
-          ResidenceCreationModelBuilder().description = html2md.convert(html);
-          CreationResidenceNavigation.goToPage(pageName: LogmentPricePage.name);
+                final html = DeltaToHTML.encodeJson(deltaJson).toString();
+                ResidenceCreationModelBuilder().description =
+                    html2md.convert(html);
+                CreationResidenceNavigation.goToPage(
+                    pageName: LogmentPricePage.name);
 
-          //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
-        },
-        onPreview: () {
-          CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
-          //CreateLogmentRouter.router.goNamed(RulesPage.name);
-        },
-      ),
+                //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
+              },
+              onPreview: () {
+                CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
+                //CreateLogmentRouter.router.goNamed(RulesPage.name);
+              },
+            ),
     );
   }
 }

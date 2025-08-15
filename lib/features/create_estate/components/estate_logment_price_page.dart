@@ -12,6 +12,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_payment_ty
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
@@ -128,59 +129,69 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
           ],
         ),
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNextText:
-            EstateCreationModelBuilder().editing ? 'Modifier' : 'Terminer',
-        onNext: () async {
-          inspect(EstateCreationModelBuilder().build());
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onNextText: EstateCreationModelBuilder().editing
+                  ? 'Modifier'
+                  : 'Terminer',
+              onNext: () async {
+                inspect(EstateCreationModelBuilder().build());
 
-          if (_formKey.currentState!.validate()) {
-            if (EstateCreationModelBuilder().editing) {
-              try {
-                CustomPopup.showLoagingToast(text: "Modification en cours");
+                if (_formKey.currentState!.validate()) {
+                  if (EstateCreationModelBuilder().editing) {
+                    try {
+                      CustomPopup.showLoagingToast(
+                          text: "Modification en cours");
 
-                EstateCreationModelBuilder().prix =
-                    _controller.numberValue.toInt();
-                await SessionManager().getCurrentUser();
+                      EstateCreationModelBuilder().prix =
+                          _controller.numberValue.toInt();
+                      await SessionManager().getCurrentUser();
 
-                await BienImmobilierRepository.update(
-                        id: EstateCreationModelBuilder().id,
-                        fields: EstateCreationModelBuilder().build().toJson())
-                    .then(
-                  (value) {
-                    EasyLoading.dismiss();
-                    AppRouter.router.push(
-                        '/logment_page/${EstateCreationModelBuilder().id}');
-                  },
-                );
-              } catch (e) {
-                CustomPopup.showErrorToast(text: 'Modification échoué');
-              }
-            } else {
-              EasyLoading.show(status: "Création en cours");
-              EstateCreationModelBuilder().prix =
-                  _controller.numberValue.toInt();
-              await SessionManager().getCurrentUser();
-              await BienImmobilierRepository.createBienImmobilier(
-                      model: EstateCreationModelBuilder().build())
-                  .then(
-                (value) {
-                  EasyLoading.dismiss();
-                  EstateCreationModelBuilder().reset();
-                  AppRouter.router.goNamed(EstatesPage.name);
-                },
-              );
-            }
-          }
-        },
+                      await BienImmobilierRepository.update(
+                              id: EstateCreationModelBuilder().id,
+                              fields:
+                                  EstateCreationModelBuilder().build().toJson())
+                          .then(
+                        (value) {
+                          EasyLoading.dismiss();
+                          AppRouter.router.push(
+                              '/logment_page/${EstateCreationModelBuilder().id}');
+                        },
+                      );
+                    } catch (e) {
+                      EasyLoading.dismiss();
+                      CustomPopup.showErrorToast(text: 'Modification échoué');
+                    }
+                  } else {
+                    try {
+                      EasyLoading.show(status: "Création en cours");
+                      EstateCreationModelBuilder().prix =
+                          _controller.numberValue.toInt();
+                      await SessionManager().getCurrentUser();
+                      await BienImmobilierRepository.createBienImmobilier(
+                              model: EstateCreationModelBuilder().build())
+                          .then(
+                        (value) {
+                          EasyLoading.dismiss();
+                          EstateCreationModelBuilder().reset();
+                          AppRouter.router.goNamed(EstatesPage.name);
+                        },
+                      );
+                    } catch (e) {
+                      EasyLoading.dismiss();
+                    }
+                  }
+                }
+              },
 
-        // CreationEstateNavigation.goToPage(pageName:PicturesLogmentPage.name);
+              // CreationEstateNavigation.goToPage(pageName:PicturesLogmentPage.name);
 
-        onPreview: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateDescriptionEditorPage.name);
-        },
-      ),
+              onPreview: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateDescriptionEditorPage.name);
+              },
+            ),
     );
   }
 }

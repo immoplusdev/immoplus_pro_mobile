@@ -7,6 +7,7 @@ import 'package:immoplus_pro/features/create_estate/components/estate_logement_l
 import 'package:immoplus_pro/features/create_estate/components/estate_type_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/amentities_selection.dart';
+import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 import '../utils/creation_estate_navigation.dart';
@@ -30,6 +31,9 @@ class _EstateAmentitiesPageState extends State<EstateAmentitiesPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -55,15 +59,18 @@ class _EstateAmentitiesPageState extends State<EstateAmentitiesPage> {
           ),
         ],
       ),
-      bottomNavigationBar: StepBottomButton(
-        onNext: () {
-          CreationEstateNavigation.goToPage(
-              pageName: EstateLogmentLocationPage.name);
-        },
-        onPreview: () {
-          CreationEstateNavigation.goToPage(pageName: EstateTypePage.name);
-        },
-      ),
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SavingEstateButton()
+          : StepBottomButton(
+              onNext: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateLogmentLocationPage.name);
+              },
+              onPreview: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateTypePage.name);
+              },
+            ),
     );
   }
 }

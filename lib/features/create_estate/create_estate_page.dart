@@ -50,6 +50,9 @@ class _CreateEstatePageState extends State<CreateEstatePage> {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           slivers: [
             SliverSafeArea(
               sliver: SliverPersistentHeader(

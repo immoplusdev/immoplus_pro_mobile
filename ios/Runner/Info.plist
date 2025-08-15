@@ -26,83 +26,40 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Immo Plus nécessite l'accès à la caméra pour que vous puissiez personnaliser votre page.</string>
+	<string>ImmoPLus Pro utilise l’appareil photo pour vous permettre de prendre des photos.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
+	<string>ImmoPLus Pro nécessite un accès à votre position même lorsque l’application est en arrière-plan.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
+	<string>ImmoPLus Pro nécessite un accès permanent à votre position, même lorsque l’application est fermée.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Votre localisation est requise pour des propositions plus adaptées à vos besoins.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Cette application a besoin d'accéder au microphone pour [raison spécifique].</string>
+	<string>ImmoPLus Pro a besoin d’accéder à votre position pour afficher votre emplacement sur la carte et fournir des services basés sur votre localisation.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>ImmoPLus Pro enregistre des photos dans votre photothèque.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Immo Plus nécessite l'accès à la photothèque pour que vous puissiez personnaliser votre page.</string>
-	<key>NSPrivacyAccessedAPITypes</key>
-	<array>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryDiskSpace</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>Connaître l'espace disque disponible est crucial pour optimiser le stockage des données téléchargées et éviter d'affecter les performances de votre appareil.</string>
-			</array>
-		</dict>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>Nous utilisons UserDefaults pour enregistrer vos préférences et améliorer votre expérience utilisateur.</string>
-			</array>
-		</dict>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>Nous accédons aux timestamps de fichiers pour optimiser la gestion de cache et réduire le temps de chargement.</string>
-			</array>
-		</dict>
-		<dict>
-			<key>NSPrivacyAccessedAPIType</key>
-			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
-			<key>NSPrivacyAccessedAPITypeReasons</key>
-			<array>
-				<string>L'accès au temps de démarrage du système nous aide à diagnostiquer des problèmes et à améliorer la performance de l'application.</string>
-			</array>
-		</dict>
-	</array>
-	<key>NSPrivacyTracking</key>
-	<false/>
+	<string>ImmoPLus Pro a besoin d’accéder à votre photothèque pour sélectionner des images.</string>
+	<key>NSUserNotificationUsageDescription</key>
+	<string>ImmoPLus Pro souhaite vous envoyer des notifications.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-		<string>external-accessory</string>
-	</array>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Cette app a besoin d’accéder au micro pour enregistrer l’audio (mémos vocaux, appels, etc.).</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

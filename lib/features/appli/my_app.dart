@@ -10,9 +10,9 @@ import 'package:immoplus_pro/supported_locales.dart';
 import 'package:toastification/toastification.dart';
 
 class MyApp extends StatefulWidget {
-  MyApp({
-    Key? key,
-  }) : super(key: key);
+  const MyApp({
+    super.key,
+  });
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -34,23 +34,27 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: BlocsManager.listBlocProviders,
       child: ToastificationWrapper(
-        child: MaterialApp.router(
-          localizationsDelegates: const [
-            CountryLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate, // This is required
-          ],
-          supportedLocales: immoPlusSupportedLocales,
-          debugShowCheckedModeBanner: false,
-          theme: ThemeConfig.lightTheme(context: context),
-          //darkTheme: ThemeConfig.darkTheme(context: context),
-          //routerConfig: Constantes.appRouter,
-          routeInformationParser: AppRouter.router.routeInformationParser,
-          routeInformationProvider: AppRouter.router.routeInformationProvider,
-          routerDelegate: AppRouter.router.routerDelegate,
-          backButtonDispatcher: AppRouter.router.backButtonDispatcher,
-          builder: EasyLoading.init(),
+        child: MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: MaterialApp.router(
+            localizationsDelegates: const [
+              CountryLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate, // This is required
+            ],
+            supportedLocales: immoPlusSupportedLocales,
+            debugShowCheckedModeBanner: false,
+            theme: ThemeConfig.lightTheme(context: context),
+            //darkTheme: ThemeConfig.darkTheme(context: context),
+            //routerConfig: Constantes.appRouter,
+            routeInformationParser: AppRouter.router.routeInformationParser,
+            routeInformationProvider: AppRouter.router.routeInformationProvider,
+            routerDelegate: AppRouter.router.routerDelegate,
+            backButtonDispatcher: AppRouter.router.backButtonDispatcher,
+            builder: EasyLoading.init(),
+          ),
         ),
       ),
     );

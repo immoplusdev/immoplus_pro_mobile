@@ -107,10 +107,12 @@ class LocationController extends GetxController
 
     try {
       CustomPopup.showLoagingToast();
-      LocationService.getCurrentPosition()
+      final position = await LocationService.getCurrentPosition()
           .onError((error, stackTrace) => throw AddressException());
+
       final locationAdreess = await _getAddressFromGeocodingApi(
-          latitude: latitude, longitude: longitude);
+          latitude: position.latitude, longitude: position.longitude);
+
       EasyLoading.dismiss();
       AppRouter.router.pop(locationAdreess);
     } catch (e) {

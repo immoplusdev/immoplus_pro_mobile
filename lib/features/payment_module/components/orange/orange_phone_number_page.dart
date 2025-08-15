@@ -77,12 +77,17 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
-                FontAwesomeIcons.moneyBill,
-                color: Colors.green,
+              leading: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: const Icon(
+                  FontAwesomeIcons.moneyBill,
+                  color: Colors.green,
+                ),
               ),
               title:
                   Text(Utils.formatCurrency(PaymentData.of(context)!.amount)),
+              subtitle: Text(
+                  "${OrderPaymentController.selectedOperator.fee}% frais opérateur"),
               titleTextStyle: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),

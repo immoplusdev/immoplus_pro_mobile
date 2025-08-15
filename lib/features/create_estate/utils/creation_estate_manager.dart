@@ -19,7 +19,7 @@ class EstateCreationModelBuilder {
   String ville = '';
   String commune = '';
   PositionModel position = const PositionModel();
-  String video = '';
+  String? video;
   List<String> images = [];
   List<CommoditeModel> commodites = [];
   List<PieceModel> pieces = [];
@@ -86,7 +86,7 @@ class EstateCreationModelBuilder {
     ville = '';
     commune = '';
     position = const PositionModel();
-    video = '';
+    video = null;
     images = [];
     commodites = [];
     pieces = [];

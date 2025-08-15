@@ -31,6 +31,9 @@ class _UploadImagePageState extends State<UploadImagePage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           Visibility(
             visible: _images.isNotEmpty,
@@ -123,20 +126,25 @@ class _UploadImagePageState extends State<UploadImagePage> {
         child: ElevatedButton.icon(
             onPressed: () async {
               CustomPopup.showLoagingToast(text: "Envoie des images");
-              List<String> imagesSended = [];
-              for (var element in _images) {
-                FileDataModel response =
-                    await AuthRepository.uplaodFile(file: File(element.path));
+              try {
+                List<String> imagesSended = [];
+                for (var element in _images) {
+                  FileDataModel response =
+                      await AuthRepository.uplaodFile(file: File(element.path));
 
-                if (response.data != null) {
-                  imagesSended.add(response.data!.id ?? "");
-                  if (EstateCreationModelBuilder().miniature.isEmpty) {
-                    EstateCreationModelBuilder().miniature = response.data!.id!;
+                  if (response.data != null) {
+                    imagesSended.add(response.data!.id ?? "");
+                    if (EstateCreationModelBuilder().miniature.isEmpty) {
+                      EstateCreationModelBuilder().miniature =
+                          response.data!.id!;
+                    }
                   }
                 }
+                EasyLoading.dismiss();
+                context.pop<List<String>>(imagesSended);
+              } catch (e) {
+                EasyLoading.dismiss();
               }
-              EasyLoading.dismiss();
-              context.pop<List<String>>(imagesSended);
             },
             icon: const Icon(FontAwesomeIcons.cloudArrowUp),
             label: const Text('Envoyer les images')),

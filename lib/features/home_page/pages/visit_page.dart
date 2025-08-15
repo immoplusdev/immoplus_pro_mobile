@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
+import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
 import 'package:immoplus_pro/features/home_page/widgets/visit_card.dart';
@@ -63,10 +67,14 @@ class _VisitPageState extends State<VisitPage> {
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
           child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               _pagingController.refresh();
+              context.read<WalletCubit>().onGetWallet();
             },
           ),
           const SliverGap(15),
@@ -104,6 +112,17 @@ class _VisitPageState extends State<VisitPage> {
                   const Text(
                     "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
                     textAlign: TextAlign.center,
+                  ),
+                  Gap(20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20))),
+                    onPressed: () {
+                      AppRouter.router.pushNamed(CreateEstatePage.name);
+                    },
+                    child: Text('Ajouter une résidence'),
                   ),
                 ],
               )),

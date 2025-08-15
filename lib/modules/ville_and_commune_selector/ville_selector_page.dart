@@ -51,6 +51,9 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverAppBar(
             title: const Text('Sélectionner une ville'),

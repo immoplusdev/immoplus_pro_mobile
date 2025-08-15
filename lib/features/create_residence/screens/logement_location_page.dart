@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/configs/address.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/commune_selector_listtile.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/ville_selector_listtile.dart';
 import 'package:immoplus_pro/features/create_residence/screens/amenities_page.dart';
@@ -39,6 +40,9 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverSafeArea(
           //   sliver: SliverPersistentHeader(
@@ -92,7 +96,7 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
                     )),
                 tileColor: ResidenceCreationModelBuilder().adresse.isNotEmpty
                     ? AppColors.scafold
-                    : AppColors.whiteBackground,
+                    : CupertinoColors.tertiarySystemFill,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 title: Text((ResidenceCreationModelBuilder().adresse.isEmpty)
@@ -150,21 +154,24 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
       // floatingActionButton: FloatingActionButton(onPressed: () {
       //   log(ResidenceCreationModelBuilder().ville);
       // }),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          CreationResidenceNavigation.goToPage(pageName: AmentitiesPage.name);
-          //CreateLogmentRouter.router.goNamed(AmentitiesPage.name);
-        },
-        onNext: (ResidenceCreationModelBuilder().adresse.isNotEmpty &&
-                ResidenceCreationModelBuilder().commune.isNotEmpty &&
-                ResidenceCreationModelBuilder().ville.isNotEmpty)
-            ? () {
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onPreview: () {
                 CreationResidenceNavigation.goToPage(
-                    pageName: PicturesLogmentPage.name);
-                //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
-              }
-            : null,
-      ),
+                    pageName: AmentitiesPage.name);
+                //CreateLogmentRouter.router.goNamed(AmentitiesPage.name);
+              },
+              onNext: (ResidenceCreationModelBuilder().adresse.isNotEmpty &&
+                      ResidenceCreationModelBuilder().commune.isNotEmpty &&
+                      ResidenceCreationModelBuilder().ville.isNotEmpty)
+                  ? () {
+                      CreationResidenceNavigation.goToPage(
+                          pageName: PicturesLogmentPage.name);
+                      //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
+                    }
+                  : null,
+            ),
     );
   }
 }

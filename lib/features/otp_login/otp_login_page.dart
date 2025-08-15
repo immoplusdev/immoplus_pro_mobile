@@ -6,6 +6,15 @@ class OTPState {
   static String phoneNumber = '';
 }
 
+///
+/// [OTPLoginPage.]
+/// @Param	{PageController} rootPageController
+/// [@author	Unknown]
+/// [ @since	v0.0.1 ]
+/// [@version	v1.0.0	Tuesday, April 22nd, 2025]
+/// [@see		StatefulWidget]
+/// [@global]
+///
 class OTPLoginPage extends StatefulWidget {
   const OTPLoginPage({super.key, required this.rootPageController});
   static String name = 'OTP_LOGIN';

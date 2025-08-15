@@ -1,22 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_residence/screens/logement_location_page.dart';
 import 'package:immoplus_pro/features/create_residence/screens/video_logment_page.dart';
-import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
-import 'package:immoplus_pro/features/create_residence/utils/create_logment_router.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
-import 'package:immoplus_pro/utils/utils.dart';
-import 'package:immoplus_pro/features/create_estate/utils/create_estate_router.dart';
 import 'package:immoplus_pro/features/residence_detail/components/logment_viewer_image.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_images_pages.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PicturesLogmentPage extends StatefulWidget {
@@ -39,6 +35,9 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
     return Scaffold(
       //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           // SliverSafeArea(
           //   sliver: SliverPersistentHeader(
@@ -182,20 +181,22 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
           );
         },
       ),
-      bottomNavigationBar: StepBottomButton(
-        onPreview: () {
-          // CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
-          CreationResidenceNavigation.goToPage(
-              pageName: LogmentLocationPage.name);
-        },
-        onNext: ResidenceCreationModelBuilder().images.isNotEmpty
-            ? () async {
+      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
+          ? SavingButton()
+          : StepBottomButton(
+              onPreview: () {
+                // CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
                 CreationResidenceNavigation.goToPage(
-                    pageName: VideoLogmentPage.name);
-                //CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
-              }
-            : null,
-      ),
+                    pageName: LogmentLocationPage.name);
+              },
+              onNext: ResidenceCreationModelBuilder().images.isNotEmpty
+                  ? () async {
+                      CreationResidenceNavigation.goToPage(
+                          pageName: VideoLogmentPage.name);
+                      //CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
+                    }
+                  : null,
+            ),
     );
   }
 }

@@ -50,6 +50,9 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteBackground,
       body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           const SliverAppBar(
             title: Text('Sélectionner une commune'),
