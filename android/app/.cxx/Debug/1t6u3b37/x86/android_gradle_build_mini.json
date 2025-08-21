@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/kitoko/fvm/versions/3.29.2/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/kitoko/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/kitoko/Documents/applications/ImmoPLus-Pro/android/app/.cxx/Debug/1t6u3b37/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/kitoko/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/kitoko/Documents/applications/ImmoPLus-Pro/android/app/.cxx/Debug/1t6u3b37/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
