@@ -7,9 +7,12 @@ import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart'
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/data/models/auth/login_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
+import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
+import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -50,4 +53,14 @@ abstract class AuthProvider {
   @PATCH('/users/{id}')
   Future<UpdateUserResponseModel> updateUser(
       @Path() String id, @Body() UpdateUserDto updateUserDto);
+
+  @POST('/auth/send-email-otp')
+  Future<HttpResponse> sendEmailOtp(@Body() SendEmailOtpBody sendEmailOtpBody);
+
+  @POST('/auth/verify-email')
+  Future<HttpResponse> verifyEmail(@Body() VerifyEmailBody verifyEmailBody);
+
+  @POST('/auth/reset-password')
+  Future<HttpResponse> resetPassword(
+      @Body() ResetPasswordBody resetPasswordBody);
 }

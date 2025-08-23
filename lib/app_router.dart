@@ -17,6 +17,7 @@ import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
+import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
@@ -154,12 +155,20 @@ class AppRouter {
       //             );
       //     }),
       GoRoute(
-          path: '/login',
-          name: LoginPage.name,
-          builder: (BuildContext context, GoRouterState state) {
-            return const LoginPage();
-          },
-          routes: const []),
+        path: '/login',
+        name: LoginPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginPage();
+        },
+        routes: const [],
+      ),
+      GoRoute(
+        path: '/reset-password',
+        name: ResetPasswordPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ResetPasswordPage();
+        },
+      ),
     ],
   );
 }

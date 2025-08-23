@@ -10,9 +10,12 @@ import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart'
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/data/models/auth/login_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
+import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
+import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/providers/auth_provider.dart';
 import 'package:retrofit/retrofit.dart';
@@ -146,6 +149,66 @@ class AuthRepository {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
+    }
+  }
+
+// Étape 1: Envoyer l'OTP par email
+  static Future<HttpResponse> sendEmailOtp(
+      {required SendEmailOtpBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).sendEmailOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
+    }
+  }
+
+// Étape 2: Vérifier l'email avec l'OTP
+  static Future<HttpResponse> verifyEmailOtp(
+      {required VerifyEmailBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).verifyEmail(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to verify email: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to verify email: $error');
+    }
+  }
+
+// Étape 3: Réinitialiser le mot de passe
+  static Future<HttpResponse> resetPassword(
+      {required ResetPasswordBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).resetPassword(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to reset password: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to reset password: $error');
     }
   }
 }
