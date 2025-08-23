@@ -1,2 +1,0 @@
-/Users/kitoko/Documents/applications/ImmoPLus-Pro/android/app/.cxx/Debug/1t6u3b37/x86_64/CMakeFiles/edit_cache.dir
-/Users/kitoko/Documents/applications/ImmoPLus-Pro/android/app/.cxx/Debug/1t6u3b37/x86_64/CMakeFiles/rebuild_cache.dir
