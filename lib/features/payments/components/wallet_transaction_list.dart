@@ -11,6 +11,7 @@ import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/features/payments/data/models/transaction_model.dart';
 import 'package:immoplus_pro/features/payments/data/repositories/wallet_repository.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
+import 'package:immoplus_pro/features/payments/utils/enums.dart';
 import 'package:immoplus_pro/features/payments/utils/payments_utils.dart';
 import 'package:immoplus_pro/utils/currency_formatter.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
@@ -193,18 +194,15 @@ class _WalletTransactionListState extends State<WalletTransactionList> {
                               ),
                             )
                           : null,
-                      child: Icon(
-                        FontAwesomeIcons.coins,
-                        color: Colors.white,
-                        size: 20,
-                      ),
+                      child: getIconStatus(status: item.type.toString()),
                     ),
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Visibility(
                           visible: item.source.toString() != 'null',
-                          child: AutoSizeText(item.source.toString(),
+                          child: AutoSizeText(getTransactionTitle(item),
+                              maxLines: 1,
                               style: Theme.of(context).textTheme.bodyLarge),
                         ),
                         const Gap(3),
@@ -239,19 +237,19 @@ class _WalletTransactionListState extends State<WalletTransactionList> {
                       ],
                     ),
                     subtitle: Text(
-                      item.type == TransactionType.CREDIT.name
-                          ? " + ${CurrencyFormatter.format(item.amount!.toInt().toString())} F"
-                          : "- ${CurrencyFormatter.format(item.amount!.toInt().toString())} F",
-                    ),
+                        "${CurrencyFormatter.format(item.amount!.toInt().toString())} ${item.currency} "
+                        // item.type == WalletPaymentType.CREDIT.name
+                        //     ? " + ${CurrencyFormatter.format(item.amount!.toInt().toString())} F"
+                        //     : "- ${CurrencyFormatter.format(item.amount!.toInt().toString())} F",
+                        ),
                     titleTextStyle: Theme.of(context).textTheme.bodyLarge,
                     subtitleTextStyle: Theme.of(context)
                         .textTheme
                         .titleMedium!
                         .copyWith(
                             fontWeight: FontWeight.bold,
-                            color: item.type == TransactionType.CREDIT.name
-                                ? Colors.green
-                                : Colors.red),
+                            color:
+                                getColorStatus(status: item.type.toString())),
                     trailing: SizedBox(
                       height: 100,
                       child: Column(

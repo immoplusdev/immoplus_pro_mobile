@@ -248,15 +248,16 @@ class _WithdrawalRequestListState extends State<WithdrawalRequestList> {
                             child: Chip(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 3, vertical: 0),
-                              avatar: getIconStatus(
-                                  status:
-                                      item.status!.toLowerCase().toString()),
+                              avatar:
+                                  getIconStatus(status: item.status.toString()),
+                              avatarBoxConstraints: BoxConstraints(),
                               backgroundColor: getColorStatus(
-                                  status:
-                                      item.status!.toLowerCase().toString()),
-                              label: Text(getPaymentStatusName(
-                                  status:
-                                      item.status!.toLowerCase().toString())),
+                                  status: item.status.toString()),
+                              label: Text(
+                                getPaymentStatusName(
+                                  status: item.status.toString(),
+                                ),
+                              ),
                             ),
                           ),
                         ],
