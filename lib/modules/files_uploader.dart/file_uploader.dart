@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
+import 'package:immoplus_pro/utils/compress_file_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -49,8 +50,13 @@ class _FileUploaderState extends State<FileUploader> {
                 ImagePicker()
                     .pickImage(source: ImageSource.camera, imageQuality: 40)
                     .then(
-                  (value) {
-                    Navigator.pop(context, value);
+                  (value) async {
+                    XFile? compressFile;
+                    if (value != null) {
+                      compressFile =
+                          await CompressFileUtils.compressFileIfNeeded(value);
+                    }
+                    Navigator.pop(context, compressFile);
                   },
                 );
               },
@@ -64,8 +70,13 @@ class _FileUploaderState extends State<FileUploader> {
                 ImagePicker()
                     .pickImage(source: ImageSource.gallery, imageQuality: 40)
                     .then(
-                  (value) {
-                    Navigator.pop(context, value);
+                  (value) async {
+                    XFile? compressFile;
+                    if (value != null) {
+                      compressFile =
+                          await CompressFileUtils.compressFileIfNeeded(value);
+                    }
+                    Navigator.pop(context, compressFile);
                   },
                 );
               },

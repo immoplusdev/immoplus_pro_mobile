@@ -81,7 +81,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
           backgroundColor: AppColors.scafold,
           appBar: AppBar(
             backgroundColor: AppColors.scafold,
-            title: const Text('Incription particulier'),
+            title: const Text('Inscription particulier'),
             elevation: 0,
             leading: IconButton(
               icon: const Icon(
