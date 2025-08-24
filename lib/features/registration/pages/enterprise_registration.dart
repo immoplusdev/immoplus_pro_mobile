@@ -87,7 +87,7 @@ class _EnterpriseRegistrationPageState
         backgroundColor: AppColors.scafold,
         appBar: AppBar(
           backgroundColor: AppColors.scafold,
-          title: const Text('Incription entreprise'),
+          title: const Text('Inscription entreprise'),
           elevation: 0,
           actions: const [
             Icon(FontAwesomeIcons.treeCity),

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
+import 'package:immoplus_pro/cubits/authentification/reset_password_cubit.dart';
 import 'package:immoplus_pro/cubits/detail_product_cubit/carousel_cubit.dart';
 import 'package:immoplus_pro/cubits/refresh_cubit.dart';
 import 'package:immoplus_pro/features/booking/logic/booking_cubit.dart';
@@ -41,6 +42,9 @@ class BlocsManager {
     ),
     BlocProvider<WalletCubit>(
       create: (context) => WalletCubit(),
+    ),
+    BlocProvider<ResetPasswordCubit>(
+      create: (context) => ResetPasswordCubit(),
     ),
   ];
 }

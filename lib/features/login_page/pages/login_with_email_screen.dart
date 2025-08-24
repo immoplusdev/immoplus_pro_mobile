@@ -115,6 +115,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                         //     MaterialPageRoute(
                         //       builder: (context) => ResetPassword(),
                         //     ));
+                        // context.pushNamed(ResetPasswordPage.name);
                       },
                       child: Text(
                         'Mot de passe oublié',

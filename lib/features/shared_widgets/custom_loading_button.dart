@@ -39,7 +39,7 @@ class CustomLoadingButtom extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          onPressed: (isLoading) ? null : onClick,
+          onPressed: (isLoading || !clickable) ? null : onClick,
           child: (isLoading)
               ? CupertinoActivityIndicator(
                   radius: 16,
