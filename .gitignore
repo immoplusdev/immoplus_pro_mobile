@@ -51,3 +51,6 @@ android/app/.cxx/
 build/*
 # VS Code settings
 .vscode/
+.fvm/
+**/.fvm/
+**/.fvm/**

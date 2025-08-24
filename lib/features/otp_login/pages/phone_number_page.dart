@@ -17,6 +17,7 @@ import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
+import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
@@ -151,6 +152,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                       //     MaterialPageRoute(
                       //       builder: (context) => ResetPassword(),
                       //     ));
+                      context.pushNamed(ResetPasswordPage.name);
                     },
                     child: Text(
                       'Mot de passe oublié',

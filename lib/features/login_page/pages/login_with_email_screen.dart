@@ -13,6 +13,7 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
+import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
@@ -115,7 +116,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                         //     MaterialPageRoute(
                         //       builder: (context) => ResetPassword(),
                         //     ));
-                        // context.pushNamed(ResetPasswordPage.name);
+                        context.pushNamed(ResetPasswordPage.name);
                       },
                       child: Text(
                         'Mot de passe oublié',
