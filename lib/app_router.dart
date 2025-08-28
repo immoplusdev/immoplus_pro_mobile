@@ -14,6 +14,7 @@ import 'package:immoplus_pro/features/payment_module/operators_selector_page.dar
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/place/place_page.dart';
+import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
@@ -167,6 +168,13 @@ class AppRouter {
         name: ResetPasswordPage.name,
         builder: (BuildContext context, GoRouterState state) {
           return const ResetPasswordPage();
+        },
+      ),
+      GoRoute(
+        path: '/update-password',
+        name: UpdatePasswordPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const UpdatePasswordPage();
         },
       ),
     ],
