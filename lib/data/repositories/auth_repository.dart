@@ -23,7 +23,7 @@ import 'package:retrofit/retrofit.dart';
 class AuthRepository {
   static Future<FileDataModel> uplaodFile({required File file}) async {
     try {
-      final response = AuthProvider(DioClient().dio).uploadImage(file);
+      final response = await AuthProvider(DioClient().dio).uploadImage(file);
       inspect(response);
       return response;
     } on DioException catch (dioError) {
@@ -173,6 +173,8 @@ class AuthRepository {
   }
 
 // Étape 2: Vérifier l'email avec l'OTP
+  @Deprecated(
+      'La vérification OTP se fait maintenant directement dans resetPassword.')
   static Future<HttpResponse> verifyEmailOtp(
       {required VerifyEmailBody body}) async {
     try {

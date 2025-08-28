@@ -6,13 +6,13 @@ class StepBottomButton extends StatefulWidget {
   const StepBottomButton({
     super.key,
     required this.onNext,
-    required this.onPreview,
+    required this.onPrevious,
     this.onNextText,
-    this.onPreviewText,
+    this.onPreviousText,
   });
   final void Function()? onNext;
-  final void Function()? onPreview;
-  final String? onPreviewText;
+  final void Function()? onPrevious;
+  final String? onPreviousText;
   final String? onNextText;
   @override
   State<StepBottomButton> createState() => _StepBottomButtonState();
@@ -28,8 +28,8 @@ class _StepBottomButtonState extends State<StepBottomButton> {
         children: [
           Flexible(
             child: CustomButtom(
-              text: widget.onPreviewText ?? 'Précedent',
-              onClick: widget.onPreview,
+              text: widget.onPreviousText ?? 'Précedent',
+              onClick: widget.onPrevious,
             ),
           ),
           const Gap(10),

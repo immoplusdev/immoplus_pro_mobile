@@ -52,6 +52,11 @@ class FormUtils {
     return null;
   }
 
+  static bool isValidEmail(String? email) {
+    if (email == null || email.trim().isEmpty) return false;
+    return RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
+  }
+
   static String? passwordValidator({String? password}) {
     if (password == null || password.isEmpty) {
       return 'Aucun mot de passe';

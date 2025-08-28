@@ -133,7 +133,7 @@ class _EstateDescriptionEditorPageState
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentPricePage.name);
               },
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateVideoLogmentPage.name);
               },

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -40,27 +41,22 @@ class ViewerImageLogment extends StatelessWidget {
           elevation: 0,
         ),
         extendBodyBehindAppBar: true,
-        body: Container(
-          child: PhotoViewGallery(
-            loadingBuilder: (context, event) => Container(
-              color: Colors.black,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+        body: PhotoViewGallery(
+          loadingBuilder: (context, event) => Container(
+            color: Colors.black,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-            pageController: PageController(
-              initialPage: initialPage,
-            ),
-            pageOptions: imageUrls!
-                .map((image) => PhotoViewGalleryPageOptions(
-                      imageProvider:
-                          NetworkImage(Utils.getImagePath(id: image)),
-                    ))
-                .toList(),
           ),
-          // PhotoView(
-          //   imageProvider: NetworkImage(url),
-          // )
+          pageController: PageController(
+            initialPage: initialPage,
+          ),
+          pageOptions: imageUrls!
+              .map((image) => PhotoViewGalleryPageOptions(
+                    imageProvider: CachedNetworkImageProvider(
+                        Utils.getImagePath(id: image)),
+                  ))
+              .toList(),
         ),
       ),
     );

@@ -187,7 +187,7 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
 
               // CreationEstateNavigation.goToPage(pageName:PicturesLogmentPage.name);
 
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateDescriptionEditorPage.name);
               },

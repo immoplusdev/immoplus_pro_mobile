@@ -141,7 +141,7 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
 
                 //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
               },
-              onPreview: () {
+              onPrevious: () {
                 CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
                 //CreateLogmentRouter.router.goNamed(RulesPage.name);
               },

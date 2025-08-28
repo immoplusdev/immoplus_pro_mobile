@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-import 'package:immoplus_pro/data/schemas/onboarding_schema.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
+import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:isar/isar.dart';
@@ -32,13 +33,13 @@ class SessionManager {
   }
 
   Future<UserModelSchema?> getCurrentUser() async {
-    print('Get User');
     if (currentUser == null) {
       final user = await isarInstance.userModelSchemas.where().findFirst();
       if (user != null) {
         currentUser = user;
       }
     }
+    print('Get User from Session: $currentUser');
     return currentUser;
   }
 
@@ -47,6 +48,12 @@ class SessionManager {
       await isarInstance.userModelSchemas.clear();
     });
     currentUser = null;
+  }
+
+  /// logout user clear session and navigate to login page
+  Future<void> logout() async {
+    await clearSession();
+    AppRouter.router.goNamed(LoginPage.name);
   }
 
   // Fonction qui sera exécutée dans le nouvel isolat

@@ -157,7 +157,7 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
           ? SavingButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 CreationResidenceNavigation.goToPage(
                     pageName: AmentitiesPage.name);
                 //CreateLogmentRouter.router.goNamed(AmentitiesPage.name);

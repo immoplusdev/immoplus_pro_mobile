@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/cubits/authentification/reset_password_cubit_state.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
-import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
 import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 
 class ResetPasswordCubit extends Cubit<ResetPasswordCubitState> {
@@ -44,26 +43,37 @@ class ResetPasswordCubit extends Cubit<ResetPasswordCubitState> {
           errorMessage: "Veuillez d'abord demander un code de vérification."));
       return;
     }
+    _currentOtp = otp;
 
-    emit(const ResetPasswordCubitState.verifyingEmail());
-
-    try {
-      final body = VerifyEmailBody(email: _currentEmail!, otp: otp);
-      await AuthRepository.verifyEmailOtp(body: body);
-
-      _currentOtp = otp;
-
-      emit(const ResetPasswordCubitState.emailVerified());
-
-      log('Email verified successfully for: $_currentEmail',
-          name: 'RESET_PASSWORD_CUBIT');
-    } catch (e) {
-      log(e.toString(), name: "VERIFY_EMAIL_ERROR");
-
-      String errorMessage = e.toString().replaceFirst('Exception: ', '');
-      emit(ResetPasswordCubitState.error(errorMessage: errorMessage));
-    }
+    emit(const ResetPasswordCubitState.emailVerified());
   }
+
+  // Future<void> verifyEmailOtp({required String otp}) async {
+  //   if (_currentEmail == null) {
+  //     emit(const ResetPasswordCubitState.error(
+  //         errorMessage: "Veuillez d'abord demander un code de vérification."));
+  //     return;
+  //   }
+
+  //   emit(const ResetPasswordCubitState.verifyingEmail());
+
+  //   try {
+  //     final body = VerifyEmailBody(email: _currentEmail!, otp: otp);
+  //     await AuthRepository.verifyEmailOtp(body: body);
+
+  //     _currentOtp = otp;
+
+  //     emit(const ResetPasswordCubitState.emailVerified());
+
+  //     log('Email verified successfully for: $_currentEmail',
+  //         name: 'RESET_PASSWORD_CUBIT');
+  //   } catch (e) {
+  //     log(e.toString(), name: "VERIFY_EMAIL_ERROR");
+
+  //     String errorMessage = e.toString().replaceFirst('Exception: ', '');
+  //     emit(ResetPasswordCubitState.error(errorMessage: errorMessage));
+  //   }
+  // }
 
   /// Étape 3: Réinitialise le mot de passe
   Future<void> resetPassword({required String newPassword}) async {

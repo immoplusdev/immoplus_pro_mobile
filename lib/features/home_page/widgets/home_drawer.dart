@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/immo_icons.dart';
@@ -384,19 +385,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               ),
                               CupertinoDialogAction(
                                 isDestructiveAction: true,
-                                onPressed: () {
-                                  isarInstance.writeTxnSync(
-                                    () {
-                                      final result = isarInstance
-                                          .userModelSchemas
-                                          .deleteSync(1);
-                                      if (result) {
-                                        context.goNamed(LoginPage.name);
-                                      } else {
-                                        context.pop();
-                                      }
-                                    },
-                                  );
+                                onPressed: () async {
+                                  await SessionManager().logout();
                                 },
                                 child: const Text('Déconnexion'),
                               ),

@@ -113,6 +113,7 @@ dependencies:
   currency_textfield: ^4.14.1
   flutter_image_compress: ^2.4.0
   pinput: ^5.0.1
+  reorderables: ^0.6.0
 
 dev_dependencies:
   flutter_test:

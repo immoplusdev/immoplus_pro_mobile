@@ -221,7 +221,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
       bottomNavigationBar: EstateCreationModelBuilder().editing
           ? SavingEstateButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstatePicturesLogmentPage.name);
               },

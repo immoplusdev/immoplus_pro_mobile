@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/location_module/location_controller.dart';
-import 'package:immoplus_pro/features/location_module/location_page.dart';
 
 class CurrentLocationSection extends GetView<LocationController> {
   const CurrentLocationSection({super.key});
@@ -19,9 +18,7 @@ class CurrentLocationSection extends GetView<LocationController> {
                   borderRadius: BorderRadius.circular(20)),
               backgroundColor: AppColors.primaryLite,
             ),
-            onPressed: () => controller.getCurrentPosition(
-                latitude: currentPosition.value.latitude ?? 0,
-                longitude: currentPosition.value.longitude ?? 0),
+            onPressed: () => controller.getCurrentPosition(),
             icon:
                 const Icon(FontAwesomeIcons.locationArrow, color: Colors.black),
             label: Text(

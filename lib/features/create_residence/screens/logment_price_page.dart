@@ -192,7 +192,7 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
 
               //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
 
-              onPreview: () {
+              onPrevious: () {
                 CreationResidenceNavigation.goToPage(
                     pageName: DescriptionEditorPage.name);
                 //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);

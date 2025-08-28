@@ -66,7 +66,7 @@ class _EstateAmentitiesPageState extends State<EstateAmentitiesPage> {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentLocationPage.name);
               },
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateTypePage.name);
               },

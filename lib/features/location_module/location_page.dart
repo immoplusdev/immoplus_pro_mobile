@@ -15,9 +15,6 @@ import 'components/location_indicator.dart';
 import 'components/place_autocomplete_list.dart';
 import 'components/search_input.dart';
 
-/// Current position
-final currentPosition = Address(latitude: 5.30966, longitude: -4.01266).obs;
-
 class LocationPage extends StatefulWidget {
   const LocationPage({super.key});
 
