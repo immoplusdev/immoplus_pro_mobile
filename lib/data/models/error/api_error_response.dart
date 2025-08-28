@@ -6,11 +6,11 @@ part 'api_error_response.g.dart';
 @JsonSerializable()
 class ApiErrorResponse {
   final int statusCode;
-  final String message;
-  final String error;
-  final String code;
-  final String timestamp;
-  final String path;
+  final String? message;
+  final String? error;
+  final String? code;
+  final String? timestamp;
+  final String? path;
 
   const ApiErrorResponse({
     required this.statusCode,

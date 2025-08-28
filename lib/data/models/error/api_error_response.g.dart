@@ -9,11 +9,11 @@ part of 'api_error_response.dart';
 ApiErrorResponse _$ApiErrorResponseFromJson(Map<String, dynamic> json) =>
     ApiErrorResponse(
       statusCode: (json['statusCode'] as num).toInt(),
-      message: json['message'] as String,
-      error: json['error'] as String,
-      code: json['code'] as String,
-      timestamp: json['timestamp'] as String,
-      path: json['path'] as String,
+      message: json['message'] as String?,
+      error: json['error'] as String?,
+      code: json['code'] as String?,
+      timestamp: json['timestamp'] as String?,
+      path: json['path'] as String?,
     );
 
 Map<String, dynamic> _$ApiErrorResponseToJson(ApiErrorResponse instance) =>

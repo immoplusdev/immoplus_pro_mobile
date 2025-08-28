@@ -91,14 +91,23 @@ class ErrorInterceptor extends Interceptor {
       context: context,
       title: const Text("Oops, quelque chose s'est mal passé."),
       description: Text(
-        apiErrorResponse?.message ??
-            _getMessageFromStatusCode(response?.statusCode),
+        apiErrorResponse?.message ?? _manageResponse(response),
       ),
       autoCloseDuration: const Duration(seconds: 5),
       showProgressBar: false,
       alignment: Alignment.bottomCenter,
       style: ToastificationStyle.flatColored,
     );
+  }
+
+  _manageResponse(Response? response) {
+    if (response?.data != null) {
+      if (response?.data['message'] != null) {
+        return response?.data['message'];
+      }
+    }
+
+    return _getMessageFromStatusCode(response?.statusCode);
   }
 
   /// Messages de fallback basés sur les codes de statut HTTP

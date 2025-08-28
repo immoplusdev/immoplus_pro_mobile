@@ -26,7 +26,7 @@ enum ApiErrorCode {
   final String value;
 
   /// Crée un enum à partir d'un string
-  static ApiErrorCode fromString(String code) {
+  static ApiErrorCode fromString(String? code) {
     return ApiErrorCode.values.firstWhere(
       (e) => e.value == code,
       orElse: () => ApiErrorCode.unknown,
