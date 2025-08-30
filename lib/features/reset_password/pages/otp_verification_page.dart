@@ -72,131 +72,135 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BlocBuilder<ResetPasswordCubit, ResetPasswordCubitState>(
-          builder: (context, state) {
-            final email = context.read<ResetPasswordCubit>().currentEmail ?? "";
-            return HeaderContainer(
-              iconData: FontAwesomeIcons.shieldHalved,
-              title: "Entrez le code de vérification reçu",
-              subtitle: "Code envoyé à $email",
-            );
-          },
-        ),
-        Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              const Gap(50),
-              Pinput(
-                controller: _otpController,
-                length: _otpLength,
-                defaultPinTheme: PinTheme(
-                  width: 50,
-                  height: 50,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300, width: 2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                focusedPinTheme: PinTheme(
-                  width: 50,
-                  height: 50,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.lightBlue, width: 2),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                submittedPinTheme: PinTheme(
-                  width: 50,
-                  height: 50,
-                  textStyle: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.lightBlue,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const Gap(30),
-              BlocConsumer<ResetPasswordCubit, ResetPasswordCubitState>(
-                listener: (context, state) {
-                  state.when(
-                    initial: () {},
-                    sendingEmailOtp: () {},
-                    emailOtpSent: (message) {},
-                    verifyingEmail: () {},
-                    emailVerified: () {
-                      widget.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    resettingPassword: () {},
-                    passwordResetSuccess: (message) {},
-                    error: (errorMessage) {
-                      _otpController.clear();
-                    },
-                  );
-                },
-                builder: (context, state) {
-                  return CustomLoadingButtom(
-                    isLoading: state.maybeWhen(
-                      verifyingEmail: () => true,
-                      orElse: () => false,
-                    ),
-                    clickable: _isOtpComplete,
-                    onClick: _isOtpComplete
-                        ? () {
-                            context
-                                .read<ResetPasswordCubit>()
-                                .verifyEmailOtp(otp: _otpController.text);
-                          }
-                        : null,
-                    text: "Continuer",
-                  );
-                },
-              ),
-              const Gap(20),
-              BlocBuilder<ResetPasswordCubit, ResetPasswordCubitState>(
-                builder: (context, state) {
-                  final isLoading = state.maybeWhen(
-                    sendingEmailOtp: () => true,
-                    orElse: () => false,
-                  );
-
-                  return TextButton(
-                    onPressed: _canResendCode && !isLoading ? _resendOtp : null,
-                    child: Text(
-                      _canResendCode
-                          ? "Renvoyer le code"
-                          : "Renvoyer le code ($_resendCountdown s)",
-                      style: TextStyle(
-                        color: _canResendCode && !isLoading
-                            ? AppColors.lightBlue
-                            : Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          BlocBuilder<ResetPasswordCubit, ResetPasswordCubitState>(
+            builder: (context, state) {
+              final email =
+                  context.read<ResetPasswordCubit>().currentEmail ?? "";
+              return HeaderContainer(
+                iconData: FontAwesomeIcons.shieldHalved,
+                title: "Entrez le code de vérification reçu",
+                subtitle: "Code envoyé à $email",
+              );
+            },
           ),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                const Gap(50),
+                Pinput(
+                  controller: _otpController,
+                  length: _otpLength,
+                  defaultPinTheme: PinTheme(
+                    width: 50,
+                    height: 50,
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300, width: 2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  focusedPinTheme: PinTheme(
+                    width: 50,
+                    height: 50,
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.lightBlue, width: 2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  submittedPinTheme: PinTheme(
+                    width: 50,
+                    height: 50,
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightBlue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const Gap(30),
+                BlocConsumer<ResetPasswordCubit, ResetPasswordCubitState>(
+                  listener: (context, state) {
+                    state.when(
+                      initial: () {},
+                      sendingEmailOtp: () {},
+                      emailOtpSent: (message) {},
+                      verifyingEmail: () {},
+                      emailVerified: () {
+                        widget.pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      resettingPassword: () {},
+                      passwordResetSuccess: (message) {},
+                      error: (errorMessage) {
+                        _otpController.clear();
+                      },
+                    );
+                  },
+                  builder: (context, state) {
+                    return CustomLoadingButtom(
+                      isLoading: state.maybeWhen(
+                        verifyingEmail: () => true,
+                        orElse: () => false,
+                      ),
+                      clickable: _isOtpComplete,
+                      onClick: _isOtpComplete
+                          ? () {
+                              context
+                                  .read<ResetPasswordCubit>()
+                                  .verifyEmailOtp(otp: _otpController.text);
+                            }
+                          : null,
+                      text: "Continuer",
+                    );
+                  },
+                ),
+                const Gap(20),
+                BlocBuilder<ResetPasswordCubit, ResetPasswordCubitState>(
+                  builder: (context, state) {
+                    final isLoading = state.maybeWhen(
+                      sendingEmailOtp: () => true,
+                      orElse: () => false,
+                    );
+
+                    return TextButton(
+                      onPressed:
+                          _canResendCode && !isLoading ? _resendOtp : null,
+                      child: Text(
+                        _canResendCode
+                            ? "Renvoyer le code"
+                            : "Renvoyer le code ($_resendCountdown s)",
+                        style: TextStyle(
+                          color: _canResendCode && !isLoading
+                              ? AppColors.lightBlue
+                              : Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
