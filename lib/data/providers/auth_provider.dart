@@ -10,6 +10,7 @@ import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart
 import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
+import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
@@ -63,4 +64,8 @@ abstract class AuthProvider {
   @POST('/auth/reset-password')
   Future<HttpResponse> resetPassword(
       @Body() ResetPasswordBody resetPasswordBody);
+
+  @POST('/auth/update-password')
+  Future<HttpResponse> updatePassword(
+      @Body() UpdatePasswordBody updatePasswordBody);
 }

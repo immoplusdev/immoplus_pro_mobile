@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -99,11 +100,18 @@ class LocationController extends GetxController
     placeAutocompleteList.addAll(previousAddresses);
   }
 
-  getCurrentPosition(
-      {required double latitude, required double longitude}) async {
-    change(state, status: RxStatus.loading());
+  Future<LatLng> getLatLngPosition() async {
+    try {
+      final position = await LocationService.getCurrentPosition()
+          .onError((error, stackTrace) => throw AddressException());
+      return LatLng(position.latitude, position.longitude);
+    } catch (e) {
+      return LatLng(5.30966, -4.01266);
+    }
+  }
 
-    Address position = currentPosition.value.copyWith();
+  getCurrentPosition() async {
+    change(state, status: RxStatus.loading());
 
     try {
       CustomPopup.showLoagingToast();
@@ -116,6 +124,7 @@ class LocationController extends GetxController
       EasyLoading.dismiss();
       AppRouter.router.pop(locationAdreess);
     } catch (e) {
+      CustomPopup.hideLoadingToast();
       change(state, status: RxStatus.error(e.toString()));
       return;
     }
@@ -143,8 +152,8 @@ class LocationController extends GetxController
 
   onMapCreated(GoogleMapController controller) async {
     mapController = controller;
-    moveToLocation(LatLng(currentPosition.value.latitude ?? 0,
-        currentPosition.value.longitude ?? 0));
+    final me = await getLatLngPosition();
+    moveToLocation(me);
   }
 
   moveToLocation(LatLng latLng) async {

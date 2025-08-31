@@ -1,14 +1,11 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:immoplus_pro/features/location_module/data/geocoding_api_repository.dart';
 import 'package:immoplus_pro/features/location_module/data/places_api_repository.dart';
-import 'package:immoplus_pro/features/location_module/location_page.dart';
-import 'package:location/location.dart' as loc;
 
 abstract class AppLocationSettings {
   static const int getLocationTimeLimit = 20; //in seconds
@@ -18,7 +15,6 @@ abstract class AppLocationSettings {
 
 class LocationService extends GetxService {
   StreamSubscription<Position>? _positionStreamSubscription;
-  StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
   bool positionStreamStarted = false;
 
   late LocationSettings locationSettings;
@@ -94,10 +90,7 @@ class LocationService extends GetxService {
     ].any((element) => element == locationPermission)) {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-      currentPosition(currentPosition.value.copyWith(
-        latitude: position.latitude,
-        longitude: position.longitude,
-      ));
+
       return position;
     } else {
       throw Exception('Location permissions are denied.');

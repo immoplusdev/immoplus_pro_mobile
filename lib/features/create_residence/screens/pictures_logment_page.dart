@@ -1,19 +1,21 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 import 'package:immoplus_pro/features/create_residence/screens/logement_location_page.dart';
 import 'package:immoplus_pro/features/create_residence/screens/video_logment_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/upload_image_item_card.dart';
 import 'package:immoplus_pro/features/residence_detail/components/logment_viewer_image.dart';
-import 'package:immoplus_pro/features/shared_widgets/upload_images_pages.dart';
-import 'package:immoplus_pro/utils/utils.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PicturesLogmentPage extends StatefulWidget {
   const PicturesLogmentPage({super.key});
@@ -24,6 +26,9 @@ class PicturesLogmentPage extends StatefulWidget {
 }
 
 class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
+  bool _isUploading = false;
+  final uploadingImages = ResidenceCreationModelBuilder().uploadingImages;
+
   @override
   void initState() {
     super.initState();
@@ -33,19 +38,13 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: AppColors.scafold,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          // SliverSafeArea(
-          //   sliver: SliverPersistentHeader(
-          //     delegate: PregressStepperResidenceCreating(),
-          //   ),
-          // ),
           Visibility(
-            visible: ResidenceCreationModelBuilder().images.isNotEmpty,
+            visible: uploadingImages.isNotEmpty,
             replacement: SliverFillRemaining(
               hasScrollBody: false,
               child: Center(
@@ -74,122 +73,30 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
                 ),
               )),
             ),
-            child: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 250.0,
-                mainAxisExtent: 200,
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
-                childAspectRatio: 4.0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewerImageLogment(
-                                initialPage: 0,
-                                tag: ResidenceCreationModelBuilder()
-                                    .images[index],
-                                imageUrls:
-                                    ResidenceCreationModelBuilder().images),
-                          ));
-                    },
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: double.infinity,
-                            child: CachedNetworkImage(
-                              imageUrl: Utils.getImagePath(
-                                  id: ResidenceCreationModelBuilder().images[
-                                      index]), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
-
-                              placeholder: (context, url) => Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor: Colors.grey.shade400,
-                                period: const Duration(milliseconds: 500),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                              fit: BoxFit
-                                  .cover, // or other BoxFit values as per your design
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 3,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                backgroundColor: Colors.red,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  ResidenceCreationModelBuilder()
-                                      .images
-                                      .removeAt(index);
-                                });
-                              },
-                              child: const Icon(Icons.delete)),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                childCount: ResidenceCreationModelBuilder().images.length,
-              ),
-            ),
+            child: _buildUploadingImagesGrid(),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add_photo_alternate_outlined),
-        onPressed: () async {
-          print(ResidenceCreationModelBuilder().images);
-          showModalBottomSheet<List<String>>(
-            context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            builder: (context) => const FractionallySizedBox(
-              heightFactor: 0.9,
-              child: UploadImagePage(),
-            ),
-          ).then(
-            (value) {
-              setState(() {
-                if (value != null) {
-                  if (value.isNotEmpty) {
-                    ResidenceCreationModelBuilder().miniature = value.first;
-                    ResidenceCreationModelBuilder().images.addAll(value);
-                  }
-                }
-              });
-            },
-          );
-        },
+        backgroundColor: _isUploading ? Colors.grey : AppColors.primary,
+        onPressed: _isUploading ? null : _pickImages,
+        child: _isUploading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    color: Colors.white, strokeWidth: 2))
+            : const Icon(Icons.add_photo_alternate_outlined),
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
           ? SavingButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 // CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
                 CreationResidenceNavigation.goToPage(
                     pageName: LogmentLocationPage.name);
               },
-              onNext: ResidenceCreationModelBuilder().images.isNotEmpty
+              onNext: _canProceed()
                   ? () async {
                       CreationResidenceNavigation.goToPage(
                           pageName: VideoLogmentPage.name);
@@ -198,5 +105,138 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
                   : null,
             ),
     );
+  }
+
+  Widget _buildUploadingImagesGrid() {
+    if (uploadingImages.isEmpty) return SliverToBoxAdapter(child: Container());
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(12),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 250.0,
+          mainAxisExtent: 200,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final item = uploadingImages[index];
+            return UploadImageItemCard(
+              key: ValueKey(item.id),
+              imageItem: item,
+              onItemUpdated: (updatedItem) =>
+                  _handleItemUpdated(index, updatedItem),
+              onDelete: () {
+                setState(() => _removeItemEverywhere(item));
+              },
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewerImageLogment(
+                          initialPage: index,
+                          tag: ResidenceCreationModelBuilder().images[index],
+                          imageUrls: uploadingImages
+                              .where((ite) => ite.isUploaded)
+                              .map((e) => e.uploadedId!)
+                              .toList()),
+                    ));
+              },
+            );
+          },
+          childCount: uploadingImages.length,
+        ),
+      ),
+    );
+  }
+
+  /// Méthode pour gérer la mise à jour d'un élément d'upload
+  void _handleItemUpdated(int index, ImageUploadItem updatedItem) {
+    setState(() {
+      uploadingImages[index] = updatedItem;
+
+      if (updatedItem.isUploaded && updatedItem.uploadedId != null) {
+        final id = updatedItem.uploadedId!;
+
+        // Ajout si pas déjà présent
+        if (!ResidenceCreationModelBuilder().images.contains(id)) {
+          ResidenceCreationModelBuilder().images.add(id);
+        }
+
+        // Définir miniature si aucune
+        if (ResidenceCreationModelBuilder().miniature.isEmpty) {
+          ResidenceCreationModelBuilder().miniature = id;
+        }
+      }
+
+      _checkUploadCompletion();
+    });
+  }
+
+  /// Méthode pour supprimer un élément de la liste d'upload et des images finales
+  void _removeItemEverywhere(ImageUploadItem item) {
+    uploadingImages.removeWhere((it) => it.id == item.id);
+
+    final uploadedId = item.uploadedId;
+    if (uploadedId != null && uploadedId.isNotEmpty) {
+      ResidenceCreationModelBuilder()
+          .images
+          .removeWhere((x) => x == uploadedId);
+      if (ResidenceCreationModelBuilder().miniature == uploadedId) {
+        ResidenceCreationModelBuilder().miniature =
+            ResidenceCreationModelBuilder().images.isNotEmpty
+                ? ResidenceCreationModelBuilder().images.first
+                : '';
+      }
+    }
+    _checkUploadCompletion();
+  }
+
+  // Méthode pour sélectionner les images
+  Future<void> _pickImages() async {
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      final List<XFile> pickedImages =
+          await picker.pickMultiImage(imageQuality: 60);
+
+      if (pickedImages.isEmpty) return;
+
+      setState(() {
+        // Convertir les XFile en ImageUploadItem avec statut uploading
+        final newUploadItems = pickedImages
+            .map((xFile) => ImageUploadItem(
+                file: File(xFile.path), status: UploadStatus.uploading))
+            .toList();
+
+        uploadingImages.addAll(newUploadItems);
+        inspect(uploadingImages);
+      });
+    } catch (e) {
+      // Gérer les erreurs de sélection d'images
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur lors de la sélection des images: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  // Méthode pour vérifier si tous les uploads sont terminés
+  void _checkUploadCompletion() {
+    final hasUploadingImages =
+        uploadingImages.any((item) => item.status == UploadStatus.uploading);
+
+    setState(() {
+      _isUploading = hasUploadingImages;
+    });
+  }
+
+  bool _canProceed() {
+    return ResidenceCreationModelBuilder().images.isNotEmpty && !_isUploading;
   }
 }

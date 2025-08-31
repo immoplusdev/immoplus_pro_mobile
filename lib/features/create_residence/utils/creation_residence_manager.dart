@@ -3,7 +3,7 @@ import 'package:immoplus_pro/data/models/residence/piece_model.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
-import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 
 class ResidenceCreationModelBuilder {
   static final ResidenceCreationModelBuilder _instance =
@@ -35,6 +35,7 @@ class ResidenceCreationModelBuilder {
   bool residenceDisponible = true;
   bool editing = false;
   String id = '';
+  List<ImageUploadItem> uploadingImages = [];
 
   // Private constructor
   ResidenceCreationModelBuilder._internal();
@@ -97,6 +98,12 @@ class ResidenceCreationModelBuilder {
     residenceDisponible = model.residenceDisponible;
     editing = true;
     id = model.id;
+    uploadingImages = model.images
+        .map((img) => ImageUploadItem(
+              status: UploadStatus.success,
+              uploadedId: img,
+            ))
+        .toList();
   }
 
   // Method to reset all values to default
@@ -126,5 +133,6 @@ class ResidenceCreationModelBuilder {
     residenceDisponible = true;
     editing = false;
     id = '';
+    uploadingImages = [];
   }
 }

@@ -147,7 +147,7 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
       bottomNavigationBar: EstateCreationModelBuilder().editing
           ? SavingEstateButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateAmentitiesPage.name);
               },

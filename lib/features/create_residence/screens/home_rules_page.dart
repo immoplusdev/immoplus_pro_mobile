@@ -95,7 +95,7 @@ class _HomeRulesPageState extends State<HomeRulesPage> {
                 CreationResidenceNavigation.goToPage(
                     pageName: PicturesLogmentPage.name);
               },
-              onPreview: () {
+              onPrevious: () {
                 //CreateLogmentRouter.router.goNamed(WellcommePage.name);
                 CreationResidenceNavigation.goToPage(
                     pageName: WellcommePage.name);

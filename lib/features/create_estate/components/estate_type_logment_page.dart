@@ -65,7 +65,7 @@ class _EstateTypePageState extends State<EstateTypePage> {
       bottomNavigationBar: EstateCreationModelBuilder().editing
           ? SavingEstateButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateWellcommePage.name);
               },

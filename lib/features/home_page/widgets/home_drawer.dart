@@ -8,17 +8,14 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/immo_icons.dart';
-import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
-import 'package:immoplus_pro/features/login_page/login_page.dart';
-import 'package:immoplus_pro/features/payments/payments_page.dart';
+import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
-import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -310,6 +307,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       size: 20,
                     ),
                     title: const Text('Modifier mot de passe'),
+                    onTap: () => context.pushNamed(UpdatePasswordPage.name),
                     // trailing: Icon(
                     //   FontAwesomeIcons.circleChevronRight,
                     //   size: 15,
@@ -384,19 +382,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               ),
                               CupertinoDialogAction(
                                 isDestructiveAction: true,
-                                onPressed: () {
-                                  isarInstance.writeTxnSync(
-                                    () {
-                                      final result = isarInstance
-                                          .userModelSchemas
-                                          .deleteSync(1);
-                                      if (result) {
-                                        context.goNamed(LoginPage.name);
-                                      } else {
-                                        context.pop();
-                                      }
-                                    },
-                                  );
+                                onPressed: () async {
+                                  await SessionManager().logout();
                                 },
                                 child: const Text('Déconnexion'),
                               ),

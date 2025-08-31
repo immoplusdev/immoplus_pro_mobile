@@ -91,13 +91,13 @@ class ToastUtils {
   }
 
   /// Toast d'erreur rapide (méthode raccourcie)
-  static void error(String message) {
-    showError(title: message);
+  static void error(String? message) {
+    showError(title: message ?? "Une erreur est survenue");
   }
 
   /// Toast de succès rapide (méthode raccourcie)
-  static void success(String message) {
-    showSuccess(title: message);
+  static void success(String? message) {
+    showSuccess(title: message ?? "Opération effectuée avec succès");
   }
 
   /// Toast d'info rapide (méthode raccourcie)

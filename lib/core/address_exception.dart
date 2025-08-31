@@ -3,7 +3,7 @@ class AddressException implements Exception {
 
   AddressException(
       [String message =
-          "Une erreur s'est produite lors de la détection de l'adresse. Veuillez réessayer."]) {
+          "Une erreur s'est produite lors de la détection de l'adresse. Veuillez verifier les permissions de localisation et réessayer."]) {
     _message = message;
   }
 

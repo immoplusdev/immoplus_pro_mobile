@@ -13,6 +13,7 @@ import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart
 import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
+import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
@@ -23,7 +24,7 @@ import 'package:retrofit/retrofit.dart';
 class AuthRepository {
   static Future<FileDataModel> uplaodFile({required File file}) async {
     try {
-      final response = AuthProvider(DioClient().dio).uploadImage(file);
+      final response = await AuthProvider(DioClient().dio).uploadImage(file);
       inspect(response);
       return response;
     } on DioException catch (dioError) {
@@ -173,6 +174,8 @@ class AuthRepository {
   }
 
 // Étape 2: Vérifier l'email avec l'OTP
+  @Deprecated(
+      'La vérification OTP se fait maintenant directement dans resetPassword.')
   static Future<HttpResponse> verifyEmailOtp(
       {required VerifyEmailBody body}) async {
     try {
@@ -209,6 +212,24 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to reset password: $error');
+    }
+  }
+
+  static Future<HttpResponse> updatePassword(
+      {required UpdatePasswordBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).updatePassword(body);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to updatePassword password: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to updatePassword password: $error');
     }
   }
 }

@@ -173,7 +173,7 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
       bottomNavigationBar: EstateCreationModelBuilder().editing
           ? SavingEstateButton()
           : StepBottomButton(
-              onPreview: () {
+              onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentLocationPage.name);
               },

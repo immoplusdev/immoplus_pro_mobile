@@ -73,7 +73,7 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
                           pageName: LogmentLocationPage.name);
                     }
                   : null,
-              onPreview: () {
+              onPrevious: () {
                 //CreateLogmentRouter.router.goNamed(TypeLogmentPage.name);
                 CreationResidenceNavigation.goToPage(
                     pageName: TypeLogmentPage.name);
