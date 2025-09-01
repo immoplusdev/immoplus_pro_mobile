@@ -48,9 +48,18 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
           const SliverPadding(
             padding: EdgeInsets.all(10),
             sliver: SliverToBoxAdapter(
-              child: Text(
-                "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus. Ajoutez vos biens immobiliers, tels que des appartements, des maisons à louer, des terrains à vendre, ou des espaces, ainsi que tout autre bien que nos clients pourraient demander à visiter en vue d'une location ou d'une vente.",
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    "Bien immobiliers",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Gap(10),
+                  Text(
+                    "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus. Ajoutez vos biens immobiliers, tels que des appartements, des maisons à louer, des terrains à vendre, ou des espaces, ainsi que tout autre bien que nos clients pourraient demander à visiter en vue d'une location ou d'une vente.",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ),

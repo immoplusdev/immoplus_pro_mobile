@@ -89,7 +89,7 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
             : const Icon(Icons.add_photo_alternate_outlined),
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 // CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);

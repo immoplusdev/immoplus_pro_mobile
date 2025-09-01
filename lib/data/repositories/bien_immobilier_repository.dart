@@ -199,4 +199,28 @@ class BienImmobilierRepository {
       return null;
     }
   }
+
+  static Future<bool> deleteBienImmobilier({required String id}) async {
+    try {
+      final response = await BienImmobilierProvider(DioClient().dio)
+          .deleteBienImmobilier(id);
+
+      // Vérifie si la suppression s'est bien passée (status 200-299)
+      if (response.response.statusCode == 200) {
+        log('Bien immobilier supprimé avec succès: $id');
+        return true;
+      } else {
+        log('Erreur lors de la suppression: ${response.response.statusCode}');
+        return false;
+      }
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to delete property: ${dioError.message}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to delete property: $error');
+    }
+  }
 }

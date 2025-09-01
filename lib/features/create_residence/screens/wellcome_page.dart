@@ -44,9 +44,19 @@ class _WellcommePageState extends State<WellcommePage> {
             const SliverPadding(
               padding: EdgeInsets.all(10),
               sliver: SliverToBoxAdapter(
-                child: Text(
-                  "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus, la plateforme où chaque espace trouve son voyageur. En rejoignant ImmoPlus, vous faites bien plus que simplement lister votre propriété ; vous ouvrez la porte à des expériences inoubliables et à des opportunités enrichissantes.",
-                  textAlign: TextAlign.center,
+                child: Column(
+                  children: [
+                    Text(
+                      "Residence",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Gap(10),
+                    Text(
+                      "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus, la plateforme où chaque espace trouve son voyageur. En rejoignant ImmoPlus, vous faites bien plus que simplement lister votre propriété ; vous ouvrez la porte à des expériences inoubliables et à des opportunités enrichissantes.",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -61,6 +71,11 @@ class _WellcommePageState extends State<WellcommePage> {
                   controller: _controller,
                   prefixIcon: const Icon(FontAwesomeIcons.building),
                   labelText: "Nom de la résidence",
+                  onChanged: (name) {
+                    if (name.trim().isNotEmpty) {
+                      ResidenceCreationModelBuilder().nom = name;
+                    }
+                  },
                   validator: (String? value) =>
                       FormUtils.fieldValidator(value: value),
                 ),
@@ -112,7 +127,7 @@ class _WellcommePageState extends State<WellcommePage> {
 
             SliverGap(20),
             (ResidenceCreationModelBuilder().editing)
-                ? SliverToBoxAdapter(child: SavingButton())
+                ? SliverToBoxAdapter(child: SizedBox())
                 : SliverToBoxAdapter()
           ],
         ),

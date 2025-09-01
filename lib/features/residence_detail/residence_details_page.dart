@@ -26,28 +26,31 @@ import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 import 'components/detail_rules.dart';
 
-class ResidencePage extends StatefulWidget {
-  const ResidencePage({
+class ResidenceDetailsPage extends StatefulWidget {
+  const ResidenceDetailsPage({
     super.key,
     required this.idProduct,
   });
 
   final String idProduct;
-  static String name = 'logment_page';
+  static String name = 'logment_details_page';
   @override
-  State<ResidencePage> createState() => _ResidencePageState();
+  State<ResidenceDetailsPage> createState() => _ResidenceDetailsPageState();
 }
 
-class _ResidencePageState extends State<ResidencePage> {
+class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
   String? time = 'A vie';
   VideoPlayerController? videoPlayerController;
   int initialCarouselPage = 0;
   final List<String>? images = [];
   @override
   void initState() {
-    context.read<LogmentCubit>().getResidence(id: widget.idProduct);
-
+    _getResidenceById();
     super.initState();
+  }
+
+  _getResidenceById() {
+    context.read<LogmentCubit>().getResidence(id: widget.idProduct);
   }
 
   @override
@@ -76,9 +79,7 @@ class _ResidencePageState extends State<ResidencePage> {
                 //loader
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    context
-                        .read<LogmentCubit>()
-                        .getResidence(id: widget.idProduct);
+                    _getResidenceById();
                   },
                 ),
                 //productName

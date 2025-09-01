@@ -155,7 +155,7 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
       //   log(ResidenceCreationModelBuilder().ville);
       // }),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(

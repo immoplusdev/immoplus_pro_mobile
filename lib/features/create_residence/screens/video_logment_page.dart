@@ -203,7 +203,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
         },
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(

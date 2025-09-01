@@ -24,6 +24,7 @@ class CustomTextField extends StatefulWidget {
     this.fillColor,
     this.autofocus = false,
     this.isEnabled = true,
+    this.onChanged,
   });
   final String? labelText;
   final Widget? sufixIcon;
@@ -45,6 +46,7 @@ class CustomTextField extends StatefulWidget {
   final Color? fillColor;
   final bool? autofocus;
   final bool? isEnabled;
+  final Function(String)? onChanged;
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
@@ -65,7 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? TextStyle(fontSize: widget.fontSize)
             : null,
         autofocus: widget.autofocus ?? false,
-        onChanged: ((value) {}),
+        onChanged: widget.onChanged,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: widget.validator,
         obscureText: widget.obscureText,

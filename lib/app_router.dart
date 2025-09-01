@@ -5,7 +5,7 @@ import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/estate_detail/estate_page.dart';
+import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
@@ -20,7 +20,7 @@ import 'package:immoplus_pro/features/registration/pages/particulier_registratio
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
-import 'package:immoplus_pro/features/residence_detail/residence_page.dart';
+import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
@@ -100,14 +100,14 @@ class AppRouter {
         builder: (context, state) => const EstatesPage(),
       ),
       GoRoute(
-        path: '/estate_page/:id',
-        builder: (context, state) => EstatePage(
+        path: '/${EstateDetailsPage.name}/:id',
+        builder: (context, state) => EstateDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
       ),
       GoRoute(
-        path: '/logment_page/:id',
-        builder: (context, state) => ResidencePage(
+        path: '/${ResidenceDetailsPage.name}/:id',
+        builder: (context, state) => ResidenceDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
       ),

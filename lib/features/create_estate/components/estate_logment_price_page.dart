@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -175,7 +176,8 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                         (value) {
                           EasyLoading.dismiss();
                           EstateCreationModelBuilder().reset();
-                          AppRouter.router.goNamed(EstatesPage.name);
+                          context.pop(true);
+                          // AppRouter.router.goNamed(EstatesPage.name);
                         },
                       );
                     } catch (e) {

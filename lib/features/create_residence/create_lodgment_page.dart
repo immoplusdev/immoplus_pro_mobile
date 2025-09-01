@@ -12,6 +12,7 @@ import 'package:immoplus_pro/features/create_residence/screens/video_logment_pag
 import 'package:immoplus_pro/features/create_residence/screens/wellcome_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 
 class CreateLodgmentPage extends StatefulWidget {
@@ -84,10 +85,16 @@ class _CreateLodgmentPageState extends State<CreateLodgmentPage> {
       ),
       bottomNavigationBar: Container(
         color: Colors.white,
-        height: 55,
+        height: 155,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            if (ResidenceCreationModelBuilder().editing)
+              SavingButton(
+                onrefresh: () {
+                  context.pop(true);
+                },
+              ),
             TextButton(
               onPressed: () {
                 AppDialog.confirm(

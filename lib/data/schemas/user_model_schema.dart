@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/common/enums.dart';
 import 'package:isar/isar.dart';
 
 part 'user_model_schema.g.dart';
@@ -23,4 +24,8 @@ class UserModelSchema {
   String? pieceIdentite;
   String? avatar;
   String? role;
+
+  /// return true if user is an  professional Company
+  // bool get isEntreprise => roleName == Roles.pro_entreprise.name;
+  bool get isEntreprise => true;
 }

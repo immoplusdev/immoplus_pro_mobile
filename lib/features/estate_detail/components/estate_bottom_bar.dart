@@ -124,7 +124,7 @@ class EstateBottomBar extends StatelessWidget {
                             await AppDialog.confirm(
                                 context: context,
                                 content:
-                                    "Les résidences indisponibles ne seront pas accessibles aux clients pour effectuer des réservations.",
+                                    "Les biens indisponibles ne seront pas accessibles aux clients pour effectuer des réservations.",
                                 rollback: () {
                                   context.read<EstateCubit>().updateEstate(
                                       id: bienImmobilier.id,
@@ -158,7 +158,20 @@ class EstateBottomBar extends StatelessWidget {
                           color: Colors.red,
                         ),
                         tileColor: Colors.transparent,
-                        title: const Text('Supprimer la résidence'),
+                        title: const Text('Supprimer le bien'),
+                        onTap: () async {
+                          final result = await AppDialog.confirmDialog(
+                            context: context,
+                            content:
+                                "Êtes-vous sûr de vouloir supprimer ce bien immobilier ? Cette action est irréversible.",
+                          );
+                          if (result == true) {
+                            context.pop();
+                            context
+                                .read<EstateCubit>()
+                                .deleteEstate(id: bienImmobilier.id);
+                          }
+                        },
                         titleTextStyle: Theme.of(context)
                             .textTheme
                             .titleSmall!

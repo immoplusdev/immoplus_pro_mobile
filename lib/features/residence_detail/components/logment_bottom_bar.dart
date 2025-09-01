@@ -80,7 +80,13 @@ class LogmentBottomBar extends StatelessWidget {
                             },
                           ).then(
                             (value) {
-                              ResidenceCreationModelBuilder().reset();
+                              if (value == true) {
+                                context.pop();
+                                ResidenceCreationModelBuilder().reset();
+                                context
+                                    .read<LogmentCubit>()
+                                    .getResidence(id: logmentModel.id);
+                              }
                             },
                           );
                         },

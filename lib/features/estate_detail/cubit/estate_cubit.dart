@@ -37,4 +37,22 @@ class EstateCubit extends Cubit<RequestState> {
       emit(RequestState.error(error: e.toString()));
     }
   }
+
+  deleteEstate({required String id}) async {
+    emit(const RequestState.loading());
+    try {
+      bool isDeleted =
+          await BienImmobilierRepository.deleteBienImmobilier(id: id);
+
+      if (isDeleted) {
+        // Utiliser l'état success existant
+        emit(const RequestState.success(message: "Bien supprimé avec succès."));
+      } else {
+        emit(
+            const RequestState.error(error: "Échec de la suppression du bien"));
+      }
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
 }

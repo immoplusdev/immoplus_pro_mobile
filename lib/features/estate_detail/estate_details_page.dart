@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/features/estate_detail/components/detail_rooms.dart';
 import 'package:immoplus_pro/features/estate_detail/components/estate_bottom_bar.dart';
@@ -15,6 +17,7 @@ import 'package:immoplus_pro/features/residence_detail/components/detail_logment
 import 'package:immoplus_pro/features/residence_detail/components/inititial_detail_screen.dart';
 import 'package:immoplus_pro/features/residence_detail/components/see_more_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:video_player/video_player.dart';
 
 import 'components/detail_estate_amentities.dart';
@@ -24,19 +27,19 @@ import 'components/detail_logment_map.dart';
 import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 
-class EstatePage extends StatefulWidget {
-  const EstatePage({
+class EstateDetailsPage extends StatefulWidget {
+  const EstateDetailsPage({
     super.key,
     required this.idProduct,
   });
 
   final String idProduct;
-  static String name = 'estate_page';
+  static String name = 'estate_details_page';
   @override
-  State<EstatePage> createState() => _EstatePageState();
+  State<EstateDetailsPage> createState() => _EstateDetailsPageState();
 }
 
-class _EstatePageState extends State<EstatePage> {
+class _EstateDetailsPageState extends State<EstateDetailsPage> {
   String? time = 'A vie';
   VideoPlayerController? videoPlayerController;
   int initialCarouselPage = 0;
@@ -57,7 +60,14 @@ class _EstatePageState extends State<EstatePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<EstateCubit, RequestState>(
+    return BlocConsumer<EstateCubit, RequestState>(
+      listener: (context, state) {
+        if (state is REQUEST_SUCCESS) {
+          ToastUtils.showSuccess(title: state.message ?? "Opération réussie");
+          EstateCreationModelBuilder().reset();
+          context.pop(true);
+        }
+      },
       builder: (context, state) {
         if (state is REQUEST_LOADING) {
           return const LoadingPage();
