@@ -14,7 +14,7 @@ class RequestState with _$RequestState {
   factory RequestState() = _RequestState;
   const factory RequestState.initial() = REQUEST_INITIAL;
   const factory RequestState.loading() = REQUEST_LOADING;
-  const factory RequestState.success() = REQUEST_SUCCESS;
+  const factory RequestState.success({String? message}) = REQUEST_SUCCESS;
   const factory RequestState.error({required String error}) = REQUEST_ERROR;
   const factory RequestState.residence({required ResidenceModel data}) =
       REQUEST_RESIDENCE_DATA;

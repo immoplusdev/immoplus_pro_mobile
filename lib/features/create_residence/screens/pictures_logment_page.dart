@@ -1,21 +1,15 @@
-import 'dart:developer';
-import 'dart:io';
-
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 import 'package:immoplus_pro/features/create_residence/screens/logement_location_page.dart';
 import 'package:immoplus_pro/features/create_residence/screens/video_logment_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/upload_image_item_card.dart';
 import 'package:immoplus_pro/features/residence_detail/components/logment_viewer_image.dart';
+import 'package:immoplus_pro/features/shared_widgets/empty_image_picker.dart';
 
 class PicturesLogmentPage extends StatefulWidget {
   const PicturesLogmentPage({super.key});
@@ -47,31 +41,7 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
             visible: uploadingImages.isNotEmpty,
             replacement: SliverFillRemaining(
               hasScrollBody: false,
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: DottedBorder(
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(10),
-                  padding: const EdgeInsets.all(20),
-                  color: Colors.grey.shade400,
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.photoFilm,
-                        size: 100,
-                        color: Colors.grey,
-                      ),
-                      Gap(20),
-                      Text(
-                        "Capturez la beauté de votre bien ! Prenez des photos soigneusement travaillées pour attirer davantage de clients. N'oubliez pas, la première image sélectionnée sera celle affichée en miniature.",
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              )),
+              child: EmptyImagePicker(),
             ),
             child: _buildUploadingImagesGrid(),
           ),
@@ -89,7 +59,7 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
             : const Icon(Icons.add_photo_alternate_outlined),
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 // CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);
@@ -195,35 +165,19 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
 
   // Méthode pour sélectionner les images
   Future<void> _pickImages() async {
-    final ImagePicker picker = ImagePicker();
+    final pickedImages = await ImagePickerService.pickMultipleImages();
 
-    try {
-      final List<XFile> pickedImages =
-          await picker.pickMultiImage(imageQuality: 60);
+    if (pickedImages.isEmpty) return;
 
-      if (pickedImages.isEmpty) return;
+    setState(() {
+      // Convertir les XFile en ImageUploadItem avec statut uploading
+      final newUploadItems = pickedImages
+          .map((file) =>
+              ImageUploadItem(file: file, status: UploadStatus.uploading))
+          .toList();
 
-      setState(() {
-        // Convertir les XFile en ImageUploadItem avec statut uploading
-        final newUploadItems = pickedImages
-            .map((xFile) => ImageUploadItem(
-                file: File(xFile.path), status: UploadStatus.uploading))
-            .toList();
-
-        uploadingImages.addAll(newUploadItems);
-        inspect(uploadingImages);
-      });
-    } catch (e) {
-      // Gérer les erreurs de sélection d'images
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erreur lors de la sélection des images: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
+      uploadingImages.addAll(newUploadItems);
+    });
   }
 
   // Méthode pour vérifier si tous les uploads sont terminés

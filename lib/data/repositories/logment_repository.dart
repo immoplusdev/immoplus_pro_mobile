@@ -195,4 +195,28 @@ class LogmentRepository {
       throw Exception('Failed to load users: $error');
     }
   }
+
+  static Future<bool> deleteResidence({required String id}) async {
+    try {
+      final httpResponse =
+          await ResidenceProvider(DioClient().dio).deleteResidence(id);
+
+      // Vérifie si la suppression s'est bien passée (status 200-299)
+      if (httpResponse.response.statusCode == 200) {
+        log('Residence supprimé avec succès: $id');
+        return true;
+      } else {
+        log('Erreur lors de la suppression: ${httpResponse.response.statusCode}');
+        return false;
+      }
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to delete residence: ${dioError.message}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to delete residence: $error');
+    }
+  }
 }

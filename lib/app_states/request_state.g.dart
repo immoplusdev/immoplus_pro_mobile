@@ -43,12 +43,14 @@ Map<String, dynamic> _$$REQUEST_LOADINGImplToJson(
 _$REQUEST_SUCCESSImpl _$$REQUEST_SUCCESSImplFromJson(
         Map<String, dynamic> json) =>
     _$REQUEST_SUCCESSImpl(
+      message: json['message'] as String?,
       $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$REQUEST_SUCCESSImplToJson(
         _$REQUEST_SUCCESSImpl instance) =>
     <String, dynamic>{
+      'message': instance.message,
       'runtimeType': instance.$type,
     };
 

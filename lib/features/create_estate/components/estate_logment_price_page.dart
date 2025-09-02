@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -12,10 +13,8 @@ import 'package:immoplus_pro/features/create_estate/components/estate_payment_ty
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
-import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
@@ -130,7 +129,7 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
         ),
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onNextText: EstateCreationModelBuilder().editing
                   ? 'Modifier'
@@ -175,7 +174,8 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                         (value) {
                           EasyLoading.dismiss();
                           EstateCreationModelBuilder().reset();
-                          AppRouter.router.goNamed(EstatesPage.name);
+                          context.pop(true);
+                          // AppRouter.router.goNamed(EstatesPage.name);
                         },
                       );
                     } catch (e) {

@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/features/residence/utils/residences_utils.dart';
@@ -11,20 +10,13 @@ import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ResidenceListCard extends StatelessWidget {
-  const ResidenceListCard({super.key, required this.residence});
+  final VoidCallback? onTap;
+  const ResidenceListCard({super.key, required this.residence, this.onTap});
   final ResidenceModel residence;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        context.push('/logment_page/${residence.id}');
-
-        // final Uri url = Uri.parse(
-        //     "${RequestPath.baseUrl}/admin/content/logements/${residence.id}");
-        // if (!await launchUrl(url)) {
-        //   throw Exception('Could not launch $url');
-        // }
-      },
+      onTap: onTap,
       child: Container(
         constraints: const BoxConstraints(),
         height: 180,

@@ -67,4 +67,7 @@ abstract class BienImmobilierProvider {
   @POST("/demandes-visites/action/programmer/{id}")
   Future<DemandeVisiteModel> programmer(
       @Path() String id, @Body() VisitProgrammerBody programmer);
+
+  @DELETE("/biens-immobiliers/{id}")
+  Future<HttpResponse> deleteBienImmobilier(@Path() String id);
 }

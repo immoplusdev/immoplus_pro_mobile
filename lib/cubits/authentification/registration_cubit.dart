@@ -42,6 +42,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
+          ..role = response.data.user.role.name
           ..activite = response.data.user.additionalData.activite
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
@@ -92,6 +93,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
+          ..role = response.data.user.role.name
           ..activite = response.data.user.additionalData.activite
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..photoIdentite = response.data.user.additionalData.photoIdentiteId

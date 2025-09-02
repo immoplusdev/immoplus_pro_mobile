@@ -75,7 +75,7 @@ class _TypeLogmentPageState extends State<TypeLogmentPage> {
       //   print(data);
       // }),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(

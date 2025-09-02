@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/configs/address.dart';
 import 'package:immoplus_pro/features/location_module/components/error_indicator.dart';
 import 'package:immoplus_pro/features/location_module/location_controller.dart';
 

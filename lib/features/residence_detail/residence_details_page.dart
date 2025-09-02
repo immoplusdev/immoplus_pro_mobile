@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_title2.dart';
@@ -15,6 +17,7 @@ import 'package:immoplus_pro/features/residence_detail/components/logment_bottom
 import 'package:immoplus_pro/features/residence_detail/components/see_more_button.dart';
 import 'package:immoplus_pro/features/residence_detail/cubit/logment_cubit.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:video_player/video_player.dart';
 
 import 'components/detail_logment_amentities.dart';
@@ -26,28 +29,31 @@ import 'components/detail_logment_name.dart';
 import 'components/detail_logment_video.dart';
 import 'components/detail_rules.dart';
 
-class ResidencePage extends StatefulWidget {
-  const ResidencePage({
+class ResidenceDetailsPage extends StatefulWidget {
+  const ResidenceDetailsPage({
     super.key,
     required this.idProduct,
   });
 
   final String idProduct;
-  static String name = 'logment_page';
+  static String name = 'logment_details_page';
   @override
-  State<ResidencePage> createState() => _ResidencePageState();
+  State<ResidenceDetailsPage> createState() => _ResidenceDetailsPageState();
 }
 
-class _ResidencePageState extends State<ResidencePage> {
+class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
   String? time = 'A vie';
   VideoPlayerController? videoPlayerController;
   int initialCarouselPage = 0;
   final List<String>? images = [];
   @override
   void initState() {
-    context.read<LogmentCubit>().getResidence(id: widget.idProduct);
-
+    _getResidenceById();
     super.initState();
+  }
+
+  _getResidenceById() {
+    context.read<LogmentCubit>().getResidence(id: widget.idProduct);
   }
 
   @override
@@ -60,7 +66,14 @@ class _ResidencePageState extends State<ResidencePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LogmentCubit, RequestState>(
+    return BlocConsumer<LogmentCubit, RequestState>(
+      listener: (context, state) {
+        if (state is REQUEST_SUCCESS) {
+          ToastUtils.showSuccess(title: state.message ?? "Opération réussie");
+          ResidenceCreationModelBuilder().reset();
+          context.pop(true);
+        }
+      },
       builder: (context, state) {
         if (state is REQUEST_LOADING) {
           return const LoadingPage();
@@ -76,9 +89,7 @@ class _ResidencePageState extends State<ResidencePage> {
                 //loader
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    context
-                        .read<LogmentCubit>()
-                        .getResidence(id: widget.idProduct);
+                    _getResidenceById();
                   },
                 ),
                 //productName
