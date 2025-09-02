@@ -79,6 +79,7 @@ class LogmentBottomBar extends StatelessWidget {
                               );
                             },
                           ).then(
+                            // value return by CreateLodgmentPage
                             (value) {
                               if (value == true) {
                                 context.pop();

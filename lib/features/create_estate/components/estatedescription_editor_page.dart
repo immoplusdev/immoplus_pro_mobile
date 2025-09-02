@@ -8,8 +8,6 @@ import 'package:immoplus_pro/features/create_estate/components/estate_logment_pr
 import 'package:immoplus_pro/features/create_estate/components/estate_video_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
-import 'package:immoplus_pro/features/create_residence/pregress_stepper_logment_creating.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -121,7 +119,7 @@ class _EstateDescriptionEditorPageState
         ],
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onNext: () {
                 _controller.document.toDelta();

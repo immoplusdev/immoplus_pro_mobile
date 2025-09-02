@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
@@ -9,8 +8,11 @@ import 'package:immoplus_pro/utils/session_manager.dart';
 
 class SavingEstateButton extends StatefulWidget {
   const SavingEstateButton({
+    required this.onrefresh,
     super.key,
   });
+
+  final VoidCallback onrefresh;
 
   @override
   State<SavingEstateButton> createState() => _SavingEstateButtonState();
@@ -36,8 +38,9 @@ class _SavingEstateButtonState extends State<SavingEstateButton> {
                 .then(
               (value) {
                 EasyLoading.dismiss();
-                AppRouter.router
-                    .push('/logment_page/${EstateCreationModelBuilder().id}');
+                widget.onrefresh();
+                // AppRouter.router
+                //     .push('/logment_page/${EstateCreationModelBuilder().id}');
               },
             );
           } catch (e) {

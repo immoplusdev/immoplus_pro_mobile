@@ -13,10 +13,8 @@ import 'package:immoplus_pro/features/create_estate/components/estate_payment_ty
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
-import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
@@ -131,7 +129,7 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
         ),
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onNextText: EstateCreationModelBuilder().editing
                   ? 'Modifier'

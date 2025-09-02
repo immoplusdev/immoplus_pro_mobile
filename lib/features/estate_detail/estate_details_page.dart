@@ -46,9 +46,12 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
   final List<String>? images = [];
   @override
   void initState() {
-    context.read<EstateCubit>().getEstate(id: widget.idProduct);
-
+    _getEstateById();
     super.initState();
+  }
+
+  _getEstateById() {
+    context.read<EstateCubit>().getEstate(id: widget.idProduct);
   }
 
   @override
@@ -83,7 +86,7 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
                 //loader
                 CupertinoSliverRefreshControl(
                   onRefresh: () async {
-                    context.read<EstateCubit>().getEstate(id: widget.idProduct);
+                    _getEstateById();
                   },
                 ),
                 //productName

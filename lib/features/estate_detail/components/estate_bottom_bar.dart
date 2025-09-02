@@ -48,13 +48,13 @@ class EstateBottomBar extends StatelessWidget {
                   builder: (context) => Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'En cours de développement',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(color: Colors.redAccent),
-                      ),
+                      // Text(
+                      //   'En cours de développement',
+                      //   style: Theme.of(context)
+                      //       .textTheme
+                      //       .labelMedium!
+                      //       .copyWith(color: Colors.redAccent),
+                      // ),
                       ListTile(
                         leading: Icon(
                           FontAwesomeIcons.filePen,
@@ -87,7 +87,13 @@ class EstateBottomBar extends StatelessWidget {
                             },
                           ).then(
                             (value) {
-                              EstateCreationModelBuilder().reset();
+                              if (value == true) {
+                                context.pop();
+                                EstateCreationModelBuilder().reset();
+                                context
+                                    .read<EstateCubit>()
+                                    .getEstate(id: bienImmobilier.id);
+                              }
                             },
                           );
                         },
