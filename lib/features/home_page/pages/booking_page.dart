@@ -135,10 +135,7 @@ class _BookingPageState extends State<BookingPage> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        ResidenceCreationModelBuilder().reset();
-                        AppRouter.router.pushNamed(CreateLodgmentPage.name);
-                      },
+                      onPressed: _tapCreateResidence,
                       child: Text('Ajouter une résidence'),
                     ),
                   ],
@@ -152,5 +149,12 @@ class _BookingPageState extends State<BookingPage> {
         ],
       )),
     );
+  }
+
+  _tapCreateResidence() async {
+    final result = await AppRouter.router.pushNamed(CreateLodgmentPage.name);
+    if (result == true && mounted) {
+      AppRouter.router.pushNamed(ResidencesPage.name);
+    }
   }
 }
