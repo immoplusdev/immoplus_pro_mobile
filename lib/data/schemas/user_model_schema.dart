@@ -26,6 +26,6 @@ class UserModelSchema {
   String? role;
 
   /// return true if user is an  professional Company
-  // bool get isEntreprise => roleName == Roles.pro_entreprise.name;
-  bool get isEntreprise => true;
+  bool get isEntreprise => roleName == Roles.pro_entreprise.name;
+  // bool get isEntreprise => true;
 }
