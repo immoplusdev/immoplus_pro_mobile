@@ -92,6 +92,7 @@ class ErrorInterceptor extends Interceptor {
       title: const Text("Oops, quelque chose s'est mal passé."),
       description: Text(
         apiErrorResponse?.message ?? _manageResponse(response),
+        maxLines: 6,
       ),
       autoCloseDuration: const Duration(seconds: 5),
       showProgressBar: false,
