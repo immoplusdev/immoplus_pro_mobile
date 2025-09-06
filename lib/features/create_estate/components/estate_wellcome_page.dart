@@ -71,6 +71,11 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
                 labelText: "Nom du bien immobilier",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),
+                onChanged: (name) {
+                  if (name.trim().isNotEmpty) {
+                    EstateCreationModelBuilder().nom = name;
+                  }
+                },
               ),
             ),
           ),

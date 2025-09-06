@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +79,7 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
         }
 
         if (state is REQUEST_BIEN_IMMOBILIER_DATA) {
+          inspect(state.data);
           return Scaffold(
             extendBodyBehindAppBar: true,
             body: CustomScrollView(

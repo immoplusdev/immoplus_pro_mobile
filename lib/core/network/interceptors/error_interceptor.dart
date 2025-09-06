@@ -10,6 +10,7 @@ import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:toastification/toastification.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ErrorInterceptor extends Interceptor {
   @override
@@ -84,14 +85,22 @@ class ErrorInterceptor extends Interceptor {
   /// Affiche le toast d'erreur approprié
   void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
     final context = NavigationService.navigatorKey.currentContext;
-    if (context == null) return;
+    final message = apiErrorResponse?.message ?? _manageResponse(response);
+    if (context == null) {
+      Fluttertoast.showToast(
+        msg: message,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }
 
     toastification.show(
       type: ToastificationType.error,
       context: context,
       title: const Text("Oops, quelque chose s'est mal passé."),
       description: Text(
-        apiErrorResponse?.message ?? _manageResponse(response),
+        message,
         maxLines: 6,
       ),
       autoCloseDuration: const Duration(seconds: 5),
@@ -102,13 +111,17 @@ class ErrorInterceptor extends Interceptor {
   }
 
   _manageResponse(Response? response) {
-    if (response?.data != null) {
-      if (response?.data['message'] != null) {
-        return response?.data['message'];
+    try {
+      if (response?.data != null) {
+        if (response?.data['message'] != null) {
+          return response?.data['message'];
+        }
       }
+      return _getMessageFromStatusCode(response?.statusCode);
+    } catch (e) {
+      ImmoLogger.e("manageResponse", e);
+      return _getMessageFromStatusCode(response?.statusCode);
     }
-
-    return _getMessageFromStatusCode(response?.statusCode);
   }
 
   /// Messages de fallback basés sur les codes de statut HTTP
@@ -127,7 +140,7 @@ class ErrorInterceptor extends Interceptor {
       case 500:
         return "Erreur interne du serveur : Une erreur inattendue s'est produite.";
       case 502:
-        return "Bad Gateway : Le serveur a reçu une réponse invalide d'un serveur en amont.";
+        return "Bad Gateway : Le serveur a reçu une réponse invalide ";
       case 503:
         return "Service indisponible : Le serveur est temporairement indisponible.";
       default:

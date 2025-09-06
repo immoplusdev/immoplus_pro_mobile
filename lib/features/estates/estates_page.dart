@@ -162,11 +162,8 @@ class _EstatesPageState extends State<EstatesPage> {
               itemBuilder: (context, item, index) => BienImmoblierListCard(
                 bienImmobilierModel: item,
                 onTap: () async {
-                  final result = await context
-                      .push('/${EstateDetailsPage.name}/${item.id}');
-                  if (result == true && mounted) {
-                    _pagingController.refresh();
-                  }
+                  await context.push('/${EstateDetailsPage.name}/${item.id}');
+                  _pagingController.refresh();
                 },
               ),
             ),

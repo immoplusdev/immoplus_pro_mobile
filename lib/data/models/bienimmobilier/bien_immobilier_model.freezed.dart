@@ -23,26 +23,33 @@ mixin _$BienImmobilierModel {
   String get id => throw _privateConstructorUsedError;
   String get nom => throw _privateConstructorUsedError;
   String get typeBienImmobilier => throw _privateConstructorUsedError;
-  String get typeLocation => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   List<CommoditeModel> get amentities => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   String get adresse => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
+  double? get latitude => throw _privateConstructorUsedError;
+  double? get longitude => throw _privateConstructorUsedError;
   String get statusValidation => throw _privateConstructorUsedError;
   int get prix => throw _privateConstructorUsedError;
-  bool get featured => throw _privateConstructorUsedError;
+  bool get aLouer => throw _privateConstructorUsedError;
+  String get typeLocation => throw _privateConstructorUsedError;
+  List<PieceModel> get pieces => throw _privateConstructorUsedError;
   bool get bienImmobilierDisponible => throw _privateConstructorUsedError;
+  int? get nombreMaxOccupants =>
+      throw _privateConstructorUsedError; //  bool? animauxAutorises,
+  bool? get fetesAutorises =>
+      throw _privateConstructorUsedError; //  bool? reglesSupplementaires
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
   String get miniatureId => throw _privateConstructorUsedError;
-  List<PieceModel> get pieces => throw _privateConstructorUsedError;
+  String? get miniature => throw _privateConstructorUsedError;
+  String? get video => throw _privateConstructorUsedError;
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
-  String get video => throw _privateConstructorUsedError;
-  bool get aLouer => throw _privateConstructorUsedError;
+  bool get featured => throw _privateConstructorUsedError;
 
   /// Serializes this BienImmobilierModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -64,26 +71,31 @@ abstract class $BienImmobilierModelCopyWith<$Res> {
       {String id,
       String nom,
       String typeBienImmobilier,
-      String typeLocation,
       String description,
       List<CommoditeModel> amentities,
       List<String> tags,
       List<String> images,
       String adresse,
       PositionModel position,
+      double? latitude,
+      double? longitude,
       String statusValidation,
       int prix,
-      bool featured,
+      bool aLouer,
+      String typeLocation,
+      List<PieceModel> pieces,
       bool bienImmobilierDisponible,
+      int? nombreMaxOccupants,
+      bool? fetesAutorises,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt,
       String miniatureId,
-      List<PieceModel> pieces,
+      String? miniature,
+      String? video,
       String ville,
       String commune,
-      String video,
-      bool aLouer});
+      bool featured});
 
   $PositionModelCopyWith<$Res> get position;
 }
@@ -106,26 +118,31 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
     Object? id = null,
     Object? nom = null,
     Object? typeBienImmobilier = null,
-    Object? typeLocation = null,
     Object? description = null,
     Object? amentities = null,
     Object? tags = null,
     Object? images = null,
     Object? adresse = null,
     Object? position = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? statusValidation = null,
     Object? prix = null,
-    Object? featured = null,
+    Object? aLouer = null,
+    Object? typeLocation = null,
+    Object? pieces = null,
     Object? bienImmobilierDisponible = null,
+    Object? nombreMaxOccupants = freezed,
+    Object? fetesAutorises = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
     Object? miniatureId = null,
-    Object? pieces = null,
+    Object? miniature = freezed,
+    Object? video = freezed,
     Object? ville = null,
     Object? commune = null,
-    Object? video = null,
-    Object? aLouer = null,
+    Object? featured = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -139,10 +156,6 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
       typeBienImmobilier: null == typeBienImmobilier
           ? _value.typeBienImmobilier
           : typeBienImmobilier // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeLocation: null == typeLocation
-          ? _value.typeLocation
-          : typeLocation // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -168,6 +181,14 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
       statusValidation: null == statusValidation
           ? _value.statusValidation
           : statusValidation // ignore: cast_nullable_to_non_nullable
@@ -176,14 +197,30 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.prix
           : prix // ignore: cast_nullable_to_non_nullable
               as int,
-      featured: null == featured
-          ? _value.featured
-          : featured // ignore: cast_nullable_to_non_nullable
+      aLouer: null == aLouer
+          ? _value.aLouer
+          : aLouer // ignore: cast_nullable_to_non_nullable
               as bool,
+      typeLocation: null == typeLocation
+          ? _value.typeLocation
+          : typeLocation // ignore: cast_nullable_to_non_nullable
+              as String,
+      pieces: null == pieces
+          ? _value.pieces
+          : pieces // ignore: cast_nullable_to_non_nullable
+              as List<PieceModel>,
       bienImmobilierDisponible: null == bienImmobilierDisponible
           ? _value.bienImmobilierDisponible
           : bienImmobilierDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      nombreMaxOccupants: freezed == nombreMaxOccupants
+          ? _value.nombreMaxOccupants
+          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fetesAutorises: freezed == fetesAutorises
+          ? _value.fetesAutorises
+          : fetesAutorises // ignore: cast_nullable_to_non_nullable
+              as bool?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -200,10 +237,14 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.miniatureId
           : miniatureId // ignore: cast_nullable_to_non_nullable
               as String,
-      pieces: null == pieces
-          ? _value.pieces
-          : pieces // ignore: cast_nullable_to_non_nullable
-              as List<PieceModel>,
+      miniature: freezed == miniature
+          ? _value.miniature
+          : miniature // ignore: cast_nullable_to_non_nullable
+              as String?,
+      video: freezed == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as String?,
       ville: null == ville
           ? _value.ville
           : ville // ignore: cast_nullable_to_non_nullable
@@ -212,13 +253,9 @@ class _$BienImmobilierModelCopyWithImpl<$Res, $Val extends BienImmobilierModel>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String,
-      video: null == video
-          ? _value.video
-          : video // ignore: cast_nullable_to_non_nullable
-              as String,
-      aLouer: null == aLouer
-          ? _value.aLouer
-          : aLouer // ignore: cast_nullable_to_non_nullable
+      featured: null == featured
+          ? _value.featured
+          : featured // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -246,26 +283,31 @@ abstract class _$$BienImmobilierModelImplCopyWith<$Res>
       {String id,
       String nom,
       String typeBienImmobilier,
-      String typeLocation,
       String description,
       List<CommoditeModel> amentities,
       List<String> tags,
       List<String> images,
       String adresse,
       PositionModel position,
+      double? latitude,
+      double? longitude,
       String statusValidation,
       int prix,
-      bool featured,
+      bool aLouer,
+      String typeLocation,
+      List<PieceModel> pieces,
       bool bienImmobilierDisponible,
+      int? nombreMaxOccupants,
+      bool? fetesAutorises,
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt,
       String miniatureId,
-      List<PieceModel> pieces,
+      String? miniature,
+      String? video,
       String ville,
       String commune,
-      String video,
-      bool aLouer});
+      bool featured});
 
   @override
   $PositionModelCopyWith<$Res> get position;
@@ -287,26 +329,31 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? nom = null,
     Object? typeBienImmobilier = null,
-    Object? typeLocation = null,
     Object? description = null,
     Object? amentities = null,
     Object? tags = null,
     Object? images = null,
     Object? adresse = null,
     Object? position = null,
+    Object? latitude = freezed,
+    Object? longitude = freezed,
     Object? statusValidation = null,
     Object? prix = null,
-    Object? featured = null,
+    Object? aLouer = null,
+    Object? typeLocation = null,
+    Object? pieces = null,
     Object? bienImmobilierDisponible = null,
+    Object? nombreMaxOccupants = freezed,
+    Object? fetesAutorises = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
     Object? miniatureId = null,
-    Object? pieces = null,
+    Object? miniature = freezed,
+    Object? video = freezed,
     Object? ville = null,
     Object? commune = null,
-    Object? video = null,
-    Object? aLouer = null,
+    Object? featured = null,
   }) {
     return _then(_$BienImmobilierModelImpl(
       id: null == id
@@ -320,10 +367,6 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
       typeBienImmobilier: null == typeBienImmobilier
           ? _value.typeBienImmobilier
           : typeBienImmobilier // ignore: cast_nullable_to_non_nullable
-              as String,
-      typeLocation: null == typeLocation
-          ? _value.typeLocation
-          : typeLocation // ignore: cast_nullable_to_non_nullable
               as String,
       description: null == description
           ? _value.description
@@ -349,6 +392,14 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
+      latitude: freezed == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double?,
+      longitude: freezed == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double?,
       statusValidation: null == statusValidation
           ? _value.statusValidation
           : statusValidation // ignore: cast_nullable_to_non_nullable
@@ -357,14 +408,30 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.prix
           : prix // ignore: cast_nullable_to_non_nullable
               as int,
-      featured: null == featured
-          ? _value.featured
-          : featured // ignore: cast_nullable_to_non_nullable
+      aLouer: null == aLouer
+          ? _value.aLouer
+          : aLouer // ignore: cast_nullable_to_non_nullable
               as bool,
+      typeLocation: null == typeLocation
+          ? _value.typeLocation
+          : typeLocation // ignore: cast_nullable_to_non_nullable
+              as String,
+      pieces: null == pieces
+          ? _value._pieces
+          : pieces // ignore: cast_nullable_to_non_nullable
+              as List<PieceModel>,
       bienImmobilierDisponible: null == bienImmobilierDisponible
           ? _value.bienImmobilierDisponible
           : bienImmobilierDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      nombreMaxOccupants: freezed == nombreMaxOccupants
+          ? _value.nombreMaxOccupants
+          : nombreMaxOccupants // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fetesAutorises: freezed == fetesAutorises
+          ? _value.fetesAutorises
+          : fetesAutorises // ignore: cast_nullable_to_non_nullable
+              as bool?,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -381,10 +448,14 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.miniatureId
           : miniatureId // ignore: cast_nullable_to_non_nullable
               as String,
-      pieces: null == pieces
-          ? _value._pieces
-          : pieces // ignore: cast_nullable_to_non_nullable
-              as List<PieceModel>,
+      miniature: freezed == miniature
+          ? _value.miniature
+          : miniature // ignore: cast_nullable_to_non_nullable
+              as String?,
+      video: freezed == video
+          ? _value.video
+          : video // ignore: cast_nullable_to_non_nullable
+              as String?,
       ville: null == ville
           ? _value.ville
           : ville // ignore: cast_nullable_to_non_nullable
@@ -393,13 +464,9 @@ class __$$BienImmobilierModelImplCopyWithImpl<$Res>
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
               as String,
-      video: null == video
-          ? _value.video
-          : video // ignore: cast_nullable_to_non_nullable
-              as String,
-      aLouer: null == aLouer
-          ? _value.aLouer
-          : aLouer // ignore: cast_nullable_to_non_nullable
+      featured: null == featured
+          ? _value.featured
+          : featured // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -412,26 +479,31 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
       {this.id = '',
       this.nom = '',
       this.typeBienImmobilier = '',
-      this.typeLocation = '',
       this.description = '',
       final List<CommoditeModel> amentities = const [],
       final List<String> tags = const [],
       final List<String> images = const [],
       this.adresse = '',
       this.position = const PositionModel(),
+      this.latitude,
+      this.longitude,
       this.statusValidation = '',
       this.prix = 0,
-      this.featured = false,
+      this.aLouer = false,
+      this.typeLocation = '',
+      final List<PieceModel> pieces = const [],
       this.bienImmobilierDisponible = false,
+      this.nombreMaxOccupants,
+      this.fetesAutorises,
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
       this.miniatureId = '',
-      final List<PieceModel> pieces = const [],
+      this.miniature,
+      this.video,
       this.ville = '',
       this.commune = '',
-      this.video = '',
-      this.aLouer = false})
+      this.featured = false})
       : _amentities = amentities,
         _tags = tags,
         _images = images,
@@ -449,9 +521,6 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   @override
   @JsonKey()
   final String typeBienImmobilier;
-  @override
-  @JsonKey()
-  final String typeLocation;
   @override
   @JsonKey()
   final String description;
@@ -489,6 +558,10 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   @JsonKey()
   final PositionModel position;
   @override
+  final double? latitude;
+  @override
+  final double? longitude;
+  @override
   @JsonKey()
   final String statusValidation;
   @override
@@ -496,19 +569,10 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
   final int prix;
   @override
   @JsonKey()
-  final bool featured;
+  final bool aLouer;
   @override
   @JsonKey()
-  final bool bienImmobilierDisponible;
-  @override
-  final DateTime? createdAt;
-  @override
-  final DateTime? updatedAt;
-  @override
-  final DateTime? deletedAt;
-  @override
-  @JsonKey()
-  final String miniatureId;
+  final String typeLocation;
   final List<PieceModel> _pieces;
   @override
   @JsonKey()
@@ -520,20 +584,39 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
 
   @override
   @JsonKey()
+  final bool bienImmobilierDisponible;
+  @override
+  final int? nombreMaxOccupants;
+//  bool? animauxAutorises,
+  @override
+  final bool? fetesAutorises;
+//  bool? reglesSupplementaires
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  @override
+  final DateTime? deletedAt;
+  @override
+  @JsonKey()
+  final String miniatureId;
+  @override
+  final String? miniature;
+  @override
+  final String? video;
+  @override
+  @JsonKey()
   final String ville;
   @override
   @JsonKey()
   final String commune;
   @override
   @JsonKey()
-  final String video;
-  @override
-  @JsonKey()
-  final bool aLouer;
+  final bool featured;
 
   @override
   String toString() {
-    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, typeLocation: $typeLocation, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, statusValidation: $statusValidation, prix: $prix, featured: $featured, bienImmobilierDisponible: $bienImmobilierDisponible, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, pieces: $pieces, ville: $ville, commune: $commune, video: $video, aLouer: $aLouer)';
+    return 'BienImmobilierModel(id: $id, nom: $nom, typeBienImmobilier: $typeBienImmobilier, description: $description, amentities: $amentities, tags: $tags, images: $images, adresse: $adresse, position: $position, latitude: $latitude, longitude: $longitude, statusValidation: $statusValidation, prix: $prix, aLouer: $aLouer, typeLocation: $typeLocation, pieces: $pieces, bienImmobilierDisponible: $bienImmobilierDisponible, nombreMaxOccupants: $nombreMaxOccupants, fetesAutorises: $fetesAutorises, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, miniatureId: $miniatureId, miniature: $miniature, video: $video, ville: $ville, commune: $commune, featured: $featured)';
   }
 
   @override
@@ -545,8 +628,6 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             (identical(other.nom, nom) || other.nom == nom) &&
             (identical(other.typeBienImmobilier, typeBienImmobilier) ||
                 other.typeBienImmobilier == typeBienImmobilier) &&
-            (identical(other.typeLocation, typeLocation) ||
-                other.typeLocation == typeLocation) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             const DeepCollectionEquality()
@@ -556,14 +637,24 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
             (identical(other.adresse, adresse) || other.adresse == adresse) &&
             (identical(other.position, position) ||
                 other.position == position) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
             (identical(other.statusValidation, statusValidation) ||
                 other.statusValidation == statusValidation) &&
             (identical(other.prix, prix) || other.prix == prix) &&
-            (identical(other.featured, featured) ||
-                other.featured == featured) &&
+            (identical(other.aLouer, aLouer) || other.aLouer == aLouer) &&
+            (identical(other.typeLocation, typeLocation) ||
+                other.typeLocation == typeLocation) &&
+            const DeepCollectionEquality().equals(other._pieces, _pieces) &&
             (identical(
                     other.bienImmobilierDisponible, bienImmobilierDisponible) ||
                 other.bienImmobilierDisponible == bienImmobilierDisponible) &&
+            (identical(other.nombreMaxOccupants, nombreMaxOccupants) ||
+                other.nombreMaxOccupants == nombreMaxOccupants) &&
+            (identical(other.fetesAutorises, fetesAutorises) ||
+                other.fetesAutorises == fetesAutorises) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -572,11 +663,13 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
                 other.deletedAt == deletedAt) &&
             (identical(other.miniatureId, miniatureId) ||
                 other.miniatureId == miniatureId) &&
-            const DeepCollectionEquality().equals(other._pieces, _pieces) &&
+            (identical(other.miniature, miniature) ||
+                other.miniature == miniature) &&
+            (identical(other.video, video) || other.video == video) &&
             (identical(other.ville, ville) || other.ville == ville) &&
             (identical(other.commune, commune) || other.commune == commune) &&
-            (identical(other.video, video) || other.video == video) &&
-            (identical(other.aLouer, aLouer) || other.aLouer == aLouer));
+            (identical(other.featured, featured) ||
+                other.featured == featured));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -586,26 +679,31 @@ class _$BienImmobilierModelImpl implements _BienImmobilierModel {
         id,
         nom,
         typeBienImmobilier,
-        typeLocation,
         description,
         const DeepCollectionEquality().hash(_amentities),
         const DeepCollectionEquality().hash(_tags),
         const DeepCollectionEquality().hash(_images),
         adresse,
         position,
+        latitude,
+        longitude,
         statusValidation,
         prix,
-        featured,
+        aLouer,
+        typeLocation,
+        const DeepCollectionEquality().hash(_pieces),
         bienImmobilierDisponible,
+        nombreMaxOccupants,
+        fetesAutorises,
         createdAt,
         updatedAt,
         deletedAt,
         miniatureId,
-        const DeepCollectionEquality().hash(_pieces),
+        miniature,
+        video,
         ville,
         commune,
-        video,
-        aLouer
+        featured
       ]);
 
   /// Create a copy of BienImmobilierModel
@@ -630,26 +728,31 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
       {final String id,
       final String nom,
       final String typeBienImmobilier,
-      final String typeLocation,
       final String description,
       final List<CommoditeModel> amentities,
       final List<String> tags,
       final List<String> images,
       final String adresse,
       final PositionModel position,
+      final double? latitude,
+      final double? longitude,
       final String statusValidation,
       final int prix,
-      final bool featured,
+      final bool aLouer,
+      final String typeLocation,
+      final List<PieceModel> pieces,
       final bool bienImmobilierDisponible,
+      final int? nombreMaxOccupants,
+      final bool? fetesAutorises,
       final DateTime? createdAt,
       final DateTime? updatedAt,
       final DateTime? deletedAt,
       final String miniatureId,
-      final List<PieceModel> pieces,
+      final String? miniature,
+      final String? video,
       final String ville,
       final String commune,
-      final String video,
-      final bool aLouer}) = _$BienImmobilierModelImpl;
+      final bool featured}) = _$BienImmobilierModelImpl;
 
   factory _BienImmobilierModel.fromJson(Map<String, dynamic> json) =
       _$BienImmobilierModelImpl.fromJson;
@@ -660,8 +763,6 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   String get nom;
   @override
   String get typeBienImmobilier;
-  @override
-  String get typeLocation;
   @override
   String get description;
   @override
@@ -675,13 +776,25 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   @override
   PositionModel get position;
   @override
+  double? get latitude;
+  @override
+  double? get longitude;
+  @override
   String get statusValidation;
   @override
   int get prix;
   @override
-  bool get featured;
+  bool get aLouer;
+  @override
+  String get typeLocation;
+  @override
+  List<PieceModel> get pieces;
   @override
   bool get bienImmobilierDisponible;
+  @override
+  int? get nombreMaxOccupants; //  bool? animauxAutorises,
+  @override
+  bool? get fetesAutorises; //  bool? reglesSupplementaires
   @override
   DateTime? get createdAt;
   @override
@@ -691,15 +804,15 @@ abstract class _BienImmobilierModel implements BienImmobilierModel {
   @override
   String get miniatureId;
   @override
-  List<PieceModel> get pieces;
+  String? get miniature;
+  @override
+  String? get video;
   @override
   String get ville;
   @override
   String get commune;
   @override
-  String get video;
-  @override
-  bool get aLouer;
+  bool get featured;
 
   /// Create a copy of BienImmobilierModel
   /// with the given fields replaced by the non-null parameter values.

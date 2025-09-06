@@ -9,7 +9,7 @@ part 'bien_immobilier_creation_model.g.dart';
 @freezed
 class BienImmobilierCreationModel with _$BienImmobilierCreationModel {
   const factory BienImmobilierCreationModel({
-    @Default('') String miniature,
+    String? miniature,
     @Default('') String typeLocation,
     @Default('') String? nom,
     @Default('Unknown Type') String? typeBienImmobilier,

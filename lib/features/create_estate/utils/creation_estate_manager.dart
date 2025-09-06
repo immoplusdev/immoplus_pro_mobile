@@ -10,7 +10,7 @@ class EstateCreationModelBuilder {
       EstateCreationModelBuilder._internal();
 
   // Attributes
-  String miniature = '';
+  String? miniature;
   String nom = '';
   String typeBienImmobilier = '';
   String description = '';
@@ -58,7 +58,7 @@ class EstateCreationModelBuilder {
   }
 
   void fromModel(BienImmobilierModel model) {
-    miniature = model.miniatureId;
+    miniature = model.miniature;
     nom = model.nom;
     typeBienImmobilier = model.typeBienImmobilier;
     description = model.description;

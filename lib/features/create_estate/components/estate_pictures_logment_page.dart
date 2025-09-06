@@ -134,7 +134,7 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
         }
 
         // Définir miniature si aucune
-        if (EstateCreationModelBuilder().miniature.isEmpty) {
+        if ((EstateCreationModelBuilder().miniature ?? "").isEmpty) {
           EstateCreationModelBuilder().miniature = id;
         }
       }

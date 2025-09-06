@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:toastification/toastification.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -13,9 +15,10 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
   bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -26,45 +29,198 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   Future<void> _initializeAndPlayVideo() async {
     final String videoUrl =
         "https://api-v2.immoplus.ci/files/videos/raw/public/${widget.videoID}";
-    log(videoUrl);
+    log('Tentative de chargement de la vidéo: $videoUrl');
 
     try {
-      // Utiliser un VideoPlayerController.network pour lire la vidéo en streaming
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      // Créer le contrôleur vidéo
       _videoPlayerController = VideoPlayerController.networkUrl(
         Uri.parse(videoUrl),
-      )..initialize().then((_) {
-          setState(() {
-            _isLoading = false;
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true,
+          allowBackgroundPlayback: false,
+        ),
+      );
 
-            // Initialiser ChewieController
-            _chewieController = ChewieController(
-              videoPlayerController: _videoPlayerController,
-              autoPlay: false,
-              looping: false,
-            );
-          });
-        });
+      // Initialiser avec timeout et gestion d'erreur
+      await _videoPlayerController!.initialize().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw Exception('Timeout: La vidéo prend trop de temps à charger');
+        },
+      );
+
+      // Vérifier si le widget est toujours monté
+      if (!mounted) return;
+
+      // Vérifier si la vidéo a bien une durée (indicateur qu'elle est valide)
+      if (_videoPlayerController!.value.duration == Duration.zero) {
+        throw Exception('Vidéo invalide ou corrompue');
+      }
+
+      // Initialiser ChewieController seulement après succès
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController!,
+        autoPlay: false,
+        looping: false,
+        allowFullScreen: true,
+        allowMuting: true,
+        showControls: true,
+        materialProgressColors: ChewieProgressColors(
+          playedColor: Theme.of(context).primaryColor,
+          handleColor: Theme.of(context).primaryColor,
+          backgroundColor: Colors.grey,
+          bufferedColor: Colors.lightGreen,
+        ),
+        placeholder: Container(
+          color: Colors.grey.shade200,
+          child: const Center(
+            child: Icon(
+              Icons.play_circle_outline,
+              size: 80,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Erreur de lecture vidéo',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  errorMessage,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      log('Vidéo initialisée avec succès');
+
+      // Optionnel: Afficher un SnackBar de succès
+      // if (mounted) {
+      //   ToastUtils.success('Vidéo chargée avec succès');
+      // }
     } catch (e) {
       log('Erreur lors de la lecture de la vidéo : $e');
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString();
+        });
+
+        ToastUtils.error('Erreur de chargement: ${e.toString()}');
+      }
     }
   }
 
   @override
   void dispose() {
-    // Nettoyer les contrôleurs
+    // Nettoyer les contrôleurs dans le bon ordre
     _chewieController?.dispose();
-    _videoPlayerController.dispose();
+    _videoPlayerController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? _buildShimmerEffect() // Affiche l'effet Shimmer pendant le chargement
-        : SizedBox(height: 300, child: Chewie(controller: _chewieController!));
+    if (_isLoading) {
+      return _buildShimmerEffect();
+    }
+
+    if (_errorMessage != null) {
+      return _buildErrorWidget();
+    }
+
+    if (_chewieController != null &&
+        _videoPlayerController!.value.isInitialized) {
+      return SizedBox(
+        height: 300,
+        child: Chewie(controller: _chewieController!),
+      );
+    }
+
+    return _buildErrorWidget();
   }
 
-  // Simuler un effet Shimmer avec des containers en gradients
+  // Widget d'erreur amélioré
+  Widget _buildErrorWidget() {
+    return Container(
+      width: double.infinity,
+      height: 250.0,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.videocam_off,
+            size: 60,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Impossible de lire la vidéo',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: _initializeAndPlayVideo,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Réessayer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Effet Shimmer amélioré
   Widget _buildShimmerEffect() {
     return Container(
       width: double.infinity,
@@ -74,19 +230,47 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           colors: [
             Colors.grey.shade300,
             Colors.grey.shade100,
+            Colors.grey.shade300,
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          stops: const [0.3, 0.7],
+          begin: Alignment(-1.0, -2.0),
+          end: Alignment(1.0, 2.0),
+          stops: const [0.0, 0.5, 1.0],
         ),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: const Stack(
+      child: Stack(
         alignment: Alignment.center,
         children: [
-          SizedBox(
-            width: 80,
-            height: 80,
-            child: CircularProgressIndicator(),
+          // Icône de vidéo en arrière-plan
+          Positioned(
+            child: Icon(
+              Icons.play_circle_outline,
+              size: 100,
+              color: Colors.grey.shade400,
+            ),
+          ),
+          // Indicateur de progression
+          const Positioned(
+            bottom: 20,
+            child: Column(
+              children: [
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Chargement de la vidéo...',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
