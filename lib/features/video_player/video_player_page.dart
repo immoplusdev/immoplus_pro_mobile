@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:immoplus_pro/utils/toast_utils.dart';
-import 'package:toastification/toastification.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
@@ -73,16 +71,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         materialProgressColors: ChewieProgressColors(
           playedColor: Theme.of(context).primaryColor,
           handleColor: Theme.of(context).primaryColor,
-          backgroundColor: Colors.grey,
+          // backgroundColor: Colors.red,
           bufferedColor: Colors.lightGreen,
         ),
         placeholder: Container(
-          color: Colors.grey.shade200,
+          // color: Colors.grey.shade200,
           child: const Center(
             child: Icon(
               Icons.play_circle_outline,
               size: 80,
-              color: Colors.grey,
+              // color: Colors.grey,
             ),
           ),
         ),
@@ -135,8 +133,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           _isLoading = false;
           _errorMessage = e.toString();
         });
-
-        ToastUtils.error('Erreur de chargement: ${e.toString()}');
       }
     }
   }
@@ -176,7 +172,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       width: double.infinity,
       height: 250.0,
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        // color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -193,7 +189,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.grey.shade600,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 8),
@@ -205,7 +201,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.grey.shade500,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -226,50 +222,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       width: double.infinity,
       height: 250.0,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.grey.shade300,
-            Colors.grey.shade100,
-            Colors.grey.shade300,
-          ],
-          begin: Alignment(-1.0, -2.0),
-          end: Alignment(1.0, 2.0),
-          stops: const [0.0, 0.5, 1.0],
-        ),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Icône de vidéo en arrière-plan
-          Positioned(
-            child: Icon(
-              Icons.play_circle_outline,
-              size: 100,
-              color: Colors.grey.shade400,
+          SizedBox(
+            width: 40,
+            height: 40,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
             ),
           ),
-          // Indicateur de progression
-          const Positioned(
-            bottom: 20,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Chargement de la vidéo...',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+          SizedBox(height: 18),
+          Text(
+            'Chargement de la vidéo...',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 12,
             ),
           ),
         ],
