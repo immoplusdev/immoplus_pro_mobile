@@ -281,7 +281,7 @@ class Utils {
     // log(ConfigModel.singleton.contactEmail!);
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: "email@gmail.com",
+      path: "support@afriqsolus.ci",
       query: _encodeQueryParameters(<String, String>{
         'subject': "Réservation d'identifiant: $id",
       }),

@@ -25,8 +25,11 @@ import 'package:shimmer/shimmer.dart';
 ///////
 
 class VisitDetailPage extends StatefulWidget {
-  const VisitDetailPage({super.key, required this.id});
+  const VisitDetailPage(
+      {super.key, required this.id, required this.clientPhoneNumer});
   final String id;
+  final String clientPhoneNumer;
+
   @override
   State<VisitDetailPage> createState() => _VisitDetailPageState();
 }
@@ -255,7 +258,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           ),
                         ),
                         tileColor: Colors.white,
-                        onTap: () {},
+                        onTap: () {
+                          ContactUtils.showContact(id: widget.id);
+                        },
                         horizontalTitleGap: 0,
                         leading: Icon(
                           FontAwesomeIcons.key,
@@ -296,7 +301,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           ),
                         ),
                         onTap: () {
-                          ContactUtils.showContact(id: widget.id);
+                          Utils.makePhoneCall(widget.clientPhoneNumer);
                         },
                         horizontalTitleGap: 0,
                         leading: Icon(
