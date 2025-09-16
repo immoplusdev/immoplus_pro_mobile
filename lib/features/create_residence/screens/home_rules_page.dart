@@ -88,7 +88,7 @@ class _HomeRulesPageState extends State<HomeRulesPage> {
         ],
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onNext: () {
                 //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);

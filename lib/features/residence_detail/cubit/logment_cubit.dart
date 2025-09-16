@@ -30,4 +30,21 @@ class LogmentCubit extends Cubit<RequestState> {
       emit(RequestState.error(error: e.toString()));
     }
   }
+
+  deleteResidence({required String id}) async {
+    emit(const RequestState.loading());
+    try {
+      bool isDeleted = await LogmentRepository.deleteResidence(id: id);
+
+      if (isDeleted) {
+        emit(const RequestState.success(
+            message: "Résidence supprimée avec succès"));
+      } else {
+        emit(const RequestState.error(
+            error: "Échec de la suppression de la résidence"));
+      }
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
 }

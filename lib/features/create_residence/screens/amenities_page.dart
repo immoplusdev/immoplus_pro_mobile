@@ -64,7 +64,7 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
         ],
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onNext: ResidenceCreationModelBuilder().commodites.isNotEmpty
                   ? () {

@@ -12,7 +12,6 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
       id: json['id'] as String? ?? '',
       nom: json['nom'] as String? ?? '',
       typeBienImmobilier: json['typeBienImmobilier'] as String? ?? '',
-      typeLocation: json['typeLocation'] as String? ?? '',
       description: json['description'] as String? ?? '',
       amentities: (json['amentities'] as List<dynamic>?)
               ?.map((e) => CommoditeModel.fromJson(e as Map<String, dynamic>))
@@ -29,11 +28,20 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
       position: json['position'] == null
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
       statusValidation: json['statusValidation'] as String? ?? '',
       prix: (json['prix'] as num?)?.toInt() ?? 0,
-      featured: json['featured'] as bool? ?? false,
+      aLouer: json['aLouer'] as bool? ?? false,
+      typeLocation: json['typeLocation'] as String? ?? '',
+      pieces: (json['pieces'] as List<dynamic>?)
+              ?.map((e) => PieceModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       bienImmobilierDisponible:
           json['bienImmobilierDisponible'] as bool? ?? false,
+      nombreMaxOccupants: (json['nombreMaxOccupants'] as num?)?.toInt(),
+      fetesAutorises: json['fetesAutorises'] as bool?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -44,14 +52,11 @@ _$BienImmobilierModelImpl _$$BienImmobilierModelImplFromJson(
           ? null
           : DateTime.parse(json['deletedAt'] as String),
       miniatureId: json['miniatureId'] as String? ?? '',
-      pieces: (json['pieces'] as List<dynamic>?)
-              ?.map((e) => PieceModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const [],
+      miniature: json['miniature'] as String?,
+      video: json['video'] as String?,
       ville: json['ville'] as String? ?? '',
       commune: json['commune'] as String? ?? '',
-      video: json['video'] as String? ?? '',
-      aLouer: json['aLouer'] as bool? ?? false,
+      featured: json['featured'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$BienImmobilierModelImplToJson(
@@ -60,24 +65,29 @@ Map<String, dynamic> _$$BienImmobilierModelImplToJson(
       'id': instance.id,
       'nom': instance.nom,
       'typeBienImmobilier': instance.typeBienImmobilier,
-      'typeLocation': instance.typeLocation,
       'description': instance.description,
       'amentities': instance.amentities,
       'tags': instance.tags,
       'images': instance.images,
       'adresse': instance.adresse,
       'position': instance.position,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
       'statusValidation': instance.statusValidation,
       'prix': instance.prix,
-      'featured': instance.featured,
+      'aLouer': instance.aLouer,
+      'typeLocation': instance.typeLocation,
+      'pieces': instance.pieces,
       'bienImmobilierDisponible': instance.bienImmobilierDisponible,
+      'nombreMaxOccupants': instance.nombreMaxOccupants,
+      'fetesAutorises': instance.fetesAutorises,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'deletedAt': instance.deletedAt?.toIso8601String(),
       'miniatureId': instance.miniatureId,
-      'pieces': instance.pieces,
+      'miniature': instance.miniature,
+      'video': instance.video,
       'ville': instance.ville,
       'commune': instance.commune,
-      'video': instance.video,
-      'aLouer': instance.aLouer,
+      'featured': instance.featured,
     };

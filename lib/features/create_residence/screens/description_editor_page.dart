@@ -127,7 +127,7 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
         ],
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onNext: () {
                 _controller.document.toDelta();

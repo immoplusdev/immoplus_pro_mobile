@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/features/residence/utils/residences_utils.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
@@ -11,14 +10,14 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class BienImmoblierListCard extends StatelessWidget {
-  const BienImmoblierListCard({super.key, required this.bienImmobilierModel});
+  const BienImmoblierListCard(
+      {super.key, required this.bienImmobilierModel, required this.onTap});
   final BienImmobilierModel bienImmobilierModel;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        context.push('/estate_page/${bienImmobilierModel.id}');
-      },
+      onTap: onTap,
       child: Container(
         height: 143,
         decoration: BoxDecoration(

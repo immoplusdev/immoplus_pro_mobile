@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
-import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/features/home_page/pages/booking_page.dart';
@@ -51,12 +50,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.whiteBackground,
-        centerTitle: (SessionManager().currentUser!.roleName ==
-                Roles.pro_entreprise.name)
-            ? true
-            : false,
-        title: (SessionManager().currentUser!.roleName ==
-                Roles.pro_entreprise.name)
+        centerTitle:
+            (SessionManager().currentUser!.isEntreprise) ? true : false,
+        title: (SessionManager().currentUser!.isEntreprise)
             ? ValueListenableBuilder(
                 valueListenable: HomePage.selectedSection,
                 builder: (context, state, child) {

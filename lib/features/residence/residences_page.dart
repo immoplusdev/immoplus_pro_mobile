@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -13,6 +12,7 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_list_card.dart';
+import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ResidencesPage extends StatefulWidget {
@@ -91,10 +91,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
             ),
             labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             onDeleted: () {},
-            onPressed: () {
-              ResidenceCreationModelBuilder().reset();
-              context.pushNamed(CreateLodgmentPage.name);
-            },
+            onPressed: _tapCreateResidence,
           ),
           const Gap(7),
         ],
@@ -153,10 +150,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        ResidenceCreationModelBuilder().reset();
-                        context.pushNamed(CreateLodgmentPage.name);
-                      },
+                      onPressed: _tapCreateResidence,
                       child: Text('Ajouter une résidence'),
                     ),
                   ],
@@ -164,11 +158,24 @@ class _ResidencesPageState extends State<ResidencesPage> {
               ),
               itemBuilder: (context, item, index) => ResidenceListCard(
                 residence: item,
+                onTap: () async {
+                  await context
+                      .push('/${ResidenceDetailsPage.name}/${item.id}');
+                  _pagingController.refresh();
+                },
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  _tapCreateResidence() async {
+    ResidenceCreationModelBuilder().reset();
+    final result = await context.pushNamed(CreateLodgmentPage.name);
+    if (result == true && mounted) {
+      _pagingController.refresh();
+    }
   }
 }

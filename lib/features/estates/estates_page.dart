@@ -7,9 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
-import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
+import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
-import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
+import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/widgets/bien_immobilier_list_card.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
@@ -93,9 +93,7 @@ class _EstatesPageState extends State<EstatesPage> {
             ),
             labelPadding: const EdgeInsets.symmetric(horizontal: 2),
             onDeleted: () {},
-            onPressed: () {
-              context.pushNamed(CreateEstatePage.name);
-            },
+            onPressed: _tapCreateEstate,
           ),
           const Gap(7),
         ],
@@ -155,22 +153,31 @@ class _EstatesPageState extends State<EstatesPage> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        ResidenceCreationModelBuilder().reset();
-                        context.pushNamed(CreateLodgmentPage.name);
-                      },
-                      child: Text('Ajouter une résidence'),
+                      onPressed: _tapCreateEstate,
+                      child: Text('Ajouter un bien immobilier'),
                     ),
                   ],
                 ),
               ),
               itemBuilder: (context, item, index) => BienImmoblierListCard(
                 bienImmobilierModel: item,
+                onTap: () async {
+                  await context.push('/${EstateDetailsPage.name}/${item.id}');
+                  _pagingController.refresh();
+                },
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  _tapCreateEstate() async {
+    EstateCreationModelBuilder().reset();
+    final result = await context.pushNamed(CreateEstatePage.name);
+    if (result == true && mounted) {
+      _pagingController.refresh();
+    }
   }
 }

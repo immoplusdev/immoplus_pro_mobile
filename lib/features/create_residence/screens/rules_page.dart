@@ -136,7 +136,7 @@ class _RulesPageState extends State<RulesPage> {
         ],
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(

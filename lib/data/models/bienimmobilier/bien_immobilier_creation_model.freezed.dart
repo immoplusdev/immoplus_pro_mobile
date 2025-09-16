@@ -21,7 +21,7 @@ BienImmobilierCreationModel _$BienImmobilierCreationModelFromJson(
 
 /// @nodoc
 mixin _$BienImmobilierCreationModel {
-  String get miniature => throw _privateConstructorUsedError;
+  String? get miniature => throw _privateConstructorUsedError;
   String get typeLocation => throw _privateConstructorUsedError;
   String? get nom => throw _privateConstructorUsedError;
   String? get typeBienImmobilier => throw _privateConstructorUsedError;
@@ -58,7 +58,7 @@ abstract class $BienImmobilierCreationModelCopyWith<$Res> {
           BienImmobilierCreationModel>;
   @useResult
   $Res call(
-      {String miniature,
+      {String? miniature,
       String typeLocation,
       String? nom,
       String? typeBienImmobilier,
@@ -95,7 +95,7 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? typeLocation = null,
     Object? nom = freezed,
     Object? typeBienImmobilier = freezed,
@@ -114,10 +114,10 @@ class _$BienImmobilierCreationModelCopyWithImpl<$Res,
     Object? aLouer = null,
   }) {
     return _then(_value.copyWith(
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       typeLocation: null == typeLocation
           ? _value.typeLocation
           : typeLocation // ignore: cast_nullable_to_non_nullable
@@ -210,7 +210,7 @@ abstract class _$$BienImmobilierCreationModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String miniature,
+      {String? miniature,
       String typeLocation,
       String? nom,
       String? typeBienImmobilier,
@@ -247,7 +247,7 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? typeLocation = null,
     Object? nom = freezed,
     Object? typeBienImmobilier = freezed,
@@ -266,10 +266,10 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
     Object? aLouer = null,
   }) {
     return _then(_$BienImmobilierCreationModelImpl(
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       typeLocation: null == typeLocation
           ? _value.typeLocation
           : typeLocation // ignore: cast_nullable_to_non_nullable
@@ -371,7 +371,7 @@ class _$BienImmobilierCreationModelImpl
 
   @override
   @JsonKey()
-  final String miniature;
+  final String? miniature;
   @override
   @JsonKey()
   final String typeLocation;
@@ -530,7 +530,7 @@ class _$BienImmobilierCreationModelImpl
 abstract class _BienImmobilierCreationModel
     implements BienImmobilierCreationModel {
   const factory _BienImmobilierCreationModel(
-      {final String miniature,
+      {final String? miniature,
       final String typeLocation,
       final String? nom,
       final String? typeBienImmobilier,
@@ -552,7 +552,7 @@ abstract class _BienImmobilierCreationModel
       _$BienImmobilierCreationModelImpl.fromJson;
 
   @override
-  String get miniature;
+  String? get miniature;
   @override
   String get typeLocation;
   @override

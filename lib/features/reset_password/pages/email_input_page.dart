@@ -79,10 +79,12 @@ class _EmailInputPageState extends State<EmailInputPage> {
                         initial: () {},
                         sendingEmailOtp: () {},
                         emailOtpSent: (message) {
-                          widget.pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                          if (widget.pageController.page == 0) {
+                            widget.pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         },
                         verifyingEmail: () {},
                         emailVerified: () {},

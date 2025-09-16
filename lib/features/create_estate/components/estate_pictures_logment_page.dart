@@ -1,20 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/features/create_estate/components/estate_logement_location_page.dart';
 import 'package:immoplus_pro/features/create_estate/components/estate_video_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
+import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/upload_image_item_card.dart';
 import 'package:immoplus_pro/features/residence_detail/components/logment_viewer_image.dart';
-import 'package:immoplus_pro/features/shared_widgets/upload_images_pages.dart';
-import 'package:immoplus_pro/utils/utils.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:immoplus_pro/features/shared_widgets/empty_image_picker.dart';
 
 class EstatePicturesLogmentPage extends StatefulWidget {
   const EstatePicturesLogmentPage({super.key});
@@ -26,6 +21,8 @@ class EstatePicturesLogmentPage extends StatefulWidget {
 }
 
 class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
+  bool _isUploading = false;
+  final uploadingImages = EstateCreationModelBuilder().uploadingImages;
   @override
   void initState() {
     super.initState();
@@ -42,142 +39,34 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
         ),
         slivers: [
           Visibility(
-            visible: EstateCreationModelBuilder().images.isNotEmpty,
+            visible: uploadingImages.isNotEmpty,
             replacement: SliverFillRemaining(
               hasScrollBody: false,
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: DottedBorder(
-                  radius: const Radius.circular(12),
-                  padding: const EdgeInsets.all(6),
-                  color: CupertinoColors.systemGrey,
-                  child: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.photoFilm,
-                        size: 100,
-                        color: Colors.grey,
-                      ),
-                      Gap(10),
-                      Text(
-                        "Capturez la beauté de votre bien ! Prenez des photos soigneusement travaillées pour attirer davantage de clients. N'oubliez pas, la première image sélectionnée sera celle affichée en miniature.",
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              )),
+              child: EmptyImagePicker(),
             ),
-            child: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 250.0,
-                mainAxisExtent: 200,
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
-                childAspectRatio: 4.0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewerImageLogment(
-                                initialPage: 0,
-                                tag: EstateCreationModelBuilder().images[index],
-                                imageUrls: EstateCreationModelBuilder().images),
-                          ));
-                    },
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: CachedNetworkImage(
-                            imageUrl: Utils.getImagePath(
-                                id: EstateCreationModelBuilder().images[
-                                    index]), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
-
-                            placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade400,
-                              period: const Duration(milliseconds: 500),
-                              child: Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Colors.white,
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            fit: BoxFit
-                                .cover, // or other BoxFit values as per your design
-                          ),
-                        ),
-                        Positioned(
-                          right: 3,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: const CircleBorder(),
-                                backgroundColor: Colors.red,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  EstateCreationModelBuilder()
-                                      .images
-                                      .removeAt(index);
-                                });
-                              },
-                              child: const Icon(Icons.delete)),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                childCount: EstateCreationModelBuilder().images.length,
-              ),
-            ),
+            child: _buildUploadingImagesGrid(),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add_photo_alternate_outlined),
-        onPressed: () async {
-          print(EstateCreationModelBuilder().images);
-          showModalBottomSheet<List<String>>(
-            context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            builder: (context) => const FractionallySizedBox(
-              heightFactor: 0.9,
-              child: UploadImagePage(),
-            ),
-          ).then(
-            (value) {
-              setState(() {
-                if (value != null) {
-                  EstateCreationModelBuilder().miniature = value.first;
-                  EstateCreationModelBuilder().images.addAll(value);
-                }
-              });
-            },
-          );
-        },
+        backgroundColor: _isUploading ? Colors.grey : AppColors.primary,
+        onPressed: _isUploading ? null : _pickImages,
+        child: _isUploading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    color: Colors.white, strokeWidth: 2))
+            : const Icon(Icons.add_photo_alternate_outlined),
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentLocationPage.name);
               },
-              onNext: EstateCreationModelBuilder().images.isNotEmpty
+              onNext: _canProceed()
                   ? () async {
                       CreationEstateNavigation.goToPage(
                           pageName: EstateVideoLogmentPage.name);
@@ -185,5 +74,120 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
                   : null,
             ),
     );
+  }
+
+  Widget _buildUploadingImagesGrid() {
+    if (uploadingImages.isEmpty) return SliverToBoxAdapter(child: Container());
+
+    return SliverPadding(
+      padding: const EdgeInsets.all(12),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 250.0,
+          mainAxisExtent: 200,
+          mainAxisSpacing: 8.0,
+          crossAxisSpacing: 8.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final item = uploadingImages[index];
+            return UploadImageItemCard(
+              key: ValueKey(item.id),
+              imageItem: item,
+              onItemUpdated: (updatedItem) =>
+                  _handleItemUpdated(index, updatedItem),
+              onDelete: () {
+                setState(() => _removeItemEverywhere(item));
+              },
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewerImageLogment(
+                          initialPage: index,
+                          tag: EstateCreationModelBuilder().images[index],
+                          imageUrls: uploadingImages
+                              .where((ite) => ite.isUploaded)
+                              .map((e) => e.uploadedId!)
+                              .toList()),
+                    ));
+              },
+            );
+          },
+          childCount: uploadingImages.length,
+        ),
+      ),
+    );
+  }
+
+  /// Méthode pour gérer la mise à jour d'un élément d'upload
+  void _handleItemUpdated(int index, ImageUploadItem updatedItem) {
+    setState(() {
+      uploadingImages[index] = updatedItem;
+
+      if (updatedItem.isUploaded && updatedItem.uploadedId != null) {
+        final id = updatedItem.uploadedId!;
+
+        // Ajout si pas déjà présent
+        if (!EstateCreationModelBuilder().images.contains(id)) {
+          EstateCreationModelBuilder().images.add(id);
+        }
+
+        // Définir miniature si aucune
+        if ((EstateCreationModelBuilder().miniature ?? "").isEmpty) {
+          EstateCreationModelBuilder().miniature = id;
+        }
+      }
+
+      _checkUploadCompletion();
+    });
+  }
+
+  /// Méthode pour supprimer un élément de la liste d'upload et des images finales
+  void _removeItemEverywhere(ImageUploadItem item) {
+    uploadingImages.removeWhere((it) => it.id == item.id);
+
+    final uploadedId = item.uploadedId;
+    if (uploadedId != null && uploadedId.isNotEmpty) {
+      EstateCreationModelBuilder().images.removeWhere((x) => x == uploadedId);
+      if (EstateCreationModelBuilder().miniature == uploadedId) {
+        EstateCreationModelBuilder().miniature =
+            EstateCreationModelBuilder().images.isNotEmpty
+                ? EstateCreationModelBuilder().images.first
+                : '';
+      }
+    }
+    _checkUploadCompletion();
+  }
+
+  // Méthode pour sélectionner les images
+  Future<void> _pickImages() async {
+    final pickedImages = await ImagePickerService.pickMultipleImages();
+
+    if (pickedImages.isEmpty) return;
+
+    setState(() {
+      // Convertir les XFile en ImageUploadItem avec statut uploading
+      final newUploadItems = pickedImages
+          .map((file) =>
+              ImageUploadItem(file: file, status: UploadStatus.uploading))
+          .toList();
+
+      uploadingImages.addAll(newUploadItems);
+    });
+  }
+
+  // Méthode pour vérifier si tous les uploads sont terminés
+  void _checkUploadCompletion() {
+    final hasUploadingImages =
+        uploadingImages.any((item) => item.status == UploadStatus.uploading);
+
+    setState(() {
+      _isUploading = hasUploadingImages;
+    });
+  }
+
+  bool _canProceed() {
+    return EstateCreationModelBuilder().images.isNotEmpty && !_isUploading;
   }
 }

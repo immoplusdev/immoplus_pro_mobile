@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
@@ -8,8 +7,10 @@ import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class SavingButton extends StatefulWidget {
+  final VoidCallback onrefresh;
   const SavingButton({
     super.key,
+    required this.onrefresh,
   });
 
   @override
@@ -36,8 +37,9 @@ class _SavingButtonState extends State<SavingButton> {
                 .then(
               (value) {
                 EasyLoading.dismiss();
-                AppRouter.router.push(
-                    '/logment_page/${ResidenceCreationModelBuilder().id}');
+                widget.onrefresh();
+                // AppRouter.router.push(
+                //     '/logment_page/${ResidenceCreationModelBuilder().id}');
               },
             );
           } catch (e) {

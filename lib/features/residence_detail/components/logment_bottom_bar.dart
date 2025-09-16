@@ -79,8 +79,15 @@ class LogmentBottomBar extends StatelessWidget {
                               );
                             },
                           ).then(
+                            // value return by CreateLodgmentPage
                             (value) {
-                              ResidenceCreationModelBuilder().reset();
+                              if (value == true) {
+                                context.pop();
+                                ResidenceCreationModelBuilder().reset();
+                                context
+                                    .read<LogmentCubit>()
+                                    .getResidence(id: logmentModel.id);
+                              }
                             },
                           );
                         },
@@ -160,6 +167,19 @@ class LogmentBottomBar extends StatelessWidget {
                           FontAwesomeIcons.circleArrowRight,
                           color: Colors.red,
                         ),
+                        onTap: () async {
+                          final result = await AppDialog.confirmDialog(
+                            context: context,
+                            content:
+                                "Êtes-vous sûr de vouloir supprimer ce bien immobilier ? Cette action est irréversible.",
+                          );
+                          if (result == true) {
+                            context.pop();
+                            context
+                                .read<LogmentCubit>()
+                                .deleteResidence(id: logmentModel.id);
+                          }
+                        },
                       ),
                       const Gap(20),
                     ],

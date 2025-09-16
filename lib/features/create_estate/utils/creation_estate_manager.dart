@@ -3,13 +3,14 @@ import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.da
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
 import 'package:immoplus_pro/data/models/residence/piece_model.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
+import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 
 class EstateCreationModelBuilder {
   static final EstateCreationModelBuilder _instance =
       EstateCreationModelBuilder._internal();
 
   // Attributes
-  String miniature = '';
+  String? miniature;
   String nom = '';
   String typeBienImmobilier = '';
   String description = '';
@@ -28,6 +29,7 @@ class EstateCreationModelBuilder {
   bool aLouer = true;
   bool editing = false;
   String id = '';
+  List<ImageUploadItem> uploadingImages = [];
   // Private constructor
   EstateCreationModelBuilder._internal();
 
@@ -56,7 +58,7 @@ class EstateCreationModelBuilder {
   }
 
   void fromModel(BienImmobilierModel model) {
-    miniature = model.miniatureId;
+    miniature = model.miniature;
     nom = model.nom;
     typeBienImmobilier = model.typeBienImmobilier;
     description = model.description;
@@ -73,6 +75,12 @@ class EstateCreationModelBuilder {
     aLouer = model.aLouer;
     editing = true;
     id = model.id;
+    uploadingImages = model.images
+        .map((img) => ImageUploadItem(
+              status: UploadStatus.success,
+              uploadedId: img,
+            ))
+        .toList();
   }
 
   // Method to reset all values to default
@@ -96,5 +104,6 @@ class EstateCreationModelBuilder {
     aLouer = true;
     editing = false;
     id = '';
+    uploadingImages = [];
   }
 }

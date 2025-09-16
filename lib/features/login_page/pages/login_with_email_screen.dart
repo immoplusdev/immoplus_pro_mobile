@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus_pro/common/account_source.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
@@ -146,6 +147,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                               final body = LoginBodyModel(
                                 username: _formController.email!.text,
                                 password: _formController.password!.text,
+                                source: AccountSource.proApp.value,
                               );
 
                               context.read<LoginCubit>().onSendData(

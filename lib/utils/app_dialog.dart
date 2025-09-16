@@ -69,4 +69,34 @@ class AppDialog {
       ).then((value) {
         print('TOTO');
       });
+
+  static Future<bool?> confirmDialog({
+    required BuildContext context,
+    required String content,
+  }) async =>
+      showCupertinoModalPopup<bool?>(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Icon(
+            CupertinoIcons.exclamationmark_triangle,
+            color: Colors.red,
+          ),
+          content: Text(content),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: const Text('Retour'),
+              onPressed: () {
+                context.pop(false);
+              },
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                context.pop(true);
+              },
+              child: const Text('Confirmer'),
+            ),
+          ],
+        ),
+      );
 }

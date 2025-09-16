@@ -8,6 +8,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
+import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
@@ -110,7 +111,7 @@ class _VisitPageState extends State<VisitPage> {
                   ),
                   const Gap(20),
                   const Text(
-                    "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
+                    "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos bien dès maintenant pour commencer à recevoir des demandes !",
                     textAlign: TextAlign.center,
                   ),
                   Gap(20),
@@ -119,10 +120,8 @@ class _VisitPageState extends State<VisitPage> {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
-                    onPressed: () {
-                      AppRouter.router.pushNamed(CreateEstatePage.name);
-                    },
-                    child: Text('Ajouter une résidence'),
+                    onPressed: _tapCreateEstate,
+                    child: Text('Ajouter un bien'),
                   ),
                 ],
               )),
@@ -134,5 +133,12 @@ class _VisitPageState extends State<VisitPage> {
         ],
       )),
     );
+  }
+
+  _tapCreateEstate() async {
+    final result = await AppRouter.router.pushNamed(CreateEstatePage.name);
+    if (result == true && mounted) {
+      AppRouter.router.pushNamed(EstatesPage.name);
+    }
   }
 }

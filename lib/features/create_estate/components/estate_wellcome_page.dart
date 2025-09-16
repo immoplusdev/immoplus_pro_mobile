@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_estate/components/estate_type_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/lottie_assets.dart';
@@ -48,9 +46,18 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
           const SliverPadding(
             padding: EdgeInsets.all(10),
             sliver: SliverToBoxAdapter(
-              child: Text(
-                "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus. Ajoutez vos biens immobiliers, tels que des appartements, des maisons à louer, des terrains à vendre, ou des espaces, ainsi que tout autre bien que nos clients pourraient demander à visiter en vue d'une location ou d'une vente.",
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    "Bien immobiliers",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Gap(10),
+                  Text(
+                    "Nous sommes ravis de vous accueillir au sein de la communauté ImmoPlus. Ajoutez vos biens immobiliers, tels que des appartements, des maisons à louer, des terrains à vendre, ou des espaces, ainsi que tout autre bien que nos clients pourraient demander à visiter en vue d'une location ou d'une vente.",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ),
@@ -64,6 +71,11 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
                 labelText: "Nom du bien immobilier",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),
+                onChanged: (name) {
+                  if (name.trim().isNotEmpty) {
+                    EstateCreationModelBuilder().nom = name;
+                  }
+                },
               ),
             ),
           ),
@@ -108,9 +120,8 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
               ),
             ),
           ),
-          EstateCreationModelBuilder().editing
-              ? SliverToBoxAdapter(child: SavingEstateButton())
-              : SliverToBoxAdapter(),
+
+          SliverToBoxAdapter(),
         ],
       ),
     );

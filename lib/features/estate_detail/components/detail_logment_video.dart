@@ -11,16 +11,13 @@ class DetailEstateVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible:
-          (bienImmobilier.video != null) && bienImmobilier.video.isNotEmpty,
-      replacement: const SliverToBoxAdapter(),
-      child: SliverToBoxAdapter(
-        child: Container(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          child: VideoPlayerPage(videoID: bienImmobilier.video),
-        ),
-      ),
-    );
+    return (bienImmobilier.video != null)
+        ? SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              child: VideoPlayerPage(videoID: bienImmobilier.video!),
+            ),
+          )
+        : SliverToBoxAdapter();
   }
 }

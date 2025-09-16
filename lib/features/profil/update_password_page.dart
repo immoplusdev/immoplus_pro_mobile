@@ -8,6 +8,7 @@ import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart'
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:lottie/lottie.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
   const UpdatePasswordPage({super.key});
@@ -94,6 +95,13 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                       key: _formKey,
                       child: Column(
                         children: [
+                          Container(
+                            height: 300,
+                            child: LottieBuilder.asset(
+                              "assets/lotties/reset_password.json",
+                              repeat: false,
+                            ),
+                          ),
                           // Ancien mot de passe
                           CustomTextField(
                             controller: _oldCtrl,

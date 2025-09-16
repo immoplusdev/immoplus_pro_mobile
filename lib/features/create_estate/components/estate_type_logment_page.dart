@@ -7,7 +7,6 @@ import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manage
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/list_piece_section.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/logment_type_selection.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 class EstateTypePage extends StatefulWidget {
@@ -63,7 +62,7 @@ class _EstateTypePageState extends State<EstateTypePage> {
         ],
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(

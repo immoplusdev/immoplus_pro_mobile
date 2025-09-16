@@ -79,8 +79,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ),
                     ),
                     const Gap(5),
-                    (SessionManager().currentUser!.roleName ==
-                            Roles.pro_entreprise.name)
+                    (SessionManager().currentUser!.isEntreprise)
                         ? AutoSizeText(
                             SessionManager().currentUser?.nomEntreprise ?? "",
                             style: Theme.of(context).textTheme.titleMedium,
@@ -123,8 +122,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Gap(8),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (SessionManager().currentUser!.roleName ==
-                              Roles.pro_entreprise.name)
+                      borderRadius: (SessionManager().currentUser!.isEntreprise)
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(
                                 20,
@@ -155,14 +153,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (SessionManager().currentUser!.roleName ==
-                      Roles.pro_entreprise.name)
+                  if (SessionManager().currentUser!.isEntreprise)
                     const Divider(
                       height: 0,
                       thickness: 0.8,
                     ),
-                  if (SessionManager().currentUser!.roleName ==
-                      Roles.pro_entreprise.name)
+                  if (SessionManager().currentUser!.isEntreprise)
                     ListTile(
                       tileColor: Colors.white,
                       shape: const RoundedRectangleBorder(
@@ -194,8 +190,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   const Gap(10),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (SessionManager().currentUser!.roleName ==
-                              Roles.pro_entreprise.name)
+                      borderRadius: (SessionManager().currentUser!.isEntreprise)
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(
                                 20,
@@ -226,14 +221,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (SessionManager().currentUser!.roleName ==
-                      Roles.pro_entreprise.name)
+                  if (SessionManager().currentUser!.isEntreprise)
                     const Divider(
                       height: 0,
                       thickness: 0.8,
                     ),
-                  if (SessionManager().currentUser!.roleName ==
-                      Roles.pro_entreprise.name)
+                  if (SessionManager().currentUser!.isEntreprise)
                     ListTile(
                       tileColor: Colors.white,
                       shape: const RoundedRectangleBorder(

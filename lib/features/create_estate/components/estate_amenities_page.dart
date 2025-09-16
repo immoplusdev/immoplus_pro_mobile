@@ -7,7 +7,6 @@ import 'package:immoplus_pro/features/create_estate/components/estate_logement_l
 import 'package:immoplus_pro/features/create_estate/components/estate_type_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/amentities_selection.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 import '../utils/creation_estate_navigation.dart';
@@ -60,7 +59,7 @@ class _EstateAmentitiesPageState extends State<EstateAmentitiesPage> {
         ],
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onNext: () {
                 CreationEstateNavigation.goToPage(

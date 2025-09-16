@@ -54,7 +54,7 @@ mixin _$RequestState {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -70,7 +70,7 @@ mixin _$RequestState {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -86,7 +86,7 @@ mixin _$RequestState {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -225,7 +225,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -244,7 +244,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -263,7 +263,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -409,7 +409,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -428,7 +428,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -447,7 +447,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -593,7 +593,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -612,7 +612,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -631,7 +631,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -730,6 +730,8 @@ abstract class _$$REQUEST_SUCCESSImplCopyWith<$Res> {
   factory _$$REQUEST_SUCCESSImplCopyWith(_$REQUEST_SUCCESSImpl value,
           $Res Function(_$REQUEST_SUCCESSImpl) then) =
       __$$REQUEST_SUCCESSImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String? message});
 }
 
 /// @nodoc
@@ -742,34 +744,60 @@ class __$$REQUEST_SUCCESSImplCopyWithImpl<$Res>
 
   /// Create a copy of RequestState
   /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = freezed,
+  }) {
+    return _then(_$REQUEST_SUCCESSImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
-  const _$REQUEST_SUCCESSImpl({final String? $type})
+  const _$REQUEST_SUCCESSImpl({this.message, final String? $type})
       : $type = $type ?? 'success';
 
   factory _$REQUEST_SUCCESSImpl.fromJson(Map<String, dynamic> json) =>
       _$$REQUEST_SUCCESSImplFromJson(json);
+
+  @override
+  final String? message;
 
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'RequestState.success()';
+    return 'RequestState.success(message: $message)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$REQUEST_SUCCESSImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$REQUEST_SUCCESSImpl &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, message);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$REQUEST_SUCCESSImplCopyWith<_$REQUEST_SUCCESSImpl> get copyWith =>
+      __$$REQUEST_SUCCESSImplCopyWithImpl<_$REQUEST_SUCCESSImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -777,7 +805,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -787,7 +815,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
   }) {
-    return success();
+    return success(message);
   }
 
   @override
@@ -796,7 +824,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -806,7 +834,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
   }) {
-    return success?.call();
+    return success?.call(message);
   }
 
   @override
@@ -815,7 +843,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -827,7 +855,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success();
+      return success(message);
     }
     return orElse();
   }
@@ -903,10 +931,19 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
 }
 
 abstract class REQUEST_SUCCESS implements RequestState {
-  const factory REQUEST_SUCCESS() = _$REQUEST_SUCCESSImpl;
+  const factory REQUEST_SUCCESS({final String? message}) =
+      _$REQUEST_SUCCESSImpl;
 
   factory REQUEST_SUCCESS.fromJson(Map<String, dynamic> json) =
       _$REQUEST_SUCCESSImpl.fromJson;
+
+  String? get message;
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$REQUEST_SUCCESSImplCopyWith<_$REQUEST_SUCCESSImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -988,7 +1025,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -1007,7 +1044,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -1026,7 +1063,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -1223,7 +1260,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -1242,7 +1279,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -1261,7 +1298,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -1462,7 +1499,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -1481,7 +1518,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -1500,7 +1537,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -1695,7 +1732,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -1714,7 +1751,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -1733,7 +1770,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -1925,7 +1962,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -1944,7 +1981,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -1963,7 +2000,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -2155,7 +2192,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -2174,7 +2211,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -2193,7 +2230,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -2387,7 +2424,7 @@ class _$WALLETImpl implements WALLET {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -2406,7 +2443,7 @@ class _$WALLETImpl implements WALLET {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -2425,7 +2462,7 @@ class _$WALLETImpl implements WALLET {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,
@@ -2618,7 +2655,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult Function() $default, {
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() success,
+    required TResult Function(String? message) success,
     required TResult Function(String error) error,
     required TResult Function(ResidenceModel data) residence,
     required TResult Function(BienImmobilierModel data) bienImmobilier,
@@ -2637,7 +2674,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult? Function()? $default, {
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? success,
+    TResult? Function(String? message)? success,
     TResult? Function(String error)? error,
     TResult? Function(ResidenceModel data)? residence,
     TResult? Function(BienImmobilierModel data)? bienImmobilier,
@@ -2656,7 +2693,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult Function()? $default, {
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? success,
+    TResult Function(String? message)? success,
     TResult Function(String error)? error,
     TResult Function(ResidenceModel data)? residence,
     TResult Function(BienImmobilierModel data)? bienImmobilier,

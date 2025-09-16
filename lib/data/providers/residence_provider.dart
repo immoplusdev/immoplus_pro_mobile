@@ -29,4 +29,7 @@ abstract class ResidenceProvider {
   @PATCH("/residences/{id}")
   Future<ResidenceResponse> update(
       @Path() String id, @Body() Map<String, dynamic> fields);
+
+  @DELETE("/residences/{id}")
+  Future<HttpResponse> deleteResidence(@Path() String id);
 }

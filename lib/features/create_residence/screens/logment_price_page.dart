@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -12,10 +13,8 @@ import 'package:immoplus_pro/features/create_residence/screens/description_edito
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
-import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class LogmentPricePage extends StatefulWidget {
@@ -136,12 +135,13 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
         ),
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SavingButton()
+          ? SizedBox()
           : StepBottomButton(
               onNextText: ResidenceCreationModelBuilder().editing
                   ? 'Modifier'
                   : 'Terminer',
               onNext: () async {
+                // TODO : ResidenceCreationModelBuilder().editing = false; condition not needed
                 if (_formKey.currentState!.validate()) {
                   if (ResidenceCreationModelBuilder().editing) {
                     try {
@@ -159,6 +159,7 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                           .then(
                         (value) {
                           EasyLoading.dismiss();
+
                           AppRouter.router.push(
                               '/logment_page/${ResidenceCreationModelBuilder().id}');
                         },
@@ -179,7 +180,8 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                           EasyLoading.dismiss();
                           // CreationResidenceNavigation.goToPage(
                           //     pageName: ResidencesPage.name);
-                          AppRouter.router.goNamed(ResidencesPage.name);
+                          context.pop(true);
+                          // AppRouter.router.goNamed(ResidencesPage.name);
                         },
                       );
                     } catch (e) {

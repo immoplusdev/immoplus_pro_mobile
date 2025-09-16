@@ -12,7 +12,6 @@ import 'package:immoplus_pro/features/create_estate/components/estate_amenities_
 import 'package:immoplus_pro/features/create_estate/components/estate_pictures_logment_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/location_module/location_page.dart';
@@ -145,7 +144,7 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
         ],
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SavingEstateButton()
+          ? SizedBox()
           : StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(

@@ -43,7 +43,7 @@ class ContactUtils {
                       color: Colors.green,
                     ),
                     onTap: () async {
-                      Utils.whatsapp(phoneNumber: "+2250701710065");
+                      Utils.whatsapp(phoneNumber: "2250707293637");
                     },
                   ),
                 ),
@@ -71,7 +71,7 @@ class ContactUtils {
                       color: Colors.black,
                     ),
                     onTap: () async {
-                      // Utils.call();
+                      Utils.makePhoneCall("2250707293637");
                     },
                   ),
                 ),

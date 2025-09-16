@@ -7,7 +7,6 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
-import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/components/mosaic_logment_images.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
@@ -31,8 +30,8 @@ class DetailLogmentAppBar extends StatelessWidget {
           iconSize: 20,
           onPressed: () {
             print(Constantes.tempPage);
-            context.goNamed(ResidencesPage.name);
-            //context.pop();
+            // context.goNamed(ResidencesPage.name);
+            context.pop();
           },
           style: IconButton.styleFrom(
             iconSize: 20,

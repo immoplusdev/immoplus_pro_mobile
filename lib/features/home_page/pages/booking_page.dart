@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -135,10 +133,7 @@ class _BookingPageState extends State<BookingPage> {
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {
-                        ResidenceCreationModelBuilder().reset();
-                        AppRouter.router.pushNamed(CreateLodgmentPage.name);
-                      },
+                      onPressed: _tapCreateResidence,
                       child: Text('Ajouter une résidence'),
                     ),
                   ],
@@ -152,5 +147,12 @@ class _BookingPageState extends State<BookingPage> {
         ],
       )),
     );
+  }
+
+  _tapCreateResidence() async {
+    final result = await AppRouter.router.pushNamed(CreateLodgmentPage.name);
+    if (result == true && mounted) {
+      AppRouter.router.pushNamed(ResidencesPage.name);
+    }
   }
 }
