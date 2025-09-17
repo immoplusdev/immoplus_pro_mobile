@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
@@ -26,8 +27,8 @@ class _VisitHistoryPageState extends State<VisitHistoryPage> {
       id: SessionManager().currentUser!.userId.toString(),
       page: page,
       perPage: 5,
-      orderBy: 'createdAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
       //where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
     ).then((value) {
       if (value.hasNext == true) {

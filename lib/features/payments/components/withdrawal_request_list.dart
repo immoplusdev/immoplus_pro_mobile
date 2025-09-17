@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_model.dart';
@@ -34,8 +35,8 @@ class _WithdrawalRequestListState extends State<WithdrawalRequestList> {
     WalletRepository.getWithdrawalRequest(
       page: page,
       perPage: 10,
-      orderBy: 'updatedAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.updatedAt.value,
+      orderDir: OrderDir.desc.value,
     ).then((value) {
       if (value.hasNext == true) {
         pagingControllerWidrawalList.appendPage(
