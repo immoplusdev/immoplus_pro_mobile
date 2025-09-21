@@ -76,8 +76,10 @@ class VisitCard extends StatelessWidget {
                   CustomChip(
                     icon: FontAwesomeIcons.signHanging,
                     label: demandeVisiteModel.bienImmobilier!.nom,
+                    iconColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.white),
                     iconSize: 15,
-                    backgroundColor: CupertinoColors.systemFill,
+                    backgroundColor: AppColors.lightBlue,
                   ),
                 ],
               ),
@@ -94,7 +96,8 @@ class VisitCard extends StatelessWidget {
                         size: 15,
                       ),
                       const Gap(5),
-                      Text("${demandeVisiteModel.clientPhoneNumber}")
+                      Text("Touchez pour voir plus")
+                      // Text("${demandeVisiteModel.clientPhoneNumber}")
                     ],
                   ),
                   AutoSizeText(

@@ -88,6 +88,7 @@ enum PaymentStatus {
   failed,
   successful,
   paye,
+  non_paye,
 }
 
 enum DeliveryMethod {

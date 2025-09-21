@@ -96,4 +96,21 @@ class LocationService extends GetxService {
       throw Exception('Location permissions are denied.');
     }
   }
+
+  /// Vérifie si les permissions de localisation sont accordées
+  static Future<bool> hasLocationPermission() async {
+    try {
+      // Vérifier si le service de localisation est activé
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return false;
+
+      // Vérifier les permissions
+      LocationPermission permission = await Geolocator.checkPermission();
+
+      return permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse;
+    } catch (e) {
+      return false;
+    }
+  }
 }

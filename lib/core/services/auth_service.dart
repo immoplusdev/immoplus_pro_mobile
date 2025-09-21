@@ -45,6 +45,7 @@ class AuthService {
         ..lastName = currentUser.lastName
         ..phoneNumber = currentUser.phoneNumber
         ..email = currentUser.email
+        ..avatar = currentUser.avatar
         ..accessToken = refreshResponse.data.accessToken
         ..refreshToken = refreshResponse.data.refreshToken
         ..roleName = currentUser.roleName

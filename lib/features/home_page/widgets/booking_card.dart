@@ -84,9 +84,11 @@ class BookingCard extends StatelessWidget {
                   ),
                   CustomChip(
                     icon: CupertinoIcons.home,
+                    iconColor: Colors.white,
                     label: reservationModel.residence.nom,
+                    labelStyle: TextStyle(color: Colors.white),
                     iconSize: 15,
-                    backgroundColor: CupertinoColors.systemFill,
+                    backgroundColor: AppColors.lightBlue,
                   ),
                 ],
               ),

@@ -43,6 +43,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     return BlocBuilder<BookingCubit, BookingRequestState>(
       builder: (context, state) {
         if (state is RECEIVE_BOOKING) {
+          final clientName =
+              "${state.reservationResponse.data.client.firstName} ${state.reservationResponse.data.client.lastName}";
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
@@ -221,8 +223,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           ),
                         ),
                         title: const Text("Joindre le client"),
-                        subtitle: Text(
-                            "${state.reservationResponse.data.client.firstName} ${state.reservationResponse.data.client.lastName}"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (clientName.trim().isNotEmpty) Text(clientName),
+                            Text(state
+                                .reservationResponse.data.clientPhoneNumber),
+                          ],
+                        ),
                         titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                         trailing: Icon(
                           FontAwesomeIcons.phoneFlip,

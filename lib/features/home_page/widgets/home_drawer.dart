@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/immo_icons.dart';
+import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
@@ -28,6 +29,19 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
+  final sessionManager = SessionManager();
+  UserModelSchema? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+
+    currentUser = sessionManager.currentUser;
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -54,10 +68,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(60),
                         child: CachedNetworkImage(
-                          imageUrl: (SessionManager().currentUser!.avatar !=
-                                  null)
-                              ? Utils.getImagePath(
-                                  id: SessionManager().currentUser!.avatar!)
+                          imageUrl: (currentUser!.avatar != null)
+                              ? Utils.getImagePath(id: currentUser!.avatar!)
                               : "https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg",
                           //"https://t3.ftcdn.net/jpg/03/91/34/72/240_F_391347204_XaDg0S7PtbzJRoeow3yWO1vK4pnqBVQY.jpg",
 
@@ -79,20 +91,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ),
                     ),
                     const Gap(5),
-                    (SessionManager().currentUser!.isEntreprise)
+                    (currentUser!.isEntreprise)
                         ? AutoSizeText(
-                            SessionManager().currentUser?.nomEntreprise ?? "",
+                            "Entreprise : ${currentUser?.nomEntreprise}",
                             style: Theme.of(context).textTheme.titleMedium,
                           )
                         : AutoSizeText(
-                            '${SessionManager().currentUser?.firstName} ${SessionManager().currentUser?.lastName}',
+                            '${currentUser?.firstName} ${currentUser?.lastName}',
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                     //Text('test@gmail.com'),
+                    AutoSizeText("${currentUser?.phoneNumber}"),
                     AutoSizeText(
-                        "${SessionManager().currentUser?.phoneNumber}"),
-                    AutoSizeText(
-                      SessionManager().currentUser?.email ?? "",
+                      currentUser?.email ?? "",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
@@ -114,15 +125,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                         backgroundColor: Colors.yellow.shade700,
                         labelStyle: Theme.of(context).textTheme.labelMedium,
-                        label: getRoleDescription(
-                            SessionManager().currentUser?.role ?? ''),
+                        label: getRoleDescription(currentUser?.role ?? ''),
                       ),
                     ),
                   ),
                   Gap(8),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (SessionManager().currentUser!.isEntreprise)
+                      borderRadius: (currentUser!.isEntreprise)
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(
                                 20,
@@ -153,12 +163,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (SessionManager().currentUser!.isEntreprise)
+                  if (currentUser!.isEntreprise)
                     const Divider(
                       height: 0,
                       thickness: 0.8,
                     ),
-                  if (SessionManager().currentUser!.isEntreprise)
+                  if (currentUser!.isEntreprise)
                     ListTile(
                       tileColor: Colors.white,
                       shape: const RoundedRectangleBorder(
@@ -190,7 +200,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   const Gap(10),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (SessionManager().currentUser!.isEntreprise)
+                      borderRadius: (currentUser!.isEntreprise)
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(
                                 20,
@@ -221,12 +231,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (SessionManager().currentUser!.isEntreprise)
+                  if (currentUser!.isEntreprise)
                     const Divider(
                       height: 0,
                       thickness: 0.8,
                     ),
-                  if (SessionManager().currentUser!.isEntreprise)
+                  if (currentUser!.isEntreprise)
                     ListTile(
                       tileColor: Colors.white,
                       shape: const RoundedRectangleBorder(
@@ -271,8 +281,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      context.pushNamed(EditAccount.name);
+                    onTap: () async {
+                      await context.pushNamed(EditAccount.name);
+
+                      currentUser = sessionManager.currentUser;
+
+                      if (mounted) {
+                        setState(() {});
+                      }
                     },
                     horizontalTitleGap: 0,
                     leading: Icon(

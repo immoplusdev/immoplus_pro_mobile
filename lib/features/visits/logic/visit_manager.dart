@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 
 class VisitManager {
-  static Future<DateTime?> getDate() async {
+  static Future<DateTime?> getDate(
+      {DateTime? lastDate, DateTime? firstDate, DateTime? initialDate}) async {
     if (NavigationService.navigatorKey.currentContext != null) {
       DateTime? datetime = await showDatePicker(
           locale: const Locale("fr", "FR"),
           context: NavigationService.navigatorKey.currentContext!,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2030));
+          firstDate: firstDate ?? DateTime.now(),
+          initialDate: initialDate,
+          lastDate: lastDate ?? DateTime(2030));
 
       inspect(datetime);
       return datetime;
@@ -31,9 +33,10 @@ class VisitManager {
     return null;
   }
 
-  static Future<DateTime?> getDateTime() async {
+  static Future<DateTime?> getDateTime({DateTime? lastDate}) async {
     if (NavigationService.navigatorKey.currentContext != null) {
-      DateTime? datetime = await getDate();
+      DateTime? datetime = await getDate(
+          lastDate: lastDate, firstDate: lastDate, initialDate: lastDate);
       TimeOfDay? timeOfDay;
       if (datetime != null) {
         timeOfDay = await getTime();

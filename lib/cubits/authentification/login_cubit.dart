@@ -62,6 +62,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..role = response.data.user.role.name
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -119,6 +120,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -156,6 +158,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..avatar = response.data.avatar
           ..phoneNumber = response.data.phoneNumber
           ..email = response.data.email
+          ..avatar = response.data.avatar
           ..accessToken = SessionManager().currentUser!.accessToken
           ..refreshToken = SessionManager().currentUser!.refreshToken
           ..roleName = response.data.role.name

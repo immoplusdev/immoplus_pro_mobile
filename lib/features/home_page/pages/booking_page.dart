@@ -119,7 +119,7 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                     const Gap(30),
                     Text(
-                      "Aucune Réservation Pour le Moment",
+                      "Aucune réservation payée pour le moment",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
