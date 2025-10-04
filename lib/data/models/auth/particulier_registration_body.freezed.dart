@@ -31,6 +31,7 @@ mixin _$ParticulierRegistrationBody {
   String? get activite => throw _privateConstructorUsedError;
   String? get photoIdentiteId => throw _privateConstructorUsedError;
   String? get pieceIdentiteId => throw _privateConstructorUsedError;
+  String? get token => throw _privateConstructorUsedError;
 
   /// Serializes this ParticulierRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,7 +60,8 @@ abstract class $ParticulierRegistrationBodyCopyWith<$Res> {
       String? password,
       String? activite,
       String? photoIdentiteId,
-      String? pieceIdentiteId});
+      String? pieceIdentiteId,
+      String? token});
 }
 
 /// @nodoc
@@ -87,6 +89,7 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? token = freezed,
   }) {
     return _then(_value.copyWith(
       avatar: freezed == avatar
@@ -125,6 +128,10 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
               as String?,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -147,7 +154,8 @@ abstract class _$$ParticulierRegistrationBodyImplCopyWith<$Res>
       String? password,
       String? activite,
       String? photoIdentiteId,
-      String? pieceIdentiteId});
+      String? pieceIdentiteId,
+      String? token});
 }
 
 /// @nodoc
@@ -174,6 +182,7 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? token = freezed,
   }) {
     return _then(_$ParticulierRegistrationBodyImpl(
       avatar: freezed == avatar
@@ -212,6 +221,10 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
               as String?,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -229,7 +242,8 @@ class _$ParticulierRegistrationBodyImpl
       this.password,
       this.activite,
       this.photoIdentiteId,
-      this.pieceIdentiteId});
+      this.pieceIdentiteId,
+      this.token});
 
   factory _$ParticulierRegistrationBodyImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -254,10 +268,12 @@ class _$ParticulierRegistrationBodyImpl
   final String? photoIdentiteId;
   @override
   final String? pieceIdentiteId;
+  @override
+  final String? token;
 
   @override
   String toString() {
-    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId)';
+    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, token: $token)';
   }
 
   @override
@@ -280,13 +296,24 @@ class _$ParticulierRegistrationBodyImpl
             (identical(other.photoIdentiteId, photoIdentiteId) ||
                 other.photoIdentiteId == photoIdentiteId) &&
             (identical(other.pieceIdentiteId, pieceIdentiteId) ||
-                other.pieceIdentiteId == pieceIdentiteId));
+                other.pieceIdentiteId == pieceIdentiteId) &&
+            (identical(other.token, token) || other.token == token));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, avatar, firstName, lastName,
-      email, phoneNumber, password, activite, photoIdentiteId, pieceIdentiteId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      avatar,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      password,
+      activite,
+      photoIdentiteId,
+      pieceIdentiteId,
+      token);
 
   /// Create a copy of ParticulierRegistrationBody
   /// with the given fields replaced by the non-null parameter values.
@@ -316,7 +343,8 @@ abstract class _ParticulierRegistrationBody
       final String? password,
       final String? activite,
       final String? photoIdentiteId,
-      final String? pieceIdentiteId}) = _$ParticulierRegistrationBodyImpl;
+      final String? pieceIdentiteId,
+      final String? token}) = _$ParticulierRegistrationBodyImpl;
 
   factory _ParticulierRegistrationBody.fromJson(Map<String, dynamic> json) =
       _$ParticulierRegistrationBodyImpl.fromJson;
@@ -339,6 +367,8 @@ abstract class _ParticulierRegistrationBody
   String? get photoIdentiteId;
   @override
   String? get pieceIdentiteId;
+  @override
+  String? get token;
 
   /// Create a copy of ParticulierRegistrationBody
   /// with the given fields replaced by the non-null parameter values.

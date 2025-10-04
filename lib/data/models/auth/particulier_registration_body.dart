@@ -16,6 +16,7 @@ class ParticulierRegistrationBody with _$ParticulierRegistrationBody {
     String? activite,
     String? photoIdentiteId,
     String? pieceIdentiteId,
+    String? token,
   }) = _ParticulierRegistrationBody;
 
   factory ParticulierRegistrationBody.fromJson(Map<String, dynamic> json) =>

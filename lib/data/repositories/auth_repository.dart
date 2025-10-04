@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/core/request_response_exeption.dart';
+import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
 import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
@@ -17,6 +18,7 @@ import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
+import 'package:immoplus_pro/data/models/auth/verify_email_otp.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/providers/auth_provider.dart';
 import 'package:retrofit/retrofit.dart';
@@ -230,6 +232,42 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to updatePassword password: $error');
+    }
+  }
+
+  Future<HttpResponse> userSendOTP({required SendEmailOtpBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).userSendOTP(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
+    }
+  }
+
+  Future<VerifyEmailResponse?> verifyOtp({required VerifyEmailOtp body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).verifyOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to send email OTP: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to send email OTP: $error');
     }
   }
 }

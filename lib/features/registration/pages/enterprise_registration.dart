@@ -11,6 +11,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
 import 'package:immoplus_pro/features/account/widgets/general_condition_page.dart';
+import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
@@ -21,7 +22,9 @@ import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class EnterpriseRegistrationPage extends StatefulWidget {
-  const EnterpriseRegistrationPage({super.key});
+  final DataRouterRegistration? dataRouterRegistration;
+  const EnterpriseRegistrationPage(
+      {super.key, required this.dataRouterRegistration});
   static String name = "Enterprise_Registration";
   @override
   State<EnterpriseRegistrationPage> createState() =>
@@ -73,7 +76,8 @@ class _EnterpriseRegistrationPageState
         //registreCommerce: TextEditingController(text: ''),
         numeroContribuable: TextEditingController(text: ''),
         phoneNumber: TextEditingController(text: ''),
-        email: TextEditingController(text: ''),
+        email:
+            TextEditingController(text: widget.dataRouterRegistration?.email),
         password: TextEditingController(text: ''));
 
     super.initState();
@@ -149,6 +153,7 @@ class _EnterpriseRegistrationPageState
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.email,
+                    readOnly: true,
                     prefixIcon: const Icon(CupertinoIcons.mail),
                     labelText: 'Email',
                     textInputType: TextInputType.emailAddress,
@@ -292,23 +297,25 @@ class _EnterpriseRegistrationPageState
                                           file: fileUploaderController.file!);
 
                                       final body = EnterpriseRegistrationBody(
-                                        email: _formController.email!.text,
-                                        registreCommerceId: registre,
-                                        phoneNumber:
-                                            "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
-                                        password:
-                                            _formController.password!.text,
-                                        nomEntreprise: _formController
-                                            .enterpriseName!.text,
-                                        emailEntreprise:
-                                            _formController.email!.text,
-                                        // registreCommerce:
-                                        //     _formController.email!.text,
-                                        numeroContribuable: _formController
-                                            .numeroContribuable!.text,
-                                        typeEntreprise: _formController
-                                            .enterpriseType!.text,
-                                      );
+                                          email: _formController.email!.text,
+                                          registreCommerceId: registre,
+                                          phoneNumber:
+                                              "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
+                                          password:
+                                              _formController.password!.text,
+                                          nomEntreprise: _formController
+                                              .enterpriseName!.text,
+                                          emailEntreprise:
+                                              _formController.email!.text,
+                                          // registreCommerce:
+                                          //     _formController.email!.text,
+                                          numeroContribuable: _formController
+                                              .numeroContribuable!.text,
+                                          typeEntreprise: _formController
+                                              .enterpriseType!.text,
+                                          token: widget.dataRouterRegistration
+                                                  ?.token ??
+                                              "");
 
                                       // ignore: use_build_context_synchronously
                                       context

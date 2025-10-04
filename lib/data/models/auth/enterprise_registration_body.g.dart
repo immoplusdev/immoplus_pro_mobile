@@ -17,6 +17,7 @@ _$EnterpriseRegistrationBodyImpl _$$EnterpriseRegistrationBodyImplFromJson(
       registreCommerceId: json['registreCommerceId'] as String?,
       numeroContribuable: json['numeroContribuable'] as String?,
       typeEntreprise: json['typeEntreprise'] as String?,
+      token: json['token'] as String?,
     );
 
 Map<String, dynamic> _$$EnterpriseRegistrationBodyImplToJson(
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$EnterpriseRegistrationBodyImplToJson(
       'registreCommerceId': instance.registreCommerceId,
       'numeroContribuable': instance.numeroContribuable,
       'typeEntreprise': instance.typeEntreprise,
+      'token': instance.token,
     };
