@@ -33,10 +33,11 @@ class VisitManager {
     return null;
   }
 
-  static Future<DateTime?> getDateTime({DateTime? lastDate}) async {
+  static Future<DateTime?> getDateTime(
+      {DateTime? lastDate, DateTime? firstDate, DateTime? initialDate}) async {
     if (NavigationService.navigatorKey.currentContext != null) {
       DateTime? datetime = await getDate(
-          lastDate: lastDate, firstDate: lastDate, initialDate: lastDate);
+          lastDate: lastDate, firstDate: firstDate, initialDate: initialDate);
       TimeOfDay? timeOfDay;
       if (datetime != null) {
         timeOfDay = await getTime();

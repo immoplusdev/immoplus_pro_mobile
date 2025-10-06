@@ -87,7 +87,13 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
       builder: (context, state) {
         if (state is RECEIVE_VISIT) {
           /// la date d'acceptation de la visite doit etre uniquement le jour d'apres
-          final lastDateAcceptVisit = DateTime.now().add(Duration(days: 1));
+          final lastDateAcceptVisit = hasExpress(state.demandeVisitResponse)
+              ? DateTime.now().add(Duration(days: 1))
+              : null;
+
+          final startDate = DateTime.now().add(Duration(days: 1));
+          final initialDate = DateTime.now().add(Duration(days: 1));
+
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
@@ -176,7 +182,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           child: ListTile(
                             onTap: () {
                               VisitManager.getDateTime(
-                                      lastDate: lastDateAcceptVisit)
+                                      lastDate: lastDateAcceptVisit,
+                                      firstDate: startDate,
+                                      initialDate: initialDate)
                                   .then(
                                 (value) async {
                                   if (value != null) {
@@ -231,7 +239,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         child: ListTile(
                           onTap: () {
                             VisitManager.getDateTime(
-                                    lastDate: lastDateAcceptVisit)
+                                    lastDate: lastDateAcceptVisit,
+                                    firstDate: startDate,
+                                    initialDate: initialDate)
                                 .then(
                               (value) async {
                                 if (value != null) {
