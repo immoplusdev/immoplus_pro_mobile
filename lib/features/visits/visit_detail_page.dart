@@ -237,33 +237,33 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           .copyWith(bottom: 10),
                       sliver: SliverToBoxAdapter(
                         child: ListTile(
-                          onTap: () {
-                            VisitManager.getDateTime(
-                                    lastDate: lastDateAcceptVisit,
-                                    firstDate: startDate,
-                                    initialDate: initialDate)
-                                .then(
-                              (value) async {
-                                if (value != null) {
-                                  EasyLoading.instance.backgroundColor =
-                                      AppColors.primary;
-                                  EasyLoading.show(
-                                      status: 'Veuillez patienter..');
-                                  BienImmobilierRepository.programmerVisit(
-                                          state.demandeVisitResponse.data.id,
-                                          value)
-                                      .then((value) {
-                                    if (value != null) {
-                                      EasyLoading.dismiss();
-                                      context
-                                          .read<VisitCubit>()
-                                          .getVisit(id: widget.id);
-                                    }
-                                  });
-                                }
-                              },
-                            );
-                          },
+                          // onTap: () {
+                          //   VisitManager.getDateTime(
+                          //           lastDate: lastDateAcceptVisit,
+                          //           firstDate: startDate,
+                          //           initialDate: initialDate)
+                          //       .then(
+                          //     (value) async {
+                          //       if (value != null) {
+                          //         EasyLoading.instance.backgroundColor =
+                          //             AppColors.primary;
+                          //         EasyLoading.show(
+                          //             status: 'Veuillez patienter..');
+                          //         BienImmobilierRepository.programmerVisit(
+                          //                 state.demandeVisitResponse.data.id,
+                          //                 value)
+                          //             .then((value) {
+                          //           if (value != null) {
+                          //             EasyLoading.dismiss();
+                          //             context
+                          //                 .read<VisitCubit>()
+                          //                 .getVisit(id: widget.id);
+                          //           }
+                          //         });
+                          //       }
+                          //     },
+                          //   );
+                          // },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -278,7 +278,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 5),
                           horizontalTitleGap: 4,
-                          title: const Text("Jour et heur de visite"),
+                          title: const Text("Jour et heure de visite"),
                           subtitle: AutoSizeText(Utils.formatDateTime(
                               dateTime: state.demandeVisitResponse.data
                                   .datesDemandeVisite.first.date!)),
@@ -286,10 +286,10 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                               Theme.of(context).textTheme.titleLarge,
                           titleTextStyle:
                               Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
-                            FontAwesomeIcons.circleChevronRight,
-                            color: AppColors.primary,
-                          ),
+                          // trailing: Icon(
+                          //   FontAwesomeIcons.circleChevronRight,
+                          //   color: AppColors.primary,
+                          // ),
                         ),
                       ),
                     ),

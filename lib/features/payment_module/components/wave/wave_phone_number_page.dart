@@ -96,7 +96,7 @@ class _WaveNumberPageState extends State<WaveNumberPage> {
               controller: _formController.phoneNumber,
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.done,
-              labelText: 'Numéro de telephone orange',
+              labelText: 'Numéro de telephone valide',
               prefixIcon: const Icon(CupertinoIcons.phone),
               validator: (String? value) => PaymentUtils.numberValidator(
                   number: value!.replaceAll(' ', ''),

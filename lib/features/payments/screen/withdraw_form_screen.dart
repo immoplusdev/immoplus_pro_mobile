@@ -19,6 +19,7 @@ import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:toastification/toastification.dart';
 
 class WithdrawFormScreen extends StatefulWidget {
   const WithdrawFormScreen({super.key});
@@ -46,93 +47,102 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WalletCubit, RequestState>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.scafold,
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CustomScrollView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              slivers: [
-                SliverPadding(
-                    padding: EdgeInsets.only(top: 20),
-                    sliver: SliverToBoxAdapter(
-                      child: Text(
-                        'Demande de retrait de fonds',
-                        textAlign: TextAlign.center,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall!.copyWith(
-                                  color: AppColors.primary,
-                                ),
-                      ),
-                    )),
-                SliverGap(10),
-                SliverToBoxAdapter(
-                  child: AutoSizeText(
-                    'Veuillez renseigner les informations pour effectuer votre demande de retrait.',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
-                  ),
-                ),
-                SliverGap(30),
-                SliverToBoxAdapter(
-                  child: OperatorSelector(
-                    operators: OrderPaymentController.retraitOperatorsItems,
-                    selectedOperator: selectedOperator,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOperator = value;
-                      });
-                    },
-                  ),
-                ),
-                SliverGap(10),
-                SliverToBoxAdapter(
-                  child: CustomTextField(
-                    isEnabled: state is! REQUEST_LOADING,
-                    fillColor: Colors.white,
-                    textInputType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    labelText: 'Montant à retirer',
-                    prefixIcon: const Icon(
-                      FontAwesomeIcons.moneyBills,
-                      size: 17,
+          body: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                slivers: [
+                  SliverPadding(
+                      padding: EdgeInsets.only(top: 20),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          'Demande de retrait de fonds',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
+                                color: AppColors.primary,
+                              ),
+                        ),
+                      )),
+                  SliverGap(10),
+                  SliverToBoxAdapter(
+                    child: AutoSizeText(
+                      'Veuillez renseigner les informations pour effectuer votre demande de retrait.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(),
                     ),
-                    controller: currencyController,
-                    validator: (value) {
-                      if (currencyController.doubleValue == 0.0) {
-                        return 'Veuillez entrer un montant';
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                SliverToBoxAdapter(
-                  child: CustomTextField(
-                    isEnabled: state is! REQUEST_LOADING,
-                    fillColor: Colors.white,
-                    autofocus: true,
-                    controller: phoneNumberController,
-                    textInputType: TextInputType.number,
-                    textInputAction: TextInputAction.done,
-                    labelText: 'Numéro de telephone orange',
-                    prefixIcon: const Icon(CupertinoIcons.phone),
-                    validator: (String? value) => PaymentUtils.numberValidator(
-                        number: value!.replaceAll(' ', ''),
-                        operatorName:
-                            OrderPaymentController.selectedOperator.value ??
-                                ''),
-                    inputFormatters: [
-                      MaskTextInputFormatter(
-                          mask: '## ## ## ## ##',
-                          filter: {'#': RegExp(r'[0-9]')})
-                    ],
+                  SliverGap(30),
+                  SliverToBoxAdapter(
+                    child: OperatorSelector(
+                      operators: OrderPaymentController.retraitOperatorsItems,
+                      selectedOperator: selectedOperator,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedOperator = value;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ],
+                  SliverGap(10),
+                  SliverToBoxAdapter(
+                    child: CustomTextField(
+                      isEnabled: state is! REQUEST_LOADING,
+                      fillColor: Colors.white,
+                      textInputType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                      labelText: 'Montant à retirer',
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.moneyBills,
+                        size: 17,
+                      ),
+                      controller: currencyController,
+                      validator: (value) {
+                        if (currencyController.doubleValue == 0.0) {
+                          return 'Veuillez entrer un montant';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: CustomTextField(
+                      isEnabled: state is! REQUEST_LOADING,
+                      fillColor: Colors.white,
+                      autofocus: true,
+                      controller: phoneNumberController,
+                      textInputType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      labelText: 'Numéro de telephone valide',
+                      prefixIcon: const Icon(CupertinoIcons.phone),
+                      validator: (String? value) =>
+                          PaymentUtils.numberValidator(
+                              number: value!.replaceAll(' ', ''),
+                              operatorName: OrderPaymentController
+                                      .selectedOperator.value ??
+                                  ''),
+                      inputFormatters: [
+                        MaskTextInputFormatter(
+                            mask: '## ## ## ## ##',
+                            filter: {'#': RegExp(r'[0-9]')})
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           bottomNavigationBar: Container(
@@ -147,19 +157,40 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
               onPressed: state is REQUEST_LOADING
                   ? null
                   : () async {
-                      await context
-                          .read<WalletCubit>()
-                          .onCreateWithdrawalRequest(
-                            withdrawalRequestDto: WithdrawalRequestDto(
-                              currency: 'XOF',
-                              amount: currencyController.intValue,
-                              operator: selectedOperator!.value,
-                              phoneNumber: phoneNumberController!.text
-                                  .replaceAll(' ', '')
-                                  .trim(),
-                              status: "PENDING",
+                      if (_formKey.currentState?.validate() == true) {
+                        if (selectedOperator == null ||
+                            phoneNumberController?.text.trim().isEmpty ==
+                                true ||
+                            currencyController.intValue == 0) {
+                          toastification.show(
+                            type: ToastificationType.error,
+                            context: context,
+                            title: const Text("Oops, Impossible de continuer"),
+                            description: Text(
+                              "Verifier que tous les champs sont remplis",
+                              maxLines: 6,
                             ),
+                            autoCloseDuration: const Duration(seconds: 5),
+                            showProgressBar: false,
+                            alignment: Alignment.bottomCenter,
+                            style: ToastificationStyle.flatColored,
                           );
+                          return;
+                        }
+                        await context
+                            .read<WalletCubit>()
+                            .onCreateWithdrawalRequest(
+                              withdrawalRequestDto: WithdrawalRequestDto(
+                                currency: 'XOF',
+                                amount: currencyController.intValue,
+                                operator: selectedOperator!.value,
+                                phoneNumber: phoneNumberController!.text
+                                    .replaceAll(' ', '')
+                                    .trim(),
+                                status: "PENDING",
+                              ),
+                            );
+                      }
                     },
               child: state is REQUEST_LOADING
                   ? CircularProgressIndicator()
