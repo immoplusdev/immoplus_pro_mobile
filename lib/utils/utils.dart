@@ -328,6 +328,14 @@ class Utils {
     }
   }
 
+  static DateTime toDateTime(String? dateString) {
+    try {
+      return DateTime.parse(dateString!);
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
   // static uploadImage(
   //     {required ImageSource source,
   //     required BuildContext context,

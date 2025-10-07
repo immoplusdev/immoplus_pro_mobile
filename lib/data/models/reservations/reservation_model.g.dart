@@ -10,6 +10,8 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ReservationModelImpl(
       id: json['id'] as String? ?? '',
+      dateDebut: json['dateDebut'] as String? ?? '',
+      dateFin: json['dateFin'] as String? ?? '',
       statusReservation: json['statusReservation'] as String? ?? '',
       datesReservation: (json['datesReservation'] as List<dynamic>?)
               ?.map((e) =>
@@ -42,6 +44,8 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
         _$ReservationModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'dateDebut': instance.dateDebut,
+      'dateFin': instance.dateFin,
       'statusReservation': instance.statusReservation,
       'datesReservation': instance.datesReservation,
       'statusFacture': instance.statusFacture,
