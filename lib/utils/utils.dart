@@ -187,6 +187,11 @@ class Utils {
     return formattedDate;
   }
 
+  static String shortformatDateTime({required DateTime dateTime}) {
+    String formattedDate = DateFormat("dd/MM/yyy à HH'h':mm").format(dateTime);
+    return formattedDate;
+  }
+
   static String formatDateTime({required DateTime dateTime}) {
     String formattedDate =
         DateFormat("dd MMMM yyy  à HH'h':mm").format(dateTime);

@@ -258,8 +258,8 @@ class _WalletTransactionListState extends State<WalletTransactionList> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
-                            child: AutoSizeText(
-                                Utils.formatDate(dateTime: item.updatedAt!)),
+                            child: AutoSizeText(Utils.shortformatDateTime(
+                                dateTime: item.updatedAt!)),
                           ),
                           // Flexible(
                           //   child: Chip(

@@ -4,7 +4,10 @@ part 'onboarding_entity.g.dart';
 @collection
 class OnboardingEntity {
   Id id = 1;
-  bool? opened;
 
-  OnboardingEntity({required this.id, required this.opened});
+  /// Indique si l'utilisateur a déjà vu l'onboarding
+  late bool hasReadOnboarding;
+
+  /// Date à laquelle l'utilisateur a vu l'onboarding
+  DateTime? readAt;
 }

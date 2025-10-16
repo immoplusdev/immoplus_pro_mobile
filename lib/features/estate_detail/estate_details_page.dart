@@ -68,7 +68,8 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
     return BlocConsumer<EstateCubit, RequestState>(
       listener: (context, state) {
         if (state is REQUEST_SUCCESS) {
-          ToastUtils.showSuccess(title: state.message ?? "Opération réussie");
+          ToastUtils.showSuccess(
+              title: "Opération réussie", description: state.message);
           EstateCreationModelBuilder().reset();
           context.pop(true);
         }

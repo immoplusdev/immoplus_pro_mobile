@@ -17,6 +17,7 @@ import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_dt
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:toastification/toastification.dart';
@@ -162,19 +163,11 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                             phoneNumberController?.text.trim().isEmpty ==
                                 true ||
                             currencyController.intValue == 0) {
-                          toastification.show(
-                            type: ToastificationType.error,
-                            context: context,
-                            title: const Text("Oops, Impossible de continuer"),
-                            description: Text(
-                              "Verifier que tous les champs sont remplis",
-                              maxLines: 6,
-                            ),
-                            autoCloseDuration: const Duration(seconds: 5),
-                            showProgressBar: false,
-                            alignment: Alignment.bottomCenter,
-                            style: ToastificationStyle.flatColored,
-                          );
+                          ToastUtils.showError(
+                              title: "Oops, Impossible de continuer",
+                              description:
+                                  "Verifier que tous les champs sont remplis");
+
                           return;
                         }
                         await context

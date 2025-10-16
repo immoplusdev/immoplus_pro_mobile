@@ -78,7 +78,8 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
             listener: (context, state) {
           state.maybeWhen(
             success: (message) {
-              ToastUtils.showSuccess(title: message);
+              ToastUtils.showSuccess(
+                  description: message, title: "Opération réussie");
               context.pop();
             },
             error: (_) {},
