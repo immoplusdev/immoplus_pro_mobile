@@ -1,16 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/payment/operator_model.dart';
-import 'package:immoplus_pro/features/payment_module/utils/currency_input_formatter.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_utils.dart';
 import 'package:immoplus_pro/features/payments/components/operator_selector.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_dto.dart';
@@ -18,9 +14,7 @@ import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
-import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:toastification/toastification.dart';
 
 class WithdrawFormScreen extends StatefulWidget {
   const WithdrawFormScreen({super.key});
@@ -31,15 +25,9 @@ class WithdrawFormScreen extends StatefulWidget {
 
 class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
   OperatorModel? selectedOperator;
-  TextEditingController? amountController;
-  TextEditingController? phoneNumberController;
-  final currencyController = CurrencyTextFieldController(
-      currencySymbol: '', // ou 'XOF' si tu veux un préfixe
-      decimalSymbol:
-          ',', // Pour fr_FR (facultatif si tu veux éviter les décimales)
-      thousandSymbol: ' ',
-      initDoubleValue: 0,
-      numberOfDecimals: 0);
+  late TextEditingController amountController;
+  late TextEditingController phoneNumberController;
+
   @override
   void initState() {
     amountController = TextEditingController();
@@ -110,11 +98,23 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                         FontAwesomeIcons.moneyBills,
                         size: 17,
                       ),
-                      controller: currencyController,
+                      controller: amountController,
                       validator: (value) {
-                        if (currencyController.doubleValue == 0.0) {
+                        if ((value ?? "").trim().isEmpty) {
                           return 'Veuillez entrer un montant';
                         }
+
+                        // Convertir la valeur en nombre pour vérifier si c'est 0
+                        final montant = double.tryParse((value?.trim() ?? ""));
+
+                        if (montant == null) {
+                          return 'Veuillez entrer un montant valide';
+                        }
+
+                        if (montant == 0) {
+                          return 'Le montant doit être supérieur à 0';
+                        }
+
                         return null;
                       },
                     ),
@@ -158,11 +158,12 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
               onPressed: state is REQUEST_LOADING
                   ? null
                   : () async {
+                      final amount = int.tryParse(amountController.text) ?? 0;
                       if (_formKey.currentState?.validate() == true) {
                         if (selectedOperator == null ||
                             phoneNumberController?.text.trim().isEmpty ==
                                 true ||
-                            currencyController.intValue == 0) {
+                            amount == 0) {
                           ToastUtils.showError(
                               title: "Oops, Impossible de continuer",
                               description:
@@ -175,7 +176,7 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                             .onCreateWithdrawalRequest(
                               withdrawalRequestDto: WithdrawalRequestDto(
                                 currency: 'XOF',
-                                amount: currencyController.intValue,
+                                amount: amount,
                                 operator: selectedOperator!.value,
                                 phoneNumber: phoneNumberController!.text
                                     .replaceAll(' ', '')
