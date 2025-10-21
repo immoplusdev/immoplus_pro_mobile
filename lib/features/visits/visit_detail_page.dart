@@ -24,10 +24,8 @@ import 'package:shimmer/shimmer.dart';
 ///////
 
 class VisitDetailPage extends StatefulWidget {
-  const VisitDetailPage(
-      {super.key, required this.id, required this.clientPhoneNumer});
+  const VisitDetailPage({super.key, required this.id});
   final String id;
-  final String clientPhoneNumer;
 
   @override
   State<VisitDetailPage> createState() => _VisitDetailPageState();
@@ -93,6 +91,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
 
           final startDate = DateTime.now().add(Duration(days: 1));
           final initialDate = DateTime.now().add(Duration(days: 1));
+
+          final clientPhoneNumber =
+              state.demandeVisitResponse.data.client?.phoneNumber ?? "";
 
           return Scaffold(
             backgroundColor: AppColors.scafold,
@@ -340,7 +341,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               onTap: () {
-                                Utils.makePhoneCall(widget.clientPhoneNumer);
+                                Utils.makePhoneCall(clientPhoneNumber);
                               },
                               horizontalTitleGap: 0,
                               leading: Icon(

@@ -34,7 +34,6 @@ class VisitCard extends StatelessWidget {
                 heightFactor: 0.7,
                 child: VisitDetailPage(
                   id: demandeVisiteModel.id,
-                  clientPhoneNumer: demandeVisiteModel.clientPhoneNumber ?? "",
                 )),
           );
         },
