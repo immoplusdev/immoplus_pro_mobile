@@ -270,4 +270,23 @@ class AuthRepository {
       throw Exception('Failed to send email OTP: $error');
     }
   }
+
+  static Future<HttpResponse> deleteAccount({required String userId}) async {
+    try {
+      final response =
+          await AuthProvider(DioClient().dio).deleteAccount(userId);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to delete account: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to delete account: $error');
+    }
+  }
 }

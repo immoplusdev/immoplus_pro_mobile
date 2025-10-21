@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/reset_password_cubit.dart';
@@ -21,6 +22,9 @@ class BlocsManager {
     ),
     BlocProvider<LoginCubit>(
       create: (context) => LoginCubit(),
+    ),
+    BlocProvider<DeleteAccountCubit>(
+      create: (context) => DeleteAccountCubit(),
     ),
     BlocProvider<LogmentCubit>(
       create: (context) => LogmentCubit(),

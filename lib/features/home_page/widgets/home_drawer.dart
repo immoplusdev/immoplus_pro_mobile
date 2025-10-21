@@ -2,12 +2,15 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/immo_icons.dart';
+import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
+import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
@@ -402,6 +405,71 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                   ),
+
+                  /// Delete account button
+                  // ListTile(
+                  //   horizontalTitleGap: 0,
+                  //   leading: const Icon(
+                  //     FontAwesomeIcons
+                  //         .userXmark, // Icon plus appropriée pour la suppression
+                  //     color: Colors.redAccent,
+                  //     size: 20,
+                  //   ),
+                  //   title: const Text(
+                  //     "Supprimer mon compte",
+                  //     style: TextStyle(
+                  //       color: Colors.redAccent,
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     showCupertinoDialog(
+                  //       context: context,
+                  //       builder: (BuildContext dialogContext) {
+                  //         return BlocProvider(
+                  //           create: (context) => DeleteAccountCubit(),
+                  //           child: BlocConsumer<DeleteAccountCubit,
+                  //               DeleteAccountState>(
+                  //             listener: (context, state) {},
+                  //             builder: (context, state) {
+                  //               return CupertinoAlertDialog(
+                  //                 title: const Text('Suppression de compte'),
+                  //                 content: const Text(
+                  //                   'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+                  //                 ),
+                  //                 actions: <Widget>[
+                  //                   CupertinoDialogAction(
+                  //                     isDefaultAction: true,
+                  //                     onPressed: () {
+                  //                       Navigator.of(dialogContext).pop();
+                  //                     },
+                  //                     child: const Text('Annuler'),
+                  //                   ),
+                  //                   CupertinoDialogAction(
+                  //                     isDestructiveAction: true,
+                  //                     onPressed: state.maybeWhen(
+                  //                       loading: () => null,
+                  //                       orElse: () => () {
+                  //                         context
+                  //                             .read<DeleteAccountCubit>()
+                  //                             .deleteAccount();
+                  //                       },
+                  //                     ),
+                  //                     child: state.maybeWhen(
+                  //                       loading: () =>
+                  //                           const CupertinoActivityIndicator(),
+                  //                       orElse: () =>
+                  //                           const Text('Oui, supprimer'),
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //               );
+                  //             },
+                  //           ),
+                  //         );
+                  //       },
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             )
