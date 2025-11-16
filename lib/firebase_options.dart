@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDPw3Epoo3CDyL6OsiCTVAbKz5NMBgWolU',
-    appId: '1:1003203724496:android:d45c4df5d54e8ca7458ad5',
+    appId: '1:1003203724496:android:50f45baf38e1bb3c458ad5',
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD4OuOwQMgSTGAqG0zpXnvNVDNqNjh7x7g',
-    appId: '1:1003203724496:ios:4b3ff72c2c982ab4458ad5',
+    appId: '1:1003203724496:ios:d923d874ae90ca8b458ad5',
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
-    storageBucket: 'immo-plus.appspot.com',
-    iosClientId: '1003203724496-plj3ihlb4ink00od0dsivl8bbmmpk9t8.apps.googleusercontent.com',
-    iosBundleId: 'com.monimmoci.monimmp.prod',
+    storageBucket: 'immo-plus.firebasestorage.app',
+    iosBundleId: 'com.immoplus.pro.ci',
   );
+
 }

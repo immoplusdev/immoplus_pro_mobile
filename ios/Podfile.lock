@@ -109,10 +109,10 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (3.7.11)
   - PhoneNumberKit/UIKit (3.7.11):
     - PhoneNumberKit/PhoneNumberKitCore
-  - SDWebImage (5.21.1):
-    - SDWebImage/Core (= 5.21.1)
-  - SDWebImage/Core (5.21.1)
-  - SDWebImageWebPCoder (0.14.6):
+  - SDWebImage (5.21.3):
+    - SDWebImage/Core (= 5.21.3)
+  - SDWebImage/Core (5.21.3)
+  - SDWebImageWebPCoder (0.15.0):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
   - sms_autofill (0.0.1):
@@ -138,6 +138,7 @@ DEPENDENCIES:
   - location (from `.symlinks/plugins/location/ios`)
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
+  - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
@@ -217,12 +218,12 @@ SPEC CHECKSUMS:
   OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
-  SDWebImage: f29024626962457f3470184232766516dee8dfea
-  SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
+  SDWebImage: 16309af6d214ba3f77a7c6f6fdda888cb313a50a
+  SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   sms_autofill: b36b2147535657fea83d7f3898d7831de70bd8e4
   vibration: 69774ad57825b11c951ee4c46155f455d7a592ce
   wakelock_plus: 04623e3f525556020ebd4034310f20fe7fda8b49
 
-PODFILE CHECKSUM: 9c46fd01abff66081b39f5fa5767b3f1d0b11d76
+PODFILE CHECKSUM: 3e50b674ce24bacd07b5ca080a4a47ef74f2f436
 
 COCOAPODS: 1.16.2

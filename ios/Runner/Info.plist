@@ -26,6 +26,21 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>yourdomain.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>ImmoPLus Pro utilise l’appareil photo pour vous permettre de prendre des photos.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -34,6 +49,8 @@
 	<string>ImmoPLus Pro nécessite un accès permanent à votre position, même lorsque l’application est fermée.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>ImmoPLus Pro a besoin d’accéder à votre position pour afficher votre emplacement sur la carte et fournir des services basés sur votre localisation.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Cette app a besoin d’accéder au micro pour enregistrer l’audio (mémos vocaux, appels, etc.).</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>ImmoPLus Pro enregistre des photos dans votre photothèque.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -42,8 +59,10 @@
 	<string>ImmoPLus Pro souhaite vous envoyer des notifications.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Cette app a besoin d’accéder au micro pour enregistrer l’audio (mémos vocaux, appels, etc.).</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -54,21 +73,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>yourdomain.com</key>
-            <dict>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-                <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                <false/>
-            </dict>
-       </dict>
-    </dict>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
