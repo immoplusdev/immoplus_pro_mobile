@@ -17,6 +17,8 @@ import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
+import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
+import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
@@ -66,7 +68,9 @@ class AppRouter {
       ),
       GoRoute(
         path: '/enterprise_registration',
-        builder: (context, state) => const EnterpriseRegistrationPage(),
+        builder: (context, state) => EnterpriseRegistrationPage(
+          dataRouterRegistration: state.extra as DataRouterRegistration,
+        ),
         name: EnterpriseRegistrationPage.name,
       ),
       GoRoute(
@@ -76,7 +80,9 @@ class AppRouter {
       ),
       GoRoute(
         path: '/particulier_registration',
-        builder: (context, state) => const ParticulierRegistration(),
+        builder: (context, state) => ParticulierRegistration(
+          dataRouterRegistration: state.extra as DataRouterRegistration,
+        ),
         name: ParticulierRegistration.name,
       ),
       GoRoute(
@@ -177,6 +183,39 @@ class AppRouter {
           return const UpdatePasswordPage();
         },
       ),
+      GoRoute(
+        path: '/send-email-otp',
+        name: SendEmailOptPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as Map<String, dynamic>;
+          final callOnSuccess = data['onSuccess'] as Function(
+              DataRouterRegistration dataRouterRegistration);
+          return SendEmailOptPage(
+            onSuccess: callOnSuccess,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/verify-email-otp',
+        name: VerifyEmailOtpPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as Map<String, dynamic>;
+          final email = data['email'] as String;
+          final callOnSuccess = data['onSuccess'] as Function(
+              DataRouterRegistration dataRouterRegistration);
+          return VerifyEmailOtpPage(
+            email: email,
+            onSuccess: callOnSuccess,
+          );
+        },
+      ),
     ],
   );
 }
+
+
+// class ExtraVerifyEmailPage {
+//   final Function(DataRouterRegistration dataRouterRegistration) onSuccess;
+//   final String email;
+//   ExtraVerifyEmailPage({required this.onSuccess, required this.email});
+// }

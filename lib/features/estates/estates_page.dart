@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
@@ -30,6 +31,8 @@ class _EstatesPageState extends State<EstatesPage> {
     BienImmobilierRepository.getBiensImmobiliers(
       page: page,
       perPage: 5,
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
     ).then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(

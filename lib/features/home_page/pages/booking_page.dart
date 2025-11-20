@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -33,8 +34,8 @@ class _BookingPageState extends State<BookingPage> {
       id: SessionManager().currentUser!.userId.toString(),
       page: page,
       perPage: 5,
-      orderBy: 'createdAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
       where: {
         '_where': [
           //'{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
@@ -118,7 +119,7 @@ class _BookingPageState extends State<BookingPage> {
                     ),
                     const Gap(30),
                     Text(
-                      "Aucune Réservation Pour le Moment",
+                      "Aucune réservation payée pour le moment",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),

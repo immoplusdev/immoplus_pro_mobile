@@ -17,10 +17,15 @@ const OnboardingEntitySchema = CollectionSchema(
   name: r'OnboardingEntity',
   id: 330131177673696620,
   properties: {
-    r'opened': PropertySchema(
+    r'hasReadOnboarding': PropertySchema(
       id: 0,
-      name: r'opened',
+      name: r'hasReadOnboarding',
       type: IsarType.bool,
+    ),
+    r'readAt': PropertySchema(
+      id: 1,
+      name: r'readAt',
+      type: IsarType.dateTime,
     )
   },
   estimateSize: _onboardingEntityEstimateSize,
@@ -52,7 +57,8 @@ void _onboardingEntitySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.opened);
+  writer.writeBool(offsets[0], object.hasReadOnboarding);
+  writer.writeDateTime(offsets[1], object.readAt);
 }
 
 OnboardingEntity _onboardingEntityDeserialize(
@@ -61,10 +67,10 @@ OnboardingEntity _onboardingEntityDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = OnboardingEntity(
-    id: id,
-    opened: reader.readBoolOrNull(offsets[0]),
-  );
+  final object = OnboardingEntity();
+  object.hasReadOnboarding = reader.readBool(offsets[0]);
+  object.id = id;
+  object.readAt = reader.readDateTimeOrNull(offsets[1]);
   return object;
 }
 
@@ -76,7 +82,9 @@ P _onboardingEntityDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
+    case 1:
+      return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -177,6 +185,16 @@ extension OnboardingEntityQueryWhere
 extension OnboardingEntityQueryFilter
     on QueryBuilder<OnboardingEntity, OnboardingEntity, QFilterCondition> {
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
+      hasReadOnboardingEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasReadOnboarding',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
       idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -233,29 +251,75 @@ extension OnboardingEntityQueryFilter
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
-      openedIsNull() {
+      readAtIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'opened',
+        property: r'readAt',
       ));
     });
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
-      openedIsNotNull() {
+      readAtIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'opened',
+        property: r'readAt',
       ));
     });
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
-      openedEqualTo(bool? value) {
+      readAtEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'opened',
+        property: r'readAt',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
+      readAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'readAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
+      readAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'readAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterFilterCondition>
+      readAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'readAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -270,22 +334,50 @@ extension OnboardingEntityQueryLinks
 extension OnboardingEntityQuerySortBy
     on QueryBuilder<OnboardingEntity, OnboardingEntity, QSortBy> {
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
-      sortByOpened() {
+      sortByHasReadOnboarding() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'opened', Sort.asc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.asc);
     });
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
-      sortByOpenedDesc() {
+      sortByHasReadOnboardingDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'opened', Sort.desc);
+      return query.addSortBy(r'hasReadOnboarding', Sort.desc);
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
+      sortByReadAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
+      sortByReadAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readAt', Sort.desc);
     });
   }
 }
 
 extension OnboardingEntityQuerySortThenBy
     on QueryBuilder<OnboardingEntity, OnboardingEntity, QSortThenBy> {
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
+      thenByHasReadOnboarding() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasReadOnboarding', Sort.asc);
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
+      thenByHasReadOnboardingDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasReadOnboarding', Sort.desc);
+    });
+  }
+
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -300,16 +392,16 @@ extension OnboardingEntityQuerySortThenBy
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
-      thenByOpened() {
+      thenByReadAt() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'opened', Sort.asc);
+      return query.addSortBy(r'readAt', Sort.asc);
     });
   }
 
   QueryBuilder<OnboardingEntity, OnboardingEntity, QAfterSortBy>
-      thenByOpenedDesc() {
+      thenByReadAtDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'opened', Sort.desc);
+      return query.addSortBy(r'readAt', Sort.desc);
     });
   }
 }
@@ -317,9 +409,16 @@ extension OnboardingEntityQuerySortThenBy
 extension OnboardingEntityQueryWhereDistinct
     on QueryBuilder<OnboardingEntity, OnboardingEntity, QDistinct> {
   QueryBuilder<OnboardingEntity, OnboardingEntity, QDistinct>
-      distinctByOpened() {
+      distinctByHasReadOnboarding() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'opened');
+      return query.addDistinctBy(r'hasReadOnboarding');
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, OnboardingEntity, QDistinct>
+      distinctByReadAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'readAt');
     });
   }
 }
@@ -332,9 +431,16 @@ extension OnboardingEntityQueryProperty
     });
   }
 
-  QueryBuilder<OnboardingEntity, bool?, QQueryOperations> openedProperty() {
+  QueryBuilder<OnboardingEntity, bool, QQueryOperations>
+      hasReadOnboardingProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'opened');
+      return query.addPropertyName(r'hasReadOnboarding');
+    });
+  }
+
+  QueryBuilder<OnboardingEntity, DateTime?, QQueryOperations> readAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'readAt');
     });
   }
 }

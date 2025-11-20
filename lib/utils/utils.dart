@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -187,6 +188,11 @@ class Utils {
     return formattedDate;
   }
 
+  static String shortformatDateTime({required DateTime dateTime}) {
+    String formattedDate = DateFormat("dd/MM/yyy à HH'h':mm").format(dateTime);
+    return formattedDate;
+  }
+
   static String formatDateTime({required DateTime dateTime}) {
     String formattedDate =
         DateFormat("dd MMMM yyy  à HH'h':mm").format(dateTime);
@@ -328,6 +334,14 @@ class Utils {
     }
   }
 
+  static DateTime toDateTime(String? dateString) {
+    try {
+      return DateTime.parse(dateString!);
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
   // static uploadImage(
   //     {required ImageSource source,
   //     required BuildContext context,
@@ -454,5 +468,9 @@ class Utils {
     }
 
     return formattedAmount;
+  }
+
+  static copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
   }
 }

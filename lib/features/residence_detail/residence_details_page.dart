@@ -69,7 +69,8 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
     return BlocConsumer<LogmentCubit, RequestState>(
       listener: (context, state) {
         if (state is REQUEST_SUCCESS) {
-          ToastUtils.showSuccess(title: state.message ?? "Opération réussie");
+          ToastUtils.showSuccess(
+              title: "Opération réussie", description: state.message);
           ResidenceCreationModelBuilder().reset();
           context.pop(true);
         }

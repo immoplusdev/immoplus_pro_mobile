@@ -6,18 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
+import 'package:immoplus_pro/constantes/constantes.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/features/visits/logic/booking_cubit.dart';
 import 'package:immoplus_pro/features/visits/logic/visit_manager.dart';
 import 'package:immoplus_pro/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus_pro/features/visits/widgets/estate_info.dart';
-import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/utils/contact_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -25,10 +24,8 @@ import 'package:shimmer/shimmer.dart';
 ///////
 
 class VisitDetailPage extends StatefulWidget {
-  const VisitDetailPage(
-      {super.key, required this.id, required this.clientPhoneNumer});
+  const VisitDetailPage({super.key, required this.id});
   final String id;
-  final String clientPhoneNumer;
 
   @override
   State<VisitDetailPage> createState() => _VisitDetailPageState();
@@ -41,11 +38,63 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     context.read<VisitCubit>().getVisit(id: widget.id);
   }
 
+  /// verifier si la demande de visite contient des dates
+  // bool hasDateVisite(DemandeVisitResponse demandeVisitResponse) {
+  //   return demandeVisitResponse.data.datesDemandeVisite.isNotEmpty;
+  // }
+
+  /// verifier si la demande de visite est payé
+  bool hasPaid(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.statusFacture.toString() ==
+        PaymentStatus.paye.name;
+  }
+
+  // bool hasNotPaid(DemandeVisitResponse demandeVisitResponse) {
+  //   return demandeVisitResponse.data.statusFacture.toString() ==
+  //       PaymentStatus.non_paye.name;
+  // }
+
+  /// verifier si la demande de visite contient une facture
+  bool hasExpress(DemandeVisitResponse demandeVisitResponse) {
+    return demandeVisitResponse.data.typeDemandeVisite.toString() == "express";
+  }
+
+  /// Getter pour determiner si on doit afficher le bouton de paiement
+  // bool shouldShowPaymentButton(DemandeVisitResponse demandeVisitResponse) {
+  //   // Cas 1: Express - afficher si pas payé ET qu'il y a des dates de visite
+  //   if (hasExpress(demandeVisitResponse)) {
+  //     return hasNotPaid(demandeVisitResponse) &&
+  //         hasDateVisite(demandeVisitResponse);
+  //   }
+  //   return false;
+  // }
+
+  /// Getter pour determiner si on doit afficher le numéro du client
+  bool shouldShowClientPhone(DemandeVisitResponse demandeVisitResponse) {
+    // Cas 1: Express - afficher si on a payé
+    if (hasExpress(demandeVisitResponse)) {
+      return hasPaid(demandeVisitResponse);
+    }
+    // Cas 2: Normal (pas express) - afficher
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<VisitCubit, VisitRequestState>(
       builder: (context, state) {
         if (state is RECEIVE_VISIT) {
+          /// la date d'acceptation de la visite doit etre uniquement le jour d'apres
+          final lastDateAcceptVisit = hasExpress(state.demandeVisitResponse)
+              ? DateTime.now().add(Duration(days: 1))
+              : null;
+
+          final startDate = DateTime.now().add(Duration(days: 1));
+          final initialDate = DateTime.now().add(Duration(days: 1));
+
+          final clientPhoneNumber =
+              state.demandeVisitResponse.data.client?.phoneNumber ?? "";
+
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
@@ -103,11 +152,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                     ),
                   ),
                   const SliverGap(10),
-                  if (state
-                      .demandeVisitResponse.data.datesDemandeVisite.isEmpty)
+                  if (state.demandeVisitResponse.data.datesDemandeVisite
+                      .isEmpty) ...[
                     const SliverGap(5),
-                  if (state
-                      .demandeVisitResponse.data.datesDemandeVisite.isEmpty)
                     SliverPadding(
                       padding: const EdgeInsets.symmetric(horizontal: 10)
                           .copyWith(bottom: 10),
@@ -124,11 +171,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         ),
                       ),
                     ),
-                  if (state
-                      .demandeVisitResponse.data.datesDemandeVisite.isEmpty)
                     const SliverGap(5),
-                  if (state
-                      .demandeVisitResponse.data.datesDemandeVisite.isEmpty)
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10)
@@ -139,7 +182,11 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           period: const Duration(seconds: 5),
                           child: ListTile(
                             onTap: () {
-                              VisitManager.getDateTime().then(
+                              VisitManager.getDateTime(
+                                      lastDate: lastDateAcceptVisit,
+                                      firstDate: startDate,
+                                      initialDate: initialDate)
+                                  .then(
                                 (value) async {
                                   if (value != null) {
                                     EasyLoading.instance.backgroundColor =
@@ -183,6 +230,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         ),
                       ),
                     ),
+                  ],
                   if (state
                       .demandeVisitResponse.data.datesDemandeVisite.isNotEmpty)
                     SliverPadding(
@@ -190,29 +238,33 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           .copyWith(bottom: 10),
                       sliver: SliverToBoxAdapter(
                         child: ListTile(
-                          onTap: () {
-                            VisitManager.getDateTime().then(
-                              (value) async {
-                                if (value != null) {
-                                  EasyLoading.instance.backgroundColor =
-                                      AppColors.primary;
-                                  EasyLoading.show(
-                                      status: 'Veuillez patienter..');
-                                  BienImmobilierRepository.programmerVisit(
-                                          state.demandeVisitResponse.data.id,
-                                          value)
-                                      .then((value) {
-                                    if (value != null) {
-                                      EasyLoading.dismiss();
-                                      context
-                                          .read<VisitCubit>()
-                                          .getVisit(id: widget.id);
-                                    }
-                                  });
-                                }
-                              },
-                            );
-                          },
+                          // onTap: () {
+                          //   VisitManager.getDateTime(
+                          //           lastDate: lastDateAcceptVisit,
+                          //           firstDate: startDate,
+                          //           initialDate: initialDate)
+                          //       .then(
+                          //     (value) async {
+                          //       if (value != null) {
+                          //         EasyLoading.instance.backgroundColor =
+                          //             AppColors.primary;
+                          //         EasyLoading.show(
+                          //             status: 'Veuillez patienter..');
+                          //         BienImmobilierRepository.programmerVisit(
+                          //                 state.demandeVisitResponse.data.id,
+                          //                 value)
+                          //             .then((value) {
+                          //           if (value != null) {
+                          //             EasyLoading.dismiss();
+                          //             context
+                          //                 .read<VisitCubit>()
+                          //                 .getVisit(id: widget.id);
+                          //           }
+                          //         });
+                          //       }
+                          //     },
+                          //   );
+                          // },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
@@ -227,7 +279,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           contentPadding:
                               const EdgeInsets.symmetric(horizontal: 5),
                           horizontalTitleGap: 4,
-                          title: const Text("Jour et heur de visite"),
+                          title: const Text("Jour et heure de visite"),
                           subtitle: AutoSizeText(Utils.formatDateTime(
                               dateTime: state.demandeVisitResponse.data
                                   .datesDemandeVisite.first.date!)),
@@ -235,10 +287,10 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                               Theme.of(context).textTheme.titleLarge,
                           titleTextStyle:
                               Theme.of(context).textTheme.bodyMedium,
-                          trailing: Icon(
-                            FontAwesomeIcons.circleChevronRight,
-                            color: AppColors.primary,
-                          ),
+                          // trailing: Icon(
+                          //   FontAwesomeIcons.circleChevronRight,
+                          //   color: AppColors.primary,
+                          // ),
                         ),
                       ),
                     ),
@@ -247,15 +299,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     sliver: SliverToBoxAdapter(
                       child: ListTile(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              20,
-                            ),
-                            topRight: Radius.circular(
-                              20,
-                            ),
-                          ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
                         tileColor: Colors.white,
                         onTap: () {
@@ -286,39 +331,36 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                     ),
                   ),
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     sliver: SliverToBoxAdapter(
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(
-                              20,
-                            ),
-                            bottomLeft: Radius.circular(
-                              20,
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          Utils.makePhoneCall(widget.clientPhoneNumer);
-                        },
-                        horizontalTitleGap: 0,
-                        leading: Icon(
-                          FontAwesomeIcons.buildingUser,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        title: const AutoSizeText(
-                          'Contacter le client',
-                          maxLines: 1,
-                        ),
-                        trailing: Icon(
-                          FontAwesomeIcons.circleChevronRight,
-                          size: 15,
-                          color: AppColors.primary,
-                        ),
-                      ),
+                      child: shouldShowClientPhone(state.demandeVisitResponse)
+                          ? ListTile(
+                              tileColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              onTap: () {
+                                Utils.makePhoneCall(clientPhoneNumber);
+                              },
+                              horizontalTitleGap: 0,
+                              leading: Icon(
+                                FontAwesomeIcons.buildingUser,
+                                color: AppColors.primary,
+                                size: 20,
+                              ),
+                              title: const AutoSizeText(
+                                'Contacter le client',
+                                maxLines: 1,
+                              ),
+                              trailing: Icon(
+                                FontAwesomeIcons.circleChevronRight,
+                                size: 15,
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : Text(
+                              "Vous avez pas accès au numéro du client tant que celui ci n'a pas payé la visite"),
                     ),
                   ),
                 ],

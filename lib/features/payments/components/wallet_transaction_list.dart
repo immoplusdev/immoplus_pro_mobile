@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/features/payments/data/models/transaction_model.dart';
@@ -33,8 +34,8 @@ class _WalletTransactionListState extends State<WalletTransactionList> {
     WalletRepository.getTransactions(
       page: page,
       perPage: 10,
-      orderBy: 'updatedAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.updatedAt.value,
+      orderDir: OrderDir.desc.value,
       // where: {
       // '_where': [
       //   '{"_field": "paymentType", "_op": "eq", "_val": retrait}',
@@ -257,8 +258,8 @@ class _WalletTransactionListState extends State<WalletTransactionList> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
-                            child: AutoSizeText(
-                                Utils.formatDate(dateTime: item.updatedAt!)),
+                            child: AutoSizeText(Utils.shortformatDateTime(
+                                dateTime: item.updatedAt!)),
                           ),
                           // Flexible(
                           //   child: Chip(

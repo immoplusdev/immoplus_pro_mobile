@@ -66,17 +66,23 @@ class _HomePageState extends State<HomePage> {
                             BookingSection.in_progress: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                'Réservations',
-                                style: Theme.of(context).textTheme.titleMedium,
+                              child: FittedBox(
+                                child: Text(
+                                  'Réservations',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
                               ),
                             ),
                             BookingSection.visit: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(
-                                'Visites',
-                                style: Theme.of(context).textTheme.titleMedium,
+                              child: FittedBox(
+                                child: Text(
+                                  'Visites',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
                               ),
                             ),
                           },

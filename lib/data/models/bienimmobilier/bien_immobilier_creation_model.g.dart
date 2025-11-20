@@ -9,7 +9,7 @@ part of 'bien_immobilier_creation_model.dart';
 _$BienImmobilierCreationModelImpl _$$BienImmobilierCreationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$BienImmobilierCreationModelImpl(
-      miniature: json['miniature'] as String? ?? '',
+      miniature: json['miniature'] as String?,
       typeLocation: json['typeLocation'] as String? ?? '',
       nom: json['nom'] as String? ?? '',
       typeBienImmobilier:

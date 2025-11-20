@@ -143,6 +143,7 @@ class _EditAccountState extends State<EditAccount> {
                           FormUtils.fieldValidator(value: value),
                     ),
                     InternationalPhoneInput(
+                      isEnabled: false,
                       initialPhoneNumber:
                           SessionManager().currentUser!.phoneNumber,
                       onValidPhoneNumber: (value) {
@@ -155,6 +156,7 @@ class _EditAccountState extends State<EditAccount> {
                     const Gap(10),
                     CustomTextField(
                       controller: _formController.email,
+                      isEnabled: false,
                       prefixIcon: const Icon(CupertinoIcons.mail),
                       labelText: 'Email',
                       textInputType: TextInputType.emailAddress,

@@ -1,62 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:map_launcher/map_launcher.dart' as MPL;
 
 class DetailEstateMap extends StatefulWidget {
-  DetailEstateMap({super.key, required this.bienImmobilier});
+  const DetailEstateMap({super.key, required this.bienImmobilier});
   final BienImmobilierModel bienImmobilier;
   @override
-  _DetailEstateMapState createState() => _DetailEstateMapState();
+  State<DetailEstateMap> createState() => _DetailEstateMapState();
 }
 
 class _DetailEstateMapState extends State<DetailEstateMap> {
-  // Uint8List? markerIcon;
+  late GoogleMapController _mapController;
+  final Set<Marker> _markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _addCustomMarker();
+  }
+
+  Future<void> _addCustomMarker() async {
+    Marker customMarker = await GoogleMapsCustomMarker.createCustomMarker(
+      marker: Marker(
+        markerId: const MarkerId('residenceMarker'),
+        position: LatLng(
+          widget.bienImmobilier.position.coordinates!.last,
+          widget.bienImmobilier.position.coordinates!.first,
+        ),
+        onTap: () async {
+          if (await MPL.MapLauncher.isMapAvailable(MPL.MapType.google) ??
+              false) {
+            MPL.MapLauncher.showDirections(
+              destinationTitle: widget.bienImmobilier.nom,
+              destination: MPL.Coords(
+                widget.bienImmobilier.position.coordinates![1],
+                widget.bienImmobilier.position.coordinates![0],
+              ),
+              directionsMode: MPL.DirectionsMode.driving,
+              mapType: MPL.MapType.google,
+            );
+          } else {
+            final availableMaps = await MPL.MapLauncher.installedMaps;
+
+            await availableMaps.first.showDirections(
+              destinationTitle: widget.bienImmobilier.nom,
+              destination: MPL.Coords(
+                widget.bienImmobilier.position.coordinates![1],
+                widget.bienImmobilier.position.coordinates![0],
+              ),
+              directionsMode: MPL.DirectionsMode.driving,
+            );
+          }
+        },
+      ),
+      shape: MarkerShape.bubble,
+      imagePixelRatio: 2,
+      title: widget.bienImmobilier.nom ?? 'Résidence',
+      textSize: 35,
+      backgroundColor: AppColors.primary,
+    );
+
+    setState(() {
+      _markers.add(customMarker);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return (widget.bienImmobilier.position.coordinates.isNotEmpty)
+    return (widget.bienImmobilier.position != null)
         ? SliverToBoxAdapter(
             child: SizedBox(
               height: 300,
-              child: FlutterMap(
-                options: MapOptions(
-                  onTap: (tapPosition, point) {
-                    print(point);
-                  },
-                  initialCenter: LatLng(
-                    widget.bienImmobilier.position.coordinates.last,
-                    widget.bienImmobilier.position.coordinates.first,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                markers: _markers,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    widget.bienImmobilier.position.coordinates!.last,
+                    widget.bienImmobilier.position.coordinates!.first,
                   ),
-                  initialZoom: 13.4,
+                  zoom: 12.4,
                 ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    subdomains: const ['a', 'b', 'c'],
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: LatLng(
-                          widget.bienImmobilier.position.coordinates.last,
-                          widget.bienImmobilier.position.coordinates.first,
-                        ), // Position du marqueur
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                          size: 40.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                rotateGesturesEnabled: false, // Désactive la rotation
+                tiltGesturesEnabled:
+                    false, // Désactive les gestes d'inclinaison
+                onMapCreated: (GoogleMapController controller) {
+                  _mapController = controller;
+                },
               ),
             ),
           )
-        : SliverToBoxAdapter(child: SizedBox.shrink());
+        : const SliverToBoxAdapter(child: SizedBox.shrink());
   }
 }

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:immoplus_pro/features/payments/data/models/has_pin_response_model.dart';
+import 'package:immoplus_pro/features/payments/data/models/pin_request_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/transaction_collection_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/wallet_response_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_collection_model.dart';
@@ -41,4 +43,16 @@ abstract class WalletProvider {
   @POST("/wallet/withdrawal-request/create")
   Future<WithdrawalRequestModel> createWithdrawalRequest(
       @Body() WithdrawalRequestDto withdrawalRequestDto);
+
+  /// Définir un nouveau code PIN pour le wallet
+  @POST('/wallet/set-pin')
+  Future<void> setPin(@Body() PinRequestModel pinRequest);
+
+  /// Vérifier le code PIN du wallet
+  @POST('/wallet/verify-pin')
+  Future<void> verifyPin(@Body() PinRequestModel pinRequest);
+
+  /// Vérifier si l'utilisateur a déjà défini un PIN
+  @GET('/wallet/has-pin')
+  Future<HasPinResponseModel> hasPin();
 }

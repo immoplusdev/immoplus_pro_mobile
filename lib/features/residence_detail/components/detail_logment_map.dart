@@ -1,85 +1,91 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:immoplus_pro/data/models/residence/residence_model.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
 
-Future<Uint8List> getBytesFromAsset(String path, int width) async {
-  ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-      targetWidth: width);
-  ui.FrameInfo fi = await codec.getNextFrame();
-  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-      .buffer
-      .asUint8List();
-}
+import 'package:immoplus_pro/data/models/residence/residence_model.dart';
+import 'package:immoplus_pro/features/payment_module/utils/utils.dart';
+import 'package:map_launcher/map_launcher.dart' as MPL;
 
 class DetailLogmentMap extends StatefulWidget {
-  DetailLogmentMap({super.key, required this.residence});
+  const DetailLogmentMap({super.key, required this.residence});
   final ResidenceModel residence;
+
   @override
-  _DetailLogmentMapState createState() => _DetailLogmentMapState();
+  State<DetailLogmentMap> createState() => _DetailLogmentMapState();
 }
 
 class _DetailLogmentMapState extends State<DetailLogmentMap> {
-  // Uint8List? markerIcon;
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getBytesFromAsset('assets/icon/marker.png', 130).then((value) {
-  //     setState(() {
-  //       markerIcon = value;
-  //     });
-  //   });
-  // }
+  late GoogleMapController _mapController;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return (widget.residence.position != null)
-        ? SliverToBoxAdapter(
-            child: SizedBox(
-              height: 300,
-              child: FlutterMap(
-                options: MapOptions(
-                  onTap: (tapPosition, point) {
-                    print(point);
-                  },
-                  initialCenter: LatLng(
-                    widget.residence.position.coordinates.last,
-                    widget.residence.position.coordinates.first,
-                  ),
-                  initialZoom: 13.4,
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    subdomains: const ['a', 'b', 'c'],
-                  ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        width: 80.0,
-                        height: 80.0,
-                        point: LatLng(
-                          widget.residence.position.coordinates.last,
-                          widget.residence.position.coordinates.first,
-                        ), // Position du marqueur
-                        child: const Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                          size: 40.0,
+        ? SliverPadding(
+            padding: const EdgeInsets.all(8.0),
+            sliver: SliverToBoxAdapter(
+              child: SizedBox(
+                height: 300,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: GoogleMap(
+                        mapType: MapType.normal,
+                        // markers: _markers,
+                        zoomGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            widget.residence.position.coordinates!.last,
+                            widget.residence.position.coordinates!.first,
+                          ),
+                          zoom: 15.4,
+                        ),
+                        rotateGesturesEnabled: false, // Désactive la rotation
+                        tiltGesturesEnabled:
+                            false, // Désactive les gestes d'inclinaison
+                        myLocationButtonEnabled: false,
+                        onMapCreated: (GoogleMapController controller) {
+                          _mapController = controller;
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 50),
+                        child: Stack(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/svgs/icons/markers.svg",
+                              height: 100,
+                              // height: 50,
+                              // width: 50,
+                            ),
+                            Positioned(
+                              left: 7,
+                              top: 8,
+                              child: CircleAvatar(
+                                radius: 27,
+                                backgroundImage: NetworkImage(
+                                    Utils.getImagePath(
+                                        id: widget.residence.images.first)),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           )
-        : SliverToBoxAdapter(child: SizedBox.shrink());
+        : const SliverToBoxAdapter(child: SizedBox.shrink());
   }
 }

@@ -10,12 +10,16 @@ part 'reservation_model.g.dart';
 class ReservationModel with _$ReservationModel {
   const factory ReservationModel({
     @Default('') String id,
+    @Default('') String dateDebut,
+    @Default('') String dateFin,
     @Default('') String statusReservation,
     @Default([]) List<DatesReservationModel> datesReservation,
     @Default('') String statusFacture,
     @Default(false) bool retraitProEffectue,
     @Default(0) double montantTotalReservation,
     @Default(0) double montantReservationSansCommission,
+    @Default(0) int montantPaye,
+    @Default('') String codeReservation,
     @Default('') String notes,
     @Default('') String clientPhoneNumber,
     @Default('') String createdAt,

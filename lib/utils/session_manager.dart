@@ -68,18 +68,32 @@ class SessionManager {
     return await isar.userModelSchemas.get(1);
   }
 
-  Future<bool> appIsAlreadyOpened() async {
-    return isarInstance.writeTxn<bool>(
-      () async {
-        final data = await isarInstance.onboardingEntitys.get(1);
-        if (data != null) {
-          log("OPENED TRUE");
-          return true;
-        } else {
-          log("OPENED FALSE");
-          return false;
-        }
-      },
-    );
+  /// Marque l'onboarding comme lu/vu par l'utilisateur
+  Future<void> markOnboardingAsRead() async {
+    await isarInstance.writeTxn(() async {
+      await isarInstance.onboardingEntitys.put(
+        OnboardingEntity()
+          ..hasReadOnboarding = true
+          ..readAt = DateTime.now(),
+      );
+    });
+    log("Onboarding marked as read");
+  }
+
+  /// Vérifie si l'utilisateur a déjà vu l'onboarding
+  Future<bool> hasReadOnboarding() async {
+    final onboardingData =
+        await isarInstance.onboardingEntitys.where().findFirst();
+    final hasRead = onboardingData?.hasReadOnboarding ?? false;
+    log("Has read onboarding: $hasRead");
+    return hasRead;
+  }
+
+  /// Réinitialise le statut de l'onboarding (utile pour les tests)
+  Future<void> resetOnboarding() async {
+    await isarInstance.writeTxn(() async {
+      await isarInstance.onboardingEntitys.clear();
+    });
+    log("Onboarding reset");
   }
 }

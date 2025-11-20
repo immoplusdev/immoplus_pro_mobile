@@ -102,6 +102,7 @@ class ErrorInterceptor extends Interceptor {
       description: Text(
         message,
         maxLines: 6,
+        overflow: TextOverflow.ellipsis,
       ),
       autoCloseDuration: const Duration(seconds: 5),
       showProgressBar: false,

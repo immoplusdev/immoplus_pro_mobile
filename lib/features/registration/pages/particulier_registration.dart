@@ -13,6 +13,7 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
@@ -25,7 +26,9 @@ import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ParticulierRegistration extends StatefulWidget {
-  const ParticulierRegistration({super.key});
+  final DataRouterRegistration dataRouterRegistration;
+  const ParticulierRegistration(
+      {super.key, required this.dataRouterRegistration});
   static String name = "Particulier_Registration";
   @override
   State<ParticulierRegistration> createState() =>
@@ -59,7 +62,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
       lastName: TextEditingController(text: ''),
       activity: TextEditingController(text: ''),
       phoneNumber: TextEditingController(text: ''),
-      email: TextEditingController(text: ''),
+      email: TextEditingController(text: widget.dataRouterRegistration.email),
       password: TextEditingController(text: ''),
     );
     _formKey = GlobalKey<FormState>();
@@ -181,6 +184,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                   SliverToBoxAdapter(
                     child: CustomTextField(
                       focusNode: _emailFocus,
+                      readOnly: true,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(_passwordFocus),
@@ -345,23 +349,23 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             file:
                                                 fileUploaderControllerPieceIdentite
                                                     .file!);
-                                        final body =
-                                            ParticulierRegistrationBody(
-                                          avatar: avatar,
-                                          pieceIdentiteId: piece,
-                                          photoIdentiteId: avatar,
-                                          firstName:
-                                              _formController.firstName!.text,
-                                          lastName:
-                                              _formController.lastName!.text,
-                                          email: _formController.email!.text,
-                                          phoneNumber:
-                                              "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
-                                          password:
-                                              _formController.password!.text,
-                                          activite:
-                                              _formController.activity!.text,
-                                        );
+                                        final body = ParticulierRegistrationBody(
+                                            avatar: avatar,
+                                            pieceIdentiteId: piece,
+                                            photoIdentiteId: avatar,
+                                            firstName:
+                                                _formController.firstName!.text,
+                                            lastName:
+                                                _formController.lastName!.text,
+                                            email: _formController.email!.text,
+                                            phoneNumber:
+                                                "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
+                                            password:
+                                                _formController.password!.text,
+                                            activite:
+                                                _formController.activity!.text,
+                                            token: widget
+                                                .dataRouterRegistration.token);
 
                                         context
                                             .read<RgistrationCubitCubit>()

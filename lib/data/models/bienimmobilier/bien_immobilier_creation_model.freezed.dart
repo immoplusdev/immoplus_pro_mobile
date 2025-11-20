@@ -343,7 +343,7 @@ class __$$BienImmobilierCreationModelImplCopyWithImpl<$Res>
 class _$BienImmobilierCreationModelImpl
     implements _BienImmobilierCreationModel {
   const _$BienImmobilierCreationModelImpl(
-      {this.miniature = '',
+      {this.miniature,
       this.typeLocation = '',
       this.nom = '',
       this.typeBienImmobilier = 'Unknown Type',
@@ -370,7 +370,6 @@ class _$BienImmobilierCreationModelImpl
       _$$BienImmobilierCreationModelImplFromJson(json);
 
   @override
-  @JsonKey()
   final String? miniature;
   @override
   @JsonKey()

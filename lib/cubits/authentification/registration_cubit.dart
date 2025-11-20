@@ -1,13 +1,17 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
+import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
 import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
+import 'package:immoplus_pro/data/models/auth/verify_email_otp.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
@@ -18,6 +22,47 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit() : super(const RegistrationCubitState.initial());
+
+  Future<bool> userSendOTP({required String email}) async {
+    emit(const RegistrationCubitState.loading());
+    try {
+      final response = await AuthRepository()
+          .userSendOTP(body: SendEmailOtpBody(email: email));
+      emit(RegistrationCubitState.initial());
+      if ([200, 201].contains(response.response.statusCode)) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      emit(RegistrationCubitState.initial());
+      return false;
+    } catch (error) {
+      log('Error: $error');
+      emit(RegistrationCubitState.initial());
+      return false;
+    }
+  }
+
+  Future<VerifyEmailResponse?> verifyOtp(
+      {required String email, required String otp}) async {
+    emit(const RegistrationCubitState.loading());
+    try {
+      final response = await AuthRepository()
+          .verifyOtp(body: VerifyEmailOtp(email: email, otp: otp));
+      emit(RegistrationCubitState.initial());
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      emit(RegistrationCubitState.initial());
+      return null;
+    } catch (error) {
+      log('Error: $error');
+      emit(RegistrationCubitState.initial());
+      return null;
+    }
+  }
 
   createEnterpriseAccount(
       {required EnterpriseRegistrationBody enterpriseRegistrationBody,
@@ -39,6 +84,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -90,6 +136,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name

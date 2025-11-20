@@ -84,9 +84,11 @@ class BookingCard extends StatelessWidget {
                   ),
                   CustomChip(
                     icon: CupertinoIcons.home,
+                    iconColor: Colors.white,
                     label: reservationModel.residence.nom,
+                    labelStyle: TextStyle(color: Colors.white),
                     iconSize: 15,
-                    backgroundColor: CupertinoColors.systemFill,
+                    backgroundColor: AppColors.lightBlue,
                   ),
                 ],
               ),
@@ -133,7 +135,7 @@ class BookingCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                               maxLines: 1,
-                              "${formatDate.format(reservationModel.datesReservation.first.date!)} à ${reservationModel.residence.heureEntree}")
+                              "${formatDate.format(Utils.toDateTime(reservationModel.dateDebut))}  à ${reservationModel.residence.heureEntree}")
                         ],
                       ),
                     ),
@@ -153,7 +155,7 @@ class BookingCard extends StatelessWidget {
                           ),
                           AutoSizeText(
                             maxLines: 1,
-                            "${formatDate.format(reservationModel.datesReservation.last.date!)} avant ${reservationModel.residence.heureDepart} ",
+                            "${formatDate.format(Utils.toDateTime(reservationModel.dateFin))} avant ${reservationModel.residence.heureDepart} ",
                           )
                         ],
                       ),

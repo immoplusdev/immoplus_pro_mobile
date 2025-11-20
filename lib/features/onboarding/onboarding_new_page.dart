@@ -7,6 +7,7 @@ import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/splash_screen.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 
 class OnboardingNewPage extends StatefulWidget {
   const OnboardingNewPage({super.key});
@@ -16,13 +17,21 @@ class OnboardingNewPage extends StatefulWidget {
 }
 
 class _OnboardingNewPageState extends State<OnboardingNewPage> {
-  Future<void> _endOnboarding() async {
-    await isarInstance.writeTxn(
-      () async {
-        await isarInstance.onboardingEntitys
-            .put(OnboardingEntity(id: 1, opened: true));
-      },
-    );
+  // Future<void> _endOnboarding() async {
+  //   await isarInstance.writeTxn(
+  //     () async {
+  //       await isarInstance.onboardingEntitys
+  //           .put(OnboardingEntity(id: 1, opened: true));
+  //     },
+  //   );
+  // }
+
+  /// Navigation vers la page d'accueil après avoir marqué l'onboarding comme lu
+  Future<void> _navigateToHome() async {
+    await SessionManager().markOnboardingAsRead();
+    if (mounted) {
+      context.goNamed(SplashScreen.name);
+    }
   }
 
   final PageController _pageController = PageController();
@@ -48,28 +57,28 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                 },
                 children: [
                   _buildPage(
-                    imagePath: "assets/img/onboarding/login.jpg",
+                    imagePath: "assets/img/onboarding/onb_1.jpg",
                     color: Colors.blueAccent,
                     title: "Bienvenue sur ImmoPlus Pro",
                     content:
                         "Découvrez une plateforme dédiée aux professionnels de l'immobilier pour gérer facilement leurs logements et réservations.",
                   ),
                   _buildPage(
-                    imagePath: "assets/img/onboarding/3.jpg",
+                    imagePath: "assets/img/onboarding/onb_2.jpg",
                     color: Colors.greenAccent,
                     title: "Publiez vos résidences et gérez vos réservations",
                     content:
                         "Ajoutez vos biens en quelques clics et recevez directement les réservations des clients intéressés.",
                   ),
                   _buildPage(
-                    imagePath: "assets/img/onboarding/2.jpg",
+                    imagePath: "assets/img/onboarding/onb_3.jpg",
                     color: Colors.orangeAccent,
                     title: "Boostez la visibilité de vos maisons à louer",
                     content:
                         "Mettez vos logements en avant et facilitez les visites en planifiant des rendez-vous avec les potentiels locataires.",
                   ),
                   _buildPage(
-                    imagePath: "assets/img/onboarding/1.jpg",
+                    imagePath: "assets/img/onboarding/login.jpg",
                     color: Colors.orangeAccent,
                     title: "Prêt à optimiser votre gestion immobilière ?",
                     content:
@@ -113,11 +122,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                     );
                   } else {
                     print("Onboarding terminé !");
-                    _endOnboarding().then(
-                      (value) {
-                        context.goNamed(SplashScreen.name);
-                      },
-                    );
+                    _navigateToHome();
                   }
                 },
               ),
@@ -128,11 +133,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
               child: CustomButtom(
                 text: 'Passer',
                 onClick: () async {
-                  _endOnboarding().then(
-                    (value) {
-                      context.goNamed(SplashScreen.name);
-                    },
-                  );
+                  _navigateToHome();
                 },
                 color: Colors.white,
                 textColor: Colors.black,

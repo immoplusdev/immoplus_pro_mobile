@@ -10,6 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/constantes/constantes.dart';
+import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
@@ -38,11 +40,21 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     context.read<BookingCubit>().getBooking(id: widget.id);
   }
 
+  /// verifier si la demande de visite est payé
+  bool hasPaid(ReservationResponse reservationResponse) {
+    return reservationResponse.data.statusFacture.toString() ==
+        PaymentStatus.paye.name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BookingCubit, BookingRequestState>(
       builder: (context, state) {
         if (state is RECEIVE_BOOKING) {
+          final codeReservation =
+              state.reservationResponse.data.codeReservation;
+          final clientName =
+              "${state.reservationResponse.data.client.firstName} ${state.reservationResponse.data.client.lastName}";
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
@@ -151,6 +163,16 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                   ),
+                  if (hasPaid(state.reservationResponse)) ...[
+                    SliverGap(10),
+                    _customTile(
+                      title: 'Code réservation:'.toUpperCase(),
+                      value: codeReservation,
+                      onTap: () {
+                        Utils.copyToClipboard(codeReservation);
+                      },
+                    ),
+                  ],
                   const SliverToBoxAdapter(child: Divider()),
                   SliverToBoxAdapter(
                       child: Padding(
@@ -221,8 +243,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           ),
                         ),
                         title: const Text("Joindre le client"),
-                        subtitle: Text(
-                            "${state.reservationResponse.data.client.firstName} ${state.reservationResponse.data.client.lastName}"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (clientName.trim().isNotEmpty) Text(clientName),
+                            Text(state
+                                .reservationResponse.data.clientPhoneNumber),
+                          ],
+                        ),
                         titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                         trailing: Icon(
                           FontAwesomeIcons.phoneFlip,
@@ -289,6 +318,36 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         }
         return const LoadingPage();
       },
+    );
+  }
+
+  Widget _customTile(
+      {required String title, required String value, VoidCallback? onTap}) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListTile(
+          tileColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(title),
+          subtitle: SelectableText(
+            value,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.purple, fontSize: 18),
+          ),
+          dense: true,
+          onTap: onTap,
+          trailing: Icon(
+            FontAwesomeIcons.copy,
+            color: AppColors.primary,
+          ),
+          titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ),
     );
   }
 }

@@ -20,12 +20,11 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _getData({required BuildContext context}) async {
-    log("TOTO");
-    bool isAlreadyOpend = await SessionManager().appIsAlreadyOpened();
-    log(isAlreadyOpend.toString());
+    // await SessionManager().resetOnboarding();
+    bool hasSeenOnboarding = await SessionManager().hasReadOnboarding();
     final notificationService = getIt<NotificationService>();
 
-    if (isAlreadyOpend) {
+    if (hasSeenOnboarding) {
       PermissionServices.requestNotificationPermissions();
 
       await SessionManager().getCurrentUser();

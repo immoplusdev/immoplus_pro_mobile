@@ -8,7 +8,7 @@ class ToastUtils {
 
   /// Affiche un toast d'erreur
   static void showError({
-    required String title,
+    String? title,
     String? description,
     Duration? duration,
     Alignment? alignment,
@@ -18,8 +18,14 @@ class ToastUtils {
     toastification.show(
       type: ToastificationType.error,
       context: NavigationService.navigatorKey.currentContext,
-      title: Text(title),
-      description: description != null ? Text(description) : null,
+      title: Text(title ?? "Une erreur est survenue"),
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
@@ -29,7 +35,7 @@ class ToastUtils {
 
   /// Affiche un toast de succès
   static void showSuccess({
-    required String title,
+    String? title,
     String? description,
     Duration? duration,
     Alignment? alignment,
@@ -39,8 +45,14 @@ class ToastUtils {
     toastification.show(
       type: ToastificationType.success,
       context: NavigationService.navigatorKey.currentContext,
-      title: Text(title),
-      description: description != null ? Text(description) : null,
+      title: Text(title ?? ""),
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
@@ -61,7 +73,13 @@ class ToastUtils {
       type: ToastificationType.info,
       context: NavigationService.navigatorKey.currentContext,
       title: Text(title),
-      description: description != null ? Text(description) : null,
+      description: description != null
+          ? Text(
+              description,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+            )
+          : null,
       autoCloseDuration: duration ?? _defaultDuration,
       showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,

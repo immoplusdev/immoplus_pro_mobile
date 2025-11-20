@@ -9,6 +9,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final String? initialPhoneNumber;
   final String? Function(String?)? validator;
   final void Function(bool)? onInputValidated;
+  final bool isEnabled;
 
   const InternationalPhoneInput({
     super.key,
@@ -17,6 +18,7 @@ class InternationalPhoneInput extends StatefulWidget {
     this.validator,
     this.onInputValidated, // Default to Côte d’Ivoire
     this.initialPhoneNumber,
+    this.isEnabled = true,
   });
 
   @override
@@ -72,6 +74,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               },
               validator: widget.validator,
               ignoreBlank: false,
+              isEnabled: widget.isEnabled,
               autoValidateMode: AutovalidateMode.disabled,
               initialValue: _phoneNumber,
               textFieldController: _controller,

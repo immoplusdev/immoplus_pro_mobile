@@ -21,26 +21,17 @@ import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
-import 'package:toastification/toastification.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 
 class LoginCubit extends Cubit<LoginCubitState> {
   LoginCubit() : super(const LoginCubitState.initial());
 
   _checkRole(String? role) {
     if (role == Roles.customer.name) {
-      toastification.show(
-        type: ToastificationType.error,
-        context: NavigationService.navigatorKey
-            .currentContext, // optional if you use ToastificationWrapper
-        title: const Text("Accès interdit"),
-        description: const Text(
-            "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application."),
-        autoCloseDuration: const Duration(seconds: 5),
-
-        showProgressBar: false,
-        alignment: Alignment.bottomCenter,
-        style: ToastificationStyle.flatColored,
-      );
+      ToastUtils.showError(
+          title: "Accès interdit",
+          description:
+              "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");
 
       throw Exception(
           "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");
@@ -62,6 +53,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..role = response.data.user.role.name
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -119,6 +111,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..lastName = response.data.user.lastName
           ..phoneNumber = response.data.user.phoneNumber
           ..email = response.data.user.email
+          ..avatar = response.data.user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
           ..roleName = response.data.user.role.name
@@ -156,6 +149,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..avatar = response.data.avatar
           ..phoneNumber = response.data.phoneNumber
           ..email = response.data.email
+          ..avatar = response.data.avatar
           ..accessToken = SessionManager().currentUser!.accessToken
           ..refreshToken = SessionManager().currentUser!.refreshToken
           ..roleName = response.data.role.name

@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
+import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/utils/hex_color.dart';
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
@@ -64,7 +66,15 @@ class RegistrationMainScreean extends StatelessWidget {
                       icon: FontAwesomeIcons.treeCity,
                       title: "Entreprise",
                       onTap: () {
-                        context.pushNamed(EnterpriseRegistrationPage.name);
+                        context.pushNamed(SendEmailOptPage.name, extra: {
+                          "onSuccess":
+                              (DataRouterRegistration dataRouterRegistration) {
+                            context.pushReplacementNamed(
+                              EnterpriseRegistrationPage.name,
+                              extra: dataRouterRegistration,
+                            );
+                          }
+                        });
                       },
                     ),
                   ),
@@ -74,7 +84,15 @@ class RegistrationMainScreean extends StatelessWidget {
                       icon: FontAwesomeIcons.userTie,
                       title: "Indépendant",
                       onTap: () {
-                        context.pushNamed(ParticulierRegistration.name);
+                        context.pushNamed(SendEmailOptPage.name, extra: {
+                          "onSuccess":
+                              (DataRouterRegistration dataRouterRegistration) {
+                            context.pushReplacementNamed(
+                              ParticulierRegistration.name,
+                              extra: dataRouterRegistration,
+                            );
+                          }
+                        });
                       },
                     ),
                   ),

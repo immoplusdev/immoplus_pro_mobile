@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -31,8 +32,8 @@ class _WithdrawableBookingPageState extends State<WithdrawableBookingPage> {
       id: SessionManager().currentUser!.userId.toString(),
       page: page,
       perPage: 5,
-      orderBy: 'createdAt',
-      orderDir: 'desc',
+      orderBy: OrderByField.createdAt.value,
+      orderDir: OrderDir.desc.value,
       where: {
         '_where': [
           '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
