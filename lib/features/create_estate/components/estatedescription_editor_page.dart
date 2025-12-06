@@ -25,6 +25,7 @@ class _EstateDescriptionEditorPageState
     extends State<EstateDescriptionEditorPage> {
   late SelectionCardData currentSlected;
   late QuillController _controller = _controller = QuillController.basic();
+  ValueNotifier<bool> isEmpty = ValueNotifier<bool>(true);
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _EstateDescriptionEditorPageState
 
         final html = DeltaToHTML.encodeJson(deltaJson).toString();
         EstateCreationModelBuilder().description = html2md.convert(html);
+        isEmpty.value = _controller.document.isEmpty();
       },
     );
   }
@@ -71,15 +73,16 @@ class _EstateDescriptionEditorPageState
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             sliver: SliverToBoxAdapter(
-              child: Text('Decrivez votre logement',
+              child: Text('Decrivez bien immobilier',
                   style: Theme.of(context).textTheme.headlineSmall),
             ),
           ),
           SliverToBoxAdapter(
             child: Container(
               color: AppColors.primaryLite,
-              child: QuillToolbar.simple(
-                configurations: QuillSimpleToolbarConfigurations(
+              child: QuillSimpleToolbar(
+                controller: _controller,
+                config: QuillSimpleToolbarConfig(
                   showSearchButton: false,
                   showListCheck: false,
                   showColorButton: false,
@@ -91,10 +94,6 @@ class _EstateDescriptionEditorPageState
                   showUnderLineButton: false,
                   showBackgroundColorButton: false,
                   toolbarSize: 20,
-                  controller: _controller,
-                  sharedConfigurations: const QuillSharedConfigurations(
-                      //locale: Locale('fr'),
-                      ),
                 ),
               ),
             ),
@@ -106,12 +105,9 @@ class _EstateDescriptionEditorPageState
               color: Colors.white,
               height: 500,
               child: QuillEditor.basic(
-                configurations: QuillEditorConfigurations(
+                controller: _controller,
+                config: QuillEditorConfig(
                   showCursor: true,
-                  controller: _controller,
-
-                  //readOnly: false,
-                  sharedConfigurations: const QuillSharedConfigurations(),
                 ),
               ),
             ),
@@ -120,22 +116,30 @@ class _EstateDescriptionEditorPageState
       ),
       bottomNavigationBar: EstateCreationModelBuilder().editing
           ? SizedBox()
-          : StepBottomButton(
-              onNext: () {
-                _controller.document.toDelta();
-                List deltaJson = _controller.document.toDelta().toJson();
+          : ValueListenableBuilder<bool>(
+              valueListenable: isEmpty,
+              builder: (context, isEmptyValue, child) {
+                return StepBottomButton(
+                  onNext: isEmptyValue
+                      ? null
+                      : () {
+                          _controller.document.toDelta();
+                          List deltaJson =
+                              _controller.document.toDelta().toJson();
 
-                final html = DeltaToHTML.encodeJson(deltaJson).toString();
-                EstateCreationModelBuilder().description =
-                    html2md.convert(html);
-                CreationEstateNavigation.goToPage(
-                    pageName: EstateLogmentPricePage.name);
-              },
-              onPrevious: () {
-                CreationEstateNavigation.goToPage(
-                    pageName: EstateVideoLogmentPage.name);
-              },
-            ),
+                          final html =
+                              DeltaToHTML.encodeJson(deltaJson).toString();
+                          EstateCreationModelBuilder().description =
+                              html2md.convert(html);
+                          CreationEstateNavigation.goToPage(
+                              pageName: EstateLogmentPricePage.name);
+                        },
+                  onPrevious: () {
+                    CreationEstateNavigation.goToPage(
+                        pageName: EstateVideoLogmentPage.name);
+                  },
+                );
+              }),
     );
   }
 }

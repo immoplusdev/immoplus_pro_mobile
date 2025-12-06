@@ -13,6 +13,7 @@ import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
@@ -39,12 +40,21 @@ class AppRouter {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => SplashScreen(),
       ),
       GoRoute(
         path: '/home',
         name: HomePage.name,
         builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: '/pin_code',
+        name: PinCodePage.name,
+        builder: (context, state) => PinCodePage(
+          onSuccess: () {
+            context.goNamed(HomePage.name);
+          },
+        ),
       ),
       GoRoute(
         path: '/onboarding',

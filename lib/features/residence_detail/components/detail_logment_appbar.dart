@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
@@ -56,8 +57,18 @@ class DetailLogmentAppBar extends StatelessWidget {
             padding: EdgeInsets.zero,
             iconSize: 20,
             onPressed: () async {
-              await Share.shareUri(
-                Uri(),
+              // Code for the placeholder:
+              final String shareUrl =
+                  'https://app.immoplus.ci/residence_detail/${logmentModel.id}';
+
+              final String shareText =
+                  'Découvrez la résidence ${logmentModel.nom} sur ImmoPlus.\n'
+                  'Prix de réservation : ${logmentModel.prixReservation} F.\n'
+                  'Lien : $shareUrl';
+
+              Share.share(
+                shareText,
+                subject: 'Partager ma résidence ImmoPlus',
               );
             },
             style: IconButton.styleFrom(
@@ -66,12 +77,12 @@ class DetailLogmentAppBar extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
             icon: Container(
-              width: 30,
+              width: 40,
               decoration: const BoxDecoration(
                   shape: BoxShape.circle, color: Colors.white),
               child: Center(
-                child: Icon(
-                  CupertinoIcons.share,
+                child: FaIcon(
+                  FontAwesomeIcons.shareNodes,
                   color: AppColors.primary,
                 ),
               ),

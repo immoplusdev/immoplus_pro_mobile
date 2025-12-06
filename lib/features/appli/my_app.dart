@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/configs/theme_config.dart';
 import 'package:immoplus_pro/constantes/list_bloc.dart';
@@ -39,11 +40,13 @@ class _MyAppState extends State<MyApp> {
               .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: MaterialApp.router(
             localizationsDelegates: const [
+              FlutterQuillLocalizations.delegate,
               CountryLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate, // This is required
+              GlobalCupertinoLocalizations.delegate,
             ],
+
             supportedLocales: immoPlusSupportedLocales,
             debugShowCheckedModeBanner: false,
             theme: ThemeConfig.lightTheme(context: context),

@@ -1,12 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/features/residence/utils/residences_utils.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ResidenceListCard extends StatelessWidget {
@@ -79,17 +82,41 @@ class ResidenceListCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AutoSizeText(
-                        residence.nom ?? '',
-                        maxLines: 2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AutoSizeText(
+                            residence.nom ?? '',
+                            maxLines: 2,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          GestureDetector(
+                              onTap: () async {
+                                // Code for the placeholder:
+                                final String shareUrl =
+                                    'https://app.immoplus.ci/residence_detail/${residence.id}';
+
+                                final String shareText =
+                                    'Découvrez la résidence ${residence.nom} sur ImmoPlus.\n'
+                                    'Prix de réservation : ${residence.prixReservation} F.\n'
+                                    'Lien : $shareUrl';
+
+                                Share.share(
+                                  shareText,
+                                  subject: 'Partager ma résidence ImmoPlus',
+                                );
+                              },
+                              child: FaIcon(
+                                CupertinoIcons.share,
+                                color: AppColors.primary,
+                                size: 19,
+                              )),
+                        ],
                       ),
-                      const Row(
-                        children: [],
-                      ),
+
                       const Gap(5),
 
                       SizedBox(

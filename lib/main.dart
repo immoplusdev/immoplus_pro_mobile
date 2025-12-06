@@ -5,7 +5,7 @@ import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/appli/my_app.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 late Isar isarInstance;

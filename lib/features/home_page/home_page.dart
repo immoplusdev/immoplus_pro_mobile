@@ -16,6 +16,7 @@ import 'package:immoplus_pro/features/home_page/utils/home_router.dart';
 import 'package:immoplus_pro/features/home_page/widgets/home_drawer.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,6 +30,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PageController _pageController = PageController();
   @override
   void initState() {
     // TODO: implement initState
@@ -177,11 +179,30 @@ class _HomePageState extends State<HomePage> {
                             context: context,
                             builder: (context) => FractionallySizedBox(
                                   heightFactor: 0.93,
-                                  child: PaymentsPage(),
+                                  child: PageView(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    controller: _pageController,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: PinCodePage(
+                                          onSuccess: () {
+                                            _pageController.animateToPage(
+                                              1,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.ease,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      PaymentsPage(),
+                                    ],
+                                  ),
                                 ));
                       },
                 avatar: Icon(
-                  FontAwesomeIcons.moneyBills,
+                  FontAwesomeIcons.coins,
                   color: Colors.white,
                   size: 13,
                 ),

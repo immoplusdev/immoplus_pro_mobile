@@ -39,7 +39,7 @@ const OnboardingEntitySchema = CollectionSchema(
   getId: _onboardingEntityGetId,
   getLinks: _onboardingEntityGetLinks,
   attach: _onboardingEntityAttach,
-  version: '3.1.8',
+  version: '3.3.0-dev.1',
 );
 
 int _onboardingEntityEstimateSize(

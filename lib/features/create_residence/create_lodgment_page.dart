@@ -85,7 +85,7 @@ class _CreateLodgmentPageState extends State<CreateLodgmentPage> {
       ),
       bottomNavigationBar: Container(
         color: Colors.white,
-        height: 155,
+        height: 80,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
@@ -14,7 +15,9 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_list_card.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ResidencesPage extends StatefulWidget {
   const ResidencesPage({super.key});
@@ -26,7 +29,7 @@ class ResidencesPage extends StatefulWidget {
 class _ResidencesPageState extends State<ResidencesPage> {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
-
+  final sessionManager = getIt<SessionManager>();
   Future<void> loadPage(int page) async {
     LogmentRepository.getResidences(
       page: page,
@@ -75,26 +78,41 @@ class _ResidencesPageState extends State<ResidencesPage> {
         title: const Text('Mes résidences'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
-          InputChip(
-            backgroundColor: AppColors.primary.withOpacity(0.8),
-            label: const Text('Ajouter résidence'),
-            labelStyle: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.white),
-            avatar: const Icon(
-              FontAwesomeIcons.buildingUser,
-              size: 15,
-              color: Colors.white,
+          // InputChip(
+          //   backgroundColor: AppColors.primary.withOpacity(0.8),
+          //   label: const Text('Ajouter résidence'),
+          //   labelStyle: Theme.of(context)
+          //       .textTheme
+          //       .bodySmall!
+          //       .copyWith(color: Colors.white),
+          //   avatar: const Icon(
+          //     FontAwesomeIcons.buildingUser,
+          //     size: 15,
+          //     color: Colors.white,
+          //   ),
+          //   deleteIcon: const Icon(
+          //     CupertinoIcons.chevron_right_circle_fill,
+          //     size: 15,
+          //     color: Colors.white,
+          //   ),
+          //   labelPadding: const EdgeInsets.symmetric(horizontal: 2),
+          //   onDeleted: () {},
+          //   onPressed: _tapCreateResidence,
+          // ),
+          IconButton(
+            onPressed: () {
+              // Code for the placeholder:
+              final String shareUrl =
+                  'https://app.immoplus.ci/user_residences/${sessionManager.currentUser?.userId}  ';
+              Share.share(
+                'Découvrez mes résidences sur ImmoPlus\n$shareUrl',
+                subject: 'Partager mes résidences ImmoPlus',
+              );
+            },
+            icon: FaIcon(
+              FontAwesomeIcons.shareNodes,
+              color: AppColors.primary,
             ),
-            deleteIcon: const Icon(
-              CupertinoIcons.chevron_right_circle_fill,
-              size: 15,
-              color: Colors.white,
-            ),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-            onDeleted: () {},
-            onPressed: _tapCreateResidence,
           ),
           const Gap(7),
         ],
@@ -171,6 +189,17 @@ class _ResidencesPageState extends State<ResidencesPage> {
           ),
         ],
       ),
+      floatingActionButton: (_pagingController.itemList?.isNotEmpty == true)
+          ? FloatingActionButton.extended(
+              onPressed: _tapCreateResidence,
+              backgroundColor: AppColors.primary,
+              icon: const Icon(
+                FontAwesomeIcons.plus,
+                color: Colors.white,
+              ),
+              label: const Text('Ajouter une résidence'),
+            )
+          : null,
     );
   }
 

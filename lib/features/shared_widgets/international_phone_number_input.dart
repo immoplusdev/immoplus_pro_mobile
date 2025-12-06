@@ -29,15 +29,18 @@ class InternationalPhoneInput extends StatefulWidget {
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   final TextEditingController _controller = TextEditingController();
   late PhoneNumber _phoneNumber;
+  late PhoneNumber _initialPhoneNumber; // Add this
   final ValueNotifier<bool?> _isValidNotifier = ValueNotifier<bool?>(null);
 
   @override
   void initState() {
     super.initState();
-    _phoneNumber = PhoneNumber(
+    _initialPhoneNumber = PhoneNumber(
+      // Initialize this
       isoCode: widget.initialCountryCode,
       phoneNumber: widget.initialPhoneNumber,
     );
+    _phoneNumber = _initialPhoneNumber; // Set current to initial
   }
 
   @override
@@ -76,7 +79,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               ignoreBlank: false,
               isEnabled: widget.isEnabled,
               autoValidateMode: AutovalidateMode.disabled,
-              initialValue: _phoneNumber,
+              initialValue: _initialPhoneNumber, // Use static initial value
               textFieldController: _controller,
               formatInput: true,
               maxLength: 13,

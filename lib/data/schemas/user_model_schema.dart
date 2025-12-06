@@ -1,5 +1,5 @@
 import 'package:immoplus_pro/common/enums.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 part 'user_model_schema.g.dart';
 

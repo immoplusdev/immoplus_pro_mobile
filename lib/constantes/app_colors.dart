@@ -12,4 +12,5 @@ class AppColors {
   static Color white = Colors.white;
   static Color black = Colors.black;
   static Color lightBlue = Color(0xff2072ca);
+  static Color customBlue = Color(0xff2744de);
 }

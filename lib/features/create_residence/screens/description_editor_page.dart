@@ -9,7 +9,6 @@ import 'package:immoplus_pro/features/create_residence/screens/rules_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
@@ -24,7 +23,7 @@ class DescriptionEditorPage extends StatefulWidget {
 class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
   late SelectionCardData currentSlected;
   late QuillController _controller = _controller = QuillController.basic();
-
+  ValueNotifier<bool> isEmpty = ValueNotifier<bool>(true);
   @override
   void initState() {
     super.initState();
@@ -51,6 +50,7 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
 
         final html = DeltaToHTML.encodeJson(deltaJson).toString();
         ResidenceCreationModelBuilder().description = html2md.convert(html);
+        isEmpty.value = _controller.document.isEmpty();
       },
     );
   }
@@ -86,8 +86,9 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
           SliverToBoxAdapter(
             child: Container(
               color: AppColors.primaryLite,
-              child: QuillToolbar.simple(
-                configurations: QuillSimpleToolbarConfigurations(
+              child: QuillSimpleToolbar(
+                controller: _controller,
+                config: QuillSimpleToolbarConfig(
                   showSearchButton: false,
                   showListCheck: false,
                   showColorButton: false,
@@ -99,10 +100,13 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
                   showUnderLineButton: false,
                   showBackgroundColorButton: false,
                   toolbarSize: 20,
-                  controller: _controller,
-                  sharedConfigurations: const QuillSharedConfigurations(
-                      //locale: Locale('fr'),
-                      ),
+                  showInlineCode: false,
+                  showFontSize: false,
+                  showFontFamily: false,
+                  showQuote: false,
+                  showHeaderStyle: false,
+                  showStrikeThrough: false,
+                  showClearFormat: false,
                 ),
               ),
             ),
@@ -114,12 +118,9 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
               color: Colors.white,
               height: 500,
               child: QuillEditor.basic(
-                configurations: QuillEditorConfigurations(
+                controller: _controller,
+                config: QuillEditorConfig(
                   showCursor: true,
-                  controller: _controller,
-
-                  //readOnly: false,
-                  sharedConfigurations: const QuillSharedConfigurations(),
                 ),
               ),
             ),
@@ -128,24 +129,33 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
       ),
       bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
           ? SizedBox()
-          : StepBottomButton(
-              onNext: () {
-                _controller.document.toDelta();
-                List deltaJson = _controller.document.toDelta().toJson();
+          : ValueListenableBuilder<bool>(
+              valueListenable: isEmpty,
+              builder: (context, isEmptyValue, child) {
+                return StepBottomButton(
+                  onNext: isEmptyValue
+                      ? null
+                      : () {
+                          _controller.document.toDelta();
+                          List deltaJson =
+                              _controller.document.toDelta().toJson();
 
-                final html = DeltaToHTML.encodeJson(deltaJson).toString();
-                ResidenceCreationModelBuilder().description =
-                    html2md.convert(html);
-                CreationResidenceNavigation.goToPage(
-                    pageName: LogmentPricePage.name);
+                          final html =
+                              DeltaToHTML.encodeJson(deltaJson).toString();
+                          ResidenceCreationModelBuilder().description =
+                              html2md.convert(html);
+                          CreationResidenceNavigation.goToPage(
+                              pageName: LogmentPricePage.name);
 
-                //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
-              },
-              onPrevious: () {
-                CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
-                //CreateLogmentRouter.router.goNamed(RulesPage.name);
-              },
-            ),
+                          //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
+                        },
+                  onPrevious: () {
+                    CreationResidenceNavigation.goToPage(
+                        pageName: RulesPage.name);
+                    //CreateLogmentRouter.router.goNamed(RulesPage.name);
+                  },
+                );
+              }),
     );
   }
 }

@@ -5,9 +5,11 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
-import 'package:isar/isar.dart';
+import 'package:injectable/injectable.dart';
+import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
+@singleton
 class SessionManager {
   static final SessionManager _instance = SessionManager._internal();
 

@@ -42,27 +42,33 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>ImmoPLus Pro utilise l’appareil photo pour vous permettre de prendre des photos.</string>
+	<string>Immoplus Pro a besoin d’accéder à votre appareil photo pour vous permettre de prendre des photos de vos biens immobiliers et de scanner des documents professionnels.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>ImmoPLus Pro nécessite un accès à votre position même lorsque l’application est en arrière-plan.</string>
+	<string>Immoplus Pro utilise votre position pour localiser vos biens sur la carte et faciliter la saisie d’adresse, même lorsque l’application est en arrière-plan.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>ImmoPLus Pro nécessite un accès permanent à votre position, même lorsque l’application est fermée.</string>
+	<string>Immoplus Pro nécessite un accès permanent à votre position pour assurer le suivi de vos activités immobilières et la localisation précise des biens.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>ImmoPLus Pro a besoin d’accéder à votre position pour afficher votre emplacement sur la carte et fournir des services basés sur votre localisation.</string>
+	<string>Immoplus Pro utilise votre position pour localiser vos biens immobiliers sur la carte et faciliter la saisie de l’adresse lors de la création d’annonces.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Cette app a besoin d’accéder au micro pour enregistrer l’audio (mémos vocaux, appels, etc.).</string>
+	<string>Immoplus Pro utilise le microphone pour vous permettre d’enregistrer des descriptions vocales ou des notes audio pour vos biens.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>ImmoPLus Pro enregistre des photos dans votre photothèque.</string>
+	<string>Immoplus Pro a besoin d’enregistrer des photos dans votre galerie pour sauvegarder les images de vos annonces ou documents.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ImmoPLus Pro a besoin d’accéder à votre photothèque pour sélectionner des images.</string>
+	<string>Immoplus Pro a besoin d’accéder à votre galerie pour vous permettre de sélectionner et télécharger les photos de vos biens immobiliers.</string>
 	<key>NSUserNotificationUsageDescription</key>
-	<string>ImmoPLus Pro souhaite vous envoyer des notifications.</string>
+	<string>Immoplus Pro souhaite vous envoyer des notifications pour vous informer des nouvelles demandes, des mises à jour de vos annonces et des messages importants.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Immoplus Pro utilise Face ID pour sécuriser l’accès à votre compte et protéger vos données professionnelles.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
 		<string>fetch</string>
+	</array>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
@@ -71,15 +77,13 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 </dict>
 </plist>

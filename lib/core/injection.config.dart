@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -9,9 +10,16 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:immoplus_pro/features/pin_code/data/repositories/pin_code_repository.dart'
+    as _i177;
+import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart'
+    as _i581;
+import 'package:immoplus_pro/features/pin_code/views/services/biometry_service.dart'
+    as _i521;
 import 'package:immoplus_pro/services/deep_link_services.dart' as _i178;
 import 'package:immoplus_pro/services/notification_service.dart' as _i873;
 import 'package:immoplus_pro/utils/easy_loading_handler.dart' as _i166;
+import 'package:immoplus_pro/utils/session_manager.dart' as _i165;
 import 'package:injectable/injectable.dart' as _i526;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -25,11 +33,18 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    gh.factory<_i177.PinCodeRepository>(() => _i177.PinCodeRepository());
+    gh.factory<_i521.BiometryService>(() => _i521.BiometryService());
+    gh.singleton<_i165.SessionManager>(() => _i165.SessionManager());
     gh.lazySingleton<_i166.EasyLoadingHandler>(
         () => _i166.EasyLoadingHandler());
     gh.lazySingleton<_i178.DeepLinkServices>(() => _i178.DeepLinkServices());
     gh.lazySingleton<_i873.NotificationService>(
         () => _i873.NotificationService());
+    gh.factory<_i581.PinCodeCubit>(() => _i581.PinCodeCubit(
+          gh<_i177.PinCodeRepository>(),
+          gh<_i521.BiometryService>(),
+        ));
     return this;
   }
 }

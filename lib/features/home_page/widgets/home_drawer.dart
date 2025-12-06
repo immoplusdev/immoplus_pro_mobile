@@ -55,7 +55,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         child: Column(
           children: [
             Container(
-              height: 230,
+              height: 220,
               width: double.infinity,
               color: AppColors.scafold,
               child: DrawerHeader(
@@ -97,14 +97,24 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     (currentUser!.isEntreprise)
                         ? AutoSizeText(
                             "Entreprise : ${currentUser?.nomEntreprise}",
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                           )
                         : AutoSizeText(
                             '${currentUser?.firstName} ${currentUser?.lastName}',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                     //Text('test@gmail.com'),
-                    AutoSizeText("${currentUser?.phoneNumber}"),
+                    //AutoSizeText("${currentUser?.phoneNumber}"),
                     AutoSizeText(
                       currentUser?.email ?? "",
                       style: Theme.of(context).textTheme.bodySmall,
@@ -121,17 +131,43 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 scrollDirection: Axis.vertical,
                 children: [
                   UnconstrainedBox(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: CustomChip(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                        backgroundColor: Colors.yellow.shade700,
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
-                        label: getRoleDescription(currentUser?.role ?? ''),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.yellow.shade700,
+                            Colors.orange.shade600,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          getRoleDescription(currentUser?.role ?? ''),
+                          style:
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ) ??
+                                  const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
                   ),
+
                   Gap(8),
                   ListTile(
                     shape: RoundedRectangleBorder(
@@ -407,69 +443,69 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
 
                   /// Delete account button
-                  // ListTile(
-                  //   horizontalTitleGap: 0,
-                  //   leading: const Icon(
-                  //     FontAwesomeIcons
-                  //         .userXmark, // Icon plus appropriée pour la suppression
-                  //     color: Colors.redAccent,
-                  //     size: 20,
-                  //   ),
-                  //   title: const Text(
-                  //     "Supprimer mon compte",
-                  //     style: TextStyle(
-                  //       color: Colors.redAccent,
-                  //     ),
-                  //   ),
-                  //   onTap: () {
-                  //     showCupertinoDialog(
-                  //       context: context,
-                  //       builder: (BuildContext dialogContext) {
-                  //         return BlocProvider(
-                  //           create: (context) => DeleteAccountCubit(),
-                  //           child: BlocConsumer<DeleteAccountCubit,
-                  //               DeleteAccountState>(
-                  //             listener: (context, state) {},
-                  //             builder: (context, state) {
-                  //               return CupertinoAlertDialog(
-                  //                 title: const Text('Suppression de compte'),
-                  //                 content: const Text(
-                  //                   'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
-                  //                 ),
-                  //                 actions: <Widget>[
-                  //                   CupertinoDialogAction(
-                  //                     isDefaultAction: true,
-                  //                     onPressed: () {
-                  //                       Navigator.of(dialogContext).pop();
-                  //                     },
-                  //                     child: const Text('Annuler'),
-                  //                   ),
-                  //                   CupertinoDialogAction(
-                  //                     isDestructiveAction: true,
-                  //                     onPressed: state.maybeWhen(
-                  //                       loading: () => null,
-                  //                       orElse: () => () {
-                  //                         context
-                  //                             .read<DeleteAccountCubit>()
-                  //                             .deleteAccount();
-                  //                       },
-                  //                     ),
-                  //                     child: state.maybeWhen(
-                  //                       loading: () =>
-                  //                           const CupertinoActivityIndicator(),
-                  //                       orElse: () =>
-                  //                           const Text('Oui, supprimer'),
-                  //                     ),
-                  //                   ),
-                  //                 ],
-                  //               );
-                  //             },
-                  //           ),
-                  //         );
-                  //       },
-                  //     );
-                  //   },
-                  // ),
+                  ListTile(
+                    horizontalTitleGap: 0,
+                    leading: const Icon(
+                      FontAwesomeIcons
+                          .trashCan, // Icon plus appropriée pour la suppression
+                      color: Colors.redAccent,
+                      size: 20,
+                    ),
+                    title: const Text(
+                      "Supprimer mon compte",
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                    onTap: () {
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext dialogContext) {
+                          return BlocProvider(
+                            create: (context) => DeleteAccountCubit(),
+                            child: BlocConsumer<DeleteAccountCubit,
+                                DeleteAccountState>(
+                              listener: (context, state) {},
+                              builder: (context, state) {
+                                return CupertinoAlertDialog(
+                                  title: const Text('Suppression de compte'),
+                                  content: const Text(
+                                    'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+                                  ),
+                                  actions: <Widget>[
+                                    CupertinoDialogAction(
+                                      isDefaultAction: true,
+                                      onPressed: () {
+                                        Navigator.of(dialogContext).pop();
+                                      },
+                                      child: const Text('Annuler'),
+                                    ),
+                                    CupertinoDialogAction(
+                                      isDestructiveAction: true,
+                                      onPressed: state.maybeWhen(
+                                        loading: () => null,
+                                        orElse: () => () {
+                                          context
+                                              .read<DeleteAccountCubit>()
+                                              .deleteAccount();
+                                        },
+                                      ),
+                                      child: state.maybeWhen(
+                                        loading: () =>
+                                            const CupertinoActivityIndicator(),
+                                        orElse: () =>
+                                            const Text('Oui, supprimer'),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
             )

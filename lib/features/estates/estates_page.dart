@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
@@ -14,7 +15,9 @@ import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/widgets/bien_immobilier_list_card.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:share_plus/share_plus.dart';
 
 class EstatesPage extends StatefulWidget {
   const EstatesPage({super.key});
@@ -24,6 +27,7 @@ class EstatesPage extends StatefulWidget {
 }
 
 class _EstatesPageState extends State<EstatesPage> {
+  final sessionManager = getIt<SessionManager>();
   final PagingController<int, BienImmobilierModel> _pagingController =
       PagingController(firstPageKey: 1);
 
@@ -77,26 +81,20 @@ class _EstatesPageState extends State<EstatesPage> {
         title: const Text('Mes biens immobiliers'),
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
-          InputChip(
-            backgroundColor: AppColors.primary.withOpacity(0.8),
-            label: const Text('Ajouter bien'),
-            labelStyle: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.white),
-            avatar: const Icon(
-              FontAwesomeIcons.buildingUser,
-              size: 15,
-              color: Colors.white,
+          IconButton(
+            onPressed: () {
+              // Code for the placeholder:
+              final String shareUrl =
+                  'https://app.immoplus.ci/user_estates/${sessionManager.currentUser?.userId}  ';
+              Share.share(
+                'Découvrez mes résidences sur ImmoPlus\n$shareUrl',
+                subject: 'Partager mes résidences ImmoPlus',
+              );
+            },
+            icon: FaIcon(
+              FontAwesomeIcons.shareNodes,
+              color: AppColors.primary,
             ),
-            deleteIcon: const Icon(
-              CupertinoIcons.chevron_right_circle_fill,
-              size: 15,
-              color: Colors.white,
-            ),
-            labelPadding: const EdgeInsets.symmetric(horizontal: 2),
-            onDeleted: () {},
-            onPressed: _tapCreateEstate,
           ),
           const Gap(7),
         ],
@@ -173,6 +171,17 @@ class _EstatesPageState extends State<EstatesPage> {
           ),
         ],
       ),
+      floatingActionButton: (_pagingController.itemList?.isNotEmpty == true)
+          ? FloatingActionButton.extended(
+              onPressed: _tapCreateEstate,
+              backgroundColor: AppColors.primary,
+              icon: const Icon(
+                FontAwesomeIcons.plus,
+                color: Colors.white,
+              ),
+              label: const Text('Ajouter une résidence'),
+            )
+          : null,
     );
   }
 

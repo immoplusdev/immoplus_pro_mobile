@@ -15,7 +15,8 @@ class OrderPaymentController {
       return "https://play-lh.googleusercontent.com/ZZzobZMd5ewtZsX7B6bYyj1yMb7hyOEhVCpqsYlbDA0MGQaGuMAIlddE8xWvksIyhLZt";
     } else if (method == 'mtn') {
       return "https://theme.zdassets.com/theme_assets/2281253/1525d160e04a6da033974dee88ce44cce70585d4.JPG";
-    } else if (method == 'visa') {}
+    }
+    //else if (method == 'visa') {}
     return "https://play-lh.googleusercontent.com/lKebetEHVDuBrbq5KJJ4MK6V6BaFuo0Mj9Qy9YZkoenrEDZVU-IzLrbAuoKMaCT4nA";
   }
 
@@ -38,13 +39,6 @@ class OrderPaymentController {
       fee: 2,
     ),
 
-    // OperatorModel(
-    //     id: 0,
-    //     name: "Sur place",
-    //     logo: "https://cdn-icons-png.flaticon.com/512/2331/2331941.png",
-    //     prefix: null,
-    //     value: 'cash',
-    //     fee: 1),
     OperatorModel(
       id: 1,
       name: "Orange Money",
@@ -72,15 +66,15 @@ class OrderPaymentController {
       prefix: "01",
       fee: 2,
     ),
-    OperatorModel(
-      id: 0,
-      name: "Visa card",
-      value: 'visa',
-      logo:
-          "https://play-lh.googleusercontent.com/lKebetEHVDuBrbq5KJJ4MK6V6BaFuo0Mj9Qy9YZkoenrEDZVU-IzLrbAuoKMaCT4nA",
-      prefix: '',
-      fee: 2,
-    ),
+    // OperatorModel(
+    //   id: 0,
+    //   name: "Visa card",
+    //   value: 'visa',
+    //   logo:
+    //       "https://play-lh.googleusercontent.com/lKebetEHVDuBrbq5KJJ4MK6V6BaFuo0Mj9Qy9YZkoenrEDZVU-IzLrbAuoKMaCT4nA",
+    //   prefix: '',
+    //   fee: 2,
+    // ),
   ];
   static OperatorProviderModel electedOperator = const OperatorProviderModel();
   static OperatorProviderModel electedParamsItem =
