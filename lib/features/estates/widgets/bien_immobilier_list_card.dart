@@ -105,7 +105,7 @@ class BienImmoblierListCard extends StatelessWidget {
 
                                 Share.share(
                                   shareText,
-                                  subject: 'Partager ma résidence ImmoPlus',
+                                  subject: 'Partager ce bien immobilier',
                                 );
                               },
                               child: FaIcon(

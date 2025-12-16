@@ -87,8 +87,8 @@ class _EstatesPageState extends State<EstatesPage> {
               final String shareUrl =
                   'https://app.immoplus.ci/user_estates/${sessionManager.currentUser?.userId}  ';
               Share.share(
-                'Découvrez mes résidences sur ImmoPlus\n$shareUrl',
-                subject: 'Partager mes résidences ImmoPlus',
+                'Découvrez mes biens immobiliers sur ImmoPlus\n$shareUrl',
+                subject: 'Partager mes biens immobiliers',
               );
             },
             icon: FaIcon(
