@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 const _sizeButton = 60.0;
@@ -46,10 +47,10 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
   ];
 
   /// Navigation vers la page d'accueil après avoir marqué l'onboarding comme lu
-  Future<void> _navigateToHome() async {
+  Future<void> _navigateLoginPage() async {
     await sessionManager.markOnboardingAsRead();
     if (mounted) {
-      context.goNamed(HomePage.name);
+      context.goNamed(LoginPage.name);
     }
   }
 
@@ -139,7 +140,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
                                 curve: Curves.easeInOut,
                               );
                             } else {
-                              await _navigateToHome();
+                              await _navigateLoginPage();
                             }
                           },
                           child: Container(
