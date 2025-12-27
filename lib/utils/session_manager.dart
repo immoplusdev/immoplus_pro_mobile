@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
+import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
@@ -55,7 +56,7 @@ class SessionManager {
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
     await clearSession();
-    AppRouter.router.goNamed(LoginPage.name);
+    AppRouter.router.goNamed(AuthenticationPage.name);
   }
 
   // Fonction qui sera exécutée dans le nouvel isolat

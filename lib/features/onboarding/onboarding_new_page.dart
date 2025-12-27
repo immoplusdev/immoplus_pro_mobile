@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -50,7 +51,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
   Future<void> _navigateLoginPage() async {
     await sessionManager.markOnboardingAsRead();
     if (mounted) {
-      context.goNamed(LoginPage.name);
+      context.goNamed(AuthenticationPage.name);
     }
   }
 

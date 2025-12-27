@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
@@ -12,7 +11,6 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.da
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
 import 'package:immoplus_pro/features/account/widgets/general_condition_page.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
-import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader.dart';

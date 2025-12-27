@@ -92,7 +92,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                 size: 30,
               ),
               onPressed: () async {
-                context.goNamed(RegistrationMainScreean.name);
+                context.pop();
               },
             ),
             actions: const [

@@ -52,6 +52,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
