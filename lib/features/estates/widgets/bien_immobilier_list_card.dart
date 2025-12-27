@@ -5,18 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/features/residence/utils/residences_utils.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
 import 'package:immoplus_pro/utils/utils.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 class BienImmoblierListCard extends StatelessWidget {
-  const BienImmoblierListCard(
+  BienImmoblierListCard(
       {super.key, required this.bienImmobilierModel, required this.onTap});
   final BienImmobilierModel bienImmobilierModel;
   final VoidCallback? onTap;
+  final GlobalKey _shareButtonKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -103,12 +104,17 @@ class BienImmoblierListCard extends StatelessWidget {
                                     'Prix de réservation : ${bienImmobilierModel.prix} F/${bienImmobilierModel.typeLocation}.\n'
                                     'Lien : $shareUrl';
 
-                                Share.share(
-                                  shareText,
+                                final origin =
+                                    ShareService.getSharePositionFromKey(
+                                        _shareButtonKey);
+                                await ShareService.shareText(
+                                  text: shareText,
                                   subject: 'Partager ce bien immobilier',
+                                  sharePositionOrigin: origin,
                                 );
                               },
                               child: FaIcon(
+                                key: _shareButtonKey,
                                 CupertinoIcons.share,
                                 color: AppColors.primary,
                                 size: 19,

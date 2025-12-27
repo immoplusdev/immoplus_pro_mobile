@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
@@ -17,7 +18,6 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:share_plus/share_plus.dart';
 
 class EstatesPage extends StatefulWidget {
   const EstatesPage({super.key});
@@ -30,6 +30,8 @@ class _EstatesPageState extends State<EstatesPage> {
   final sessionManager = getIt<SessionManager>();
   final PagingController<int, BienImmobilierModel> _pagingController =
       PagingController(firstPageKey: 1);
+
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   Future<void> loadPage(int page) async {
     BienImmobilierRepository.getBiensImmobiliers(
@@ -82,16 +84,21 @@ class _EstatesPageState extends State<EstatesPage> {
         titleTextStyle: Theme.of(context).textTheme.titleSmall,
         actions: [
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               // Code for the placeholder:
               final String shareUrl =
                   'https://app.immoplus.ci/user_estates/${sessionManager.currentUser?.userId}  ';
-              Share.share(
-                'Découvrez mes biens immobiliers sur ImmoPlus\n$shareUrl',
-                subject: 'Partager mes biens immobiliers',
-              );
+
+              final origin =
+                  ShareService.getSharePositionFromKey(_shareButtonKey);
+              await ShareService.shareText(
+                  text:
+                      'Découvrez mes biens immobiliers sur ImmoPlus\n$shareUrl',
+                  subject: 'Partager mes biens immobiliers',
+                  sharePositionOrigin: origin);
             },
             icon: FaIcon(
+              key: _shareButtonKey,
               FontAwesomeIcons.shareNodes,
               color: AppColors.primary,
             ),

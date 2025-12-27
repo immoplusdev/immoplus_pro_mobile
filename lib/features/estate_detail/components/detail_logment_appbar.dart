@@ -5,15 +5,16 @@ import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
+import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/features/residence_detail/components/mosaic_logment_images.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DetailEstateAppBar extends StatelessWidget {
-  const DetailEstateAppBar({super.key, required this.bienImmobilier});
+  DetailEstateAppBar({super.key, required this.bienImmobilier});
   final BienImmobilierModel bienImmobilier;
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +57,15 @@ class DetailEstateAppBar extends StatelessWidget {
             padding: EdgeInsets.zero,
             iconSize: 20,
             onPressed: () async {
-              await Share.shareUri(
-                Uri(),
-              );
+              final shareText = 'Découvrez ce bien immobilier sur ImmoPlus\n'
+                  'Description : ${bienImmobilier.description}.\n'
+                  'Prix : ${bienImmobilier.prix} F\n'
+                  'Adresse : ${bienImmobilier.adresse}.\n';
+
+              final origin =
+                  ShareService.getSharePositionFromKey(_shareButtonKey);
+              await ShareService.shareText(
+                  text: shareText, sharePositionOrigin: origin);
             },
             style: IconButton.styleFrom(
               iconSize: 25,
@@ -66,6 +73,7 @@ class DetailEstateAppBar extends StatelessWidget {
               padding: EdgeInsets.zero,
             ),
             icon: Container(
+              key: _shareButtonKey,
               width: 30,
               decoration:
                   BoxDecoration(shape: BoxShape.circle, color: Colors.white),
