@@ -59,6 +59,8 @@ ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 ios/Runner.xcworkspace/xcshareddata/swiftpm/
 ios/Runner.xcodeproj/project.pbxproj
 ios/Podfile.lock
+ios/Podfile.lock
+pubspec.lock
 
 # iOS build artifacts
 ios/build/
