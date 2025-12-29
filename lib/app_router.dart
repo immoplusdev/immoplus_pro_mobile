@@ -43,9 +43,11 @@ class AppRouter {
         builder: (context, state) => SplashScreen(),
       ),
       GoRoute(
-        path: '/home',
+        path: HomePage.routePath(),
         name: HomePage.name,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => HomePage(
+          paiementId: state.extra as String?,
+        ),
       ),
       GoRoute(
         path: '/pin_code',
@@ -111,23 +113,23 @@ class AppRouter {
         name: PlacePage.name,
       ),
       GoRoute(
-        path: '/logments',
+        path: ResidencesPage.routePath(),
         name: ResidencesPage.name,
         builder: (context, state) => const ResidencesPage(),
       ),
       GoRoute(
-        path: '/estates',
+        path: EstatesPage.routePath(),
         name: EstatesPage.name,
         builder: (context, state) => const EstatesPage(),
       ),
       GoRoute(
-        path: '/${EstateDetailsPage.name}/:id',
+        path: EstateDetailsPage.routePath(),
         builder: (context, state) => EstateDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
       ),
       GoRoute(
-        path: '/${ResidenceDetailsPage.name}/:id',
+        path: ResidenceDetailsPage.routePath(),
         builder: (context, state) => ResidenceDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
@@ -151,12 +153,12 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/BOOKINGHISTORY',
+        path: BookingHistoryPage.routePath(),
         name: BookingHistoryPage.name,
         builder: (context, state) => const BookingHistoryPage(),
       ),
       GoRoute(
-        path: '/visitHistory',
+        path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
       ),

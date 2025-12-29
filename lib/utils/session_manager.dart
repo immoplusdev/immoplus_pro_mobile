@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
-import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 @singleton
@@ -56,6 +56,7 @@ class SessionManager {
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
     await clearSession();
+    OneSignal.logout();
     AppRouter.router.goNamed(AuthenticationPage.name);
   }
 

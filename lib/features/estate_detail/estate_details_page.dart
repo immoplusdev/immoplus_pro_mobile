@@ -37,6 +37,13 @@ class EstateDetailsPage extends StatefulWidget {
 
   final String idProduct;
   static String name = 'estate_details_page';
+
+  static String routePath() => '/estate_details_page/:id';
+
+  static String route({String? id}) {
+    return '/estate_details_page/$id';
+  }
+
   @override
   State<EstateDetailsPage> createState() => _EstateDetailsPageState();
 }

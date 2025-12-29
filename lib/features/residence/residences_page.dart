@@ -22,6 +22,13 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 class ResidencesPage extends StatefulWidget {
   const ResidencesPage({super.key});
   static String name = 'logment_page';
+
+  static String routePath() => '/logment_page';
+
+  static String route() {
+    return '/logment_page';
+  }
+
   @override
   State<ResidencesPage> createState() => _ResidencesPageState();
 }
@@ -49,10 +56,21 @@ class _ResidencesPageState extends State<ResidencesPage> {
     });
   }
 
+  bool _hasItems = false;
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       loadPage(pageKey);
+    });
+
+    _pagingController.addListener(() {
+      final hasItems = _pagingController.itemList?.isNotEmpty == true;
+      if (_hasItems != hasItems) {
+        setState(() {
+          _hasItems = hasItems;
+        });
+      }
     });
     super.initState();
   }
@@ -194,7 +212,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
           ),
         ],
       ),
-      floatingActionButton: (_pagingController.itemList?.isNotEmpty == true)
+      floatingActionButton: (_hasItems)
           ? FloatingActionButton.extended(
               onPressed: _tapCreateResidence,
               backgroundColor: AppColors.primary,

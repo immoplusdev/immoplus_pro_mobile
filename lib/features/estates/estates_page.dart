@@ -22,6 +22,11 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 class EstatesPage extends StatefulWidget {
   const EstatesPage({super.key});
   static String name = 'estate_page';
+  static String routePath() => '/estate_page';
+  static String route() {
+    return '/estate_page';
+  }
+
   @override
   State<EstatesPage> createState() => _EstatesPageState();
 }
@@ -52,10 +57,21 @@ class _EstatesPageState extends State<EstatesPage> {
     });
   }
 
+  bool _hasItems = false;
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       loadPage(pageKey);
+    });
+
+    _pagingController.addListener(() {
+      final hasItems = _pagingController.itemList?.isNotEmpty == true;
+      if (_hasItems != hasItems) {
+        setState(() {
+          _hasItems = hasItems;
+        });
+      }
     });
 
     super.initState();
@@ -178,7 +194,7 @@ class _EstatesPageState extends State<EstatesPage> {
           ),
         ],
       ),
-      floatingActionButton: (_pagingController.itemList?.isNotEmpty == true)
+      floatingActionButton: _hasItems
           ? FloatingActionButton.extended(
               onPressed: _tapCreateEstate,
               backgroundColor: AppColors.primary,
@@ -186,7 +202,7 @@ class _EstatesPageState extends State<EstatesPage> {
                 FontAwesomeIcons.plus,
                 color: Colors.white,
               ),
-              label: const Text('Ajouter une résidence'),
+              label: const Text('Ajouter un bien immobilier'),
             )
           : null,
     );

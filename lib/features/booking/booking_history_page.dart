@@ -14,6 +14,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 class BookingHistoryPage extends StatefulWidget {
   const BookingHistoryPage({super.key});
   static String name = 'BOOKING_HISTORY';
+
+  static String routePath() => '/booking_history_page';
+  static String route() {
+    return '/booking_history_page';
+  }
+
   @override
   State<BookingHistoryPage> createState() => _BookingHistoryPageState();
 }
