@@ -20,6 +20,7 @@ import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:immoplus_pro/widgets/config_env.dart';
 
 class HomePage extends StatefulWidget {
   final String? paiementId;
@@ -94,157 +95,159 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.whiteBackground,
-        centerTitle:
-            (SessionManager().currentUser!.isEntreprise) ? true : false,
-        title: (SessionManager().currentUser!.isEntreprise)
-            ? ValueListenableBuilder(
-                valueListenable: HomePage.selectedSection,
-                builder: (context, state, child) {
-                  final isIOS = Platform.isIOS;
-                  return isIOS
-                      ? CupertinoSlidingSegmentedControl<BookingSection>(
-                          backgroundColor: CupertinoColors.systemFill,
-                          thumbColor: Colors.white,
-                          groupValue: HomePage.selectedSection.value,
-                          children: {
-                            BookingSection.in_progress: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: FittedBox(
-                                child: Text(
-                                  'Réservations',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+    return EnvironmentsBadge(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.whiteBackground,
+          centerTitle:
+              (SessionManager().currentUser!.isEntreprise) ? true : false,
+          title: (SessionManager().currentUser!.isEntreprise)
+              ? ValueListenableBuilder(
+                  valueListenable: HomePage.selectedSection,
+                  builder: (context, state, child) {
+                    final isIOS = Platform.isIOS;
+                    return isIOS
+                        ? CupertinoSlidingSegmentedControl<BookingSection>(
+                            backgroundColor: CupertinoColors.systemFill,
+                            thumbColor: Colors.white,
+                            groupValue: HomePage.selectedSection.value,
+                            children: {
+                              BookingSection.in_progress: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: FittedBox(
+                                  child: Text(
+                                    'Réservations',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
                                 ),
                               ),
-                            ),
-                            BookingSection.visit: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: FittedBox(
-                                child: Text(
-                                  'Visites',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                              BookingSection.visit: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: FittedBox(
+                                  child: Text(
+                                    'Visites',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
                                 ),
                               ),
+                            },
+                            onValueChanged: (bookingSection) {
+                              if (bookingSection != null) {
+                                HomePage.selectedSection.value = bookingSection;
+                                _navigateToSection(bookingSection);
+                              }
+                            },
+                          )
+                        : SegmentedButton<BookingSection>(
+                            segments: const <ButtonSegment<BookingSection>>[
+                              ButtonSegment(
+                                value: BookingSection.in_progress,
+                                label: Text('Réservations'),
+                              ),
+                              ButtonSegment(
+                                value: BookingSection.visit,
+                                label: Text('Visites'),
+                              ),
+                            ],
+                            selected: {HomePage.selectedSection.value},
+                            showSelectedIcon: false,
+                            style: SegmentedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.grey.shade700,
+                              selectedForegroundColor: Colors.white,
+                              selectedBackgroundColor: AppColors.primary,
                             ),
-                          },
-                          onValueChanged: (bookingSection) {
-                            if (bookingSection != null) {
-                              HomePage.selectedSection.value = bookingSection;
-                              _navigateToSection(bookingSection);
-                            }
-                          },
-                        )
-                      : SegmentedButton<BookingSection>(
-                          segments: const <ButtonSegment<BookingSection>>[
-                            ButtonSegment(
-                              value: BookingSection.in_progress,
-                              label: Text('Réservations'),
-                            ),
-                            ButtonSegment(
-                              value: BookingSection.visit,
-                              label: Text('Visites'),
-                            ),
-                          ],
-                          selected: {HomePage.selectedSection.value},
-                          showSelectedIcon: false,
-                          style: SegmentedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.grey.shade700,
-                            selectedForegroundColor: Colors.white,
-                            selectedBackgroundColor: AppColors.primary,
-                          ),
-                          onSelectionChanged: (newSelection) {
-                            final selected = newSelection.first;
-                            HomePage.selectedSection.value = selected;
-                            _navigateToSection(selected);
-                          },
-                        );
-                })
-            : const AutoSizeText('Réservations'),
-        titleTextStyle: Theme.of(context).textTheme.titleLarge,
-        actions: [
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     shape: BoxShape.circle,
-          //     border: Border.all(),
-          //     // boxShadow: [
-          //     //   BoxShadow(
-          //     //       blurRadius: 5,
-          //     //       color: Colors.grey.shade400,
-          //     //       spreadRadius: 1)
-          //     // ],
-          //   ),
-          //   child: InkWell(
-          //     onTap: () {
-          //       //context.go('/home/notifs');
-          //     },
-          //     child: CircleAvatar(
-          //       backgroundColor: Colors.white,
-          //       child: Badge(
-          //         isLabelVisible: true,
-          //         label: const Text(
-          //           '+9',
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //             fontSize: 10,
-          //           ),
-          //         ),
-          //         child: Container(
-          //           padding: const EdgeInsets.all(8),
-          //           child: Icon(
-          //             CupertinoIcons.bell,
-          //             color: AppColors.primary,
-          //             size: 20,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const Gap(13),
+                            onSelectionChanged: (newSelection) {
+                              final selected = newSelection.first;
+                              HomePage.selectedSection.value = selected;
+                              _navigateToSection(selected);
+                            },
+                          );
+                  })
+              : const AutoSizeText('Réservations'),
+          titleTextStyle: Theme.of(context).textTheme.titleLarge,
+          actions: [
+            // Container(
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     shape: BoxShape.circle,
+            //     border: Border.all(),
+            //     // boxShadow: [
+            //     //   BoxShadow(
+            //     //       blurRadius: 5,
+            //     //       color: Colors.grey.shade400,
+            //     //       spreadRadius: 1)
+            //     // ],
+            //   ),
+            //   child: InkWell(
+            //     onTap: () {
+            //       //context.go('/home/notifs');
+            //     },
+            //     child: CircleAvatar(
+            //       backgroundColor: Colors.white,
+            //       child: Badge(
+            //         isLabelVisible: true,
+            //         label: const Text(
+            //           '+9',
+            //           style: TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 10,
+            //           ),
+            //         ),
+            //         child: Container(
+            //           padding: const EdgeInsets.all(8),
+            //           child: Icon(
+            //             CupertinoIcons.bell,
+            //             color: AppColors.primary,
+            //             size: 20,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // const Gap(13),
 
-          BlocBuilder<WalletCubit, RequestState>(
-            builder: (context, state) {
-              return InputChip(
-                onPressed:
-                    state is REQUEST_LOADING ? null : _showPaiementDialog,
-                avatar: Icon(
-                  FontAwesomeIcons.coins,
-                  color: Colors.white,
-                  size: 13,
-                ),
-                labelPadding: EdgeInsets.symmetric(horizontal: 2),
-                backgroundColor: AppColors.primary,
-                labelStyle: context.textTheme.labelLarge!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-                label: (state is WALLET)
-                    ? Text(
-                        formatCfa(state.data.availableBalance),
-                      )
-                    : CupertinoActivityIndicator(
-                        color: Colors.white,
-                      ),
-              );
-            },
-          ),
-          Gap(8),
-        ],
-      ),
-      drawer: const HomeDrawer(),
-      body: Router(
-        routerDelegate: HomeRouter.router.routerDelegate,
-        routeInformationParser: HomeRouter.router.routeInformationParser,
-        routeInformationProvider: HomeRouter.router.routeInformationProvider,
+            BlocBuilder<WalletCubit, RequestState>(
+              builder: (context, state) {
+                return InputChip(
+                  onPressed:
+                      state is REQUEST_LOADING ? null : _showPaiementDialog,
+                  avatar: Icon(
+                    FontAwesomeIcons.coins,
+                    color: Colors.white,
+                    size: 13,
+                  ),
+                  labelPadding: EdgeInsets.symmetric(horizontal: 2),
+                  backgroundColor: AppColors.primary,
+                  labelStyle: context.textTheme.labelLarge!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                  label: (state is WALLET)
+                      ? Text(
+                          formatCfa(state.data.availableBalance),
+                        )
+                      : CupertinoActivityIndicator(
+                          color: Colors.white,
+                        ),
+                );
+              },
+            ),
+            Gap(8),
+          ],
+        ),
+        drawer: const HomeDrawer(),
+        body: Router(
+          routerDelegate: HomeRouter.router.routerDelegate,
+          routeInformationParser: HomeRouter.router.routeInformationParser,
+          routeInformationProvider: HomeRouter.router.routeInformationProvider,
+        ),
       ),
     );
   }
