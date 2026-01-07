@@ -9,7 +9,7 @@ import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
-import 'package:immoplus_pro/features/account/widgets/general_condition_page.dart';
+import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';

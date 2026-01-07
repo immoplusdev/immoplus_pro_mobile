@@ -2,59 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/models/logement_type.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 
 class EstateTypeSelection extends StatefulWidget {
   const EstateTypeSelection({super.key, required this.onSlect});
-  final void Function(Map)? onSlect;
+  final void Function(PropertyType)? onSlect;
   @override
   State<EstateTypeSelection> createState() => _EstateTypeSelectionState();
 }
 
 class _EstateTypeSelectionState extends State<EstateTypeSelection> {
-  List<Map> selectabeChoice = [
-    {
-      'icon': 'building-user-solid',
-      'text': 'Appartement',
-    },
-    {
-      'icon': 'cottage',
-      'text': 'Maison',
-    },
-    {
-      'icon': 'villa',
-      'text': 'Villa',
-    },
-    {
-      'icon': 'studio',
-      'text': 'Studio',
-    },
-    {
-      'icon': 'bureau',
-      'text': 'Bureau',
-    },
-    {
-      'icon': 'land',
-      'text': 'Terrain',
-    },
+  List<PropertyType> selectableChoice = [
+    const PropertyType(
+      icon: 'building-user-solid',
+      text: 'Appartement',
+      label: 'Appartement',
+    ),
+    const PropertyType(
+      icon: 'cottage',
+      text: 'Maison',
+      label: 'Duplex',
+    ),
+    const PropertyType(
+      icon: 'villa',
+      text: 'Villa',
+      label: 'Villa',
+    ),
+    const PropertyType(
+      icon: 'studio',
+      text: 'Studio',
+      label: 'Studio',
+    ),
+    const PropertyType(
+      icon: 'bureau',
+      text: 'Bureau',
+      label: 'Bureau',
+    ),
+    const PropertyType(
+      icon: 'land',
+      text: 'Terrain',
+      label: 'Terrain',
+    ),
   ];
-  Map selectedChoice = {
-    'icon': '',
-    'text': '',
-  };
-  isSelected(int index) {
-    return selectedChoice['icon'] == selectabeChoice[index]['icon'];
+  PropertyType? selectedChoice;
+  bool isSelected(int index) {
+    return selectedChoice == selectableChoice[index];
   }
 
   @override
   void initState() {
     if (EstateCreationModelBuilder().typeBienImmobilier.isNotEmpty) {
-      selectedChoice = selectabeChoice.firstWhere(
-        (element) =>
-            (element['text'] as String).toLowerCase() ==
-            EstateCreationModelBuilder().typeBienImmobilier.toLowerCase(),
-      );
+      try {
+        selectedChoice = selectableChoice.firstWhere(
+          (element) =>
+              (element.text).toLowerCase() ==
+              EstateCreationModelBuilder().typeBienImmobilier.toLowerCase(),
+        );
+      } catch (e) {
+        //
+      }
     }
 
     super.initState();
@@ -72,6 +80,8 @@ class _EstateTypeSelectionState extends State<EstateTypeSelection> {
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          final choice = selectableChoice[index];
+          final selected = isSelected(index);
           return Card(
             color: isSelected(index) ? Colors.white : AppColors.noSelected,
             elevation: isSelected(index) ? 2 : 0,
@@ -84,9 +94,9 @@ class _EstateTypeSelectionState extends State<EstateTypeSelection> {
               borderRadius: BorderRadius.circular(20),
               onTap: () {
                 setState(() {
-                  selectedChoice = selectabeChoice[index];
+                  selectedChoice = choice;
                 });
-                widget.onSlect!(selectedChoice);
+                widget.onSlect?.call(choice);
               },
               child: Container(
                 padding:
@@ -97,12 +107,12 @@ class _EstateTypeSelectionState extends State<EstateTypeSelection> {
                   children: [
                     SvgPicture.asset(
                       height: 50,
-                      SVGMap.map[selectabeChoice[index]['icon']] ?? '',
+                      SVGMap.map[choice.icon] ?? '',
                       color:
                           isSelected(index) ? AppColors.primary : Colors.black,
                     ),
                     Text(
-                      selectabeChoice[index]['text'],
+                      choice.label,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                           fontWeight:
@@ -117,7 +127,7 @@ class _EstateTypeSelectionState extends State<EstateTypeSelection> {
             ),
           );
         },
-        childCount: selectabeChoice.length,
+        childCount: selectableChoice.length,
       ),
     );
   }
