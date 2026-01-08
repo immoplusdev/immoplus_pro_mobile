@@ -15,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/bottom_immoplus.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -312,15 +313,7 @@ class _RegistrationContent extends StatelessWidget {
 
         // Copyright
         SliverToBoxAdapter(
-          child: Center(
-            child: Text(
-              '©AfriqueSolus',
-              style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 12,
-              ),
-            ),
-          ),
+          child: BottomImmoPlus(),
         ),
         const SliverGap(20),
       ],

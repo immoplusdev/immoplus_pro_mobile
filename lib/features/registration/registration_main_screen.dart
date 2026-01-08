@@ -106,7 +106,7 @@
 //           height: 100,
 //           child: Center(
 //             child: Text(
-//               '©AfriqueSolus',
+//               '©Afriq'Solus',
 //               style: TextStyle(color: Color.fromARGB(255, 182, 181, 181)),
 //             ),
 //           )),
