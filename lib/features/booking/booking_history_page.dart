@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_card.dart';
@@ -28,6 +29,33 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
 
+  StatusFacture _selectedStatus = StatusFacture.all;
+
+  Map<String, dynamic>? _buildWhereClause() {
+    final conditions = <String>[];
+
+    // Ajouter le filtre de statut de facture
+    if (_selectedStatus.whereCondition != null) {
+      conditions.add(_selectedStatus.whereCondition!);
+    }
+
+    // Exemple : Ajouter d'autres filtres
+    // if (_selectedDateRange != null) {
+    //   conditions.add('{"_field": "createdAt", "_op": "gte", "_val": "$_selectedDateRange"}');
+    // }
+
+    // if (_selectedPropertyType != null) {
+    //   conditions.add('{"_field": "propertyType", "_op": "eq", "_val": "$_selectedPropertyType"}');
+    // }
+
+    // Retourner null si aucun filtre n'est actif
+    if (conditions.isEmpty) return null;
+
+    return {
+      '_where': conditions,
+    };
+  }
+
   Future<void> loadPage(int page) async {
     LogmentRepository.getReservationsOwner(
       id: SessionManager().currentUser!.userId.toString(),
@@ -35,7 +63,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       perPage: 5,
       orderBy: OrderByField.createdAt.value,
       orderDir: OrderDir.desc.value,
-      //where: '{"_field": "statusReservation", "_op": "eq", "_val": "valide"}',
+      where: _buildWhereClause(),
     ).then((value) {
       if (value.hasNext == true) {
         _pagingController.appendPage(value.data, (value.currentPage) + 1);
@@ -45,6 +73,13 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
     }).onError((error, stackTrace) {
       _pagingController.error = error.toString();
     });
+  }
+
+  void _onFilterChanged(StatusFacture status) {
+    setState(() {
+      _selectedStatus = status;
+    });
+    _pagingController.refresh();
   }
 
   @override
@@ -57,16 +92,9 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
 
   @override
   void dispose() {
-    super.dispose();
-
     _pagingController.dispose();
+    super.dispose();
   }
-
-  // @override
-  // void initState() {
-  //   context.read<BookingCubit>().getBookings();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,66 +104,109 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
       ),
       backgroundColor: AppColors.whiteBackground,
       body: SafeArea(
-          child: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
-        slivers: [
-          CupertinoSliverRefreshControl(
-            onRefresh: () async {
-              _pagingController.refresh();
-            },
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
           ),
-          const SliverGap(15),
-
-          //   child: Divider(),
-          // ),
-          PagedSliverList<int, ReservationModel>(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate(
-              firstPageProgressIndicatorBuilder: (context) => Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                    //height: 600,
-                    child: Column(
-                  children: List.generate(
-                    20,
-                    (index) => const BookingLoadingCard(),
-                  ),
-                )),
-              ),
-              noItemsFoundIndicatorBuilder: (context) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Gap(80),
-                    SvgPicture.asset(
-                      "assets/svgs/undraw/4.svg",
-                      width: 200,
-                    ),
-                    const Gap(30),
-                    Text(
-                      "Aucune Réservation Pour le Moment",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const Gap(20),
-                    const Text(
-                      "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+          slivers: [
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                _pagingController.refresh();
+              },
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+                child: Row(
+                  children: StatusFacture.values.map((status) {
+                    final isSelected = _selectedStatus == status;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: GestureDetector(
+                        onTap: () => _onFilterChanged(status),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.transparent,
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.grey.shade300,
+                              width: 1.5,
+                            ),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Text(
+                            status.label,
+                            style: TextStyle(
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey.shade700,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-              itemBuilder: (context, item, index) => BookingCard(
-                reservationModel: item,
+            ),
+            PagedSliverList<int, ReservationModel>(
+              pagingController: _pagingController,
+              builderDelegate: PagedChildBuilderDelegate(
+                firstPageProgressIndicatorBuilder: (context) => Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    child: Column(
+                      children: List.generate(
+                        20,
+                        (index) => const BookingLoadingCard(),
+                      ),
+                    ),
+                  ),
+                ),
+                noItemsFoundIndicatorBuilder: (context) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Gap(80),
+                      SvgPicture.asset(
+                        "assets/svgs/undraw/4.svg",
+                        width: 200,
+                      ),
+                      const Gap(30),
+                      Text(
+                        "Aucune Réservation Pour le Moment",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Gap(20),
+                      const Text(
+                        "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos résidences dès maintenant pour commencer à recevoir des demandes !",
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                itemBuilder: (context, item, index) => BookingCard(
+                  reservationModel: item,
+                ),
               ),
             ),
-          ),
-        ],
-      )),
+          ],
+        ),
+      ),
     );
   }
 }

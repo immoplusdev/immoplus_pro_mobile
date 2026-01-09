@@ -106,3 +106,23 @@ enum ShippingStatus {
 enum NotificationCollection {
   payments,
 }
+
+enum StatusFacture {
+  all('Tous'),
+  paid('Payé'),
+  unpaid('Non Payé');
+
+  final String label;
+  const StatusFacture(this.label);
+
+  String? get whereCondition {
+    switch (this) {
+      case StatusFacture.paid:
+        return '{"_field": "statusFacture", "_op": "eq", "_val": "paye"}';
+      case StatusFacture.unpaid:
+        return '{"_field": "statusFacture", "_op": "eq", "_val": "non_paye"}';
+      case StatusFacture.all:
+        return null;
+    }
+  }
+}
