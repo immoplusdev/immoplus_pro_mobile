@@ -126,16 +126,22 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
       uploadingImages[index] = updatedItem;
 
       if (updatedItem.isUploaded && updatedItem.uploadedId != null) {
-        final id = updatedItem.uploadedId!;
+        // Reconstruire la liste images en respectant l'ordre de uploadingImages
+        EstateCreationModelBuilder().images = uploadingImages
+            .where((item) => item.isUploaded && item.uploadedId != null)
+            .map((item) => item.uploadedId!)
+            .toList();
 
-        // Ajout si pas déjà présent
-        if (!EstateCreationModelBuilder().images.contains(id)) {
-          EstateCreationModelBuilder().images.add(id);
-        }
+        // Définir miniature = première image uploadée dans l'ordre
+        final firstUploadedImage = uploadingImages
+            .firstWhere(
+              (item) => item.isUploaded && item.uploadedId != null,
+              orElse: () => uploadingImages.first,
+            )
+            .uploadedId;
 
-        // Définir miniature si aucune
-        if ((EstateCreationModelBuilder().miniature ?? "").isEmpty) {
-          EstateCreationModelBuilder().miniature = id;
+        if (firstUploadedImage != null) {
+          EstateCreationModelBuilder().miniature = firstUploadedImage;
         }
       }
 
