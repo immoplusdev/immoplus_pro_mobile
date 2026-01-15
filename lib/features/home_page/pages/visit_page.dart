@@ -108,13 +108,13 @@ class _VisitPageState extends State<VisitPage> {
                   ),
                   const Gap(30),
                   Text(
-                    "Aucune Réservation Pour le Moment",
+                    "Aucune demande de visite pour le Moment",
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const Gap(20),
                   const Text(
-                    "Votre tableau de bord est prêt à accueillir vos prochaines réservations. Ajoutez vos bien dès maintenant pour commencer à recevoir des demandes !",
+                    "Votre tableau de bord est prêt à accueillir vos prochaines demandes de visites. Ajoutez vos bien dès maintenant pour commencer à recevoir des demandes !",
                     textAlign: TextAlign.center,
                   ),
                   Gap(20),
