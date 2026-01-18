@@ -19,6 +19,8 @@ import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
+import 'package:immoplus_pro/services/remote_config_service.dart';
+import 'package:immoplus_pro/services/version_update_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
@@ -39,6 +41,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
+  final _remoteConfig = getIt<RemoteConfigService>();
   @override
   void initState() {
     // TODO: implement initState
@@ -48,10 +51,12 @@ class _HomePageState extends State<HomePage> {
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
         _showPaiementDialog();
       }
+      await UpdateService()
+          .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
     });
   }
 
