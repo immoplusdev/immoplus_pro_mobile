@@ -9,9 +9,10 @@ class AppDialog {
           required String content,
           required Widget icon,
           void Function()? rollback,
+          bool barrierDismissible = false,
           String? textButton}) async =>
       showCupertinoModalPopup(
-        barrierDismissible: false,
+        barrierDismissible: barrierDismissible,
         context: context,
         builder: (context) => CupertinoAlertDialog(
           title: icon,

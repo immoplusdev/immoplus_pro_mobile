@@ -25,6 +25,7 @@ import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.d
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
+import 'package:immoplus_pro/force_update_required_page.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 
@@ -223,6 +224,16 @@ class AppRouter {
           return VerifyEmailOtpPage(
             email: email,
             onSuccess: callOnSuccess,
+          );
+        },
+      ),
+      GoRoute(
+        path: ForceUpdateRequiredPage.routePath(),
+        name: ForceUpdateRequiredPage.name,
+        builder: (context, state) {
+          final onUpdateTap = state.extra as Function()?;
+          return ForceUpdateRequiredPage(
+            onUpdateTap: onUpdateTap,
           );
         },
       ),

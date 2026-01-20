@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus_pro/core/extensions/safe_area_extensions.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
@@ -154,7 +155,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 20 + kDefaultPadding,
               ),
             ],
           ),

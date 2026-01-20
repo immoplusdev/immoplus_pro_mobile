@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:immoplus_pro/configs/app_flavor.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/appli/my_app.dart';
@@ -12,7 +13,7 @@ late Isar isarInstance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: AppFlavor.envFileName);
   await configureDependencies();
 
   final dir = await getApplicationDocumentsDirectory();

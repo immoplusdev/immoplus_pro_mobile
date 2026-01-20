@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/extensions/safe_area_extensions.dart';
 import 'package:immoplus_pro/cubits/authentification/update_password_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/update_password_cubit_state.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
@@ -173,6 +174,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                     );
                   },
                 ),
+                SizedBox(height: kDefaultPadding)
               ],
             ),
           );

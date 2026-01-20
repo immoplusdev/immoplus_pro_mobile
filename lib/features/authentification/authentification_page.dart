@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/bottom_immoplus.dart';
+import 'package:immoplus_pro/widgets/config_env.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({super.key, this.initialTab = 0});
@@ -52,153 +54,155 @@ class _AuthenticationPageState extends State<AuthenticationPage>
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LoginCubit(),
-      child: Scaffold(
-        backgroundColor: HexColor("#121224"),
-        body: CustomScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          physics: const NeverScrollableScrollPhysics(),
-          slivers: [
-            // AppBar avec logo
-            SliverAppBar(
-              backgroundColor: HexColor("#121224"),
-              leadingWidth: 35,
-              automaticallyImplyLeading: false,
-              actions: [
-                SvgPicture.asset(
-                  'assets/icons/logo_immo.svg',
-                  color: HexColor('#2072ca'),
-                  width: 50,
-                ),
-                const Gap(20),
-              ],
-            ),
-            const SliverGap(30),
-
-            // Titre principal
-            SliverToBoxAdapter(
-              child: Center(
-                child: Text(
-                  "Bienvenue sur ImmoPlus Pro",
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
+      child: EnvironmentsBadge(
+        child: Scaffold(
+          backgroundColor: HexColor("#121224"),
+          body: CustomScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const NeverScrollableScrollPhysics(),
+            slivers: [
+              // AppBar avec logo
+              SliverAppBar(
+                backgroundColor: HexColor("#121224"),
+                leadingWidth: 35,
+                automaticallyImplyLeading: false,
+                actions: [
+                  SvgPicture.asset(
+                    'assets/icons/logo_immo.svg',
+                    color: HexColor('#2072ca'),
+                    width: 50,
+                  ),
+                  const Gap(20),
+                ],
               ),
-            ),
-            const SliverGap(8),
+              const SliverGap(30),
 
-            // Sous-titre
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
+              // Titre principal
+              SliverToBoxAdapter(
                 child: Center(
-                  child: AutoSizeText(
-                    maxLines: 2,
-                    "Gérez vos biens immobiliers en toute simplicité",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Colors.white.withOpacity(0.8),
+                  child: Text(
+                    "Bienvenue sur ImmoPlus Pro",
+                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                   ),
                 ),
               ),
-            ),
-            const SliverGap(30),
+              const SliverGap(8),
 
-            // TabBar personnalisé
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              sliver: SliverToBoxAdapter(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1,
+              // Sous-titre
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverToBoxAdapter(
+                  child: Center(
+                    child: AutoSizeText(
+                      maxLines: 2,
+                      "Gérez vos biens immobiliers en toute simplicité",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(4),
-                  child: TabBar(
-                    controller: _tabController,
-                    indicator: BoxDecoration(
-                      color: HexColor('#2072ca'),
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: HexColor('#2072ca').withOpacity(0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
+                ),
+              ),
+              const SliverGap(30),
+
+              // TabBar personnalisé
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverToBoxAdapter(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(4),
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        color: HexColor('#2072ca'),
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: HexColor('#2072ca').withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white.withOpacity(0.7),
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      unselectedLabelStyle: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                      ),
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      dividerColor: Colors.transparent,
+                      splashFactory: NoSplash.splashFactory,
+                      overlayColor: WidgetStateProperty.all(Colors.transparent),
+                      tabs: const [
+                        Tab(
+                          height: 48,
+                          child: Text("Connexion"),
+                        ),
+                        Tab(
+                          height: 48,
+                          child: Text("Inscription"),
                         ),
                       ],
                     ),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.white.withOpacity(0.7),
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  ),
+                ),
+              ),
+              const SliverGap(20),
+
+              // Contenu des onglets
+              SliverFillRemaining(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     ),
-                    unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16,
-                    ),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    dividerColor: Colors.transparent,
-                    splashFactory: NoSplash.splashFactory,
-                    overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    tabs: const [
-                      Tab(
-                        height: 48,
-                        child: Text("Connexion"),
+                  ),
+                  child: TabBarView(
+                    controller: _tabController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      // Page de connexion (avec OTP et Email)
+                      PageView(
+                        controller: _loginPageController,
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          OTPLoginPage(
+                            rootPageController: _loginPageController,
+                          ),
+                          LoginWithEmailScreen(
+                            rootPageController: _loginPageController,
+                          ),
+                        ],
                       ),
-                      Tab(
-                        height: 48,
-                        child: Text("Inscription"),
-                      ),
+
+                      // Page d'inscription (choix Entreprise/Indépendant)
+                      _RegistrationContent(),
                     ],
                   ),
                 ),
               ),
-            ),
-            const SliverGap(20),
-
-            // Contenu des onglets
-            SliverFillRemaining(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: TabBarView(
-                  controller: _tabController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    // Page de connexion (avec OTP et Email)
-                    PageView(
-                      controller: _loginPageController,
-                      scrollDirection: Axis.horizontal,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        OTPLoginPage(
-                          rootPageController: _loginPageController,
-                        ),
-                        LoginWithEmailScreen(
-                          rootPageController: _loginPageController,
-                        ),
-                      ],
-                    ),
-
-                    // Page d'inscription (choix Entreprise/Indépendant)
-                    _RegistrationContent(),
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -309,15 +313,7 @@ class _RegistrationContent extends StatelessWidget {
 
         // Copyright
         SliverToBoxAdapter(
-          child: Center(
-            child: Text(
-              '©AfriqueSolus',
-              style: TextStyle(
-                color: Colors.grey[400],
-                fontSize: 12,
-              ),
-            ),
-          ),
+          child: BottomImmoPlus(),
         ),
         const SliverGap(20),
       ],

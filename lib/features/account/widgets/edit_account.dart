@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/core/extensions/safe_area_extensions.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
@@ -175,8 +176,9 @@ class _EditAccountState extends State<EditAccount> {
         bottomNavigationBar: Container(
           height: 100,
           padding: const EdgeInsets.all(10.0),
-          margin:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          margin: EdgeInsets.only(
+              bottom:
+                  MediaQuery.of(context).viewInsets.bottom + kDefaultPadding),
           child: BlocBuilder<LoginCubit, LoginCubitState>(
             builder: (context, state) {
               return CustomLoadingButtom(

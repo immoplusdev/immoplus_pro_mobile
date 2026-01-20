@@ -25,3 +25,5 @@ String formatCfa(int amount) {
   final formatter = NumberFormat("#,##0", "fr_FR");
   return "${formatter.format(amount)} F";
 }
+
+const double appPadding = 16.0;
