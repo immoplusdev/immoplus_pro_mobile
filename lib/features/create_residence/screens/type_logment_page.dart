@@ -49,7 +49,7 @@ class _TypeLogmentPageState extends State<TypeLogmentPage> {
               onSlect: (p0) {
                 setState(() {
                   ResidenceCreationModelBuilder().typeResidence =
-                      p0['text'].toString().toLowerCase();
+                      p0.text.toString().toLowerCase();
                 });
               },
             ),

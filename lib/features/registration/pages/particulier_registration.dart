@@ -9,18 +9,16 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
-import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
-import 'package:immoplus_pro/features/account/widgets/general_condition_page.dart';
-import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -92,7 +90,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                 size: 30,
               ),
               onPressed: () async {
-                context.goNamed(RegistrationMainScreean.name);
+                context.pop();
               },
             ),
             actions: const [

@@ -44,7 +44,7 @@ class _EstateTypePageState extends State<EstateTypePage> {
             onSlect: (p0) {
               setState(() {
                 EstateCreationModelBuilder().typeBienImmobilier =
-                    p0['text'].toString().toLowerCase();
+                    p0.text.toString().toLowerCase();
               });
             },
           ),

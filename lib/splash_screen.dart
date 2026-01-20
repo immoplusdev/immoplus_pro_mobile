@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
+import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await SessionManager().getCurrentUser();
 
       if (SessionManager().currentUser == null) {
-        AppRouter.router.goNamed(LoadingPage.name);
+        AppRouter.router.goNamed(AuthenticationPage.name);
       } else {
         DioClient.token = SessionManager().currentUser!.accessToken;
         DioClient().dio.options.headers['Authorization'] =

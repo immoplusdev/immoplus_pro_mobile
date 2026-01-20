@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
@@ -20,7 +21,6 @@ import 'package:immoplus_pro/features/registration/pages/enterprise_registration
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
-import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
@@ -43,9 +43,11 @@ class AppRouter {
         builder: (context, state) => SplashScreen(),
       ),
       GoRoute(
-        path: '/home',
+        path: HomePage.routePath(),
         name: HomePage.name,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => HomePage(
+          paiementId: state.extra as String?,
+        ),
       ),
       GoRoute(
         path: '/pin_code',
@@ -71,10 +73,15 @@ class AppRouter {
         builder: (context, state) => const PaymentsPage(),
         name: PaymentsPage.name,
       ),
+      // GoRoute(
+      //   path: '/registration',
+      //   builder: (context, state) => const RegistrationMainScreean(),
+      //   name: RegistrationMainScreean.name,
+      // ),
       GoRoute(
-        path: '/registration',
-        builder: (context, state) => const RegistrationMainScreean(),
-        name: RegistrationMainScreean.name,
+        path: '/${AuthenticationPage.name}',
+        name: AuthenticationPage.name,
+        builder: (context, state) => const AuthenticationPage(),
       ),
       GoRoute(
         path: '/enterprise_registration',
@@ -106,23 +113,23 @@ class AppRouter {
         name: PlacePage.name,
       ),
       GoRoute(
-        path: '/logments',
+        path: ResidencesPage.routePath(),
         name: ResidencesPage.name,
         builder: (context, state) => const ResidencesPage(),
       ),
       GoRoute(
-        path: '/estates',
+        path: EstatesPage.routePath(),
         name: EstatesPage.name,
         builder: (context, state) => const EstatesPage(),
       ),
       GoRoute(
-        path: '/${EstateDetailsPage.name}/:id',
+        path: EstateDetailsPage.routePath(),
         builder: (context, state) => EstateDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
       ),
       GoRoute(
-        path: '/${ResidenceDetailsPage.name}/:id',
+        path: ResidenceDetailsPage.routePath(),
         builder: (context, state) => ResidenceDetailsPage(
           idProduct: state.pathParameters['id'].toString(),
         ),
@@ -146,12 +153,12 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/BOOKINGHISTORY',
+        path: BookingHistoryPage.routePath(),
         name: BookingHistoryPage.name,
         builder: (context, state) => const BookingHistoryPage(),
       ),
       GoRoute(
-        path: '/visitHistory',
+        path: VisitHistoryPage.routePath(),
         name: VisitHistoryPage.name,
         builder: (context, state) => const VisitHistoryPage(),
       ),

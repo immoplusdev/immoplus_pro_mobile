@@ -6,15 +6,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
+import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:immoplus_pro/features/residence_detail/components/mosaic_logment_images.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DetailLogmentAppBar extends StatelessWidget {
-  const DetailLogmentAppBar({super.key, required this.logmentModel});
+  DetailLogmentAppBar({super.key, required this.logmentModel});
   final ResidenceModel logmentModel;
+  final GlobalKey _shareButtonKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +57,7 @@ class DetailLogmentAppBar extends StatelessWidget {
           child: IconButton(
             padding: EdgeInsets.zero,
             iconSize: 20,
+            key: _shareButtonKey,
             onPressed: () async {
               // Code for the placeholder:
               final String shareUrl =
@@ -66,8 +68,11 @@ class DetailLogmentAppBar extends StatelessWidget {
                   'Prix de réservation : ${logmentModel.prixReservation} F.\n'
                   'Lien : $shareUrl';
 
-              Share.share(
-                shareText,
+              final origin =
+                  ShareService.getSharePositionFromKey(_shareButtonKey);
+              await ShareService.shareText(
+                text: shareText,
+                sharePositionOrigin: origin,
                 subject: 'Partager ma résidence ImmoPlus',
               );
             },

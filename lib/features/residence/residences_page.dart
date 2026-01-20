@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
@@ -17,11 +18,17 @@ import 'package:immoplus_pro/features/residence/widgets/residence_list_card.dart
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ResidencesPage extends StatefulWidget {
   const ResidencesPage({super.key});
   static String name = 'logment_page';
+
+  static String routePath() => '/logment_page';
+
+  static String route() {
+    return '/logment_page';
+  }
+
   @override
   State<ResidencesPage> createState() => _ResidencesPageState();
 }
@@ -30,6 +37,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
   final PagingController<int, ResidenceModel> _pagingController =
       PagingController(firstPageKey: 1);
   final sessionManager = getIt<SessionManager>();
+  final GlobalKey _shareButtonKey = GlobalKey();
   Future<void> loadPage(int page) async {
     LogmentRepository.getResidences(
       page: page,
@@ -48,10 +56,21 @@ class _ResidencesPageState extends State<ResidencesPage> {
     });
   }
 
+  bool _hasItems = false;
+
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
       loadPage(pageKey);
+    });
+
+    _pagingController.addListener(() {
+      final hasItems = _pagingController.itemList?.isNotEmpty == true;
+      if (_hasItems != hasItems) {
+        setState(() {
+          _hasItems = hasItems;
+        });
+      }
     });
     super.initState();
   }
@@ -100,16 +119,20 @@ class _ResidencesPageState extends State<ResidencesPage> {
           //   onPressed: _tapCreateResidence,
           // ),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               // Code for the placeholder:
               final String shareUrl =
                   'https://app.immoplus.ci/user_residences/${sessionManager.currentUser?.userId}  ';
-              Share.share(
-                'Découvrez mes résidences sur ImmoPlus\n$shareUrl',
-                subject: 'Partager mes résidences ImmoPlus',
-              );
+
+              final origin =
+                  ShareService.getSharePositionFromKey(_shareButtonKey);
+              await ShareService.shareText(
+                  text: 'Découvrez mes résidences sur ImmoPlus\n$shareUrl',
+                  subject: 'Partager mes résidences ImmoPlus',
+                  sharePositionOrigin: origin);
             },
             icon: FaIcon(
+              key: _shareButtonKey,
               FontAwesomeIcons.shareNodes,
               color: AppColors.primary,
             ),
@@ -189,7 +212,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
           ),
         ],
       ),
-      floatingActionButton: (_pagingController.itemList?.isNotEmpty == true)
+      floatingActionButton: (_hasItems)
           ? FloatingActionButton.extended(
               onPressed: _tapCreateResidence,
               backgroundColor: AppColors.primary,
