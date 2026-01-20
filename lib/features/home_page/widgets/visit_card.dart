@@ -74,7 +74,7 @@ class VisitCard extends StatelessWidget {
                       label: demandeVisiteModel.typeDemandeVisite.toString()),
                   CustomChip(
                     icon: FontAwesomeIcons.signHanging,
-                    label: demandeVisiteModel.bienImmobilier!.nom,
+                    label: demandeVisiteModel.bienImmobilier?.nom ?? "_",
                     iconColor: Colors.white,
                     labelStyle: TextStyle(color: Colors.white),
                     iconSize: 15,
@@ -83,7 +83,7 @@ class VisitCard extends StatelessWidget {
                 ],
               ),
               DateCreationWidget(createdAt: demandeVisiteModel.createdAt),
-              Text("📍 ${demandeVisiteModel.bienImmobilier!.adresse}"),
+              Text("📍 ${demandeVisiteModel.bienImmobilier?.adresse ?? "_"}"),
               const Gap(10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,9 +155,13 @@ class VisitCard extends StatelessWidget {
                             size: 15,
                           ),
                           backgroundColor: AppColors.scafold,
-                          label: Text(Utils.formatDatenly(
-                              dateTime: demandeVisiteModel
-                                  .datesDemandeVisite.first.date!)),
+                          label: Text(demandeVisiteModel
+                                      .datesDemandeVisite.first.date !=
+                                  null
+                              ? Utils.formatDatenly(
+                                  dateTime: demandeVisiteModel
+                                      .datesDemandeVisite.first.date!)
+                              : ""),
                           labelStyle:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     color: AppColors.primary,
@@ -167,9 +171,11 @@ class VisitCard extends StatelessWidget {
                     ),
                   if (demandeVisiteModel.datesDemandeVisite.isNotEmpty)
                     AutoSizeText(
-                      Utils.formatTimeOnly(
-                          dateTime: demandeVisiteModel
-                              .datesDemandeVisite.first.date!),
+                      demandeVisiteModel.datesDemandeVisite.first.date != null
+                          ? Utils.formatTimeOnly(
+                              dateTime: demandeVisiteModel
+                                  .datesDemandeVisite.first.date!)
+                          : "",
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium!
