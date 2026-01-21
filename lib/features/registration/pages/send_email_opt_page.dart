@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
+import 'package:immoplus_pro/utils/formular_utils.dart';
 
 class SendEmailOptPage extends StatefulWidget {
   final Function(DataRouterRegistration dataRouterRegistration) onSuccess;
@@ -40,18 +41,6 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
         "onSuccess": widget.onSuccess
       });
     }
-  }
-
-  String? _emailValidator(String? value) {
-    final email = value?.trim() ?? '';
-    if (email.isEmpty) return "L'email est requis";
-    if (email.length > 254) return "L'email est trop long";
-    if (email.contains(' ')) return "L'email ne doit pas contenir d'espaces";
-
-    final regex = RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[A-Za-z]{2,}$');
-    if (!regex.hasMatch(email)) return "Format d'email incorrect";
-
-    return null;
   }
 
   @override
@@ -124,7 +113,8 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                                   controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.send,
-                                  validator: _emailValidator,
+                                  validator: (String? value) =>
+                                      FormUtils.emailValidator(email: value),
                                   inputFormatters: [
                                     FilteringTextInputFormatter.deny(
                                         RegExp(r"\s")),
