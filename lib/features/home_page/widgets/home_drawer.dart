@@ -171,17 +171,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   Gap(8),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (currentUser!.isEntreprise)
-                          ? const BorderRadius.only(
-                              topLeft: Radius.circular(
-                                20,
-                              ),
-                              topRight: Radius.circular(
-                                20,
-                              ),
-                            )
-                          : BorderRadius.circular(20),
-                    ),
+                        borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(
+                        20,
+                      ),
+                      topRight: Radius.circular(
+                        20,
+                      ),
+                    )),
                     tileColor: Colors.white,
                     onTap: () {
                       context.pushNamed(ResidencesPage.name);
@@ -202,54 +199,51 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (currentUser!.isEntreprise)
-                    const Divider(
-                      height: 0,
-                      thickness: 0.8,
-                    ),
-                  if (currentUser!.isEntreprise)
-                    ListTile(
-                      tileColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
-                          ),
+                  // if (currentUser!.isEntreprise)
+                  const Divider(
+                    height: 0,
+                    thickness: 0.8,
+                  ),
+                  // if (currentUser!.isEntreprise)
+                  ListTile(
+                    tileColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(
+                          20,
+                        ),
+                        bottomLeft: Radius.circular(
+                          20,
                         ),
                       ),
-                      onTap: () {
-                        context.pushNamed(EstatesPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.treeCity,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      title: const Text('Biens immobilier'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
                     ),
+                    onTap: () {
+                      context.pushNamed(EstatesPage.name);
+                    },
+                    horizontalTitleGap: 0,
+                    leading: Icon(
+                      FontAwesomeIcons.treeCity,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    title: const Text('Biens immobilier'),
+                    trailing: Icon(
+                      FontAwesomeIcons.circleChevronRight,
+                      size: 15,
+                      color: AppColors.primary,
+                    ),
+                  ),
                   const Gap(10),
                   ListTile(
                     shape: RoundedRectangleBorder(
-                      borderRadius: (currentUser!.isEntreprise)
-                          ? const BorderRadius.only(
-                              topLeft: Radius.circular(
-                                20,
-                              ),
-                              topRight: Radius.circular(
-                                20,
-                              ),
-                            )
-                          : BorderRadius.circular(20),
-                    ),
+                        borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(
+                        20,
+                      ),
+                      topRight: Radius.circular(
+                        20,
+                      ),
+                    )),
                     tileColor: Colors.white,
                     onTap: () {
                       context.pushNamed(BookingHistoryPage.name);
@@ -270,43 +264,43 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  if (currentUser!.isEntreprise)
-                    const Divider(
-                      height: 0,
-                      thickness: 0.8,
-                    ),
-                  if (currentUser!.isEntreprise)
-                    ListTile(
-                      tileColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(
-                            20,
-                          ),
-                          bottomLeft: Radius.circular(
-                            20,
-                          ),
+                  // if (currentUser!.isEntreprise)
+                  const Divider(
+                    height: 0,
+                    thickness: 0.8,
+                  ),
+                  // if (currentUser!.isEntreprise)
+                  ListTile(
+                    tileColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(
+                          20,
+                        ),
+                        bottomLeft: Radius.circular(
+                          20,
                         ),
                       ),
-                      onTap: () {
-                        context.pushNamed(VisitHistoryPage.name);
-                      },
-                      horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.route,
-                        color: AppColors.primary,
-                        size: 20,
-                      ),
-                      title: const AutoSizeText(
-                        'Historique des visites',
-                        maxLines: 1,
-                      ),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
-                        size: 15,
-                        color: AppColors.primary,
-                      ),
                     ),
+                    onTap: () {
+                      context.pushNamed(VisitHistoryPage.name);
+                    },
+                    horizontalTitleGap: 0,
+                    leading: Icon(
+                      FontAwesomeIcons.route,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    title: const AutoSizeText(
+                      'Historique des visites',
+                      maxLines: 1,
+                    ),
+                    trailing: Icon(
+                      FontAwesomeIcons.circleChevronRight,
+                      size: 15,
+                      color: AppColors.primary,
+                    ),
+                  ),
                   const Gap(20),
                   ListTile(
                     tileColor: Colors.white,

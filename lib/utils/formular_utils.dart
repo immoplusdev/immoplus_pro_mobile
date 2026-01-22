@@ -4,6 +4,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/request_path.dart';
 
@@ -42,11 +43,7 @@ class FormUtils {
   static String? emailValidator({String? email}) {
     if (email == null || email.isEmpty) {
       return 'Aucune adresse mail';
-    } else if (!RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-      caseSensitive: false,
-      multiLine: false,
-    ).hasMatch(email)) {
+    } else if (!GetUtils.isEmail(email)) {
       return 'Adresse non valide';
     }
     return null;
