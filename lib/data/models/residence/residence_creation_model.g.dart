@@ -9,7 +9,7 @@ part of 'residence_creation_model.dart';
 _$ResidenceCreationModelImpl _$$ResidenceCreationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ResidenceCreationModelImpl(
-      miniature: json['miniature'] as String? ?? '',
+      miniature: json['miniature'] as String?,
       nom: json['nom'] as String? ?? '',
       typeResidence: json['typeResidence'] as String? ?? '',
       description: json['description'] as String? ?? '',

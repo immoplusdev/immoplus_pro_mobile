@@ -9,7 +9,7 @@ part 'residence_creation_model.g.dart';
 @freezed
 class ResidenceCreationModel with _$ResidenceCreationModel {
   const factory ResidenceCreationModel({
-    @Default('') String miniature,
+    String? miniature,
     @Default('') String nom,
     @Default('') String typeResidence,
     @Default('') String description,

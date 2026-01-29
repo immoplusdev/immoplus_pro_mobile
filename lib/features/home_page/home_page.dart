@@ -104,76 +104,69 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.whiteBackground,
-          centerTitle:
-              (SessionManager().currentUser!.isEntreprise) ? true : false,
-          title: (SessionManager().currentUser!.isEntreprise)
-              ? ValueListenableBuilder(
-                  valueListenable: HomePage.selectedSection,
-                  builder: (context, state, child) {
-                    final isIOS = Platform.isIOS;
-                    return isIOS
-                        ? CupertinoSlidingSegmentedControl<BookingSection>(
-                            backgroundColor: CupertinoColors.systemFill,
-                            thumbColor: Colors.white,
-                            groupValue: HomePage.selectedSection.value,
-                            children: {
-                              BookingSection.in_progress: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: FittedBox(
-                                  child: Text(
-                                    'Réservations',
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ),
+          centerTitle: true,
+          title: ValueListenableBuilder(
+              valueListenable: HomePage.selectedSection,
+              builder: (context, state, child) {
+                final isIOS = Platform.isIOS;
+                return isIOS
+                    ? CupertinoSlidingSegmentedControl<BookingSection>(
+                        backgroundColor: CupertinoColors.systemFill,
+                        thumbColor: Colors.white,
+                        groupValue: HomePage.selectedSection.value,
+                        children: {
+                          BookingSection.in_progress: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: FittedBox(
+                              child: Text(
+                                'Réservations',
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
-                              BookingSection.visit: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: FittedBox(
-                                  child: Text(
-                                    'Visites',
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                ),
-                              ),
-                            },
-                            onValueChanged: (bookingSection) {
-                              if (bookingSection != null) {
-                                HomePage.selectedSection.value = bookingSection;
-                                _navigateToSection(bookingSection);
-                              }
-                            },
-                          )
-                        : SegmentedButton<BookingSection>(
-                            segments: const <ButtonSegment<BookingSection>>[
-                              ButtonSegment(
-                                value: BookingSection.in_progress,
-                                label: Text('Réservations'),
-                              ),
-                              ButtonSegment(
-                                value: BookingSection.visit,
-                                label: Text('Visites'),
-                              ),
-                            ],
-                            selected: {HomePage.selectedSection.value},
-                            showSelectedIcon: false,
-                            style: SegmentedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.grey.shade700,
-                              selectedForegroundColor: Colors.white,
-                              selectedBackgroundColor: AppColors.primary,
                             ),
-                            onSelectionChanged: (newSelection) {
-                              final selected = newSelection.first;
-                              HomePage.selectedSection.value = selected;
-                              _navigateToSection(selected);
-                            },
-                          );
-                  })
-              : const AutoSizeText('Réservations'),
+                          ),
+                          BookingSection.visit: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: FittedBox(
+                              child: Text(
+                                'Visites',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                          ),
+                        },
+                        onValueChanged: (bookingSection) {
+                          if (bookingSection != null) {
+                            HomePage.selectedSection.value = bookingSection;
+                            _navigateToSection(bookingSection);
+                          }
+                        },
+                      )
+                    : SegmentedButton<BookingSection>(
+                        segments: const <ButtonSegment<BookingSection>>[
+                          ButtonSegment(
+                            value: BookingSection.in_progress,
+                            label: Text('Réservations'),
+                          ),
+                          ButtonSegment(
+                            value: BookingSection.visit,
+                            label: Text('Visites'),
+                          ),
+                        ],
+                        selected: {HomePage.selectedSection.value},
+                        showSelectedIcon: false,
+                        style: SegmentedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.grey.shade700,
+                          selectedForegroundColor: Colors.white,
+                          selectedBackgroundColor: AppColors.primary,
+                        ),
+                        onSelectionChanged: (newSelection) {
+                          final selected = newSelection.first;
+                          HomePage.selectedSection.value = selected;
+                          _navigateToSection(selected);
+                        },
+                      );
+              }),
           titleTextStyle: Theme.of(context).textTheme.titleLarge,
           actions: [
             // Container(

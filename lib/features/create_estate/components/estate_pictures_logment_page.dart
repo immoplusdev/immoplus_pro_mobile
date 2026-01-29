@@ -160,7 +160,7 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
         EstateCreationModelBuilder().miniature =
             EstateCreationModelBuilder().images.isNotEmpty
                 ? EstateCreationModelBuilder().images.first
-                : '';
+                : null;
       }
     }
     _checkUploadCompletion();
