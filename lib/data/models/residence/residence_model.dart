@@ -10,7 +10,7 @@ part 'residence_model.g.dart';
 class ResidenceModel with _$ResidenceModel {
   const factory ResidenceModel({
     @Default('') String id,
-    @Default('') String miniature,
+    String? miniature,
     @Default('') String nom,
     @Default('') String statusValidation,
     @Default('') String typeResidence,
@@ -20,7 +20,7 @@ class ResidenceModel with _$ResidenceModel {
     @Default('') String ville,
     @Default('') String commune,
     @Default(PositionModel()) PositionModel position,
-    @Default('') String video,
+    String? video,
     @Default([]) List<String> images,
     @Default([]) List<CommoditeModel> commodites,
     @Default([]) List<PieceModel> pieces,

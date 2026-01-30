@@ -12,6 +12,11 @@ import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:toastification/toastification.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+const _silentErrorCodes = {
+  ApiErrorCode.jwtTokenExpired,
+  ApiErrorCode.socialAccountNotFound,
+};
+
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -26,8 +31,8 @@ class ErrorInterceptor extends Interceptor {
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
 
-    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh)
-    if (apiErrorResponse?.errorCode != ApiErrorCode.jwtTokenExpired) {
+    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
+    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
       _showErrorToast(apiErrorResponse, err.response);
     }
 

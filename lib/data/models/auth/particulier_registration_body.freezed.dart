@@ -32,6 +32,7 @@ mixin _$ParticulierRegistrationBody {
   String? get photoIdentiteId => throw _privateConstructorUsedError;
   String? get pieceIdentiteId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get provider => throw _privateConstructorUsedError;
 
   /// Serializes this ParticulierRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,7 +62,8 @@ abstract class $ParticulierRegistrationBodyCopyWith<$Res> {
       String? activite,
       String? photoIdentiteId,
       String? pieceIdentiteId,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -90,6 +92,7 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_value.copyWith(
       avatar: freezed == avatar
@@ -132,6 +135,10 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -155,7 +162,8 @@ abstract class _$$ParticulierRegistrationBodyImplCopyWith<$Res>
       String? activite,
       String? photoIdentiteId,
       String? pieceIdentiteId,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -183,6 +191,7 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_$ParticulierRegistrationBodyImpl(
       avatar: freezed == avatar
@@ -225,6 +234,10 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -243,7 +256,8 @@ class _$ParticulierRegistrationBodyImpl
       this.activite,
       this.photoIdentiteId,
       this.pieceIdentiteId,
-      this.token});
+      this.token,
+      this.provider});
 
   factory _$ParticulierRegistrationBodyImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -270,10 +284,12 @@ class _$ParticulierRegistrationBodyImpl
   final String? pieceIdentiteId;
   @override
   final String? token;
+  @override
+  final String? provider;
 
   @override
   String toString() {
-    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, token: $token)';
+    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, token: $token, provider: $provider)';
   }
 
   @override
@@ -297,7 +313,9 @@ class _$ParticulierRegistrationBodyImpl
                 other.photoIdentiteId == photoIdentiteId) &&
             (identical(other.pieceIdentiteId, pieceIdentiteId) ||
                 other.pieceIdentiteId == pieceIdentiteId) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -313,7 +331,8 @@ class _$ParticulierRegistrationBodyImpl
       activite,
       photoIdentiteId,
       pieceIdentiteId,
-      token);
+      token,
+      provider);
 
   /// Create a copy of ParticulierRegistrationBody
   /// with the given fields replaced by the non-null parameter values.
@@ -344,7 +363,8 @@ abstract class _ParticulierRegistrationBody
       final String? activite,
       final String? photoIdentiteId,
       final String? pieceIdentiteId,
-      final String? token}) = _$ParticulierRegistrationBodyImpl;
+      final String? token,
+      final String? provider}) = _$ParticulierRegistrationBodyImpl;
 
   factory _ParticulierRegistrationBody.fromJson(Map<String, dynamic> json) =
       _$ParticulierRegistrationBodyImpl.fromJson;
@@ -369,6 +389,8 @@ abstract class _ParticulierRegistrationBody
   String? get pieceIdentiteId;
   @override
   String? get token;
+  @override
+  String? get provider;
 
   /// Create a copy of ParticulierRegistrationBody
   /// with the given fields replaced by the non-null parameter values.

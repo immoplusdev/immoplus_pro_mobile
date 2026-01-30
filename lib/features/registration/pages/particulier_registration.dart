@@ -13,7 +13,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
-import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
+import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
@@ -347,23 +347,27 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             file:
                                                 fileUploaderControllerPieceIdentite
                                                     .file!);
-                                        final body = ParticulierRegistrationBody(
-                                            avatar: avatar,
-                                            pieceIdentiteId: piece,
-                                            photoIdentiteId: avatar,
-                                            firstName:
-                                                _formController.firstName!.text,
-                                            lastName:
-                                                _formController.lastName!.text,
-                                            email: _formController.email!.text,
-                                            phoneNumber:
-                                                "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
-                                            password:
-                                                _formController.password!.text,
-                                            activite:
-                                                _formController.activity!.text,
-                                            token: widget
-                                                .dataRouterRegistration.token);
+                                        final body =
+                                            ParticulierRegistrationBody(
+                                          avatar: avatar,
+                                          pieceIdentiteId: piece,
+                                          photoIdentiteId: avatar,
+                                          firstName:
+                                              _formController.firstName!.text,
+                                          lastName:
+                                              _formController.lastName!.text,
+                                          email: _formController.email!.text,
+                                          phoneNumber:
+                                              "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
+                                          password:
+                                              _formController.password!.text,
+                                          activite:
+                                              _formController.activity!.text,
+                                          token: widget
+                                              .dataRouterRegistration.token,
+                                          provider: widget
+                                              .dataRouterRegistration.provider,
+                                        );
 
                                         context
                                             .read<RgistrationCubitCubit>()

@@ -21,7 +21,7 @@ ResidenceModel _$ResidenceModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ResidenceModel {
   String get id => throw _privateConstructorUsedError;
-  String get miniature => throw _privateConstructorUsedError;
+  String? get miniature => throw _privateConstructorUsedError;
   String get nom => throw _privateConstructorUsedError;
   String get statusValidation => throw _privateConstructorUsedError;
   String get typeResidence => throw _privateConstructorUsedError;
@@ -31,7 +31,7 @@ mixin _$ResidenceModel {
   String get ville => throw _privateConstructorUsedError;
   String get commune => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
-  String get video => throw _privateConstructorUsedError;
+  String? get video => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   List<CommoditeModel> get commodites => throw _privateConstructorUsedError;
   List<PieceModel> get pieces => throw _privateConstructorUsedError;
@@ -63,7 +63,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String miniature,
+      String? miniature,
       String nom,
       String statusValidation,
       String typeResidence,
@@ -73,7 +73,7 @@ abstract class $ResidenceModelCopyWith<$Res> {
       String ville,
       String commune,
       PositionModel position,
-      String video,
+      String? video,
       List<String> images,
       List<CommoditeModel> commodites,
       List<PieceModel> pieces,
@@ -106,7 +106,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
   @override
   $Res call({
     Object? id = null,
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? nom = null,
     Object? statusValidation = null,
     Object? typeResidence = null,
@@ -116,7 +116,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? ville = null,
     Object? commune = null,
     Object? position = null,
-    Object? video = null,
+    Object? video = freezed,
     Object? images = null,
     Object? commodites = null,
     Object? pieces = null,
@@ -135,10 +135,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
@@ -175,10 +175,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
-      video: null == video
+      video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -251,7 +251,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String miniature,
+      String? miniature,
       String nom,
       String statusValidation,
       String typeResidence,
@@ -261,7 +261,7 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       String ville,
       String commune,
       PositionModel position,
-      String video,
+      String? video,
       List<String> images,
       List<CommoditeModel> commodites,
       List<PieceModel> pieces,
@@ -293,7 +293,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? nom = null,
     Object? statusValidation = null,
     Object? typeResidence = null,
@@ -303,7 +303,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? ville = null,
     Object? commune = null,
     Object? position = null,
-    Object? video = null,
+    Object? video = freezed,
     Object? images = null,
     Object? commodites = null,
     Object? pieces = null,
@@ -322,10 +322,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
@@ -362,10 +362,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as PositionModel,
-      video: null == video
+      video: freezed == video
           ? _value.video
           : video // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -423,7 +423,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
 class _$ResidenceModelImpl implements _ResidenceModel {
   const _$ResidenceModelImpl(
       {this.id = '',
-      this.miniature = '',
+      this.miniature,
       this.nom = '',
       this.statusValidation = '',
       this.typeResidence = '',
@@ -433,7 +433,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.ville = '',
       this.commune = '',
       this.position = const PositionModel(),
-      this.video = '',
+      this.video,
       final List<String> images = const [],
       final List<CommoditeModel> commodites = const [],
       final List<PieceModel> pieces = const [],
@@ -457,8 +457,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @JsonKey()
   final String id;
   @override
-  @JsonKey()
-  final String miniature;
+  final String? miniature;
   @override
   @JsonKey()
   final String nom;
@@ -487,8 +486,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @JsonKey()
   final PositionModel position;
   @override
-  @JsonKey()
-  final String video;
+  final String? video;
   final List<String> _images;
   @override
   @JsonKey()
@@ -646,7 +644,7 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 abstract class _ResidenceModel implements ResidenceModel {
   const factory _ResidenceModel(
       {final String id,
-      final String miniature,
+      final String? miniature,
       final String nom,
       final String statusValidation,
       final String typeResidence,
@@ -656,7 +654,7 @@ abstract class _ResidenceModel implements ResidenceModel {
       final String ville,
       final String commune,
       final PositionModel position,
-      final String video,
+      final String? video,
       final List<String> images,
       final List<CommoditeModel> commodites,
       final List<PieceModel> pieces,
@@ -676,7 +674,7 @@ abstract class _ResidenceModel implements ResidenceModel {
   @override
   String get id;
   @override
-  String get miniature;
+  String? get miniature;
   @override
   String get nom;
   @override
@@ -696,7 +694,7 @@ abstract class _ResidenceModel implements ResidenceModel {
   @override
   PositionModel get position;
   @override
-  String get video;
+  String? get video;
   @override
   List<String> get images;
   @override

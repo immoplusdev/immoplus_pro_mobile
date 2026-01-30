@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/create_residence/widgets/list_rule_section
 import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/time_selector.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 
 class RulesPage extends StatefulWidget {
   const RulesPage({super.key});
@@ -149,6 +150,15 @@ class _RulesPageState extends State<RulesPage> {
                       ResidenceCreationModelBuilder().heureEntree.isEmpty)
                   ? null
                   : () {
+                      final builder = ResidenceCreationModelBuilder();
+                      if (builder.dureeMinSejour >= builder.dureeMaxSejour) {
+                        // Afficher un message d'erreur
+                        ToastUtils.showError(
+                          description:
+                              "La durée minimum doit être inférieure à la durée maximum",
+                        );
+                        return; // ❌ Ne pas naviguer
+                      }
                       CreationResidenceNavigation.goToPage(
                           pageName: DescriptionEditorPage.name);
                       //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);

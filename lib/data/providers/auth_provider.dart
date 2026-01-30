@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart' hide Headers;
+import 'package:immoplus_pro/cubits/authentification/social_login_body.dart';
 import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
 import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/custom_registration_body.dart';
@@ -80,4 +81,8 @@ abstract class AuthProvider {
 
   @DELETE('/users/{id}')
   Future<HttpResponse> deleteAccount(@Path() String id);
+
+  @POST('/auth/social-login')
+  Future<AccountCreationResponse> socialLogin(
+      @Body() SocialLoginBody socialLoginBody);
 }

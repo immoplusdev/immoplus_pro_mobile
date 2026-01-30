@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus_pro/common/account_source.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
@@ -16,9 +12,9 @@ import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
+import 'package:immoplus_pro/widgets/social_button_widget.dart';
 
 class LoginWithEmailScreen extends StatefulWidget {
   const LoginWithEmailScreen({super.key, required this.rootPageController});
@@ -178,85 +174,14 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                 ],
               ),
               const Gap(10),
-              SizedBox(
-                width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(50, 50),
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(3),
-                          backgroundColor: Colors.blueGrey,
-                          foregroundColor: Colors.white),
-                      onPressed: () {
-                        widget.rootPageController.previousPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      child: const Icon(
-                        Icons.pin,
-                        color: CupertinoColors.white,
-                        size: 40,
-                      ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(50, 50),
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(3),
-                          backgroundColor: HexColor("#0866FF"),
-                          foregroundColor: Colors.white),
-                      onPressed: () {
-                        CustomPopup.toast(
-                            text:
-                                "La connexion via Facebook n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                            toastPosition: EasyLoadingToastPosition.bottom,
-                            color: AppColors.primary);
-                      },
-                      child: SvgPicture.asset('assets/svgs/icons/facebook.svg'),
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(50, 50),
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(3),
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.white),
-                        onPressed: () {
-                          CustomPopup.toast(
-                              text:
-                                  "La connexion via Google n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                              toastPosition: EasyLoadingToastPosition.bottom,
-                              color: AppColors.primary);
-                        },
-                        child: SvgPicture.asset(
-                          'assets/svgs/icons/google.svg',
-                          width: 70,
-                        )),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(50, 50),
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(3),
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white),
-                      onPressed: () {
-                        CustomPopup.toast(
-                            text:
-                                "La connexion via Apple n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                            toastPosition: EasyLoadingToastPosition.bottom,
-                            color: AppColors.primary);
-                      },
-                      child: const Icon(
-                        FontAwesomeIcons.apple,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                ),
+              SocialLoginButtons(
+                mode: LoginMode.email,
+                onSwitchMode: () {
+                  widget.rootPageController.previousPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
               )
             ],
           ),

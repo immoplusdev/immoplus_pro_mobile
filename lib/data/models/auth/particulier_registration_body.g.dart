@@ -19,6 +19,7 @@ _$ParticulierRegistrationBodyImpl _$$ParticulierRegistrationBodyImplFromJson(
       photoIdentiteId: json['photoIdentiteId'] as String?,
       pieceIdentiteId: json['pieceIdentiteId'] as String?,
       token: json['token'] as String?,
+      provider: json['provider'] as String?,
     );
 
 Map<String, dynamic> _$$ParticulierRegistrationBodyImplToJson(
@@ -34,4 +35,5 @@ Map<String, dynamic> _$$ParticulierRegistrationBodyImplToJson(
       'photoIdentiteId': instance.photoIdentiteId,
       'pieceIdentiteId': instance.pieceIdentiteId,
       'token': instance.token,
+      'provider': instance.provider,
     };

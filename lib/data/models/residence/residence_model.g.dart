@@ -9,7 +9,7 @@ part of 'residence_model.dart';
 _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
     _$ResidenceModelImpl(
       id: json['id'] as String? ?? '',
-      miniature: json['miniature'] as String? ?? '',
+      miniature: json['miniature'] as String?,
       nom: json['nom'] as String? ?? '',
       statusValidation: json['statusValidation'] as String? ?? '',
       typeResidence: json['typeResidence'] as String? ?? '',
@@ -21,7 +21,7 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       position: json['position'] == null
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
-      video: json['video'] as String? ?? '',
+      video: json['video'] as String?,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??

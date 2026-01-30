@@ -1,14 +1,10 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
@@ -16,11 +12,11 @@ import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
-import 'package:immoplus_pro/features/registration/registration_main_screen.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
+import 'package:immoplus_pro/widgets/social_button_widget.dart';
 
 class PhoneNumberPage extends StatefulWidget {
   final PageController pageController;
@@ -193,85 +189,14 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             const Gap(10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: SizedBox(
-                width: 80,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(50, 50),
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(3),
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white),
-                      onPressed: () {
-                        widget.rootPageController.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      child: const Icon(
-                        FontAwesomeIcons.at,
-                        color: CupertinoColors.white,
-                        size: 40,
-                      ),
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(50, 50),
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(3),
-                            backgroundColor: HexColor("#0866FF"),
-                            foregroundColor: Colors.white),
-                        onPressed: () {
-                          CustomPopup.toast(
-                              text:
-                                  "La connexion via Facebook n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                              toastPosition: EasyLoadingToastPosition.bottom,
-                              color: AppColors.primary);
-                        },
-                        child:
-                            SvgPicture.asset('assets/svgs/icons/facebook.svg')),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(50, 50),
-                            shape: const CircleBorder(),
-                            padding: const EdgeInsets.all(3),
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.white),
-                        onPressed: () {
-                          CustomPopup.toast(
-                              text:
-                                  "La connexion via Google n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                              toastPosition: EasyLoadingToastPosition.bottom,
-                              color: AppColors.primary);
-                        },
-                        child: SvgPicture.asset(
-                          'assets/svgs/icons/google.svg',
-                          width: 70,
-                        )),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(50, 50),
-                          shape: const CircleBorder(),
-                          padding: const EdgeInsets.all(3),
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white),
-                      onPressed: () {
-                        CustomPopup.toast(
-                            text:
-                                "La connexion via Apple n'est pas encore disponible pour le moment, mais elle le sera très bientôt.",
-                            toastPosition: EasyLoadingToastPosition.bottom,
-                            color: AppColors.primary);
-                      },
-                      child: const Icon(
-                        FontAwesomeIcons.apple,
-                        size: 40,
-                      ),
-                    ),
-                  ],
-                ),
+              child: SocialLoginButtons(
+                mode: LoginMode.phone,
+                onSwitchMode: () {
+                  widget.rootPageController.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
               ),
             )
           ],

@@ -12,14 +12,14 @@ class DetailLogmentVideo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      visible: (logmentModel.video != null) && logmentModel.video.isNotEmpty,
+      visible: (logmentModel.video ?? "").isNotEmpty,
       replacement: const SliverToBoxAdapter(),
       child: SliverToBoxAdapter(
         child: Container(
           padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          // height: 300,
-          //color: Colors.red,
-          child: VideoPlayerPage(videoID: logmentModel.video),
+          child: (logmentModel.video ?? "").isNotEmpty
+              ? VideoPlayerPage(videoID: logmentModel.video!)
+              : SizedBox(),
         ),
       ),
     );

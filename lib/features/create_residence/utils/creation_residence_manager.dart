@@ -108,7 +108,7 @@ class ResidenceCreationModelBuilder {
 
   // Method to reset all values to default
   void reset() {
-    miniature = '';
+    miniature = null;
     nom = '';
     typeResidence = '';
     description = '';
@@ -117,7 +117,7 @@ class ResidenceCreationModelBuilder {
     ville = '';
     commune = '';
     position = const PositionModel();
-    video = '';
+    video = null;
     images = [];
     commodites = [];
     pieces = [];

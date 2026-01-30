@@ -61,6 +61,49 @@
 	<string>Immoplus Pro utilise Face ID pour sécuriser l’accès à votre compte et protéger vos données professionnelles.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Deeplink fix redirect -->
+	<key>FlutterDeepLinkingEnabled</key>
+    <false/>
+	<!-- FACEBOOK&GOOGLE CONFIG START HERE -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<!-- Facebook + Google merged -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb505592098598027</string>
+				<string>com.googleusercontent.apps.1003203724496-bfhtnv633cn8i49hjtp9dug0f3c6lbpe</string>
+			</array>
+		</dict>
+		
+		<!-- HTTPS Deeplink -->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>https</string>
+			</array>
+		</dict>
+	</array>
+
+	<key>FacebookAppID</key>
+	<string>505592098598027</string>
+	<key>FacebookClientToken</key>
+	<string>f870bbd7caa1ca5344f9aaeda75fe13b</string>
+	<key>FacebookDisplayName</key>
+	<string>Immo Plus</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>fbapi</string>
+	<string>fb-messenger-share-api</string>
+	<string>fbauth2</string>
+	<string>fbshareextension</string>
+	</array>
+<!-- FACEBOOK&GOOGLE CONFIG END HERE -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/core/request_response_exeption.dart';
+import 'package:immoplus_pro/cubits/authentification/social_login_body.dart';
 import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
 import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
@@ -287,6 +288,24 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to delete account: $error');
+    }
+  }
+
+  Future<AccountCreationResponse> socialLogin(
+      {required SocialLoginBody body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio).socialLogin(body);
+      inspect(response);
+      return response;
+    } on DioException catch (_) {
+      rethrow;
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to social login: $error');
     }
   }
 }
