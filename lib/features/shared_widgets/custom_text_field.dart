@@ -66,6 +66,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: TextFormField(
         enabled: widget.isEnabled ?? true,
         readOnly: widget.readOnly,
+        enableInteractiveSelection: !widget.readOnly,
         style: (widget.fontSize != null)
             ? TextStyle(fontSize: widget.fontSize)
             : null,

@@ -14,7 +14,8 @@ class EnterpriseRegistrationBody with _$EnterpriseRegistrationBody {
       String? registreCommerceId,
       String? numeroContribuable,
       String? typeEntreprise,
-      String? token}) = _EnterpriseRegistrationBody;
+      String? token,
+      String? provider}) = _EnterpriseRegistrationBody;
 
   factory EnterpriseRegistrationBody.fromJson(Map<String, dynamic> json) =>
       _$EnterpriseRegistrationBodyFromJson(json);

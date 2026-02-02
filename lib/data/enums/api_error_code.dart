@@ -18,6 +18,8 @@ enum ApiErrorCode {
   // Erreurs de validation
   invalidOtp('INVALID_OTP'),
 
+  socialAccountNotFound('SOCIAL_ACCOUNT_NOT_FOUND'),
+
   // Erreur inconnue
   unknown('UNKNOWN');
 

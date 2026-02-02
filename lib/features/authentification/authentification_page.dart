@@ -4,18 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
+import 'package:immoplus_pro/features/authentification/registration_content.dart';
 import 'package:immoplus_pro/features/login_page/pages/login_with_email_screen.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
+import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
-import 'package:immoplus_pro/features/registration/widgets/main_registration_button.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
-import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
-import 'package:immoplus_pro/features/shared_widgets/bottom_immoplus.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -196,7 +194,39 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                       ),
 
                       // Page d'inscription (choix Entreprise/Indépendant)
-                      _RegistrationContent(),
+                      Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: appPadding),
+                        child: SingleChildScrollView(
+                          child: RegistrationContent(
+                            entrepriseOnTap: () {
+                              context.pushNamed(
+                                SendEmailOptPage.name,
+                                extra: {
+                                  "onSuccess": (DataRouterRegistration
+                                      dataRouterRegistration) {
+                                    context.pushReplacementNamed(
+                                      EnterpriseRegistrationPage.name,
+                                      extra: dataRouterRegistration,
+                                    );
+                                  },
+                                },
+                              );
+                            },
+                            particulierOnTap: () {
+                              context.pushNamed(SendEmailOptPage.name, extra: {
+                                "onSuccess": (DataRouterRegistration
+                                    dataRouterRegistration) {
+                                  context.pushReplacementNamed(
+                                    ParticulierRegistration.name,
+                                    extra: dataRouterRegistration,
+                                  );
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -205,118 +235,6 @@ class _AuthenticationPageState extends State<AuthenticationPage>
           ),
         ),
       ),
-    );
-  }
-}
-
-// Widget pour le contenu de l'inscription
-class _RegistrationContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const SliverGap(40),
-
-        // Logo
-        SliverToBoxAdapter(
-          child: Center(
-            child: SvgPicture.asset(
-              'assets/icons/logo_immo.svg',
-              color: HexColor('#2072ca'),
-              width: 80,
-            ),
-          ),
-        ),
-        const SliverGap(20),
-
-        // Titre inscription
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverToBoxAdapter(
-            child: AutoSizeText(
-              "Inscription professionnel ImmoPlus",
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-        ),
-        const SliverGap(10),
-
-        // Sous-titre
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          sliver: SliverToBoxAdapter(
-            child: Text(
-              "Choisissez votre type de compte",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    color: Colors.grey[600],
-                  ),
-            ),
-          ),
-        ),
-        const SliverGap(60),
-
-        // Boutons Entreprise et Indépendant
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: MainRegistrationButton(
-                    icon: FontAwesomeIcons.treeCity,
-                    title: "Entreprise",
-                    onTap: () {
-                      context.pushNamed(SendEmailOptPage.name, extra: {
-                        "onSuccess":
-                            (DataRouterRegistration dataRouterRegistration) {
-                          context.pushReplacementNamed(
-                            EnterpriseRegistrationPage.name,
-                            extra: dataRouterRegistration,
-                          );
-                        }
-                      });
-                    },
-                  ),
-                ),
-                const Gap(15),
-                Flexible(
-                  flex: 1,
-                  child: MainRegistrationButton(
-                    icon: FontAwesomeIcons.userTie,
-                    title: "Indépendant",
-                    onTap: () {
-                      context.pushNamed(SendEmailOptPage.name, extra: {
-                        "onSuccess":
-                            (DataRouterRegistration dataRouterRegistration) {
-                          context.pushReplacementNamed(
-                            ParticulierRegistration.name,
-                            extra: dataRouterRegistration,
-                          );
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        const SliverGap(40),
-
-        // Copyright
-        SliverToBoxAdapter(
-          child: BottomImmoPlus(),
-        ),
-        const SliverGap(20),
-      ],
     );
   }
 }

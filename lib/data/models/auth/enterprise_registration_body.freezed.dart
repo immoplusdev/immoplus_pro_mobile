@@ -30,6 +30,7 @@ mixin _$EnterpriseRegistrationBody {
   String? get numeroContribuable => throw _privateConstructorUsedError;
   String? get typeEntreprise => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
+  String? get provider => throw _privateConstructorUsedError;
 
   /// Serializes this EnterpriseRegistrationBody to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,7 +58,8 @@ abstract class $EnterpriseRegistrationBodyCopyWith<$Res> {
       String? registreCommerceId,
       String? numeroContribuable,
       String? typeEntreprise,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -85,6 +87,7 @@ class _$EnterpriseRegistrationBodyCopyWithImpl<$Res,
     Object? numeroContribuable = freezed,
     Object? typeEntreprise = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_value.copyWith(
       email: freezed == email
@@ -123,6 +126,10 @@ class _$EnterpriseRegistrationBodyCopyWithImpl<$Res,
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -145,7 +152,8 @@ abstract class _$$EnterpriseRegistrationBodyImplCopyWith<$Res>
       String? registreCommerceId,
       String? numeroContribuable,
       String? typeEntreprise,
-      String? token});
+      String? token,
+      String? provider});
 }
 
 /// @nodoc
@@ -172,6 +180,7 @@ class __$$EnterpriseRegistrationBodyImplCopyWithImpl<$Res>
     Object? numeroContribuable = freezed,
     Object? typeEntreprise = freezed,
     Object? token = freezed,
+    Object? provider = freezed,
   }) {
     return _then(_$EnterpriseRegistrationBodyImpl(
       email: freezed == email
@@ -210,6 +219,10 @@ class __$$EnterpriseRegistrationBodyImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      provider: freezed == provider
+          ? _value.provider
+          : provider // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -226,7 +239,8 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
       this.registreCommerceId,
       this.numeroContribuable,
       this.typeEntreprise,
-      this.token});
+      this.token,
+      this.provider});
 
   factory _$EnterpriseRegistrationBodyImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -250,10 +264,12 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
   final String? typeEntreprise;
   @override
   final String? token;
+  @override
+  final String? provider;
 
   @override
   String toString() {
-    return 'EnterpriseRegistrationBody(email: $email, phoneNumber: $phoneNumber, password: $password, nomEntreprise: $nomEntreprise, emailEntreprise: $emailEntreprise, registreCommerceId: $registreCommerceId, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise, token: $token)';
+    return 'EnterpriseRegistrationBody(email: $email, phoneNumber: $phoneNumber, password: $password, nomEntreprise: $nomEntreprise, emailEntreprise: $emailEntreprise, registreCommerceId: $registreCommerceId, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise, token: $token, provider: $provider)';
   }
 
   @override
@@ -276,7 +292,9 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
                 other.numeroContribuable == numeroContribuable) &&
             (identical(other.typeEntreprise, typeEntreprise) ||
                 other.typeEntreprise == typeEntreprise) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.provider, provider) ||
+                other.provider == provider));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -291,7 +309,8 @@ class _$EnterpriseRegistrationBodyImpl implements _EnterpriseRegistrationBody {
       registreCommerceId,
       numeroContribuable,
       typeEntreprise,
-      token);
+      token,
+      provider);
 
   /// Create a copy of EnterpriseRegistrationBody
   /// with the given fields replaced by the non-null parameter values.
@@ -321,7 +340,8 @@ abstract class _EnterpriseRegistrationBody
       final String? registreCommerceId,
       final String? numeroContribuable,
       final String? typeEntreprise,
-      final String? token}) = _$EnterpriseRegistrationBodyImpl;
+      final String? token,
+      final String? provider}) = _$EnterpriseRegistrationBodyImpl;
 
   factory _EnterpriseRegistrationBody.fromJson(Map<String, dynamic> json) =
       _$EnterpriseRegistrationBodyImpl.fromJson;
@@ -344,6 +364,8 @@ abstract class _EnterpriseRegistrationBody
   String? get typeEntreprise;
   @override
   String? get token;
+  @override
+  String? get provider;
 
   /// Create a copy of EnterpriseRegistrationBody
   /// with the given fields replaced by the non-null parameter values.

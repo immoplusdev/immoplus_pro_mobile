@@ -10,7 +10,7 @@ class ResidenceCreationModelBuilder {
       ResidenceCreationModelBuilder._internal();
 
   // Attributes
-  String miniature = '';
+  String? miniature;
   String nom = '';
   String typeResidence = '';
   String description = '';
@@ -19,7 +19,7 @@ class ResidenceCreationModelBuilder {
   String ville = '';
   String commune = '';
   PositionModel position = const PositionModel();
-  String video = '';
+  String? video;
   List<String> images = [];
   List<CommoditeModel> commodites = [];
   List<PieceModel> pieces = [];
@@ -56,7 +56,7 @@ class ResidenceCreationModelBuilder {
       ville: ville,
       commune: commune,
       position: position,
-      video: video.isEmpty ? null : video,
+      video: video,
       images: List<String>.from(images),
       commodites: List<CommoditeModel>.from(commodites),
       pieces: List<PieceModel>.from(pieces),
@@ -108,7 +108,7 @@ class ResidenceCreationModelBuilder {
 
   // Method to reset all values to default
   void reset() {
-    miniature = '';
+    miniature = null;
     nom = '';
     typeResidence = '';
     description = '';
@@ -117,7 +117,7 @@ class ResidenceCreationModelBuilder {
     ville = '';
     commune = '';
     position = const PositionModel();
-    video = '';
+    video = null;
     images = [];
     commodites = [];
     pieces = [];

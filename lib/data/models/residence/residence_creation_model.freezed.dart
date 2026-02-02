@@ -21,7 +21,7 @@ ResidenceCreationModel _$ResidenceCreationModelFromJson(
 
 /// @nodoc
 mixin _$ResidenceCreationModel {
-  String get miniature => throw _privateConstructorUsedError;
+  String? get miniature => throw _privateConstructorUsedError;
   String get nom => throw _privateConstructorUsedError;
   String get typeResidence => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -62,7 +62,7 @@ abstract class $ResidenceCreationModelCopyWith<$Res> {
       _$ResidenceCreationModelCopyWithImpl<$Res, ResidenceCreationModel>;
   @useResult
   $Res call(
-      {String miniature,
+      {String? miniature,
       String nom,
       String typeResidence,
       String description,
@@ -104,7 +104,7 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? nom = null,
     Object? typeResidence = null,
     Object? description = null,
@@ -128,10 +128,10 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
     Object? residenceDisponible = null,
   }) {
     return _then(_value.copyWith(
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
@@ -240,7 +240,7 @@ abstract class _$$ResidenceCreationModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String miniature,
+      {String? miniature,
       String nom,
       String typeResidence,
       String description,
@@ -282,7 +282,7 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? miniature = null,
+    Object? miniature = freezed,
     Object? nom = null,
     Object? typeResidence = null,
     Object? description = null,
@@ -306,10 +306,10 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
     Object? residenceDisponible = null,
   }) {
     return _then(_$ResidenceCreationModelImpl(
-      miniature: null == miniature
+      miniature: freezed == miniature
           ? _value.miniature
           : miniature // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nom: null == nom
           ? _value.nom
           : nom // ignore: cast_nullable_to_non_nullable
@@ -402,7 +402,7 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
   const _$ResidenceCreationModelImpl(
-      {this.miniature = '',
+      {this.miniature,
       this.nom = '',
       this.typeResidence = '',
       this.description = '',
@@ -432,8 +432,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
       _$$ResidenceCreationModelImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String miniature;
+  final String? miniature;
   @override
   @JsonKey()
   final String nom;
@@ -612,7 +611,7 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
 
 abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   const factory _ResidenceCreationModel(
-      {final String miniature,
+      {final String? miniature,
       final String nom,
       final String typeResidence,
       final String description,
@@ -639,7 +638,7 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
       _$ResidenceCreationModelImpl.fromJson;
 
   @override
-  String get miniature;
+  String? get miniature;
   @override
   String get nom;
   @override

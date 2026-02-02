@@ -163,7 +163,7 @@ class _PicturesLogmentPageState extends State<PicturesLogmentPage> {
         ResidenceCreationModelBuilder().miniature =
             ResidenceCreationModelBuilder().images.isNotEmpty
                 ? ResidenceCreationModelBuilder().images.first
-                : '';
+                : null;
       }
     }
     _checkUploadCompletion();

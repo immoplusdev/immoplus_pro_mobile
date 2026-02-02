@@ -5,15 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
+import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 
 // Optionnel si vous utilisez PinFieldAutoFill. Sinon, remplacez par vos propres champs.
 import 'package:sms_autofill/sms_autofill.dart';
-
-class DataRouterRegistration {
-  String email;
-  String token;
-  DataRouterRegistration({required this.email, required this.token});
-}
 
 class VerifyEmailOtpPage extends StatefulWidget {
   const VerifyEmailOtpPage({

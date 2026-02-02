@@ -206,8 +206,8 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
           ).then(
             (value) {
               setState(() {
-                EstateCreationModelBuilder().video = value ?? '';
                 if (value != null && value.isNotEmpty) {
+                  EstateCreationModelBuilder().video = value;
                   // Redémarrer le téléchargement de la nouvelle vidéo
                   _isLoading = true;
                   _downloadAndPlayVideo(

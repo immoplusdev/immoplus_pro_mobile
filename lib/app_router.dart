@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
+import 'package:immoplus_pro/features/authentification/choose_account_type_page.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
@@ -17,6 +18,7 @@ import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
+import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
@@ -224,6 +226,16 @@ class AppRouter {
           return VerifyEmailOtpPage(
             email: email,
             onSuccess: callOnSuccess,
+          );
+        },
+      ),
+      GoRoute(
+        path: ChooseAccountTypePage.routePath(),
+        name: ChooseAccountTypePage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          final data = state.extra as DataRouterRegistration;
+          return ChooseAccountTypePage(
+            dataRouterRegistration: data,
           );
         },
       ),

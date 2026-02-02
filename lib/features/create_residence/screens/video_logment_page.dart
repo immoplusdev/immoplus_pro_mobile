@@ -30,7 +30,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
   @override
   void initState() {
     super.initState();
-    if (ResidenceCreationModelBuilder().video.isNotEmpty) {
+    if ((ResidenceCreationModelBuilder().video ?? "").isNotEmpty) {
       // String videoUrl =
       //     "https://api-v2.immoplus.ci/files/videos/raw/${ResidenceCreationModelBuilder().video}.mp4";
       String videoUrl =
@@ -103,7 +103,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
           //         .copyWith(color: Colors.redAccent),
           //   ),
           // ),
-          ResidenceCreationModelBuilder().video.isNotEmpty
+          (ResidenceCreationModelBuilder().video ?? "").isNotEmpty
               ? SliverToBoxAdapter(
                   child: _isLoading
                       ? const Center(
@@ -186,8 +186,9 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
           ).then(
             (value) {
               setState(() {
-                ResidenceCreationModelBuilder().video = value ?? '';
                 if (value != null && value.isNotEmpty) {
+                  ResidenceCreationModelBuilder().video = value;
+
                   _isLoading = true;
                   String videoUrl =
                       "https://api-v2.immoplus.ci/files/videos/raw/public/${ResidenceCreationModelBuilder().video}";

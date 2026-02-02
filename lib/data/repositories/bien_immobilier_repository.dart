@@ -34,9 +34,9 @@ class BienImmobilierRepository {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
       throw Exception('Failed to load users: ${dioError.message}');
-    } catch (error) {
+    } catch (error, s) {
       // Gérer d'autres types d'exceptions ici
-      log('Error: $error');
+      log('Error: $error $s');
       throw Exception('Failed to load users: $error');
     }
   }

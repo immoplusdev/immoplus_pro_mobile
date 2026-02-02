@@ -85,7 +85,7 @@ class EstateCreationModelBuilder {
 
   // Method to reset all values to default
   void reset() {
-    miniature = '';
+    miniature = null;
     nom = '';
     typeBienImmobilier = '';
     description = '';
