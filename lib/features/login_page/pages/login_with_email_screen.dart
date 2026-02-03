@@ -17,8 +17,12 @@ import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/widgets/social_button_widget.dart';
 
 class LoginWithEmailScreen extends StatefulWidget {
-  const LoginWithEmailScreen({super.key, required this.rootPageController});
-  final PageController rootPageController;
+  const LoginWithEmailScreen({
+    super.key,
+    required this.onSwitchMode,
+  });
+
+  final VoidCallback onSwitchMode;
 
   @override
   State<LoginWithEmailScreen> createState() => _LoginWithEmailScreenState();
@@ -27,27 +31,26 @@ class LoginWithEmailScreen extends StatefulWidget {
 class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
   late ValueNotifier<bool> _passwordNotifier;
   late GlobalKey<FormState> _formKey;
-
-  late Map<String, dynamic> _formData;
   late FormController _formController;
-  // INITSTATE
+
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     _formController = FormController(
       productId: 0,
-      email: TextEditingController(text: ''), //pro-entreprise@immoplus.ci'
-      password: TextEditingController(text: ''), //"@Admin2019"
+      email: TextEditingController(text: ''),
+      password: TextEditingController(text: ''),
     );
     _passwordNotifier = ValueNotifier<bool>(false);
     _formKey = GlobalKey<FormState>();
+  }
 
-    super.initState();
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) => showModalBottomSheet(
-    //       context: context,
-    //       builder: (context) => Container(),
-    //     ));
+  @override
+  void dispose() {
+    _formController.email?.dispose();
+    _formController.password?.dispose();
+    _passwordNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,52 +78,44 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                 ),
                 validator: (value) => FormUtils.emailValidator(email: value),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               ValueListenableBuilder<bool>(
-                  valueListenable: _passwordNotifier,
-                  builder: (BuildContext context, bool value, child) {
-                    return CustomTextField(
-                      controller: _formController.password,
-                      obscureText: !_passwordNotifier.value,
-                      prefixIcon: const Icon(CupertinoIcons.lock),
-                      sufixIcon: IconButton(
-                        onPressed: () {
-                          _passwordNotifier.value = !_passwordNotifier.value;
-                        },
-                        icon: Icon(
-                          (value)
-                              ? Icons.visibility_off_rounded
-                              : Icons.visibility_rounded,
-                        ),
-                        iconSize: 22,
+                valueListenable: _passwordNotifier,
+                builder: (BuildContext context, bool value, child) {
+                  return CustomTextField(
+                    controller: _formController.password,
+                    obscureText: !_passwordNotifier.value,
+                    prefixIcon: const Icon(CupertinoIcons.lock),
+                    sufixIcon: IconButton(
+                      onPressed: () {
+                        _passwordNotifier.value = !_passwordNotifier.value;
+                      },
+                      icon: Icon(
+                        (value)
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
                       ),
-                      labelText: 'Mot de passe',
-                      validator: (value) =>
-                          FormUtils.passwordValidator(password: value),
-                    );
-                  }),
+                      iconSize: 22,
+                    ),
+                    labelText: 'Mot de passe',
+                    validator: (value) =>
+                        FormUtils.passwordValidator(password: value),
+                  );
+                },
+              ),
               const Gap(5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                      onPressed: () {
-                        context.pushNamed(ResetPasswordPage.name);
-                      },
-                      child: Text(
-                        'Mot de passe oublié',
-                        style: GoogleFonts.inter(color: AppColors.primary),
-                      )),
-                  // TextButton(
-                  //     onPressed: () {
-                  //       context.pushNamed(RegistrationMainScreean.name);
-                  //     },
-                  //     child: Text(
-                  //       'S\'inscrire',
-                  //       style: GoogleFonts.inter(color: AppColors.primary),
-                  //     )),
+                    onPressed: () {
+                      context.pushNamed(ResetPasswordPage.name);
+                    },
+                    child: Text(
+                      'Mot de passe oublié',
+                      style: GoogleFonts.inter(color: AppColors.primary),
+                    ),
+                  ),
                 ],
               ),
               const Gap(5),
@@ -144,8 +139,6 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                                     body: body,
                                   );
                             }
-
-                            //context.go('/homePage');
                           },
                     text: 'Connexion'.toUpperCase(),
                   );
@@ -157,9 +150,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                   Flexible(
                     child: SizedBox(
                       width: 200,
-                      child: Divider(
-                        thickness: 1,
-                      ),
+                      child: Divider(thickness: 1),
                     ),
                   ),
                   Padding(
@@ -167,21 +158,17 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                     child: Text('Ou'),
                   ),
                   Flexible(
-                      child: SizedBox(
-                          child: Divider(
-                    thickness: 1,
-                  ))),
+                    child: SizedBox(
+                      child: Divider(thickness: 1),
+                    ),
+                  ),
                 ],
               ),
               const Gap(10),
               SocialLoginButtons(
                 mode: LoginMode.email,
-                onSwitchMode: () {
-                  widget.rootPageController.previousPage(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
+                onSwitchMode: widget
+                    .onSwitchMode, // Utiliser le callback passé en paramètre
               )
             ],
           ),

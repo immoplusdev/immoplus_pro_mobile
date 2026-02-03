@@ -5,17 +5,18 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../utils/hex_color.dart';
 
 class CustomButtom extends StatelessWidget {
-  CustomButtom({
-    Key? key,
-    required this.text,
-    this.onClick,
-    this.clickable = true,
-    this.color,
-    this.textColor,
-    this.fontSize,
-    this.elevation,
-    this.isLoading = false,
-  }) : super(key: key);
+  CustomButtom(
+      {Key? key,
+      required this.text,
+      this.onClick,
+      this.clickable = true,
+      this.color,
+      this.textColor,
+      this.fontSize,
+      this.elevation,
+      this.isLoading = false,
+      this.borderRadius})
+      : super(key: key);
   final String text;
   final void Function()? onClick;
   final Color? color;
@@ -24,6 +25,7 @@ class CustomButtom extends StatelessWidget {
   final double? elevation;
   bool clickable;
   final bool isLoading;
+  BorderRadius? borderRadius;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -39,8 +41,8 @@ class CustomButtom extends StatelessWidget {
                     ? HexColor.fromHex('#2172cb')
                     : color
                 : Colors.grey[400],
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(10)),
           ),
           onPressed: isLoading
               ? null

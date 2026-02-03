@@ -6,19 +6,15 @@ class OTPState {
   static String phoneNumber = '';
 }
 
-///
-/// [OTPLoginPage.]
-/// @Param	{PageController} rootPageController
-/// [@author	Unknown]
-/// [ @since	v0.0.1 ]
-/// [@version	v1.0.0	Tuesday, April 22nd, 2025]
-/// [@see		StatefulWidget]
-/// [@global]
-///
 class OTPLoginPage extends StatefulWidget {
-  const OTPLoginPage({super.key, required this.rootPageController});
+  const OTPLoginPage({
+    super.key,
+    required this.onSwitchMode,
+  });
+
   static String name = 'OTP_LOGIN';
-  final PageController rootPageController;
+  final VoidCallback onSwitchMode;
+
   @override
   _OTPLoginPageState createState() => _OTPLoginPageState();
 }
@@ -27,15 +23,19 @@ class _OTPLoginPageState extends State<OTPLoginPage> {
   final PageController _pageController = PageController();
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PageView(
       controller: _pageController,
-
-      physics:
-          const NeverScrollableScrollPhysics(), // Empêche de swiper manuellement
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         PhoneNumberPage(
-          rootPageController: widget.rootPageController,
+          onSwitchMode: widget.onSwitchMode, // Passer le callback
           pageController: _pageController,
         ),
         OTPPage(

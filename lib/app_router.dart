@@ -11,6 +11,7 @@ import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
+import 'package:immoplus_pro/features/login_page/register_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
@@ -166,21 +167,13 @@ class AppRouter {
         builder: (context, state) => const VisitHistoryPage(),
       ),
 
-      // GoRoute(
-      //     path: '/order/:idProduct',
-      //     builder: (BuildContext context, GoRouterState state) {
-      //       String? _type = null;
-      //       try {
-      //         _type = state.uri.queryParameters['type'];
-      //       } catch (e) {
-      //         //log(e.toString(), name: 'ERROR TYPE');
-      //       }
-      //       return (_type == ProductType.to_order.name)
-      //           ? OrderDetailOrderPage(id: state.pathParameters['idProduct']!)
-      //           : OrderDetailPage(
-      //               id: state.pathParameters['idProduct']!,
-      //             );
-      //     }),
+      GoRoute(
+        path: '/${RegisterPage.name}',
+        name: RegisterPage.name,
+        builder: (BuildContext context, GoRouterState state) {
+          return const RegisterPage();
+        },
+      ),
       GoRoute(
         path: '/login',
         name: LoginPage.name,

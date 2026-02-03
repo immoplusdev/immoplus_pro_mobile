@@ -2,13 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
+import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
@@ -21,9 +20,12 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class EnterpriseRegistrationPage extends StatefulWidget {
   final DataRouterRegistration? dataRouterRegistration;
-  const EnterpriseRegistrationPage(
-      {super.key, required this.dataRouterRegistration});
+  const EnterpriseRegistrationPage({
+    super.key,
+    required this.dataRouterRegistration,
+  });
   static String name = "Enterprise_Registration";
+
   @override
   State<EnterpriseRegistrationPage> createState() =>
       _EnterpriseRegistrationPageState();
@@ -34,70 +36,51 @@ class _EnterpriseRegistrationPageState
   late FormController _formController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ValueNotifier<bool> _passwordNotifier = ValueNotifier<bool>(false);
-  final ValueNotifier<bool> _passworConfirmdNotifier =
+  final ValueNotifier<bool> _passwordConfirmNotifier =
       ValueNotifier<bool>(false);
   final ValueNotifier<bool> _cguNotifier = ValueNotifier<bool>(false);
   final FileUploaderController fileUploaderController =
       FileUploaderController();
-  final int _selectedCity = 0;
   final FocusNode _focusNode = FocusNode();
-  _getCity({required Widget child}) {
+
+  @override
+  void initState() {
+    super.initState();
     _focusNode.unfocus();
-    showCupertinoModalPopup<void>(
-      context: context,
-      builder: (BuildContext context) => Container(
-        height: 216,
-        padding: const EdgeInsets.only(top: 6.0),
-        // The Bottom margin is provided to align the popup above the system navigation bar.
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        // Provide a background color for the popup.
-        color: CupertinoColors.systemBackground.resolveFrom(context),
-        // Use a SafeArea widget to avoid system overlaps.
-        child: SafeArea(
-          top: false,
-          child: child,
-        ),
-      ),
+
+    _formController = FormController(
+      productId: 0,
+      enterpriseName: TextEditingController(text: ''),
+      enterpriseType: TextEditingController(text: ''),
+      numeroContribuable: TextEditingController(text: ''),
+      phoneNumber: TextEditingController(text: ''),
+      email: TextEditingController(text: widget.dataRouterRegistration?.email),
+      password: TextEditingController(text: ''),
     );
   }
 
   @override
-  void initState() {
-    _focusNode.unfocus();
-
-    _formController = FormController(
-        productId: 0,
-        enterpriseName: TextEditingController(text: ''),
-        enterpriseType: TextEditingController(text: ''),
-        //registreCommerce: TextEditingController(text: ''),
-        numeroContribuable: TextEditingController(text: ''),
-        phoneNumber: TextEditingController(text: ''),
-        email:
-            TextEditingController(text: widget.dataRouterRegistration?.email),
-        password: TextEditingController(text: ''));
-
-    super.initState();
+  void dispose() {
+    _formController.enterpriseName?.dispose();
+    _formController.enterpriseType?.dispose();
+    _formController.numeroContribuable?.dispose();
+    _formController.phoneNumber?.dispose();
+    _formController.email?.dispose();
+    _formController.password?.dispose();
+    _passwordNotifier.dispose();
+    _passwordConfirmNotifier.dispose();
+    _cguNotifier.dispose();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RgistrationCubitCubit(),
-      child: Scaffold(
-        backgroundColor: AppColors.scafold,
-        appBar: AppBar(
-          backgroundColor: AppColors.scafold,
-          title: const Text('Inscription entreprise'),
-          elevation: 0,
-          actions: const [
-            Icon(FontAwesomeIcons.treeCity),
-            Gap(20),
-          ],
-          centerTitle: true,
-        ),
-        body: Padding(
+      child: CustomPageImmo(
+        title: 'Inscription entreprise',
+        content: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Form(
             key: _formKey,
@@ -105,24 +88,31 @@ class _EnterpriseRegistrationPageState
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               physics: const BouncingScrollPhysics(),
               slivers: [
+                const SliverGap(20),
+
+                // Nom de l'entreprise
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.enterpriseName,
-                    prefixIcon: const Icon(FontAwesomeIcons.buildingUser),
+                    prefixIcon: const Icon(CupertinoIcons.building_2_fill),
                     labelText: "Nom de l'entreprise",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
                 ),
+
+                // Type d'entreprise
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.enterpriseType,
-                    prefixIcon: const Icon(CupertinoIcons.building_2_fill),
+                    prefixIcon: const Icon(CupertinoIcons.briefcase),
                     labelText: "Type d'entreprise",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
                 ),
+
+                // Numéro contribuable
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.numeroContribuable,
@@ -132,6 +122,8 @@ class _EnterpriseRegistrationPageState
                         FormUtils.fieldValidator(value: value),
                   ),
                 ),
+
+                // Téléphone
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.phoneNumber,
@@ -148,6 +140,8 @@ class _EnterpriseRegistrationPageState
                     ],
                   ),
                 ),
+
+                // Email (readonly)
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.email,
@@ -159,6 +153,8 @@ class _EnterpriseRegistrationPageState
                         FormUtils.emailValidator(email: value),
                   ),
                 ),
+
+                // Mot de passe
                 SliverToBoxAdapter(
                   child: ValueListenableBuilder<bool>(
                     valueListenable: _passwordNotifier,
@@ -184,16 +180,18 @@ class _EnterpriseRegistrationPageState
                     },
                   ),
                 ),
+
+                // Confirmation mot de passe
                 SliverToBoxAdapter(
                   child: ValueListenableBuilder<bool>(
-                    valueListenable: _passworConfirmdNotifier,
+                    valueListenable: _passwordConfirmNotifier,
                     builder: (BuildContext context, bool value, child) {
                       return CustomTextField(
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         obscureText: !value,
                         sufixIcon: IconButton(
                           onPressed: () {
-                            _passworConfirmdNotifier.value = !value;
+                            _passwordConfirmNotifier.value = !value;
                           },
                           icon: Icon(
                             value
@@ -214,6 +212,8 @@ class _EnterpriseRegistrationPageState
                     },
                   ),
                 ),
+
+                // CGU Checkbox
                 SliverToBoxAdapter(
                   child: ValueListenableBuilder<bool>(
                     valueListenable: _cguNotifier,
@@ -256,15 +256,20 @@ class _EnterpriseRegistrationPageState
                     },
                   ),
                 ),
+
+                // File Uploader
                 SliverToBoxAdapter(
                   child: FileUploader(
                     fileUploaderController: fileUploaderController,
                     title: "Registre de Commerce",
                   ),
                 ),
-                const SliverGap(10),
+
+                const SliverGap(20),
+
+                // Bouton de soumission
                 SliverPadding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   sliver: SliverToBoxAdapter(
                     child: BlocBuilder<RgistrationCubitCubit,
                         RegistrationCubitState>(
@@ -279,56 +284,56 @@ class _EnterpriseRegistrationPageState
                                       EasyLoading.instance.backgroundColor =
                                           Colors.red.shade400;
                                       EasyLoading.showToast(
-                                          "Les Conditions d'utilisation ne sont pas approuvées",
-                                          toastPosition:
-                                              EasyLoadingToastPosition.bottom);
+                                        "Les Conditions d'utilisation ne sont pas approuvées",
+                                        toastPosition:
+                                            EasyLoadingToastPosition.bottom,
+                                      );
                                     } else if (fileUploaderController.file ==
                                         null) {
                                       EasyLoading.instance.backgroundColor =
                                           Colors.red.shade400;
                                       EasyLoading.showToast(
-                                          "Entrer la photo de votre registre de commerce",
-                                          toastPosition:
-                                              EasyLoadingToastPosition.bottom);
+                                        "Entrer la photo de votre registre de commerce",
+                                        toastPosition:
+                                            EasyLoadingToastPosition.bottom,
+                                      );
                                     } else {
                                       String? registre = await uploadFile(
-                                          file: fileUploaderController.file!);
+                                        file: fileUploaderController.file!,
+                                      );
 
                                       final body = EnterpriseRegistrationBody(
-                                          email: _formController.email!.text,
-                                          registreCommerceId: registre,
-                                          phoneNumber:
-                                              "225${_formController.phoneNumber!.text..replaceAll(" ", "")}",
-                                          password:
-                                              _formController.password!.text,
-                                          nomEntreprise: _formController
-                                              .enterpriseName!.text,
-                                          emailEntreprise:
-                                              _formController.email!.text,
-                                          // registreCommerce:
-                                          //     _formController.email!.text,
-                                          numeroContribuable: _formController
-                                              .numeroContribuable!.text,
-                                          typeEntreprise: _formController
-                                              .enterpriseType!.text,
-                                          token: widget.dataRouterRegistration
-                                                  ?.token ??
-                                              "",
-                                          provider: widget
-                                              .dataRouterRegistration
-                                              ?.provider);
+                                        email: _formController.email!.text,
+                                        registreCommerceId: registre,
+                                        phoneNumber:
+                                            "225${_formController.phoneNumber!.text.replaceAll(" ", "")}",
+                                        password:
+                                            _formController.password!.text,
+                                        nomEntreprise: _formController
+                                            .enterpriseName!.text,
+                                        emailEntreprise:
+                                            _formController.email!.text,
+                                        numeroContribuable: _formController
+                                            .numeroContribuable!.text,
+                                        typeEntreprise: _formController
+                                            .enterpriseType!.text,
+                                        token: widget.dataRouterRegistration
+                                                ?.token ??
+                                            "",
+                                        provider: widget
+                                            .dataRouterRegistration?.provider,
+                                      );
 
-                                      // ignore: use_build_context_synchronously
+                                      if (!context.mounted) return;
                                       context
                                           .read<RgistrationCubitCubit>()
                                           .createEnterpriseAccount(
-                                              enterpriseRegistrationBody: body,
-                                              fileUploaderController:
-                                                  fileUploaderController);
+                                            enterpriseRegistrationBody: body,
+                                            fileUploaderController:
+                                                fileUploaderController,
+                                          );
                                     }
                                   }
-
-                                  //context.go('/homePage');
                                 },
                           text: "Creer mon compte",
                         );
@@ -336,9 +341,8 @@ class _EnterpriseRegistrationPageState
                     ),
                   ),
                 ),
-                SliverGap(
-                  10,
-                ),
+
+                const SliverGap(20),
               ],
             ),
           ),
@@ -346,9 +350,4 @@ class _EnterpriseRegistrationPageState
       ),
     );
   }
-}
-
-class AlwaysDisabledFocusNode extends FocusNode {
-  @override
-  bool get hasFocus => false;
 }

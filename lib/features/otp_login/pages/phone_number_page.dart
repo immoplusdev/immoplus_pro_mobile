@@ -19,14 +19,15 @@ import 'package:immoplus_pro/utils/status_code_handler.dart';
 import 'package:immoplus_pro/widgets/social_button_widget.dart';
 
 class PhoneNumberPage extends StatefulWidget {
-  final PageController pageController;
-
   const PhoneNumberPage({
     super.key,
     required this.pageController,
-    required this.rootPageController,
+    required this.onSwitchMode,
   });
-  final PageController rootPageController;
+
+  final PageController pageController;
+  final VoidCallback onSwitchMode;
+
   @override
   State<PhoneNumberPage> createState() => _PhoneNumberPageState();
 }
@@ -34,6 +35,7 @@ class PhoneNumberPage extends StatefulWidget {
 class _PhoneNumberPageState extends State<PhoneNumberPage> {
   bool isPhoneNumberValid = false;
   String phoneNumber = '';
+
   void onInputValidated(bool isValid) {
     setState(() {
       isPhoneNumberValid = isValid;
@@ -50,41 +52,31 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
-        // padding: const EdgeInsets.all(16.0),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Gap(50),
-            //const SizedBox(height: 20),
             SizedBox(
               height: 80,
               child: InternationalPhoneInput(
                 onValidPhoneNumber: (value) {
                   phoneNumber = value;
                   OTPState.phoneNumber = phoneNumber;
-                  // Le numéro valide est traité ici si nécessaire
-                  // print(phoneNumber);
                 },
                 onInputValidated: onInputValidated,
               ),
             ),
             const Gap(10),
-
             BlocBuilder<LoginCubit, LoginCubitState>(
               builder: (context, state) {
                 return EasyButton(
                   type: EasyButtonType.elevated,
-
-                  // Content inside the button when the button state is idle.
                   idleStateWidget: Text(
                     'Envoyer Code'.toUpperCase(),
                     style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
-
-                  // Content inside of the button when the button state is loading.
                   loadingStateWidget: const CircularProgressIndicator(
                     strokeWidth: 3.0,
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -93,7 +85,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   ),
                   useWidthAnimation: true,
                   useEqualLoadingStateWidgetDimension: true,
-                  // If you want a fullwidth size, set this to double.infinity
                   width: double.infinity,
                   height: 55.0,
                   borderRadius: 20.0,
@@ -102,15 +93,18 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   buttonColor: isPhoneNumberValid
                       ? AppColors.primary
                       : Colors.blueGrey.shade200,
-
                   onPressed: phoneNumber.isNotEmpty
                       ? () async {
                           try {
                             final response = await AuthRepository.sendOtp(
-                                body: SendOptModel(
-                                    phoneNumber:
-                                        PhoneNumberHandler.formatPhoneNumber(
-                                            phoneNumber)));
+                              body: SendOptModel(
+                                phoneNumber:
+                                    PhoneNumberHandler.formatPhoneNumber(
+                                  phoneNumber,
+                                ),
+                              ),
+                            );
+
                             if (StatusCodeHandler.isSuccess(
                                 response.response.statusCode)) {
                               FocusScope.of(context).unfocus();
@@ -122,46 +116,34 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                               );
                             } else {
                               CustomPopup.showErrorToast(
-                                  text:
-                                      'Envoi du code échoué, veuillez ressayer');
+                                text: 'Envoi du code échoué, veuillez ressayer',
+                              );
                             }
                           } catch (e) {
                             CustomPopup.toast(
-                                color: Colors.red,
-                                toastPosition: EasyLoadingToastPosition.bottom,
-                                text:
-                                    "Envoi de OTP code échoué, veuillez réessayer");
+                              color: Colors.red,
+                              toastPosition: EasyLoadingToastPosition.bottom,
+                              text:
+                                  "Envoi de OTP code échoué, veuillez réessayer",
+                            );
                           }
                         }
                       : null,
                 );
               },
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                    onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => ResetPassword(),
-                      //     ));
-                      context.pushNamed(ResetPasswordPage.name);
-                    },
-                    child: Text(
-                      'Mot de passe oublié',
-                      style: GoogleFonts.inter(color: AppColors.primary),
-                    )),
-                // TextButton(
-                //     onPressed: () {
-                //       context.pushNamed(RegistrationMainScreean.name);
-                //     },
-                //     child: Text(
-                //       'S\'inscrire',
-                //       style: GoogleFonts.inter(color: AppColors.primary),
-                //     )),
+                  onPressed: () {
+                    context.pushNamed(ResetPasswordPage.name);
+                  },
+                  child: Text(
+                    'Mot de passe oublié',
+                    style: GoogleFonts.inter(color: AppColors.primary),
+                  ),
+                ),
               ],
             ),
             const Row(
@@ -169,9 +151,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                 Flexible(
                   child: SizedBox(
                     width: 200,
-                    child: Divider(
-                      thickness: 1,
-                    ),
+                    child: Divider(thickness: 1),
                   ),
                 ),
                 Padding(
@@ -179,24 +159,18 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   child: Text('ou'),
                 ),
                 Flexible(
-                    child: SizedBox(
-                        child: Divider(
-                  thickness: 1,
-                ))),
+                  child: SizedBox(
+                    child: Divider(thickness: 1),
+                  ),
+                ),
               ],
             ),
-
             const Gap(10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: SocialLoginButtons(
                 mode: LoginMode.phone,
-                onSwitchMode: () {
-                  widget.rootPageController.nextPage(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
+                onSwitchMode: widget.onSwitchMode,
               ),
             )
           ],
