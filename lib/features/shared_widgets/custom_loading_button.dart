@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus_pro/utils/hex_color.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 
 class CustomLoadingButtom extends StatelessWidget {
-  CustomLoadingButtom({
-    Key? key,
+  const CustomLoadingButtom({
+    super.key,
     required this.text,
     this.onClick,
     this.clickable = true,
     this.color,
     this.textColor,
     required this.isLoading,
-  }) : super(key: key);
+  });
   final String text;
   final void Function()? onClick;
   final Color? color;
@@ -33,11 +33,11 @@ class CustomLoadingButtom extends StatelessWidget {
             disabledBackgroundColor: Colors.blue.shade100,
             backgroundColor: (clickable)
                 ? (color == null)
-                    ? HexColor.fromHex('#2172cb')
+                    ? AppColors.primary
                     : color
                 : Colors.grey[400],
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radiusButton)),
           ),
           onPressed: (isLoading || !clickable) ? null : onClick,
           child: (isLoading)
@@ -46,11 +46,10 @@ class CustomLoadingButtom extends StatelessWidget {
                 )
               : Text(
                   text,
-                  style: GoogleFonts.inter(
-                      color: Colors
-                          .white, //(textColor == null) ? textColor : null,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: textColor ?? Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
         ),
       ),

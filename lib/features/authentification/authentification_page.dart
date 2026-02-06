@@ -1,19 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
-import 'package:immoplus_pro/features/authentification/registration_content.dart';
-import 'package:immoplus_pro/features/login_page/pages/login_with_email_screen.dart';
-import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
-import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
-import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/features/registration/pages/enterprise_registration.dart';
-import 'package:immoplus_pro/features/registration/pages/particulier_registration.dart';
+import 'package:immoplus_pro/features/login_page/login_page.dart';
+import 'package:immoplus_pro/features/login_page/register_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -54,179 +48,85 @@ class _AuthenticationPageState extends State<AuthenticationPage>
       create: (context) => LoginCubit(),
       child: EnvironmentsBadge(
         child: Scaffold(
-          backgroundColor: HexColor("#121224"),
-          body: CustomScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            physics: const NeverScrollableScrollPhysics(),
-            slivers: [
-              // AppBar avec logo
-              SliverAppBar(
-                backgroundColor: HexColor("#121224"),
-                leadingWidth: 35,
-                automaticallyImplyLeading: false,
-                actions: [
-                  SvgPicture.asset(
-                    'assets/icons/logo_immo.svg',
-                    color: HexColor('#2072ca'),
-                    width: 50,
-                  ),
-                  const Gap(20),
-                ],
-              ),
-              const SliverGap(30),
-
-              // Titre principal
-              SliverToBoxAdapter(
-                child: Center(
-                  child: Text(
-                    "Bienvenue sur ImmoPlus Pro",
-                    style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+          // backgroundColor: HexColor("#121224"),
+          body: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: const [
+                      Color(0xFFFFFFFF),
+                      Color(0xFFFFFEFE),
+                      Color(0xFF64DCFD),
+                      Color(0xFF156CE4),
+                    ],
+                    stops: const [0.0, 0.3, 0.7, 1.0],
                   ),
                 ),
               ),
-              const SliverGap(8),
-
-              // Sous-titre
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                sliver: SliverToBoxAdapter(
-                  child: Center(
-                    child: AutoSizeText(
-                      maxLines: 2,
-                      "Gérez vos biens immobiliers en toute simplicité",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.white.withOpacity(0.8),
-                          ),
-                    ),
-                  ),
-                ),
-              ),
-              const SliverGap(30),
-
-              // TabBar personnalisé
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                        width: 1,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(4),
-                    child: TabBar(
-                      controller: _tabController,
-                      indicator: BoxDecoration(
-                        color: HexColor('#2072ca'),
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: HexColor('#2072ca').withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.white.withOpacity(0.7),
-                      labelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      unselectedLabelStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                      ),
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      dividerColor: Colors.transparent,
-                      splashFactory: NoSplash.splashFactory,
-                      overlayColor: WidgetStateProperty.all(Colors.transparent),
-                      tabs: const [
-                        Tab(
-                          height: 48,
-                          child: Text("Connexion"),
-                        ),
-                        Tab(
-                          height: 48,
-                          child: Text("Inscription"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SliverGap(20),
-
-              // Contenu des onglets
-              SliverFillRemaining(
+              SingleChildScrollView(
                 child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                  ),
-                  child: TabBarView(
-                    controller: _tabController,
-                    physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(appPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Page de connexion (avec OTP et Email)
-                      PageView(
-                        controller: _loginPageController,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          OTPLoginPage(
-                            rootPageController: _loginPageController,
-                          ),
-                          LoginWithEmailScreen(
-                            rootPageController: _loginPageController,
-                          ),
-                        ],
+                      Gap(80),
+                      _infoTile(label: "Publiez"),
+                      _infoTile(label: "Gérez"),
+                      _infoTile(label: "Encaissez"),
+                      Gap(180),
+                      Text(
+                          "Commencez à publier, gérer et vendre vos biens immobiliers",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                          )),
+                      Gap(80),
+                      CustomButtom(
+                        text: "Connexion",
+                        onClick: () {
+                          context.pushNamed(LoginPage.name);
+                        },
+                        color: AppColors.customBlue,
+                        borderRadius: BorderRadius.circular(43),
                       ),
-
-                      // Page d'inscription (choix Entreprise/Indépendant)
-                      Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: appPadding),
-                        child: SingleChildScrollView(
-                          child: RegistrationContent(
-                            entrepriseOnTap: () {
-                              context.pushNamed(
-                                SendEmailOptPage.name,
-                                extra: {
-                                  "onSuccess": (DataRouterRegistration
-                                      dataRouterRegistration) {
-                                    context.pushReplacementNamed(
-                                      EnterpriseRegistrationPage.name,
-                                      extra: dataRouterRegistration,
-                                    );
-                                  },
-                                },
-                              );
-                            },
-                            particulierOnTap: () {
-                              context.pushNamed(SendEmailOptPage.name, extra: {
-                                "onSuccess": (DataRouterRegistration
-                                    dataRouterRegistration) {
-                                  context.pushReplacementNamed(
-                                    ParticulierRegistration.name,
-                                    extra: dataRouterRegistration,
-                                  );
-                                }
-                              });
-                            },
+                      Gap(6),
+                      CustomButtom(
+                        onClick: () {
+                          context.pushNamed(RegisterPage.name);
+                        },
+                        color: AppColors.whiteBackground,
+                        textColor: AppColors.black,
+                        borderRadius: BorderRadius.circular(43),
+                        child: FittedBox(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Vous n’avez pas de compte ? ",
+                              children: [
+                                TextSpan(
+                                  text: "Inscrivez-vous",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Colors.black),
+                            ),
                           ),
                         ),
                       ),
+                      Gap(10),
                     ],
                   ),
                 ),
@@ -234,6 +134,17 @@ class _AuthenticationPageState extends State<AuthenticationPage>
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _infoTile({required String label}) {
+    return Text(
+      label,
+      style: TextStyle(
+        color: AppColors.black,
+        fontSize: 40,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

@@ -27,3 +27,4 @@ String formatCfa(int amount) {
 }
 
 const double appPadding = 16.0;
+const double radiusButton = 43.0;

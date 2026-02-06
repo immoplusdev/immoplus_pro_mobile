@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus_pro/utils/hex_color.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 
 class ThemeConfig {
   static ThemeData lightTheme({required BuildContext context}) => ThemeData(
@@ -48,14 +48,14 @@ class ThemeConfig {
             )),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: HexColor.fromHex('#2172cb'),
+            backgroundColor: AppColors.primary,
           ),
         ),
         checkboxTheme: CheckboxThemeData(
-          fillColor: WidgetStateProperty.all(HexColor.fromHex('#2172cb')),
+          fillColor: WidgetStateProperty.all(AppColors.primary),
         ),
         colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: HexColor.fromHex('#2172cb'),
+              primary: AppColors.primary,
               secondaryContainer: CupertinoColors.white,
               onPrimary: CupertinoColors.white,
               surface: CupertinoColors.systemGrey,
