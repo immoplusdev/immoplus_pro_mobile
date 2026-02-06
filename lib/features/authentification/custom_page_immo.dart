@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+
+const _backIconSize = 31.0;
 
 class CustomPageImmo extends StatefulWidget {
   final String title;
@@ -37,13 +40,19 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                         GestureDetector(
                           onTap: () => context.pop(),
                           child: Container(
-                            width: 31,
-                            height: 31,
+                            width: _backIconSize,
+                            height: _backIconSize,
+                            padding: EdgeInsets.only(left: 5),
                             decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
+                                color: AppColors.blue65BAF0,
                                 shape: BoxShape.circle),
                             child: Center(
-                                child: Icon(Icons.arrow_back_ios, size: 10)),
+                              child: Icon(
+                                Icons.arrow_back_ios,
+                                size: 15,
+                                color: AppColors.white,
+                              ),
+                            ),
                           ),
                         ),
                         Expanded(
@@ -56,8 +65,8 @@ class _ChooseAccountTypePageState extends State<CustomPageImmo> {
                           ),
                         )),
                         SizedBox(
-                          width: 31,
-                          height: 31,
+                          width: _backIconSize,
+                          height: _backIconSize,
                         )
                       ],
                     ),

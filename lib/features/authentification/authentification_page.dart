@@ -97,13 +97,34 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                       ),
                       Gap(6),
                       CustomButtom(
-                        text: "Vous n’avez pas de compte ? Inscrivez-vous",
                         onClick: () {
                           context.pushNamed(RegisterPage.name);
                         },
                         color: AppColors.whiteBackground,
                         textColor: AppColors.black,
                         borderRadius: BorderRadius.circular(43),
+                        child: FittedBox(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Vous n’avez pas de compte ? ",
+                              children: [
+                                TextSpan(
+                                  text: "Inscrivez-vous",
+                                  style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                )
+                              ],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Colors.black),
+                            ),
+                          ),
+                        ),
                       ),
                       Gap(10),
                     ],

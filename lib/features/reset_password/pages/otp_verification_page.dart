@@ -9,6 +9,7 @@ import 'package:immoplus_pro/cubits/authentification/reset_password_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/reset_password_cubit_state.dart';
 import 'package:immoplus_pro/features/reset_password/widgets/header_container.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
+import 'package:immoplus_pro/widgets/custom_pinput.dart';
 import 'package:pinput/pinput.dart';
 
 const _timerDuration = 30;
@@ -91,46 +92,23 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             child: Column(
               children: [
                 const Gap(50),
-                Pinput(
+                CustomPinput(
                   controller: _otpController,
                   length: _otpLength,
-                  defaultPinTheme: PinTheme(
-                    width: 50,
-                    height: 50,
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300, width: 2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  focusedPinTheme: PinTheme(
-                    width: 50,
-                    height: 50,
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightBlue, width: 2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  submittedPinTheme: PinTheme(
-                    width: 50,
-                    height: 50,
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightBlue,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                  width: 50,
+                  height: 50,
+                  fontSize: 20,
+                  borderColor: Colors.grey.shade300,
+                  focusedBorderColor: AppColors.lightBlue,
+                  errorBorderColor: Colors.red,
+                  onCompleted: (pin) {
+                    // Soumet automatiquement quand le code est complet
+                    if (_isOtpComplete) {
+                      context
+                          .read<ResetPasswordCubit>()
+                          .verifyEmailOtp(otp: pin);
+                    }
+                  },
                 ),
                 const Gap(30),
                 BlocConsumer<ResetPasswordCubit, ResetPasswordCubitState>(

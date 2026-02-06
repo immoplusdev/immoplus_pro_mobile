@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
 import 'package:immoplus_pro/features/login_page/pages/login_with_email_screen.dart';
@@ -56,45 +57,48 @@ class _LoginPageState extends State<LoginPage> {
       create: (context) => LoginCubit(),
       child: CustomPageImmo(
         title: "Se connecter",
-        content: Column(
-          children: [
-            ValueListenableBuilder<int>(
-              valueListenable: _currentPageNotifier,
-              builder: (context, currentPage, child) {
-                return CustomTabSelector(
-                  selectedIndex: currentPage,
-                  tabs: const ['E-mail', 'Numero'],
-                  onTabSelected: _onTabSelected,
-                  selectedColor: HexColor('#2072ca'),
-                );
-              },
-            ),
-            const Gap(20),
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+        content: Container(
+          padding: const EdgeInsets.all(appPadding),
+          child: Column(
+            children: [
+              ValueListenableBuilder<int>(
+                valueListenable: _currentPageNotifier,
+                builder: (context, currentPage, child) {
+                  return CustomTabSelector(
+                    selectedIndex: currentPage,
+                    tabs: const ['E-mail', 'Numero'],
+                    onTabSelected: _onTabSelected,
+                    selectedColor: HexColor('#2072ca'),
+                  );
+                },
+              ),
+              const Gap(20),
+              Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: PageView(
+                    controller: _pageController,
+                    physics:
+                        const NeverScrollableScrollPhysics(), // Désactiver le swipe si tu veux
+                    children: [
+                      LoginWithEmailScreen(
+                        onSwitchMode: () => _onTabSelected(1),
+                      ),
+                      OTPLoginPage(
+                        onSwitchMode: () => _onTabSelected(0),
+                      ),
+                    ],
                   ),
                 ),
-                child: PageView(
-                  controller: _pageController,
-                  physics:
-                      const NeverScrollableScrollPhysics(), // Désactiver le swipe si tu veux
-                  children: [
-                    LoginWithEmailScreen(
-                      onSwitchMode: () => _onTabSelected(1),
-                    ),
-                    OTPLoginPage(
-                      onSwitchMode: () => _onTabSelected(0),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

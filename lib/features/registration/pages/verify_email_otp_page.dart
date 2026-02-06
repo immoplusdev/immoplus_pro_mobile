@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/cubits/authentification/verify_email_response.dart';
 import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/widgets/custom_pinput.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class VerifyEmailOtpPage extends StatefulWidget {
@@ -107,144 +112,112 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
           setState(() => _isLoading = state is REGISTRATION_LOADING);
         },
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(appPadding),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 520),
-              child: Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Form(
-                    key: _formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.mark_email_read_outlined,
-                          size: 48,
-                          color: theme.colorScheme.primary,
-                        ),
-                        const Gap(12),
-                        Text(
-                          'Entrez le code reçu par email',
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const Gap(8),
-                        Text(
-                          'Un code à 6 chiffres a été envoyé à ${widget.email}',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.textTheme.bodyMedium?.color
-                                ?.withOpacity(0.8),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const Gap(28),
-
-                        // Champ OTP (6 cases)
-                        PinFieldAutoFill(
-                          codeLength: 6,
-                          currentCode: _otpController.text,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(6),
-                          ],
-                          decoration: BoxLooseDecoration(
-                            gapSpace: 10,
-                            radius: const Radius.circular(10),
-                            strokeColorBuilder: FixedColorBuilder(
-                              theme.colorScheme.primary.withOpacity(.5),
-                            ),
-                            bgColorBuilder: FixedColorBuilder(
-                              theme.colorScheme.surface,
-                            ),
-                            textStyle: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Entrez le code reçu par email',
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(8),
+                    Text(
+                      'Un code à 6 chiffres a été envoyé à ${widget.email}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color:
+                            theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(28),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.E6F5FF,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Image.asset(
+                              Assets.img.email.path,
+                              width: 35,
                             ),
                           ),
-                          onCodeChanged: (code) {
-                            final v = (code ?? '').trim();
-                            if (v.length <= 6) {
-                              _otpController.value = TextEditingValue(
-                                text: v,
-                                selection:
-                                    TextSelection.collapsed(offset: v.length),
-                              );
+                          Gap(14),
+                          Text("Code de vérification",
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600, fontSize: 15)),
+                          Gap(13),
+                          // Champ OTP (6 cases)
+                          CustomPinput(
+                            controller: _otpController,
+                            onCompleted: (pin) => _submit(context),
+                            onChanged: (code) {
                               if (_formKey.currentState?.mounted ?? false) {
                                 _formKey.currentState!.validate();
                               }
-                            }
-                          },
-                          onCodeSubmitted: (_) =>
-                              _isLoading ? null : _submit(context),
-                        ),
+                            },
+                          ),
 
-                        // Message d'erreur animé
-                        Builder(
-                          builder: (context) {
-                            final err = _otpValidator(_otpController.text);
-                            return AnimatedOpacity(
-                              opacity: (err == null) ? 0 : 1,
-                              duration: const Duration(milliseconds: 200),
-                              child: (err == null)
-                                  ? const SizedBox.shrink()
-                                  : Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        err,
-                                        style: TextStyle(
-                                          color: theme.colorScheme.error,
-                                          fontSize: 13,
+                          // Message d'erreur animé
+                          Builder(
+                            builder: (context) {
+                              final err = _otpValidator(_otpController.text);
+                              return AnimatedOpacity(
+                                opacity: (err == null) ? 0 : 1,
+                                duration: const Duration(milliseconds: 200),
+                                child: (err == null)
+                                    ? const SizedBox.shrink()
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          err,
+                                          style: TextStyle(
+                                            color: theme.colorScheme.error,
+                                            fontSize: 13,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                            );
-                          },
-                        ),
-                        const Gap(24),
-
-                        // Bouton de validation
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton(
-                            onPressed:
-                                _isLoading ? null : () => _submit(context),
-                            style: FilledButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: _isLoading
-                                ? const CupertinoActivityIndicator()
-                                : const Text(
-                                    'Valider le code',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              );
+                            },
                           ),
-                        ),
-                        const Gap(12),
+                          const Gap(24),
 
-                        // Bouton renvoyer
-                        TextButton(
-                          onPressed: _isLoading ? null : () => _resend(context),
-                          child: const Text('Renvoyer le code'),
-                        ),
-                      ],
-                    ),
-                  ),
+                          // Bouton de validation
+                          SizedBox(
+                            width: double.infinity,
+                            child: CustomLoadingButtom(
+                              text: "Valider le code",
+                              onClick: () => _submit(context),
+                              isLoading: _isLoading,
+                            ),
+                          ),
+                          const Gap(12),
+
+                          // Bouton renvoyer
+                          Center(
+                            child: TextButton(
+                              onPressed:
+                                  _isLoading ? null : () => _resend(context),
+                              child: const Text('Renvoyer le code'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),

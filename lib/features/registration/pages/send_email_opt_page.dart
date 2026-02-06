@@ -1,14 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 
 class SendEmailOptPage extends StatefulWidget {
@@ -58,73 +62,71 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
           final isLoading = state is REGISTRATION_LOADING;
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(appPadding),
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Form(
-                      key: _formKey,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.mark_email_read_outlined,
-                            size: 48,
-                            color: theme.colorScheme.primary,
-                          ),
-                          const Gap(12),
-                          Text(
-                            "Saisissez votre adresse email",
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const Gap(8),
-                          Text(
-                            "Un code de vérification vous sera envoyé.",
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.textTheme.bodyMedium?.color
-                                  ?.withOpacity(0.8),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const Gap(28),
-
-                          // Champ email
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.send,
-                            validator: (String? value) =>
-                                FormUtils.emailValidator(email: value),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.deny(RegExp(r"\s")),
-                              LengthLimitingTextInputFormatter(254),
-                            ],
-                            onFieldSubmitted: (_) =>
-                                isLoading ? null : _submit(context),
-                            decoration: InputDecoration(
-                              hintText: "Adresse email",
-                              prefixIcon: const Icon(Icons.email_outlined),
-                              filled: true,
-                              fillColor: theme
-                                  .colorScheme.surfaceContainerHighest
-                                  .withOpacity(0.4),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                vertical: 18,
-                                horizontal: 14,
+                constraints: const BoxConstraints(maxWidth: 520),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Saisissez votre adresse email",
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(8),
+                      Text(
+                        "Un code de vérification vous sera envoyé.",
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.textTheme.bodyMedium?.color
+                              ?.withOpacity(0.8),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Gap(28),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColors.E6F5FF,
+                          borderRadius: BorderRadius.circular(22),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Image.asset(
+                                Assets.img.email.path,
+                                width: 35,
                               ),
-                              suffixIcon:
+                            ),
+                            Gap(14),
+                            Text("Adresse E-mail",
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600, fontSize: 15)),
+                            Gap(13),
+                            // Champ email
+                            CustomTextField(
+                              labelText: "Adresse email",
+                              controller: _emailController,
+                              textInputType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.send,
+                              validator: (String? value) =>
+                                  FormUtils.emailValidator(email: value),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                                LengthLimitingTextInputFormatter(254),
+                              ],
+                              onFieldSubmitted: (_) =>
+                                  isLoading ? null : _submit(context),
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              fontSize: 16,
+                              fillColor: AppColors.white,
+                              sufixIcon:
                                   ValueListenableBuilder<TextEditingValue>(
                                 valueListenable: _emailController,
                                 builder: (context, value, _) {
@@ -141,46 +143,24 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                                 },
                               ),
                             ),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                          const Gap(24),
+                            const Gap(8),
 
-                          // Bouton
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton(
-                              onPressed:
-                                  isLoading ? null : () => _submit(context),
-                              style: FilledButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: isLoading
-                                  ? const CupertinoActivityIndicator()
-                                  : const Text(
-                                      "Envoyer le code",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
+                            // Bouton
+                            CustomLoadingButtom(
+                              text: "Envoyer le code",
+                              onClick: () => _submit(context),
+                              isLoading: isLoading,
+                              clickable: true,
                             ),
-                          ),
-                          const Gap(8),
-                          Text(
-                            "Votre email est uniquement utilisé pour cette vérification.",
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.textTheme.bodySmall?.color
-                                  ?.withOpacity(0.7),
+                            const Gap(24),
+                            Text(
+                              "Votre email est uniquement utilisé pour cette vérification.",
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),

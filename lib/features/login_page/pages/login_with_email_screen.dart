@@ -64,7 +64,6 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(30),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 18),
           child: Column(
             children: [
               const Gap(40),
@@ -140,7 +139,7 @@ class _LoginWithEmailScreenState extends State<LoginWithEmailScreen> {
                                   );
                             }
                           },
-                    text: 'Connexion'.toUpperCase(),
+                    text: 'Connexion',
                   );
                 },
               ),

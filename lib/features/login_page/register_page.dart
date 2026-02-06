@@ -44,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return CustomPageImmo(
-      title: "S'inscrire",
+      title: "Création de compte",
       content: SingleChildScrollView(
         child: RegistrationContent(
           entrepriseOnTap: () {

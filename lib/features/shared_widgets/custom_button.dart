@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../utils/hex_color.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/network/utils/constants.dart';
 
 class CustomButtom extends StatelessWidget {
   CustomButtom(
       {Key? key,
-      required this.text,
+      this.text,
       this.onClick,
       this.clickable = true,
       this.color,
@@ -15,9 +14,12 @@ class CustomButtom extends StatelessWidget {
       this.fontSize,
       this.elevation,
       this.isLoading = false,
+      this.child,
       this.borderRadius})
       : super(key: key);
-  final String text;
+  final String? text;
+  final Widget? child;
+
   final void Function()? onClick;
   final Color? color;
   final Color? textColor;
@@ -38,11 +40,12 @@ class CustomButtom extends StatelessWidget {
             elevation: elevation ?? 0,
             backgroundColor: (clickable)
                 ? (color == null)
-                    ? HexColor.fromHex('#2172cb')
+                    ? AppColors.primary
                     : color
                 : Colors.grey[400],
             shape: RoundedRectangleBorder(
-                borderRadius: borderRadius ?? BorderRadius.circular(10)),
+                borderRadius:
+                    borderRadius ?? BorderRadius.circular(radiusButton)),
           ),
           onPressed: isLoading
               ? null
@@ -51,13 +54,14 @@ class CustomButtom extends StatelessWidget {
                   : null,
           child: isLoading
               ? CupertinoActivityIndicator()
-              : Text(
-                  text,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: textColor ?? Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
+              : child ??
+                  Text(
+                    text ?? '',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: textColor ?? Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
         ),
       ),
     );
