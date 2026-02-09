@@ -88,7 +88,7 @@ class BookingCard extends StatelessWidget {
                     label: reservationModel.residence.nom,
                     labelStyle: TextStyle(color: Colors.white),
                     iconSize: 15,
-                    backgroundColor: AppColors.lightBlue,
+                    backgroundColor: AppColors.primary,
                   ),
                 ],
               ),
