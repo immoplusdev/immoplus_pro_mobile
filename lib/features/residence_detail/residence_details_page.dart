@@ -404,7 +404,7 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                                         }).toList();
 
                                         // Fermer la bottom sheet
-                                        Navigator.pop(context);
+                                        // Navigator.pop(context);
 
                                         // Un seul appel API pour tout mettre à jour
                                         await context
