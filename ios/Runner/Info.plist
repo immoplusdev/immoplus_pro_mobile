@@ -73,7 +73,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb505592098598027</string>
+				<string>fb1234206374739165</string>
 				<string>com.googleusercontent.apps.1003203724496-bfhtnv633cn8i49hjtp9dug0f3c6lbpe</string>
 			</array>
 		</dict>
@@ -90,11 +90,11 @@
 	</array>
 
 	<key>FacebookAppID</key>
-	<string>505592098598027</string>
+	<string>1234206374739165</string>
 	<key>FacebookClientToken</key>
-	<string>f870bbd7caa1ca5344f9aaeda75fe13b</string>
+	<string>d55b99f692b7f24dc480a3ab178b0738</string>
 	<key>FacebookDisplayName</key>
-	<string>Immo Plus</string>
+	<string>Immo Plus Pro</string>
 
 	<key>LSApplicationQueriesSchemes</key>
 	<array>

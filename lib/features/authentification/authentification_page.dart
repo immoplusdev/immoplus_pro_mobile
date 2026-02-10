@@ -8,6 +8,7 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:immoplus_pro/features/login_page/register_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -78,9 +79,15 @@ class _AuthenticationPageState extends State<AuthenticationPage>
                       _infoTile(label: "Gérez"),
                       _infoTile(label: "Encaissez"),
                       Gap(180),
+                      Image.asset(
+                        Assets.icon.iconRadius.path,
+                        width: 63,
+                        height: 63,
+                      ),
+                      Gap(15),
                       Text(
                           "Commencez à publier, gérer et vendre vos biens immobiliers",
-                          textAlign: TextAlign.center,
+                          // textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,

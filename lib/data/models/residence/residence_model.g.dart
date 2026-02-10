@@ -43,6 +43,11 @@ _$ResidenceModelImpl _$$ResidenceModelImplFromJson(Map<String, dynamic> json) =>
       fetesAutorises: json['fetesAutorises'] as bool? ?? false,
       reglesSupplementaires: json['reglesSupplementaires'] as String? ?? '',
       residenceDisponible: json['residenceDisponible'] as bool? ?? true,
+      datesReservation: (json['datesReservation'] as List<dynamic>?)
+              ?.map((e) =>
+                  DateReservationModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ResidenceModelImplToJson(
@@ -72,4 +77,5 @@ Map<String, dynamic> _$$ResidenceModelImplToJson(
       'fetesAutorises': instance.fetesAutorises,
       'reglesSupplementaires': instance.reglesSupplementaires,
       'residenceDisponible': instance.residenceDisponible,
+      'datesReservation': instance.datesReservation,
     };

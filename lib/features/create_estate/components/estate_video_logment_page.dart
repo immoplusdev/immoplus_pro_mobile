@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,7 +10,6 @@ import 'package:immoplus_pro/features/create_estate/components/estate_pictures_l
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_video_page.dart';
 import 'package:path_provider/path_provider.dart';
@@ -131,18 +129,41 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
                         )
                       : (_controller != null &&
                               _controller!.value.isInitialized)
-                          ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _controller!.value.isPlaying
-                                      ? _chewieController?.pause()
-                                      : _chewieController?.play();
-                                });
-                              },
-                              child: AspectRatio(
-                                aspectRatio: _controller!.value.aspectRatio,
-                                child: Chewie(controller: _chewieController!),
-                              ),
+                          ? Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _controller!.value.isPlaying
+                                          ? _chewieController?.pause()
+                                          : _chewieController?.play();
+                                    });
+                                  },
+                                  child: AspectRatio(
+                                    aspectRatio: _controller!.value.aspectRatio,
+                                    child:
+                                        Chewie(controller: _chewieController!),
+                                  ),
+                                ),
+                                Gap(8),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      EstateCreationModelBuilder().video = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(
+                                      "Supprimer la video",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
                             )
                           : const Center(
                               child: Padding(
