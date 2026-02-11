@@ -108,79 +108,78 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                 //product adress
                 DetailLogmentInfos(reservation: state.data),
                 //réservation offers
-                const DetailDivider(),
-                const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
-                //offer list
-                DetailLogmentAmentities(residenceModel: state.data),
-                const SliverGap(10),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: AppColors.primary)),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          backgroundColor: AppColors.scafold,
-                          showDragHandle: true,
-                          enableDrag: true,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          context: context,
-                          builder: (context) => Container(
-                              child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: state.data.commodites
-                                  .map(
-                                    (e) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          child: SvgPicture.asset(
-                                            SVGMap.map[e.icon] ?? '',
-                                            height: 20,
-                                            width: 20,
-                                          ),
-                                        ),
-                                        tileColor: Colors.white,
-                                        title: Text(e.text),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          )),
-                        );
-                      },
-                      child: Text(
-                          "Voir tout les ${state.data.commodites.length} commodités"),
-                    ),
-                  ),
-                ),
-                const DetailDivider(),
-                //vidéo section
-                DetailLogmentVideo(logmentModel: state.data),
-                //description next
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 5),
-                    color: Colors.white,
-                    height: 100,
-                    child: Markdown(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      data: state.data.description ??
-                          '', //state.finishData.data!.description!,
-                      //styleSheet: MarkdownStyleSheet(),
-                    ),
-                  ),
-                ),
-                SeeMoreButton(
-                  text: state.data.description,
-                ),
+                // const DetailDivider(),
+                // const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
+                // DetailLogmentAmentities(residenceModel: state.data),
+                // const SliverGap(10),
+                // SliverToBoxAdapter(
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                //     child: OutlinedButton(
+                //       style: OutlinedButton.styleFrom(
+                //           side: BorderSide(color: AppColors.primary)),
+                //       onPressed: () {
+                //         showModalBottomSheet(
+                //           backgroundColor: AppColors.scafold,
+                //           showDragHandle: true,
+                //           enableDrag: true,
+                //           isScrollControlled: true,
+                //           shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(20)),
+                //           context: context,
+                //           builder: (context) => Container(
+                //               child: Padding(
+                //             padding: const EdgeInsets.only(bottom: 20),
+                //             child: Column(
+                //               mainAxisSize: MainAxisSize.min,
+                //               children: state.data.commodites
+                //                   .map(
+                //                     (e) => Padding(
+                //                       padding: const EdgeInsets.only(bottom: 5),
+                //                       child: ListTile(
+                //                         leading: CircleAvatar(
+                //                           child: SvgPicture.asset(
+                //                             SVGMap.map[e.icon] ?? '',
+                //                             height: 20,
+                //                             width: 20,
+                //                           ),
+                //                         ),
+                //                         tileColor: Colors.white,
+                //                         title: Text(e.text),
+                //                       ),
+                //                     ),
+                //                   )
+                //                   .toList(),
+                //             ),
+                //           )),
+                //         );
+                //       },
+                //       child: Text(
+                //           "Voir tout les ${state.data.commodites.length} commodités"),
+                //     ),
+                //   ),
+                // ),
+                // const DetailDivider(),
+                // //vidéo section
+                // DetailLogmentVideo(logmentModel: state.data),
+                // //description next
+                // SliverToBoxAdapter(
+                //   child: Container(
+                //     padding: const EdgeInsets.only(top: 5),
+                //     color: Colors.white,
+                //     height: 100,
+                //     child: Markdown(
+                //       physics: const NeverScrollableScrollPhysics(),
+                //       padding: const EdgeInsets.symmetric(horizontal: 10),
+                //       data: state.data.description ??
+                //           '', //state.finishData.data!.description!,
+                //       //styleSheet: MarkdownStyleSheet(),
+                //     ),
+                //   ),
+                // ),
+                // SeeMoreButton(
+                //   text: state.data.description,
+                // ),
 
                 // SliverList(
                 //   delegate: SliverChildBuilderDelegate(
@@ -438,8 +437,8 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                 ),
                 const SliverToBoxAdapter(child: Gap(20)),
                 const DetailDivider(),
-                const DetailLogmentTitle2(title: 'Où se situe le logement'),
-                DetailLogmentMap(residence: state.data),
+                // const DetailLogmentTitle2(title: 'Où se situe le logement'),
+                // DetailLogmentMap(residence: state.data),
                 const DetailDivider(),
                 const SliverGap(10),
                 const DetailLogmentTitle2(title: 'Règles de la maison'),
