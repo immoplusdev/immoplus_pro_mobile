@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,10 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/core/core_utils.dart';
+import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
@@ -75,11 +72,13 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
   }
 
   Future<void> _pickVideo() async {
-    final XFile? pickedFile = await _picker.pickVideo(
+    final File? pickedVideo = await ImagePickerService.pickVideo(
+      context: context,
       source: ImageSource.gallery,
     );
-    if (pickedFile != null) {
-      videoPath = pickedFile.path;
+
+    if (pickedVideo != null) {
+      videoPath = pickedVideo.path;
       _changeVideo(videoPath);
     }
   }
