@@ -15,6 +15,7 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
+import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
@@ -207,16 +208,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   // if (currentUser!.isEntreprise)
                   ListTile(
                     tileColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(
-                          20,
-                        ),
-                        bottomLeft: Radius.circular(
-                          20,
-                        ),
-                      ),
-                    ),
+                    // Arrondi en bas seulement si "Mes meubles" est masqué (customer)
+                    shape: (currentUser?.roleName == Roles.customer.name)
+                        ? const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                            ),
+                          )
+                        : null,
                     onTap: () {
                       context.pushNamed(EstatesPage.name);
                     },
@@ -226,13 +226,47 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    title: const Text('Biens immobilier'),
+                    title: const Text('Biens immobiliers'),
                     trailing: Icon(
                       FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
                   ),
+
+                  // ── Mes meubles (visible uniquement pour les rôles pro) ──
+                  if (currentUser?.roleName != Roles.customer.name) ...[
+                    const Divider(
+                      height: 0,
+                      thickness: 0.8,
+                    ),
+                    ListTile(
+                      tileColor: Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context); // Ferme le drawer
+                        context.pushNamed(FurnituresPage.name);
+                      },
+                      horizontalTitleGap: 0,
+                      leading: Icon(
+                        FontAwesomeIcons.couch,
+                        color: AppColors.furnitureViolet,
+                        size: 20,
+                      ),
+                      title: const Text('Mes meubles'),
+                      trailing: Icon(
+                        FontAwesomeIcons.circleChevronRight,
+                        size: 15,
+                        color: AppColors.furnitureViolet,
+                      ),
+                    ),
+                  ],
+                  
                   const Gap(10),
                   ListTile(
                     shape: RoundedRectangleBorder(
