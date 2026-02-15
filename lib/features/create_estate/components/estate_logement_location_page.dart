@@ -82,11 +82,11 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             sliver: SliverToBoxAdapter(
               child: ListTile(
-                leading: const CircleAvatar(
+                leading: CircleAvatar(
                     backgroundColor: Colors.transparent,
                     child: Icon(
                       FontAwesomeIcons.locationDot,
-                      color: Colors.blue,
+                      color: AppColors.primary,
                     )),
                 tileColor: EstateCreationModelBuilder().adresse.isNotEmpty
                     ? AppColors.scafold

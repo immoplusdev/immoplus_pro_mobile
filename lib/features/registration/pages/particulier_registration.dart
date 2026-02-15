@@ -357,7 +357,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             EasyLoadingToastPosition.bottom,
                                       );
                                     } else {
-                                      String? avatar = await uploadFile(
+                                      String? photo = await uploadFile(
                                         file:
                                             fileUploaderControllerPhotoIdentite
                                                 .file!,
@@ -369,9 +369,9 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                       );
 
                                       final body = ParticulierRegistrationBody(
-                                        avatar: avatar,
+                                        //  avatar: avatar,
                                         pieceIdentiteId: piece,
-                                        photoIdentiteId: avatar,
+                                        photoIdentiteId: photo,
                                         firstName:
                                             _formController.firstName!.text,
                                         lastName:
