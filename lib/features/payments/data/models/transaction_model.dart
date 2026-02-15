@@ -22,7 +22,6 @@ class TransactionModel with _$TransactionModel {
     DateTime? updatedAt,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime? deletedAt,
-    @Default('') String? createdBy,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime? releaseDate,
     @Default(false) bool isRealeased,

@@ -11,7 +11,6 @@ class CommuneModel with _$CommuneModel {
     @Default(null) DateTime? createdAt,
     @Default(null) DateTime? updatedAt,
     @Default(null) DateTime? deletedAt,
-    @Default(null) String? createdBy,
     @Default('') String villeId,
   }) = _CommuneModel;
 

@@ -20,7 +20,6 @@ _$WithdrawalRequestModelImpl _$$WithdrawalRequestModelImplFromJson(
       createdAt: _dateTimeFromJson(json['createdAt'] as String?),
       updatedAt: _dateTimeFromJson(json['updatedAt'] as String?),
       deletedAt: _dateTimeFromJson(json['deletedAt'] as String?),
-      createdBy: json['createdBy'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$WithdrawalRequestModelImplToJson(
@@ -37,5 +36,4 @@ Map<String, dynamic> _$$WithdrawalRequestModelImplToJson(
       'createdAt': _dateTimeToJson(instance.createdAt),
       'updatedAt': _dateTimeToJson(instance.updatedAt),
       'deletedAt': _dateTimeToJson(instance.deletedAt),
-      'createdBy': instance.createdBy,
     };

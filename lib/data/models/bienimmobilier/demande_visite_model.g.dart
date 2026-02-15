@@ -42,7 +42,6 @@ _$DemandeVisiteModelImpl _$$DemandeVisiteModelImplFromJson(
       updatedAt: json['updatedAt'] == null
           ? null
           : DateTime.parse(json['updatedAt'] as String),
-      createdBy: json['createdBy'] as String?,
     );
 
 Map<String, dynamic> _$$DemandeVisiteModelImplToJson(
@@ -65,5 +64,4 @@ Map<String, dynamic> _$$DemandeVisiteModelImplToJson(
       'proprietaire': instance.proprietaire,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
-      'createdBy': instance.createdBy,
     };

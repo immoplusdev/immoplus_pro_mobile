@@ -38,7 +38,6 @@ mixin _$DemandeVisiteModel {
   ClientModel? get proprietaire => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  String? get createdBy => throw _privateConstructorUsedError;
 
   /// Serializes this DemandeVisiteModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -72,8 +71,7 @@ abstract class $DemandeVisiteModelCopyWith<$Res> {
       ClientModel? client,
       ClientModel? proprietaire,
       DateTime? createdAt,
-      DateTime? updatedAt,
-      String? createdBy});
+      DateTime? updatedAt});
 
   $BienImmobilierModelCopyWith<$Res>? get bienImmobilier;
   $ClientModelCopyWith<$Res>? get client;
@@ -111,7 +109,6 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
     Object? proprietaire = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? createdBy = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -179,10 +176,6 @@ class _$DemandeVisiteModelCopyWithImpl<$Res, $Val extends DemandeVisiteModel>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 
@@ -253,8 +246,7 @@ abstract class _$$DemandeVisiteModelImplCopyWith<$Res>
       ClientModel? client,
       ClientModel? proprietaire,
       DateTime? createdAt,
-      DateTime? updatedAt,
-      String? createdBy});
+      DateTime? updatedAt});
 
   @override
   $BienImmobilierModelCopyWith<$Res>? get bienImmobilier;
@@ -293,7 +285,6 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
     Object? proprietaire = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? createdBy = freezed,
   }) {
     return _then(_$DemandeVisiteModelImpl(
       id: null == id
@@ -361,10 +352,6 @@ class __$$DemandeVisiteModelImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -388,8 +375,7 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
       this.client,
       this.proprietaire,
       this.createdAt,
-      this.updatedAt,
-      this.createdBy})
+      this.updatedAt})
       : _datesDemandeVisite = datesDemandeVisite;
 
   factory _$DemandeVisiteModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -439,12 +425,10 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
   final DateTime? createdAt;
   @override
   final DateTime? updatedAt;
-  @override
-  final String? createdBy;
 
   @override
   String toString() {
-    return 'DemandeVisiteModel(id: $id, statusDemandeVisite: $statusDemandeVisite, typeDemandeVisite: $typeDemandeVisite, datesDemandeVisite: $datesDemandeVisite, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalDemandeVisite: $montantTotalDemandeVisite, montantDemandeVisiteSansCommission: $montantDemandeVisiteSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, bienImmobilier: $bienImmobilier, bienImmobilierId: $bienImmobilierId, client: $client, proprietaire: $proprietaire, createdAt: $createdAt, updatedAt: $updatedAt, createdBy: $createdBy)';
+    return 'DemandeVisiteModel(id: $id, statusDemandeVisite: $statusDemandeVisite, typeDemandeVisite: $typeDemandeVisite, datesDemandeVisite: $datesDemandeVisite, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalDemandeVisite: $montantTotalDemandeVisite, montantDemandeVisiteSansCommission: $montantDemandeVisiteSansCommission, notes: $notes, clientPhoneNumber: $clientPhoneNumber, bienImmobilier: $bienImmobilier, bienImmobilierId: $bienImmobilierId, client: $client, proprietaire: $proprietaire, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -483,9 +467,7 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy));
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -507,8 +489,7 @@ class _$DemandeVisiteModelImpl implements _DemandeVisiteModel {
       client,
       proprietaire,
       createdAt,
-      updatedAt,
-      createdBy);
+      updatedAt);
 
   /// Create a copy of DemandeVisiteModel
   /// with the given fields replaced by the non-null parameter values.
@@ -544,8 +525,7 @@ abstract class _DemandeVisiteModel implements DemandeVisiteModel {
       final ClientModel? client,
       final ClientModel? proprietaire,
       final DateTime? createdAt,
-      final DateTime? updatedAt,
-      final String? createdBy}) = _$DemandeVisiteModelImpl;
+      final DateTime? updatedAt}) = _$DemandeVisiteModelImpl;
 
   factory _DemandeVisiteModel.fromJson(Map<String, dynamic> json) =
       _$DemandeVisiteModelImpl.fromJson;
@@ -582,8 +562,6 @@ abstract class _DemandeVisiteModel implements DemandeVisiteModel {
   DateTime? get createdAt;
   @override
   DateTime? get updatedAt;
-  @override
-  String? get createdBy;
 
   /// Create a copy of DemandeVisiteModel
   /// with the given fields replaced by the non-null parameter values.

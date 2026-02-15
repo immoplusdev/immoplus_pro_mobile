@@ -36,7 +36,6 @@ mixin _$WithdrawalRequestModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get deletedAt => throw _privateConstructorUsedError;
-  String? get createdBy => throw _privateConstructorUsedError;
 
   /// Serializes this WithdrawalRequestModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,8 +67,7 @@ abstract class $WithdrawalRequestModelCopyWith<$Res> {
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
-      DateTime? deletedAt,
-      String? createdBy});
+      DateTime? deletedAt});
 }
 
 /// @nodoc
@@ -99,7 +97,6 @@ class _$WithdrawalRequestModelCopyWithImpl<$Res,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -146,10 +143,6 @@ class _$WithdrawalRequestModelCopyWithImpl<$Res,
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 }
@@ -177,8 +170,7 @@ abstract class _$$WithdrawalRequestModelImplCopyWith<$Res>
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
-      DateTime? deletedAt,
-      String? createdBy});
+      DateTime? deletedAt});
 }
 
 /// @nodoc
@@ -207,7 +199,6 @@ class __$$WithdrawalRequestModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
   }) {
     return _then(_$WithdrawalRequestModelImpl(
       id: freezed == id
@@ -254,10 +245,6 @@ class __$$WithdrawalRequestModelImplCopyWithImpl<$Res>
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -279,8 +266,7 @@ class _$WithdrawalRequestModelImpl implements _WithdrawalRequestModel {
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       this.updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
-      this.deletedAt,
-      this.createdBy = ''});
+      this.deletedAt});
 
   factory _$WithdrawalRequestModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$WithdrawalRequestModelImplFromJson(json);
@@ -317,13 +303,10 @@ class _$WithdrawalRequestModelImpl implements _WithdrawalRequestModel {
   @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   final DateTime? deletedAt;
-  @override
-  @JsonKey()
-  final String? createdBy;
 
   @override
   String toString() {
-    return 'WithdrawalRequestModel(id: $id, owner: $owner, amount: $amount, currency: $currency, operator: $operator, phoneNumber: $phoneNumber, status: $status, note: $note, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, createdBy: $createdBy)';
+    return 'WithdrawalRequestModel(id: $id, owner: $owner, amount: $amount, currency: $currency, operator: $operator, phoneNumber: $phoneNumber, status: $status, note: $note, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
   }
 
   @override
@@ -347,27 +330,13 @@ class _$WithdrawalRequestModelImpl implements _WithdrawalRequestModel {
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
             (identical(other.deletedAt, deletedAt) ||
-                other.deletedAt == deletedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy));
+                other.deletedAt == deletedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      owner,
-      amount,
-      currency,
-      operator,
-      phoneNumber,
-      status,
-      note,
-      createdAt,
-      updatedAt,
-      deletedAt,
-      createdBy);
+  int get hashCode => Object.hash(runtimeType, id, owner, amount, currency,
+      operator, phoneNumber, status, note, createdAt, updatedAt, deletedAt);
 
   /// Create a copy of WithdrawalRequestModel
   /// with the given fields replaced by the non-null parameter values.
@@ -401,8 +370,7 @@ abstract class _WithdrawalRequestModel implements WithdrawalRequestModel {
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       final DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
-      final DateTime? deletedAt,
-      final String? createdBy}) = _$WithdrawalRequestModelImpl;
+      final DateTime? deletedAt}) = _$WithdrawalRequestModelImpl;
 
   factory _WithdrawalRequestModel.fromJson(Map<String, dynamic> json) =
       _$WithdrawalRequestModelImpl.fromJson;
@@ -433,8 +401,6 @@ abstract class _WithdrawalRequestModel implements WithdrawalRequestModel {
   @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get deletedAt;
-  @override
-  String? get createdBy;
 
   /// Create a copy of WithdrawalRequestModel
   /// with the given fields replaced by the non-null parameter values.

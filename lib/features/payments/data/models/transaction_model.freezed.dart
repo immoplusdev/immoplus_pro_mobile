@@ -37,7 +37,6 @@ mixin _$TransactionModel {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get deletedAt => throw _privateConstructorUsedError;
-  String? get createdBy => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get releaseDate => throw _privateConstructorUsedError;
   bool get isRealeased => throw _privateConstructorUsedError;
@@ -77,7 +76,6 @@ abstract class $TransactionModelCopyWith<$Res> {
       DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? deletedAt,
-      String? createdBy,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? releaseDate,
       bool isRealeased,
@@ -113,7 +111,6 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
     Object? releaseDate = freezed,
     Object? isRealeased = null,
     Object? releasedAt = freezed,
@@ -171,10 +168,6 @@ class _$TransactionModelCopyWithImpl<$Res, $Val extends TransactionModel>
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
       releaseDate: freezed == releaseDate
           ? _value.releaseDate
           : releaseDate // ignore: cast_nullable_to_non_nullable
@@ -216,7 +209,6 @@ abstract class _$$TransactionModelImplCopyWith<$Res>
       DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? deletedAt,
-      String? createdBy,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       DateTime? releaseDate,
       bool isRealeased,
@@ -250,7 +242,6 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
     Object? releaseDate = freezed,
     Object? isRealeased = null,
     Object? releasedAt = freezed,
@@ -308,10 +299,6 @@ class __$$TransactionModelImplCopyWithImpl<$Res>
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
       releaseDate: freezed == releaseDate
           ? _value.releaseDate
           : releaseDate // ignore: cast_nullable_to_non_nullable
@@ -348,7 +335,6 @@ class _$TransactionModelImpl implements _TransactionModel {
       this.updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       this.deletedAt,
-      this.createdBy = '',
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       this.releaseDate,
       this.isRealeased = false,
@@ -398,9 +384,6 @@ class _$TransactionModelImpl implements _TransactionModel {
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   final DateTime? deletedAt;
   @override
-  @JsonKey()
-  final String? createdBy;
-  @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   final DateTime? releaseDate;
   @override
@@ -412,7 +395,7 @@ class _$TransactionModelImpl implements _TransactionModel {
 
   @override
   String toString() {
-    return 'TransactionModel(id: $id, owner: $owner, amount: $amount, currency: $currency, reference: $reference, type: $type, note: $note, operator: $operator, source: $source, sourceId: $sourceId, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, createdBy: $createdBy, releaseDate: $releaseDate, isRealeased: $isRealeased, releasedAt: $releasedAt)';
+    return 'TransactionModel(id: $id, owner: $owner, amount: $amount, currency: $currency, reference: $reference, type: $type, note: $note, operator: $operator, source: $source, sourceId: $sourceId, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, releaseDate: $releaseDate, isRealeased: $isRealeased, releasedAt: $releasedAt)';
   }
 
   @override
@@ -440,8 +423,6 @@ class _$TransactionModelImpl implements _TransactionModel {
                 other.updatedAt == updatedAt) &&
             (identical(other.deletedAt, deletedAt) ||
                 other.deletedAt == deletedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
             (identical(other.releaseDate, releaseDate) ||
                 other.releaseDate == releaseDate) &&
             (identical(other.isRealeased, isRealeased) ||
@@ -467,7 +448,6 @@ class _$TransactionModelImpl implements _TransactionModel {
       createdAt,
       updatedAt,
       deletedAt,
-      createdBy,
       releaseDate,
       isRealeased,
       releasedAt);
@@ -507,7 +487,6 @@ abstract class _TransactionModel implements TransactionModel {
       final DateTime? updatedAt,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       final DateTime? deletedAt,
-      final String? createdBy,
       @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
       final DateTime? releaseDate,
       final bool isRealeased,
@@ -547,8 +526,6 @@ abstract class _TransactionModel implements TransactionModel {
   @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get deletedAt;
-  @override
-  String? get createdBy;
   @override
   @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
   DateTime? get releaseDate;
