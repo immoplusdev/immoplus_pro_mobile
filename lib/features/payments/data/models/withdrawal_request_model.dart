@@ -20,7 +20,6 @@ class WithdrawalRequestModel with _$WithdrawalRequestModel {
     DateTime? updatedAt,
     @JsonKey(fromJson: _dateTimeFromJson, toJson: _dateTimeToJson)
     DateTime? deletedAt,
-    @Default('') String? createdBy,
   }) = _WithdrawalRequestModel;
 
   factory WithdrawalRequestModel.fromJson(Map<String, dynamic> json) =>

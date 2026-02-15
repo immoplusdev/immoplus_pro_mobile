@@ -25,7 +25,6 @@ mixin _$CommuneModel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   DateTime? get deletedAt => throw _privateConstructorUsedError;
-  String? get createdBy => throw _privateConstructorUsedError;
   String get villeId => throw _privateConstructorUsedError;
 
   /// Serializes this CommuneModel to a JSON map.
@@ -50,7 +49,6 @@ abstract class $CommuneModelCopyWith<$Res> {
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt,
-      String? createdBy,
       String villeId});
 }
 
@@ -74,7 +72,6 @@ class _$CommuneModelCopyWithImpl<$Res, $Val extends CommuneModel>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
     Object? villeId = null,
   }) {
     return _then(_value.copyWith(
@@ -98,10 +95,6 @@ class _$CommuneModelCopyWithImpl<$Res, $Val extends CommuneModel>
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
       villeId: null == villeId
           ? _value.villeId
           : villeId // ignore: cast_nullable_to_non_nullable
@@ -124,7 +117,6 @@ abstract class _$$CommuneModelImplCopyWith<$Res>
       DateTime? createdAt,
       DateTime? updatedAt,
       DateTime? deletedAt,
-      String? createdBy,
       String villeId});
 }
 
@@ -146,7 +138,6 @@ class __$$CommuneModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? deletedAt = freezed,
-    Object? createdBy = freezed,
     Object? villeId = null,
   }) {
     return _then(_$CommuneModelImpl(
@@ -170,10 +161,6 @@ class __$$CommuneModelImplCopyWithImpl<$Res>
           ? _value.deletedAt
           : deletedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
       villeId: null == villeId
           ? _value.villeId
           : villeId // ignore: cast_nullable_to_non_nullable
@@ -191,7 +178,6 @@ class _$CommuneModelImpl implements _CommuneModel {
       this.createdAt = null,
       this.updatedAt = null,
       this.deletedAt = null,
-      this.createdBy = null,
       this.villeId = ''});
 
   factory _$CommuneModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -214,14 +200,11 @@ class _$CommuneModelImpl implements _CommuneModel {
   final DateTime? deletedAt;
   @override
   @JsonKey()
-  final String? createdBy;
-  @override
-  @JsonKey()
   final String villeId;
 
   @override
   String toString() {
-    return 'CommuneModel(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, createdBy: $createdBy, villeId: $villeId)';
+    return 'CommuneModel(id: $id, name: $name, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, villeId: $villeId)';
   }
 
   @override
@@ -237,15 +220,13 @@ class _$CommuneModelImpl implements _CommuneModel {
                 other.updatedAt == updatedAt) &&
             (identical(other.deletedAt, deletedAt) ||
                 other.deletedAt == deletedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
             (identical(other.villeId, villeId) || other.villeId == villeId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, createdAt, updatedAt,
-      deletedAt, createdBy, villeId);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, createdAt, updatedAt, deletedAt, villeId);
 
   /// Create a copy of CommuneModel
   /// with the given fields replaced by the non-null parameter values.
@@ -270,7 +251,6 @@ abstract class _CommuneModel implements CommuneModel {
       final DateTime? createdAt,
       final DateTime? updatedAt,
       final DateTime? deletedAt,
-      final String? createdBy,
       final String villeId}) = _$CommuneModelImpl;
 
   factory _CommuneModel.fromJson(Map<String, dynamic> json) =
@@ -286,8 +266,6 @@ abstract class _CommuneModel implements CommuneModel {
   DateTime? get updatedAt;
   @override
   DateTime? get deletedAt;
-  @override
-  String? get createdBy;
   @override
   String get villeId;
 

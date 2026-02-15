@@ -19,7 +19,6 @@ _$CommuneModelImpl _$$CommuneModelImplFromJson(Map<String, dynamic> json) =>
       deletedAt: json['deletedAt'] == null
           ? null
           : DateTime.parse(json['deletedAt'] as String),
-      createdBy: json['createdBy'] as String? ?? null,
       villeId: json['villeId'] as String? ?? '',
     );
 
@@ -30,6 +29,5 @@ Map<String, dynamic> _$$CommuneModelImplToJson(_$CommuneModelImpl instance) =>
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),
       'deletedAt': instance.deletedAt?.toIso8601String(),
-      'createdBy': instance.createdBy,
       'villeId': instance.villeId,
     };
