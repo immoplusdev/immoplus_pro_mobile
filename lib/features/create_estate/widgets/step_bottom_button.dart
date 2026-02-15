@@ -25,6 +25,7 @@ class _StepBottomButtonState extends State<StepBottomButton> {
           Flexible(
             child: CustomButtom(
               text: 'Précedent',
+              
               onClick: widget.onPreview,
             ),
           ),
