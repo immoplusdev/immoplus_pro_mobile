@@ -76,113 +76,84 @@ class BienImmoblierListCard extends StatelessWidget {
               ),
             ),
             Flexible(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AutoSizeText(
-                            bienImmobilierModel.nom ?? '',
+              flex: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: AutoSizeText(
+                            bienImmobilierModel.nom,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
-                          GestureDetector(
-                              onTap: () async {
-                                // Code for the placeholder:
-                                final String shareUrl =
-                                    'https://app.immoplus.ci/residence_detail/${bienImmobilierModel.id}';
+                        ),
+                        GestureDetector(
+                            onTap: () async {
+                              // Code for the placeholder:
+                              final String shareUrl =
+                                  'https://app.immoplus.ci/residence_detail/${bienImmobilierModel.id}';
 
-                                final String shareText =
-                                    'Découvrez la résidence ${bienImmobilierModel.nom} sur ImmoPlus.\n'
-                                    'Prix de réservation : ${bienImmobilierModel.prix} F/${bienImmobilierModel.typeLocation}.\n'
-                                    'Lien : $shareUrl';
+                              final String shareText =
+                                  'Découvrez la résidence ${bienImmobilierModel.nom} sur ImmoPlus.\n'
+                                  'Prix de réservation : ${bienImmobilierModel.prix} F/${bienImmobilierModel.typeLocation}.\n'
+                                  'Lien : $shareUrl';
 
-                                final origin =
-                                    ShareService.getSharePositionFromKey(
-                                        _shareButtonKey);
-                                await ShareService.shareText(
-                                  text: shareText,
-                                  subject: 'Partager ce bien immobilier',
-                                  sharePositionOrigin: origin,
-                                );
-                              },
-                              child: FaIcon(
-                                key: _shareButtonKey,
-                                CupertinoIcons.share,
-                                color: AppColors.primary,
-                                size: 19,
-                              )),
+                              final origin =
+                                  ShareService.getSharePositionFromKey(
+                                      _shareButtonKey);
+                              await ShareService.shareText(
+                                text: shareText,
+                                subject: 'Partager ce bien immobilier',
+                                sharePositionOrigin: origin,
+                              );
+                            },
+                            child: FaIcon(
+                              key: _shareButtonKey,
+                              CupertinoIcons.share,
+                              color: AppColors.primary,
+                              size: 19,
+                            )),
+                      ],
+                    ),
+
+                    const Gap(5),
+
+                    SizedBox(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.location_on_outlined,
+                            size: 14,
+                          ),
+                          Flexible(
+                            child: AutoSizeText(
+                              bienImmobilierModel.adresse,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
                         ],
                       ),
+                    ),
 
-                      const Gap(5),
+                    //Text('2 chambre 3 Sallon 1 cuisine'),
+                    const Gap(5),
+                    Text(
+                      "${Utils.formatCurrency(bienImmobilierModel.prix)} / ${bienImmobilierModel.typeLocation}",
+                      style: Theme.of(context).textTheme.titleMedium!,
+                    ),
 
-                      SizedBox(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.location_on_outlined,
-                              size: 14,
-                            ),
-                            Flexible(
-                              child: AutoSizeText(
-                                bienImmobilierModel.adresse,
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      //Text('2 chambre 3 Sallon 1 cuisine'),
-                      const Gap(5),
-                      Text(
-                        "${Utils.formatCurrency(bienImmobilierModel.prix)} / ${bienImmobilierModel.typeLocation}",
-                        style: Theme.of(context).textTheme.titleMedium!,
-                      ),
-
-                      Visibility(
-                        visible: !bienImmobilierModel.bienImmobilierDisponible,
-                        replacement: Material(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomChip(
-                                label: ResidencesUtils.getValidationStatusName(
-                                    bienImmobilierModel.statusValidation),
-                                labelStyle:
-                                    const TextStyle(color: Colors.white),
-                                backgroundColor:
-                                    ResidencesUtils.getValidationStatusColor(
-                                        bienImmobilierModel.statusValidation),
-                                icon: ResidencesUtils.getValidationStatusIcon(
-                                    bienImmobilierModel.statusValidation),
-                                iconColor: Colors.white,
-                                iconSize: 15,
-                                iconPadding: const EdgeInsets.only(right: 5),
-                              ),
-                              CustomChip(
-                                backgroundColor: Colors.green.shade100,
-                                icon: FontAwesomeIcons.eye,
-                                iconColor: Colors.green,
-                                label: 'Disponible',
-                                iconSize: 15,
-                                labelStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(color: Colors.green),
-                              ),
-                            ],
-                          ),
-                        ),
+                    Visibility(
+                      visible: !bienImmobilierModel.bienImmobilierDisponible,
+                      replacement: Material(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -200,17 +171,48 @@ class BienImmoblierListCard extends StatelessWidget {
                               iconPadding: const EdgeInsets.only(right: 5),
                             ),
                             CustomChip(
-                              backgroundColor: Colors.red.shade200,
+                              backgroundColor: Colors.green.shade100,
+                              icon: FontAwesomeIcons.eye,
+                              iconColor: Colors.green,
+                              label: 'Disponible',
                               iconSize: 15,
-                              icon: FontAwesomeIcons.eyeSlash,
-                              label: 'Indisponible',
+                              labelStyle: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(color: Colors.green),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomChip(
+                            label: ResidencesUtils.getValidationStatusName(
+                                bienImmobilierModel.statusValidation),
+                            labelStyle: const TextStyle(color: Colors.white),
+                            backgroundColor:
+                                ResidencesUtils.getValidationStatusColor(
+                                    bienImmobilierModel.statusValidation),
+                            icon: ResidencesUtils.getValidationStatusIcon(
+                                bienImmobilierModel.statusValidation),
+                            iconColor: Colors.white,
+                            iconSize: 15,
+                            iconPadding: const EdgeInsets.only(right: 5),
+                          ),
+                          CustomChip(
+                            backgroundColor: Colors.red.shade200,
+                            iconSize: 15,
+                            icon: FontAwesomeIcons.eyeSlash,
+                            label: 'Indisponible',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

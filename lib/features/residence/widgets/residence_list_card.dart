@@ -86,13 +86,15 @@ class ResidenceListCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          AutoSizeText(
-                            residence.nom ?? '',
-                            maxLines: 2,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
+                          Expanded(
+                            child: AutoSizeText(
+                              residence.nom,
+                              maxLines: 2,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           GestureDetector(
                               onTap: () async {
@@ -137,7 +139,7 @@ class ResidenceListCard extends StatelessWidget {
                                 height: 30,
                                 child: AutoSizeText(
                                   overflow: TextOverflow.clip,
-                                  residence.adresse ?? '',
+                                  residence.adresse,
                                   style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ),
