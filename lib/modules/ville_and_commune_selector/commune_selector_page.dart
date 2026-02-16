@@ -6,6 +6,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/configs/commune_model.dart';
 import 'package:immoplus_pro/data/repositories/config_repository.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CommuneSelectorPage extends StatefulWidget {
   const CommuneSelectorPage({super.key});
@@ -19,19 +20,13 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
       PagingController(firstPageKey: 1);
   Future<void> loadPage(int page) async {
     ConfigRepository.getCommunes(page: page, perPage: 5).then((value) {
-      if (!mounted) return;
-      try {
-        if (value.hasNext == true) {
-          _pagingController.appendPage(value.data, (value.currentPage) + 1);
-        } else {
-          _pagingController.appendLastPage(value.data);
-        }
-      } catch (_) {}
+      if (value.hasNext == true) {
+        _pagingController.appendPage(value.data, (value.currentPage) + 1);
+      } else {
+        _pagingController.appendLastPage(value.data ?? []);
+      }
     }).onError((error, stackTrace) {
-      if (!mounted) return;
-      try {
-        _pagingController.error = error.toString();
-      } catch (_) {}
+      _pagingController.error = error.toString();
     });
   }
 
@@ -66,16 +61,32 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
           ),
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              if (!mounted) return;
               _pagingController.refresh();
             },
           ),
           PagedSliverList<int, CommuneModel>(
             pagingController: _pagingController,
             builderDelegate: PagedChildBuilderDelegate(
-              firstPageProgressIndicatorBuilder: (context) => const Padding(
-                padding: EdgeInsets.all(24),
-                child: Center(child: CircularProgressIndicator()),
+              firstPageProgressIndicatorBuilder: (context) => Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                    //height: 600,
+                    child: Column(
+                  children: List.generate(
+                    20,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: const CupertinoListTile(
+                          backgroundColor: Colors.red,
+                          title: Text("•••••••••••••••••••"),
+                        ),
+                      ),
+                    ),
+                  ),
+                )),
               ),
               noItemsFoundIndicatorBuilder: (context) => Center(
                   child: Text(
