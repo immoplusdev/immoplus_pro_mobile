@@ -35,7 +35,7 @@ class _StepPhotosPageState extends State<StepPhotosPage> {
     final remaining = _maxImages - _uploadingImages.length;
     if (remaining <= 0) return;
 
-    final pickedImages = await ImagePickerService.pickMultipleImages();
+    final pickedImages = await ImagePickerService.pickMultipleImages(context: context);
     if (pickedImages.isEmpty) return;
 
     setState(() {
