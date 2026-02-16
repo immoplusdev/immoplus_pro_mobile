@@ -5,9 +5,9 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_furniture/constants/furniture_taxonomy.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_manager.dart';
 import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
+import 'package:multi_dropdown/multi_dropdown.dart';
 
-/// Step 7 du stepper de création de meuble : Détails.
-
+/// Step 7 du stepper de creation de meuble : Details.
 class StepMetadataPage extends StatefulWidget {
   const StepMetadataPage({super.key});
 
@@ -25,51 +25,25 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
   String? _selectedType;
   String _selectedEtat = 'neuf';
 
-  // ──────────────────────────────────────────────
-  // DATA
-  // ──────────────────────────────────────────────
-
   static const List<Map<String, String>> _etats = [
     {'value': 'neuf', 'label': 'Neuf'},
-    {'value': 'reconditionne', 'label': 'Reconditionné'},
+    {'value': 'reconditionne', 'label': 'Reconditionne'},
     {'value': 'occasion', 'label': 'Occasion'},
   ];
-
-  /// Types disponibles selon la catégorie sélectionnée.
-  List<String> get _availableCategories {
-    final categories = FurnitureTaxonomy.typesByCategory.keys.toList();
-    if (_selectedCategory != null && !categories.contains(_selectedCategory)) {
-      categories.add(_selectedCategory!);
-    }
-    return categories;
-  }
-
-  /// Types disponibles selon la catégorie sélectionnée.
-  List<String> get _availableTypes {
-    final types = _selectedCategory != null
-        ? List<String>.from(
-            FurnitureTaxonomy.typesByCategory[_selectedCategory] ?? const [],
-          )
-        : <String>[];
-    if (_selectedType != null && !types.contains(_selectedType)) {
-      types.add(_selectedType!);
-    }
-    return types;
-  }
-
-  // ──────────────────────────────────────────────
-  // LIFECYCLE
-  // ──────────────────────────────────────────────
 
   @override
   void initState() {
     super.initState();
 
     final meta = _manager.metadata;
-    _selectedCategory = _manager.category ??
+    final rawCategory = _manager.category ??
         meta['category'] as String? ??
         meta['categorie'] as String?;
-    _selectedType = _manager.type ?? meta['type'] as String?;
+    final rawType = _manager.type ?? meta['type'] as String?;
+
+    _selectedCategory = _validateCategory(rawCategory);
+    _selectedType = _validateType(rawType);
+
     _selectedEtat = _manager.etat ?? meta['etat'] as String? ?? 'neuf';
 
     final colors = _parseColors(meta);
@@ -77,21 +51,15 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
       _selectedColors = colors;
     }
 
-    // Sync dès l'ouverture pour que les valeurs par défaut soient dans le manager
     WidgetsBinding.instance.addPostFrameCallback((_) => _syncMetadata());
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  /// Synchronise les métadonnées vers le manager.
-
   void _syncMetadata() {
     final colorsHex = _selectedColors
-        .map((c) =>
-            '#${c.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}')
+        .map(
+          (c) =>
+              '#${c.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}',
+        )
         .join(',');
 
     _manager.category = _selectedCategory;
@@ -114,9 +82,9 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
           .toList();
     }
 
-    // Compatibilité ancien format "couleur": "FF0000,00FF00"
     final legacy = metadata['couleur'] as String? ?? '';
     if (legacy.isEmpty) return <Color>[];
+
     return legacy
         .split(',')
         .where((s) => s.trim().isNotEmpty)
@@ -128,6 +96,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
   Color? _hexToColor(String rawHex) {
     final hex = rawHex.trim().replaceAll('#', '');
     if (hex.length != 6) return null;
+
     try {
       return Color(int.parse('FF$hex', radix: 16));
     } catch (_) {
@@ -144,7 +113,136 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
       .map((s) => s[0].toUpperCase() + s.substring(1))
       .join(' ');
 
-  /// Ouvre un dialog color picker pour ajouter une nouvelle couleur.
+  String? _validateCategory(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+    final value = raw.trim();
+    return FurnitureTaxonomy.categories.contains(value) ? value : null;
+  }
+
+  String? _validateType(String? raw) {
+    if (raw == null || raw.trim().isEmpty) return null;
+    final value = raw.trim();
+    return FurnitureTaxonomy.allTypes.contains(value) ? value : null;
+  }
+
+  List<DropdownItem<String>> get _categoryItems => FurnitureTaxonomy.categories
+      .map(
+        (category) => DropdownItem<String>(
+          label: _displayCategory(category),
+          value: category,
+          selected: category == _selectedCategory,
+        ),
+      )
+      .toList();
+
+  List<DropdownItem<String>> get _typeItems => FurnitureTaxonomy.allTypes
+      .map(
+        (type) => DropdownItem<String>(
+          label: _displayType(type),
+          value: type,
+          selected: type == _selectedType,
+        ),
+      )
+      .toList();
+
+  FieldDecoration _fieldDecoration(String hintText) => FieldDecoration(
+        hintText: hintText,
+        backgroundColor: Colors.white,
+        showClearIcon: false,
+        suffixIcon: Icon(
+          Icons.keyboard_arrow_down_rounded,
+          color: Colors.grey.shade600,
+        ),
+        hintStyle: TextStyle(
+          color: Colors.grey.shade500,
+          fontSize: 14,
+        ),
+        selectedItemTextStyle: const TextStyle(
+          color: Colors.black87,
+          fontSize: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: AppColors.furnitureViolet.withValues(alpha: 0.18),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: AppColors.furnitureViolet,
+            width: 1.5,
+          ),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Colors.redAccent,
+          ),
+        ),
+      );
+
+  DropdownDecoration get _dropdownDecoration => DropdownDecoration(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        borderRadius: BorderRadius.circular(12),
+        maxHeight: 260,
+      );
+
+  DropdownItemDecoration get _dropdownItemDecoration =>
+      DropdownItemDecoration(
+        selectedBackgroundColor:
+            AppColors.furnitureViolet.withValues(alpha: 0.08),
+        selectedTextColor: AppColors.furnitureViolet,
+        textColor: Colors.black87,
+      );
+
+  SearchFieldDecoration get _searchFieldDecoration => SearchFieldDecoration(
+        hintText: 'Rechercher...',
+        filled: true,
+        fillColor: Colors.white,
+        hintStyle: TextStyle(
+          color: Colors.grey.shade500,
+          fontSize: 14,
+        ),
+        textStyle: const TextStyle(
+          color: Colors.black87,
+          fontSize: 14,
+        ),
+        searchIcon: Icon(
+          Icons.search,
+          color: Colors.grey.shade600,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Colors.grey.shade300,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppColors.furnitureViolet.withValues(alpha: 0.4),
+          ),
+        ),
+      );
+
+  String? _extractSelectedValue(dynamic selectedItems) {
+    if (selectedItems is! List || selectedItems.isEmpty) return null;
+
+    final first = selectedItems.first;
+    if (first is DropdownItem<String>) return first.value;
+    if (first is String) return first;
+
+    return null;
+  }
+
   Future<void> _openColorPicker() async {
     Color pickerColor = AppColors.furnitureViolet;
 
@@ -164,7 +262,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         style: Theme.of(context).textTheme.titleMedium,
       ),
       subheading: Text(
-        'Sélectionnez une nuance',
+        'Selectionnez une nuance',
         style: Theme.of(context).textTheme.bodySmall,
       ),
       showColorCode: false,
@@ -193,7 +291,6 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
     }
   }
 
-  /// Supprime une couleur à l'index donné.
   void _removeColor(int index) {
     setState(() {
       _selectedColors.removeAt(index);
@@ -201,12 +298,11 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
     _syncMetadata();
   }
 
-  // ──────────────────────────────────────────────
-  // BUILD
-  // ──────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
+    final categoryItems = _categoryItems;
+    final typeItems = _typeItems;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: CustomScrollView(
@@ -214,18 +310,15 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         slivers: [
           const SliverGap(16),
 
-          // ── Titre ──
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
-              child:
-                  Text('Détails du meuble', style: FurnitureTheme.sectionTitle),
+              child: Text('Details du meuble', style: FurnitureTheme.sectionTitle),
             ),
           ),
 
           const SliverGap(20),
 
-          // ── Card unique avec les 4 champs ──
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
@@ -235,23 +328,21 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Catégorie ──
-                    Text('Catégorie', style: FurnitureTheme.fieldLabel),
+                    Text('Categorie', style: FurnitureTheme.fieldLabel),
                     const Gap(8),
-                    DropdownButtonFormField<String>(
-                      initialValue: _selectedCategory,
-                      decoration: FurnitureTheme.inputDecoration(
-                        hintText: 'Sélectionnez une catégorie',
-                      ),
-                      items: _availableCategories
-                          .map((c) => DropdownMenuItem(
-                              value: c, child: Text(_displayCategory(c))))
-                          .toList(),
-                      onChanged: (value) {
+                    MultiDropdown<String>(
+                      items: categoryItems,
+                      singleSelect: true,
+                      searchEnabled: true,
+                      searchDecoration: _searchFieldDecoration,
+                      fieldDecoration:
+                          _fieldDecoration('Selectionnez une categorie'),
+                      dropdownDecoration: _dropdownDecoration,
+                      dropdownItemDecoration: _dropdownItemDecoration,
+                      onSelectionChange: (selectedItems) {
+                        final value = _extractSelectedValue(selectedItems);
                         setState(() {
-                          _selectedCategory = value;
-                          // Reset le type quand la catégorie change
-                          _selectedType = null;
+                          _selectedCategory = _validateCategory(value);
                         });
                         _syncMetadata();
                       },
@@ -259,33 +350,28 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
 
                     const Gap(16),
 
-                    // ── Type (dynamique) ──
                     Text('Type', style: FurnitureTheme.fieldLabel),
                     const Gap(8),
-                    DropdownButtonFormField<String>(
-                      initialValue: _selectedType,
-                      decoration: FurnitureTheme.inputDecoration(
-                        hintText: _selectedCategory == null
-                            ? 'Choisissez d\'abord une catégorie'
-                            : 'Sélectionnez un type',
-                      ),
-                      items: _availableTypes
-                          .map((t) => DropdownMenuItem(
-                              value: t, child: Text(_displayType(t))))
-                          .toList(),
-                      onChanged: _selectedCategory == null
-                          ? null
-                          : (value) {
-                              setState(() {
-                                _selectedType = value;
-                              });
-                              _syncMetadata();
-                            },
+                    MultiDropdown<String>(
+                      items: typeItems,
+                      singleSelect: true,
+                      enabled: true,
+                      searchEnabled: true,
+                      searchDecoration: _searchFieldDecoration,
+                      fieldDecoration: _fieldDecoration('Selectionnez un type'),
+                      dropdownDecoration: _dropdownDecoration,
+                      dropdownItemDecoration: _dropdownItemDecoration,
+                      onSelectionChange: (selectedItems) {
+                        final value = _extractSelectedValue(selectedItems);
+                        setState(() {
+                          _selectedType = _validateType(value);
+                        });
+                        _syncMetadata();
+                      },
                     ),
 
                     const Gap(16),
 
-                    // ── Couleurs (multi-sélection) ──
                     Text('Couleur', style: FurnitureTheme.fieldLabel),
                     const Gap(4),
                     Text(
@@ -301,7 +387,6 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                       runSpacing: 10,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        // Couleurs sélectionnées
                         for (int i = 0; i < _selectedColors.length; i++)
                           GestureDetector(
                             onTap: () => _removeColor(i),
@@ -340,8 +425,6 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                               ],
                             ),
                           ),
-
-                        // Bouton "+"
                         GestureDetector(
                           onTap: _openColorPicker,
                           child: Container(
@@ -370,8 +453,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
 
                     const Gap(20),
 
-                    // ── État (Segmented Control) ──
-                    Text('État', style: FurnitureTheme.fieldLabel),
+                    Text('Etat', style: FurnitureTheme.fieldLabel),
                     const Gap(10),
                     SizedBox(
                       width: double.infinity,
@@ -411,10 +493,12 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                           ),
                         ),
                         segments: _etats
-                            .map((e) => ButtonSegment<String>(
-                                  value: e['value']!,
-                                  label: Text(e['label']!),
-                                ))
+                            .map(
+                              (e) => ButtonSegment<String>(
+                                value: e['value']!,
+                                label: Text(e['label']!),
+                              ),
+                            )
                             .toList(),
                         selected: {_selectedEtat},
                         onSelectionChanged: (selection) {
@@ -431,7 +515,6 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
             ),
           ),
 
-          // Espace en bas pour le scroll
           const SliverGap(100),
         ],
       ),

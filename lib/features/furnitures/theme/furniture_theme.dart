@@ -294,6 +294,7 @@ class FurnitureTheme {
   static BoxDecoration get sectionCardDecoration => BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        
       );
 
   /// Padding standard à l'intérieur des cards de section.

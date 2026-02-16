@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/configs/address.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_manager.dart';
-import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
 import 'package:immoplus_pro/features/location_module/location_page.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/commune_selector_listtile.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/ville_selector_listtile.dart';
@@ -114,53 +113,31 @@ class _StepLocationPageState extends State<StepLocationPage> {
 
           // ── Sélection de la position GPS ──
           SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             sliver: SliverToBoxAdapter(
-              child: Container(
-                decoration: FurnitureTheme.sectionCardDecoration,
-                child: ListTile(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.furnitureVioletLight,
-                    child: Icon(
-                      FontAwesomeIcons.locationDot,
-                      color: AppColors.furnitureViolet,
-                      size: 18,
-                    ),
-                  ),
-                  tileColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  title: Text(
-                    _isAdresseValid
-                        ? _manager.adresse!
-                        : 'Position GPS de votre meuble',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: _isAdresseValid
-                          ? Colors.black87
-                          : Colors.grey.shade500,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: _isAdresseValid
-                      ? Text(
-                          'Appuyez pour modifier',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade400,
-                          ),
-                        )
-                      : null,
-                  trailing: Icon(
-                    CupertinoIcons.chevron_right_circle_fill,
-                    color: AppColors.furnitureViolet,
-                  ),
-                  onTap: _openLocationPicker,
+              child: ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                tileColor: _isAdresseValid
+                    ? AppColors.scafold
+                    : CupertinoColors.tertiarySystemFill,
+                leading: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Icon(
+                    FontAwesomeIcons.locationDot,
+                    color: AppColors.primary,
+                  ),
+                ),
+                title: Text(
+                  _isAdresseValid
+                      ? _manager.adresse!
+                      : 'Position GPS de votre meuble',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: const Icon(CupertinoIcons.chevron_right_circle_fill),
+                onTap: _openLocationPicker,
               ),
             ),
           ),
@@ -172,7 +149,7 @@ class _StepLocationPageState extends State<StepLocationPage> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             sliver: 
             
-                SliverToBoxAdapter(
+            SliverToBoxAdapter(
             child: SizedBox(
               height: 50,
               child: Markdown(

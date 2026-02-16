@@ -250,4 +250,22 @@ class FurnitureTaxonomy {
       'autre',
     ],
   };
+
+  static List<String> get categories =>
+      List<String>.unmodifiable(categoryLabels.keys);
+
+  static List<String> get allTypes {
+    final seen = <String>{};
+    final result = <String>[];
+
+    for (final types in typesByCategory.values) {
+      for (final type in types) {
+        if (seen.add(type)) {
+          result.add(type);
+        }
+      }
+    }
+
+    return List<String>.unmodifiable(result);
+  }
 }

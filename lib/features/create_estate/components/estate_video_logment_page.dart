@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +31,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
   ChewieController? _chewieController;
   bool _isLoading = true;
   String? _localVideoPath;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -62,20 +64,35 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
         });
 
         // Initialiser VideoPlayerController avec le fichier local
-        _controller = VideoPlayerController.file(videoFile)
-          ..initialize().then((_) {
-            _initializeChewieController();
-            setState(() {
-              _isLoading = false;
-            });
-          });
+        final controller = VideoPlayerController.file(videoFile);
+        await controller.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () =>
+              throw Exception('Timeout: La video prend trop de temps a charger'),
+        );
+
+        _controller = controller;
+        _initializeChewieController();
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _errorMessage = null;
+        });
       } else {
         throw Exception('Erreur lors du téléchargement de la vidéo');
       }
-    } catch (e) {
-      log('Erreur : $e');
+    } on PlatformException catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
+        _errorMessage = 'Erreur video (${e.code}): ${e.message ?? 'Operation interrompue'}';
+      });
+    } catch (e) {
+      log('Erreur : $e');
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
       });
     }
   }
@@ -144,21 +161,28 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
                                 child: Chewie(controller: _chewieController!),
                               ),
                             )
-                          : const Center(
+                          : Center(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       FontAwesomeIcons.video,
                                       size: 100,
                                     ),
-                                    Gap(10),
-                                    Text(
+                                    const Gap(10),
+                                    const Text(
                                       "Aucune vidéo n'a encore été téléchargée. Sélectionnez une vidéo bien retouchée de votre logement.",
                                       textAlign: TextAlign.center,
                                     ),
+                                    if (_errorMessage != null) ...[
+                                      const Gap(8),
+                                      Text(
+                                        _errorMessage!,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
                                   ],
                                 ),
                               ),

@@ -308,19 +308,19 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                     furniture.adresse,
                     style: const TextStyle(fontSize: 14),
                   ),
-                  if (furniture.ville != null || furniture.commune != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        [furniture.commune, furniture.ville]
-                            .where((e) => e != null && e.isNotEmpty)
-                            .join(', '),
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
+                  // if (furniture.ville != null || furniture.commune != null)
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(top: 4),
+                  //     child: Text(
+                  //       [furniture.commune, furniture.ville]
+                  //           .where((e) => e != null && e.isNotEmpty)
+                  //           .join(', '),
+                  //       style: TextStyle(
+                  //         fontSize: 13,
+                  //         color: Colors.grey.shade600,
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),
@@ -418,12 +418,14 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
     ].where((e) => e.value != null && e.value.toString().isNotEmpty).toList();
 
     if (items.isEmpty) return const SizedBox.shrink();
+    final maxChipWidth = MediaQuery.sizeOf(context).width - 64;
 
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: items.map((entry) {
         return Container(
+          constraints: BoxConstraints(maxWidth: maxChipWidth),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: AppColors.furnitureVioletLight,
@@ -432,26 +434,29 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
               color: AppColors.furnitureViolet.withValues(alpha: 0.2),
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '${entry.key} : ',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade700,
+          child: RichText(
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '${entry.key} : ',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                  ),
                 ),
-              ),
-              Text(
-                _formatMetadataValue(entry.key, entry.value),
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.furnitureViolet,
-                  fontWeight: FontWeight.w600,
+                TextSpan(
+                  text: _formatMetadataValue(entry.key, entry.value),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.furnitureViolet,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }).toList(),
@@ -746,7 +751,7 @@ class _FurnitureBottomBar extends StatelessWidget {
           children: [
             // ── Bouton Supprimer ──
             Expanded(
-              child: OutlinedButton.icon(
+              child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.redAccent,
                   side: const BorderSide(color: Colors.redAccent),
@@ -756,8 +761,7 @@ class _FurnitureBottomBar extends StatelessWidget {
                   ),
                 ),
                 onPressed: onDelete,
-                // icon: const Icon(FontAwesomeIcons.trash, size: 16),
-                label: const Text('Supprimer'),
+                child: const Icon(FontAwesomeIcons.trash, size: 16),
               ),
             ),
 
