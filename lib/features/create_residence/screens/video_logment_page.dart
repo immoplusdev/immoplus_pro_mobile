@@ -111,18 +111,42 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
                         )
                       : (_controller != null &&
                               _controller!.value.isInitialized)
-                          ? GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _controller!.value.isPlaying
-                                      ? _chewieController?.pause()
-                                      : _chewieController?.play();
-                                });
-                              },
-                              child: AspectRatio(
-                                aspectRatio: _controller!.value.aspectRatio,
-                                child: Chewie(controller: _chewieController!),
-                              ),
+                          ? Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _controller!.value.isPlaying
+                                          ? _chewieController?.pause()
+                                          : _chewieController?.play();
+                                    });
+                                  },
+                                  child: AspectRatio(
+                                    aspectRatio: _controller!.value.aspectRatio,
+                                    child:
+                                        Chewie(controller: _chewieController!),
+                                  ),
+                                ),
+                                Gap(8),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      ResidenceCreationModelBuilder().video =
+                                          null;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(
+                                      "Supprimer la video",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
                             )
                           : const Center(
                               child: Padding(

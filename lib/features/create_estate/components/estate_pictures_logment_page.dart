@@ -168,7 +168,8 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
 
   // Méthode pour sélectionner les images
   Future<void> _pickImages() async {
-    final pickedImages = await ImagePickerService.pickMultipleImages();
+    final pickedImages =
+        await ImagePickerService.pickMultipleImages(context: context);
 
     if (pickedImages.isEmpty) return;
 

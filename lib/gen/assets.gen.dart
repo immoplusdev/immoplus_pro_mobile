@@ -54,6 +54,10 @@ class $AssetsIconGen {
   AssetGenImage get iconLarge =>
       const AssetGenImage('assets/icon/icon_large.png');
 
+  /// File path: assets/icon/icon_radius.png
+  AssetGenImage get iconRadius =>
+      const AssetGenImage('assets/icon/icon_radius.png');
+
   /// File path: assets/icon/leading.json
   String get leading => 'assets/icon/leading.json';
 
@@ -91,24 +95,25 @@ class $AssetsIconGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    cash,
-    eco,
-    express,
-    icon,
-    icon3,
-    iconLarge,
-    leading,
-    logoBlanc,
-    logoBleu,
-    marker,
-    marker1,
-    marker2,
-    moov,
-    mtn,
-    normal,
-    om,
-    wave,
-  ];
+        cash,
+        eco,
+        express,
+        icon,
+        icon3,
+        iconLarge,
+        iconRadius,
+        leading,
+        logoBlanc,
+        logoBleu,
+        marker,
+        marker1,
+        marker2,
+        moov,
+        mtn,
+        normal,
+        om,
+        wave,
+      ];
 }
 
 class $AssetsIconsGen {
@@ -593,6 +598,7 @@ class $AssetsSvgsUndrawGen {
 class Assets {
   const Assets._();
 
+  static const String aEnv = '.env.dev';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const String googleMapStyle = 'assets/google_map_style.json';
@@ -603,7 +609,7 @@ class Assets {
   static const $AssetsSvgsGen svgs = $AssetsSvgsGen();
 
   /// List of all assets
-  static List<String> get values => [googleMapStyle];
+  static List<String> get values => [aEnv, aEnv, googleMapStyle];
 }
 
 class AssetGenImage {

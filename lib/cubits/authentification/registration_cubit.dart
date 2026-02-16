@@ -122,6 +122,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
         pieceIdentiteId: pieceIdentite.data!.id,
         photoIdentiteId: photoIdentite.data!.id,
       );
+      inspect(body);
       AccountCreationResponse response =
           await AuthRepository.registrationParticulier(body: body);
 

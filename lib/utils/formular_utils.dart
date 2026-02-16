@@ -1,11 +1,8 @@
 import 'dart:developer';
 
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/get_utils/get_utils.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/request_path.dart';
 
 class FormUtils {
@@ -93,8 +90,7 @@ class FormUtils {
     return null;
   }
 
-  static String getPeriod({required String value}) =>
-      switch (value.toLowerCase()) {
+  String getPeriod({required String value}) => switch (value.toLowerCase()) {
         'monthly' => ' par mois',
         'day' => ' par nuit',
         'daily' => ' par nuit',
@@ -102,10 +98,10 @@ class FormUtils {
         _ => '',
       };
   static Dio _dio = Dio();
-  static final List<DateTime> markedDates = [];
-  static Future<bool> getDateBooked({required String id}) async {
+  static Future<List<DateTime>> getDateBooked({required String id}) async {
     Response rp = await _dio.get(
         "${RequestPath.baseUrl}/reservations/data/residence/occupied-dates/$id");
+    List<DateTime> markedDates = [];
 
     List _data = rp.data['data']['dates'];
     inspect(_data);
@@ -115,92 +111,6 @@ class FormUtils {
       },
     );
 
-    return true;
-  }
-
-  static avaibilityCalendar(
-      {required BuildContext context, required String id}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.5,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('Jours disponible'),
-            ),
-            body: FutureBuilder(
-                future: getDateBooked(id: id),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
-                  if (snapshot.hasData) {
-                    return CalendarDatePicker2(
-                      config: CalendarDatePicker2Config(
-                        disableModePicker: true,
-                        firstDayOfWeek: 1,
-                        calendarType: CalendarDatePicker2Type.multi,
-                        selectedDayTextStyle: TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700),
-
-                        selectedDayHighlightColor: CupertinoColors.systemFill,
-                        centerAlignModePicker: true,
-                        customModePickerIcon: SizedBox(),
-                        firstDate: DateTime.now(),
-                        selectableDayPredicate: (day) {
-                          print(day);
-                          return false;
-                        },
-
-                        dayBuilder: (
-                                {required date,
-                                decoration,
-                                isDisabled,
-                                isSelected,
-                                isToday,
-                                textStyle}) =>
-                            IgnorePointer(
-                          ignoring: true,
-                          child: CircleAvatar(
-                            backgroundColor: isSelected!
-                                ? CupertinoColors.systemRed.color
-                                    .withOpacity(0.3)
-                                : Colors.transparent,
-                            child: Text(
-                              date.day.toString(),
-                              style: GoogleFonts.inder(
-                                color: (isSelected || isDisabled!)
-                                    ? CupertinoColors.systemGrey
-                                    : Colors.black,
-                                decoration: isSelected
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                        //   dayBuilder: _yourDayBuilder,
-                        //   yearBuilder: _yourYearBuilder,
-                      ),
-                      onDisplayedMonthChanged: null,
-                      value: markedDates,
-                      onValueChanged: (value) {
-                        log(value.toString(), name: 'VALUE');
-                      },
-                    );
-                  }
-                  return Center(child: CupertinoActivityIndicator());
-                }),
-          ),
-        ),
-      ),
-    );
+    return markedDates;
   }
 }

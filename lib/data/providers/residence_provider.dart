@@ -32,4 +32,16 @@ abstract class ResidenceProvider {
 
   @DELETE("/residences/{id}")
   Future<HttpResponse> deleteResidence(@Path() String id);
+
+  @POST("/residences/{id}/unavailability-dates")
+  Future<ResidenceResponse> addUnavailabilityDates(
+      @Path() String id, @Body() Map<String, dynamic> body);
+
+  @DELETE("/residences/{id}/unavailability-dates")
+  Future<ResidenceResponse> removeUnavailabilityDates(
+      @Path() String id, @Body() Map<String, dynamic> body);
+
+  @PUT("/residences/{id}/unavailability-dates")
+  Future<ResidenceResponse> updateUnavailabilityDates(
+      @Path() String id, @Body() Map<String, dynamic> body);
 }

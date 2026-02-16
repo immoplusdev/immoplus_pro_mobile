@@ -20,6 +20,7 @@ import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_otp.dart';
+import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/providers/auth_provider.dart';
 import 'package:retrofit/retrofit.dart';
@@ -306,6 +307,26 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to social login: $error');
+    }
+  }
+
+  Future<ConfigModel> getConfig() async {
+    try {
+      final response = await AuthProvider(DioClient().dio).getCongig();
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      // Gérer les exceptions Dio ici
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      // Gérer d'autres types d'exceptions ici
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
     }
   }
 }

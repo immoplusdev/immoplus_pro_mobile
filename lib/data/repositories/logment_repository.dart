@@ -219,4 +219,61 @@ class LogmentRepository {
       throw Exception('Failed to delete residence: $error');
     }
   }
+
+  static Future<ResidenceResponse> addUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    try {
+      final response = await ResidenceProvider(DioClient().dio)
+          .addUnavailabilityDates(id, {"dates": dates});
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception(
+          'Failed to add unavailability dates: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to add unavailability dates: $error');
+    }
+  }
+
+  static Future<ResidenceResponse> removeUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    try {
+      final response = await ResidenceProvider(DioClient().dio)
+          .removeUnavailabilityDates(id, {"dates": dates});
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception(
+          'Failed to remove unavailability dates: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to remove unavailability dates: $error');
+    }
+  }
+
+  static Future<ResidenceResponse> updateUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    try {
+      final response = await ResidenceProvider(DioClient().dio)
+          .updateUnavailabilityDates(id, {"dates": dates});
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception(
+          'Failed to update unavailability dates: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to update unavailability dates: $error');
+    }
+  }
 }

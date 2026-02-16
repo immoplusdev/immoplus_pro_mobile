@@ -47,4 +47,61 @@ class LogmentCubit extends Cubit<RequestState> {
       emit(RequestState.error(error: e.toString()));
     }
   }
+
+  addUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    emit(const REQUEST_LOADING());
+    try {
+      ResidenceResponse residenceResponse =
+          await LogmentRepository.addUnavailabilityDates(
+        id: id,
+        dates: dates,
+      );
+      emit(RequestState.success(
+          message: "Dates d'indisponibilité ajoutées avec succès"));
+      emit(RequestState.residence(data: residenceResponse.data));
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
+
+  removeUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    emit(const REQUEST_LOADING());
+    try {
+      ResidenceResponse residenceResponse =
+          await LogmentRepository.removeUnavailabilityDates(
+        id: id,
+        dates: dates,
+      );
+      emit(RequestState.success(
+          message: "Dates d'indisponibilité supprimées avec succès"));
+      emit(RequestState.residence(data: residenceResponse.data));
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
+
+  updateUnavailabilityDates({
+    required String id,
+    required List<String> dates,
+  }) async {
+    emit(const REQUEST_LOADING());
+    try {
+      ResidenceResponse residenceResponse =
+          await LogmentRepository.updateUnavailabilityDates(
+        id: id,
+        dates: dates,
+      );
+      emit(RequestState.success(
+          message: "Dates d'indisponibilité mises à jour avec succès"));
+      emit(RequestState.residence(data: residenceResponse.data));
+    } catch (e) {
+      emit(RequestState.error(error: e.toString()));
+    }
+  }
 }

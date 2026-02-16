@@ -25,7 +25,6 @@ class DemandeVisiteModel with _$DemandeVisiteModel {
     ClientModel? proprietaire,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? createdBy,
   }) = _DemandeVisiteModel;
 
   factory DemandeVisiteModel.fromJson(Map<String, dynamic> json) =>

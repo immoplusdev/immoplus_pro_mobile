@@ -1,3 +1,4 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_title2.dart';
@@ -106,79 +108,78 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                 //product adress
                 DetailLogmentInfos(reservation: state.data),
                 //réservation offers
-                const DetailDivider(),
-                const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
-                //offer list
-                DetailLogmentAmentities(residenceModel: state.data),
-                const SliverGap(10),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: AppColors.primary)),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          backgroundColor: AppColors.scafold,
-                          showDragHandle: true,
-                          enableDrag: true,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          context: context,
-                          builder: (context) => Container(
-                              child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: state.data.commodites
-                                  .map(
-                                    (e) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 5),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          child: SvgPicture.asset(
-                                            SVGMap.map[e.icon] ?? '',
-                                            height: 20,
-                                            width: 20,
-                                          ),
-                                        ),
-                                        tileColor: Colors.white,
-                                        title: Text(e.text),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          )),
-                        );
-                      },
-                      child: Text(
-                          "Voir tout les ${state.data.commodites.length} commodités"),
-                    ),
-                  ),
-                ),
-                const DetailDivider(),
-                //vidéo section
-                DetailLogmentVideo(logmentModel: state.data),
-                //description next
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 5),
-                    color: Colors.white,
-                    height: 100,
-                    child: Markdown(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      data: state.data.description ??
-                          '', //state.finishData.data!.description!,
-                      //styleSheet: MarkdownStyleSheet(),
-                    ),
-                  ),
-                ),
-                SeeMoreButton(
-                  text: state.data.description,
-                ),
+                // const DetailDivider(),
+                // const DetailLogmentTitle2(title: 'Ce que propose ce logement'),
+                // DetailLogmentAmentities(residenceModel: state.data),
+                // const SliverGap(10),
+                // SliverToBoxAdapter(
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(horizontal: 20),
+                //     child: OutlinedButton(
+                //       style: OutlinedButton.styleFrom(
+                //           side: BorderSide(color: AppColors.primary)),
+                //       onPressed: () {
+                //         showModalBottomSheet(
+                //           backgroundColor: AppColors.scafold,
+                //           showDragHandle: true,
+                //           enableDrag: true,
+                //           isScrollControlled: true,
+                //           shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(20)),
+                //           context: context,
+                //           builder: (context) => Container(
+                //               child: Padding(
+                //             padding: const EdgeInsets.only(bottom: 20),
+                //             child: Column(
+                //               mainAxisSize: MainAxisSize.min,
+                //               children: state.data.commodites
+                //                   .map(
+                //                     (e) => Padding(
+                //                       padding: const EdgeInsets.only(bottom: 5),
+                //                       child: ListTile(
+                //                         leading: CircleAvatar(
+                //                           child: SvgPicture.asset(
+                //                             SVGMap.map[e.icon] ?? '',
+                //                             height: 20,
+                //                             width: 20,
+                //                           ),
+                //                         ),
+                //                         tileColor: Colors.white,
+                //                         title: Text(e.text),
+                //                       ),
+                //                     ),
+                //                   )
+                //                   .toList(),
+                //             ),
+                //           )),
+                //         );
+                //       },
+                //       child: Text(
+                //           "Voir tout les ${state.data.commodites.length} commodités"),
+                //     ),
+                //   ),
+                // ),
+                // const DetailDivider(),
+                // //vidéo section
+                // DetailLogmentVideo(logmentModel: state.data),
+                // //description next
+                // SliverToBoxAdapter(
+                //   child: Container(
+                //     padding: const EdgeInsets.only(top: 5),
+                //     color: Colors.white,
+                //     height: 100,
+                //     child: Markdown(
+                //       physics: const NeverScrollableScrollPhysics(),
+                //       padding: const EdgeInsets.symmetric(horizontal: 10),
+                //       data: state.data.description ??
+                //           '', //state.finishData.data!.description!,
+                //       //styleSheet: MarkdownStyleSheet(),
+                //     ),
+                //   ),
+                // ),
+                // SeeMoreButton(
+                //   text: state.data.description,
+                // ),
 
                 // SliverList(
                 //   delegate: SliverChildBuilderDelegate(
@@ -209,14 +210,235 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                   reservation: state.data,
                 ),
 
-                //indformation supplementaire
+                /// choisir les dates de reservation
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: AppColors.primary),
+                      ),
+                      onPressed: () {
+                        // Convertir les dates de réservation existantes en DateTime
+                        List<DateTime?> selectedDates =
+                            state.data.datesReservation
+                                .map((dateRes) {
+                                  try {
+                                    return DateTime.parse(dateRes.date);
+                                  } catch (e) {
+                                    return null;
+                                  }
+                                })
+                                .where((date) => date != null)
+                                .toList();
+
+                        showModalBottomSheet(
+                          backgroundColor: AppColors.scafold,
+                          showDragHandle: true,
+                          enableDrag: true,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          context: context,
+                          builder: (context) => FractionallySizedBox(
+                            heightFactor: 1,
+                            child: StatefulBuilder(
+                              builder: (context, setModalState) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  children: [
+                                    Gap(MediaQuery.of(context).padding.top +
+                                        10),
+                                    Container(
+                                      height: kToolbarHeight,
+                                      alignment: Alignment.topLeft,
+                                      child: UnconstrainedBox(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            context.pop();
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: AppColors.blue65BAF0),
+                                            child: Icon(
+                                              Icons.arrow_back_ios_rounded,
+                                              color: AppColors.white,
+                                              size: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "Gérer les dates d'indisponibilité",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                    const Gap(10),
+                                    Text(
+                                      "Sélectionnez les dates à bloquer",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Colors.grey,
+                                          ),
+                                    ),
+                                    const Gap(20),
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        padding: const EdgeInsets.all(16),
+                                        child: Transform.scale(
+                                          scale: 1,
+                                          child: CalendarDatePicker2(
+                                            config: CalendarDatePicker2Config(
+                                              disableModePicker: true,
+                                              firstDayOfWeek: 1,
+                                              calendarType:
+                                                  CalendarDatePicker2Type.multi,
+                                              selectedDayTextStyle:
+                                                  const TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                              selectedDayHighlightColor:
+                                                  Colors.transparent,
+                                              centerAlignModePicker: true,
+                                              customModePickerIcon:
+                                                  const SizedBox(),
+                                              firstDate: DateTime.now(),
+                                              selectableDayPredicate: (day) {
+                                                // Empêcher la sélection des dates passées
+                                                return day.isAfter(
+                                                  DateTime.now().subtract(
+                                                      const Duration(days: 1)),
+                                                );
+                                              },
+                                              dayBuilder: ({
+                                                required date,
+                                                decoration,
+                                                isDisabled,
+                                                isSelected,
+                                                isToday,
+                                                textStyle,
+                                              }) {
+                                                return CircleAvatar(
+                                                  backgroundColor: isSelected!
+                                                      ? AppColors.primary
+                                                          .withOpacity(0.3)
+                                                      : Colors.transparent,
+                                                  child: Text(
+                                                    date.day.toString(),
+                                                    style: TextStyle(
+                                                      color: isDisabled!
+                                                          ? Colors.grey.shade400
+                                                          : isSelected
+                                                              ? AppColors
+                                                                  .primary
+                                                              : Colors.black,
+                                                      fontWeight: isSelected
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                      decoration: isSelected
+                                                          ? TextDecoration
+                                                              .lineThrough
+                                                          : TextDecoration.none,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              weekdayLabels: [
+                                                'Dim',
+                                                'Lun',
+                                                'Mar',
+                                                'Mer',
+                                                'Jeu',
+                                                'Ven',
+                                                'Sam'
+                                              ],
+                                              weekdayLabelTextStyle:
+                                                  const TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              controlsHeight: 50,
+                                              controlsTextStyle:
+                                                  const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            value: selectedDates,
+                                            onValueChanged: (dates) {
+                                              setModalState(() {
+                                                selectedDates = dates;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Gap(20),
+                                    CustomButtom(
+                                      onClick: () async {
+                                        // Formater toutes les dates sélectionnées
+                                        List<String> formattedDates =
+                                            selectedDates
+                                                .where((date) => date != null)
+                                                .map((date) {
+                                          return "${date!.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+                                        }).toList();
+
+                                        // Fermer la bottom sheet
+                                        // Navigator.pop(context);
+
+                                        // Un seul appel API pour tout mettre à jour
+                                        await context
+                                            .read<LogmentCubit>()
+                                            .updateUnavailabilityDates(
+                                              id: state.data.id,
+                                              dates: formattedDates,
+                                            );
+
+                                        // Rafraîchir la page
+                                        _getResidenceById();
+                                      },
+                                      text:
+                                          'Valider (${selectedDates.length} ${selectedDates.length > 1 ? "dates" : "date"})',
+                                    ),
+                                    const Gap(20),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("Choisir les dates d'indisponibilités"),
+                    ),
+                  ),
+                ),
+                //information supplementaire
                 const SliverToBoxAdapter(
                   child: Divider(),
                 ),
                 const SliverToBoxAdapter(child: Gap(20)),
                 const DetailDivider(),
-                const DetailLogmentTitle2(title: 'Où se situe le logement'),
-                DetailLogmentMap(residence: state.data),
+                // const DetailLogmentTitle2(title: 'Où se situe le logement'),
+                // DetailLogmentMap(residence: state.data),
                 const DetailDivider(),
                 const SliverGap(10),
                 const DetailLogmentTitle2(title: 'Règles de la maison'),

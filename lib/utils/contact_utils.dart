@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 
 class ContactUtils {
@@ -43,7 +45,11 @@ class ContactUtils {
                       color: Colors.green,
                     ),
                     onTap: () async {
-                      Utils.whatsapp(phoneNumber: "2250707293637");
+                      Utils.whatsapp(
+                          phoneNumber: getIt<SessionManager>()
+                              .configModel!
+                              .data!
+                              .contactPhoneNumber);
                     },
                   ),
                 ),
@@ -71,7 +77,10 @@ class ContactUtils {
                       color: Colors.black,
                     ),
                     onTap: () async {
-                      Utils.makePhoneCall("2250707293637");
+                      Utils.makePhoneCall(getIt<SessionManager>()
+                          .configModel!
+                          .data!
+                          .contactPhoneNumber);
                     },
                   ),
                 ),
@@ -100,7 +109,12 @@ class ContactUtils {
                     ),
                     onTap: () async {
                       if (id != null) {
-                        Utils.bookingMail(id: id);
+                        Utils.bookingMail(
+                            id: id,
+                            email: getIt<SessionManager>()
+                                .configModel!
+                                .data!
+                                .contactEmail);
                       }
                     },
                   ),

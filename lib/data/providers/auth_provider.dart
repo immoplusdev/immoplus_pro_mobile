@@ -17,6 +17,7 @@ import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_otp.dart';
+import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -85,4 +86,7 @@ abstract class AuthProvider {
   @POST('/auth/social-login')
   Future<AccountCreationResponse> socialLogin(
       @Body() SocialLoginBody socialLoginBody);
+
+  @GET('/configs')
+  Future<ConfigModel> getCongig();
 }

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
+import 'package:immoplus_pro/data/models/residence/date_reservation_model.dart';
 import 'package:immoplus_pro/data/models/residence/piece_model.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
 
@@ -33,6 +34,7 @@ class ResidenceModel with _$ResidenceModel {
     @Default(false) bool fetesAutorises,
     @Default('') String reglesSupplementaires,
     @Default(true) bool residenceDisponible,
+    @Default([]) List<DateReservationModel> datesReservation,
   }) = _ResidenceModel;
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>

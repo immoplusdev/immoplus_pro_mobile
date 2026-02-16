@@ -86,6 +86,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               maxLength: 13,
               spaceBetweenSelectorAndTextField: 0,
               textAlignVertical: TextAlignVertical.center,
+              errorMessage: "Le numéro de téléphone est incorrect",
+              searchBoxDecoration: InputDecoration(
+                labelText: "Rechercher un pays",
+              ),
               hintText: "Numéro de téléphone",
               keyboardType: TextInputType.phone,
               keyboardAction: TextInputAction.done,

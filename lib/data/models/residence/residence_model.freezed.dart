@@ -44,6 +44,8 @@ mixin _$ResidenceModel {
   bool get fetesAutorises => throw _privateConstructorUsedError;
   String get reglesSupplementaires => throw _privateConstructorUsedError;
   bool get residenceDisponible => throw _privateConstructorUsedError;
+  List<DateReservationModel> get datesReservation =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this ResidenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -85,7 +87,8 @@ abstract class $ResidenceModelCopyWith<$Res> {
       bool animauxAutorises,
       bool fetesAutorises,
       String reglesSupplementaires,
-      bool residenceDisponible});
+      bool residenceDisponible,
+      List<DateReservationModel> datesReservation});
 
   $PositionModelCopyWith<$Res> get position;
 }
@@ -129,6 +132,7 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
     Object? fetesAutorises = null,
     Object? reglesSupplementaires = null,
     Object? residenceDisponible = null,
+    Object? datesReservation = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -227,6 +231,10 @@ class _$ResidenceModelCopyWithImpl<$Res, $Val extends ResidenceModel>
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      datesReservation: null == datesReservation
+          ? _value.datesReservation
+          : datesReservation // ignore: cast_nullable_to_non_nullable
+              as List<DateReservationModel>,
     ) as $Val);
   }
 
@@ -273,7 +281,8 @@ abstract class _$$ResidenceModelImplCopyWith<$Res>
       bool animauxAutorises,
       bool fetesAutorises,
       String reglesSupplementaires,
-      bool residenceDisponible});
+      bool residenceDisponible,
+      List<DateReservationModel> datesReservation});
 
   @override
   $PositionModelCopyWith<$Res> get position;
@@ -316,6 +325,7 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
     Object? fetesAutorises = null,
     Object? reglesSupplementaires = null,
     Object? residenceDisponible = null,
+    Object? datesReservation = null,
   }) {
     return _then(_$ResidenceModelImpl(
       id: null == id
@@ -414,6 +424,10 @@ class __$$ResidenceModelImplCopyWithImpl<$Res>
           ? _value.residenceDisponible
           : residenceDisponible // ignore: cast_nullable_to_non_nullable
               as bool,
+      datesReservation: null == datesReservation
+          ? _value._datesReservation
+          : datesReservation // ignore: cast_nullable_to_non_nullable
+              as List<DateReservationModel>,
     ));
   }
 }
@@ -445,10 +459,12 @@ class _$ResidenceModelImpl implements _ResidenceModel {
       this.animauxAutorises = false,
       this.fetesAutorises = false,
       this.reglesSupplementaires = '',
-      this.residenceDisponible = true})
+      this.residenceDisponible = true,
+      final List<DateReservationModel> datesReservation = const []})
       : _images = images,
         _commodites = commodites,
-        _pieces = pieces;
+        _pieces = pieces,
+        _datesReservation = datesReservation;
 
   factory _$ResidenceModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResidenceModelImplFromJson(json);
@@ -541,10 +557,19 @@ class _$ResidenceModelImpl implements _ResidenceModel {
   @override
   @JsonKey()
   final bool residenceDisponible;
+  final List<DateReservationModel> _datesReservation;
+  @override
+  @JsonKey()
+  List<DateReservationModel> get datesReservation {
+    if (_datesReservation is EqualUnmodifiableListView)
+      return _datesReservation;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_datesReservation);
+  }
 
   @override
   String toString() {
-    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, statusValidation: $statusValidation, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible)';
+    return 'ResidenceModel(id: $id, miniature: $miniature, nom: $nom, statusValidation: $statusValidation, typeResidence: $typeResidence, description: $description, prixReservation: $prixReservation, adresse: $adresse, ville: $ville, commune: $commune, position: $position, video: $video, images: $images, commodites: $commodites, pieces: $pieces, dureeMinSejour: $dureeMinSejour, dureeMaxSejour: $dureeMaxSejour, heureEntree: $heureEntree, heureDepart: $heureDepart, nombreMaxOccupants: $nombreMaxOccupants, animauxAutorises: $animauxAutorises, fetesAutorises: $fetesAutorises, reglesSupplementaires: $reglesSupplementaires, residenceDisponible: $residenceDisponible, datesReservation: $datesReservation)';
   }
 
   @override
@@ -591,7 +616,9 @@ class _$ResidenceModelImpl implements _ResidenceModel {
             (identical(other.reglesSupplementaires, reglesSupplementaires) ||
                 other.reglesSupplementaires == reglesSupplementaires) &&
             (identical(other.residenceDisponible, residenceDisponible) ||
-                other.residenceDisponible == residenceDisponible));
+                other.residenceDisponible == residenceDisponible) &&
+            const DeepCollectionEquality()
+                .equals(other._datesReservation, _datesReservation));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -621,7 +648,8 @@ class _$ResidenceModelImpl implements _ResidenceModel {
         animauxAutorises,
         fetesAutorises,
         reglesSupplementaires,
-        residenceDisponible
+        residenceDisponible,
+        const DeepCollectionEquality().hash(_datesReservation)
       ]);
 
   /// Create a copy of ResidenceModel
@@ -643,30 +671,32 @@ class _$ResidenceModelImpl implements _ResidenceModel {
 
 abstract class _ResidenceModel implements ResidenceModel {
   const factory _ResidenceModel(
-      {final String id,
-      final String? miniature,
-      final String nom,
-      final String statusValidation,
-      final String typeResidence,
-      final String description,
-      final int prixReservation,
-      final String adresse,
-      final String ville,
-      final String commune,
-      final PositionModel position,
-      final String? video,
-      final List<String> images,
-      final List<CommoditeModel> commodites,
-      final List<PieceModel> pieces,
-      final int dureeMinSejour,
-      final int dureeMaxSejour,
-      final String heureEntree,
-      final String heureDepart,
-      final int nombreMaxOccupants,
-      final bool animauxAutorises,
-      final bool fetesAutorises,
-      final String reglesSupplementaires,
-      final bool residenceDisponible}) = _$ResidenceModelImpl;
+          {final String id,
+          final String? miniature,
+          final String nom,
+          final String statusValidation,
+          final String typeResidence,
+          final String description,
+          final int prixReservation,
+          final String adresse,
+          final String ville,
+          final String commune,
+          final PositionModel position,
+          final String? video,
+          final List<String> images,
+          final List<CommoditeModel> commodites,
+          final List<PieceModel> pieces,
+          final int dureeMinSejour,
+          final int dureeMaxSejour,
+          final String heureEntree,
+          final String heureDepart,
+          final int nombreMaxOccupants,
+          final bool animauxAutorises,
+          final bool fetesAutorises,
+          final String reglesSupplementaires,
+          final bool residenceDisponible,
+          final List<DateReservationModel> datesReservation}) =
+      _$ResidenceModelImpl;
 
   factory _ResidenceModel.fromJson(Map<String, dynamic> json) =
       _$ResidenceModelImpl.fromJson;
@@ -719,6 +749,8 @@ abstract class _ResidenceModel implements ResidenceModel {
   String get reglesSupplementaires;
   @override
   bool get residenceDisponible;
+  @override
+  List<DateReservationModel> get datesReservation;
 
   /// Create a copy of ResidenceModel
   /// with the given fields replaced by the non-null parameter values.

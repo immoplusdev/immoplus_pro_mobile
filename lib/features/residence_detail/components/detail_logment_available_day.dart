@@ -4,7 +4,6 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 
@@ -74,7 +73,7 @@ class DetailLogmentAvailableDay extends StatelessWidget {
                       //   yearBuilder: _yourYearBuilder,
                     ),
                     onDisplayedMonthChanged: null,
-                    value: FormUtils.markedDates,
+                    value: snapshot.data ?? [],
                     onValueChanged: (value) {
                       log(value.toString(), name: 'VALUE');
                     },
