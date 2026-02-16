@@ -283,13 +283,12 @@ class Utils {
     }
   }
 
-  static bookingMail({required String id}) async {
-    // log(ConfigModel.singleton.contactEmail!);
+  static bookingMail({required String id, required String email}) async {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
-      path: "support@afriqsolus.ci",
+      path: email,
       query: _encodeQueryParameters(<String, String>{
-        'subject': "Réservation d'identifiant: $id",
+        'subject': "Identifiant: $id",
       }),
     );
 
