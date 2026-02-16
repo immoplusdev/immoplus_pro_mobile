@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
@@ -22,11 +23,48 @@ class SessionManager {
 
   UserModelSchema? currentUser;
 
-  // Future<void> init() async {
-  //   if (isarInstance == null) {
-  //     isarInstance = await Isar.open([UserModelSchema]);
-  //   }
-  // }
+  ConfigModel? configModel = ConfigModel.fromJson({
+    "data": {
+      "id": "6133a1fd-3292-42d8-9d1a-c37c57cac7ca",
+      "websiteUrl": null,
+      "normalVisitPrice": 100,
+      "expressVisitPrice": 100,
+      "pourcentageCommissionReservation": 1,
+      "projectName": "My Project",
+      "projectUrl": null,
+      "smsSenderName": null,
+      "proximityRadius": null,
+      "standardShippingPrice": null,
+      "flashShippingPrice": null,
+      "contactEmail": "support@immoplus.ci",
+      "contactPhoneNumber": "2250720154645",
+      "createdAt": "2024-08-19T16:16:50.682Z",
+      "updatedAt": "2024-08-27T11:08:45.420Z",
+      "deletedAt": null,
+      "categories": [],
+      "categoryPaymentTypes": [],
+      "defaultStatus": [],
+      "galleryGroups": [],
+      "languages": [],
+      "orderPaymentTypes": [],
+      "paymentStatus": [],
+      "productTypes": [],
+      "servicePaymentTypes": [],
+      "serviceStatus": [],
+      "shippingStatus": [],
+      "shippingTypes": [],
+      "visitPaymentTypes": [],
+      "typesResidence": [
+        {"text": "Appartement", "value": "appartement"},
+        {"text": "Maison", "value": "maison"},
+        {"text": "Villa", "value": "villa"}
+      ],
+      "typesDemandeVisite": [
+        {"text": "all.enum.express", "value": "express"},
+        {"text": "all.enum.normal", "value": "normal"}
+      ]
+    }
+  });
 
   Future<void> saveUser(UserModelSchema user) async {
     await isarInstance.writeTxn(() async {
