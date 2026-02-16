@@ -1,126 +1,259 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_amenities_page.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_logement_location_page.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_logment_price_page.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
+import 'package:http/http.dart' as http;
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_estate/components/estate_pictures_logment_page.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_type_logment_page.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_video_logment_page.dart';
-import 'package:immoplus_pro/features/create_estate/components/estate_wellcome_page.dart';
 import 'package:immoplus_pro/features/create_estate/components/estatedescription_editor_page.dart';
-import 'package:immoplus_pro/features/create_estate/pregress_stepper_estate_creating.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
 import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
-import 'package:immoplus_pro/utils/app_dialog.dart';
+import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
+import 'package:immoplus_pro/features/shared_widgets/upload_video_page.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_player/video_player.dart';
 
-class CreateEstatePage extends StatefulWidget {
-  const CreateEstatePage({super.key});
-  static String name = 'create_estate';
+class EstateVideoLogmentPage extends StatefulWidget {
+  const EstateVideoLogmentPage({super.key});
+  static String name = "video_logment";
+
   @override
-  State<CreateEstatePage> createState() => _CreateEstatePageState();
+  State<EstateVideoLogmentPage> createState() => _EstateVideoLogmentPageState();
 }
 
-class _CreateEstatePageState extends State<CreateEstatePage> {
+class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
+  VideoPlayerController? _controller; // Rendre nullable
+  ChewieController? _chewieController;
+  bool _isLoading = true;
+  String? _localVideoPath;
+  String? _errorMessage;
+
   @override
   void initState() {
-    CreationEstateNavigation.stepperStateNotifier = ValueNotifier<int>(0);
-    CreationEstateNavigation.pageController = PageController();
-
-    CreationEstateNavigation.pageController.addListener(
-      () {
-        if (EstateCreationModelBuilder().editing == true) {
-          CreationEstateNavigation.setStepe(
-              CreationEstateNavigation.pageController.page!.round());
-        }
-      },
-    );
     super.initState();
-    //CreateLogmentRouter.setup();
+    //PregressStepperEstateCreating.setStepe(6);
+    // Télécharger et jouer la vidéo s'il y a une vidéo associée
+    if (EstateCreationModelBuilder().video != null) {
+      _downloadAndPlayVideo(
+          "https://api-v2.immoplus.ci/files/raw/public/${EstateCreationModelBuilder().video}.mp4");
+    } else {
+      // Si aucune vidéo, ne pas afficher le loader
+      _isLoading = false;
+    }
+  }
+
+  Future<void> _downloadAndPlayVideo(String videoUrl) async {
+    log("Téléchargement de la vidéo depuis : $videoUrl");
+    try {
+      final http.Response response = await http.get(Uri.parse(videoUrl));
+      if (response.statusCode == 200) {
+        final Directory tempDir = await getTemporaryDirectory();
+        final String tempPath = tempDir.path;
+        final File videoFile = File('$tempPath/temp_video.mp4');
+
+        // Écrire la vidéo téléchargée dans un fichier local
+        await videoFile.writeAsBytes(response.bodyBytes);
+
+        setState(() {
+          _localVideoPath = videoFile.path;
+        });
+
+        // Initialiser VideoPlayerController avec le fichier local
+        final controller = VideoPlayerController.file(videoFile);
+        await controller.initialize().timeout(
+          const Duration(seconds: 30),
+          onTimeout: () =>
+              throw Exception('Timeout: La video prend trop de temps a charger'),
+        );
+
+        _controller = controller;
+        _initializeChewieController();
+        if (!mounted) return;
+        setState(() {
+          _isLoading = false;
+          _errorMessage = null;
+        });
+      } else {
+        throw Exception('Erreur lors du téléchargement de la vidéo');
+      }
+    } on PlatformException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Erreur video (${e.code}): ${e.message ?? 'Operation interrompue'}';
+      });
+    } catch (e) {
+      log('Erreur : $e');
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = e.toString();
+      });
+    }
+  }
+
+  void _initializeChewieController() {
+    if (_controller != null && _controller!.value.isInitialized) {
+      _chewieController = ChewieController(
+        videoPlayerController: _controller!,
+        aspectRatio: _controller!.value.aspectRatio,
+        autoPlay: false,
+        looping: false,
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.white),
+            ),
+          );
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
+    // Supprimer la vidéo locale si elle a été téléchargée
+    if (_localVideoPath != null) {
+      final File videoFile = File(_localVideoPath!);
+      if (videoFile.existsSync()) {
+        videoFile.deleteSync();
+        print('Vidéo supprimée : $_localVideoPath');
+      }
+    }
+    _controller?.dispose();
+    _chewieController?.dispose();
     super.dispose();
-    CreationEstateNavigation.pageController.dispose();
-    CreationEstateNavigation.stepperStateNotifier.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: [
-            SliverSafeArea(
-              sliver: SliverPersistentHeader(
-                pinned: true,
-                floating: false,
-                delegate: PregressStepperEstateCreating(),
-              ),
-            ),
-            SliverFillRemaining(
-              child: PageView(
-                controller: CreationEstateNavigation.pageController,
-                physics: EstateCreationModelBuilder().editing
-                    ? const BouncingScrollPhysics()
-                    : const NeverScrollableScrollPhysics(),
-                children: const [
-                  EstateWellcommePage(),
-                  EstateTypePage(),
-                  EstateAmentitiesPage(),
-                  EstateLogmentLocationPage(),
-                  EstatePicturesLogmentPage(),
-                  EstateVideoLogmentPage(),
-                  EstateDescriptionEditorPage(),
-                  EstateLogmentPricePage(),
-                ],
-              ),
-            ),
-          ],
+      backgroundColor: AppColors.whiteBackground,
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
         ),
+        slivers: [
+          (EstateCreationModelBuilder().video != null)
+              ? SliverToBoxAdapter(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : (_controller != null &&
+                              _controller!.value.isInitialized)
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _controller!.value.isPlaying
+                                      ? _chewieController?.pause()
+                                      : _chewieController?.play();
+                                });
+                              },
+                              child: AspectRatio(
+                                aspectRatio: _controller!.value.aspectRatio,
+                                child: Chewie(controller: _chewieController!),
+                              ),
+                            )
+                          : Center(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      FontAwesomeIcons.video,
+                                      size: 100,
+                                    ),
+                                    const Gap(10),
+                                    const Text(
+                                      "Aucune vidéo n'a encore été téléchargée. Sélectionnez une vidéo bien retouchée de votre logement.",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    if (_errorMessage != null) ...[
+                                      const Gap(8),
+                                      Text(
+                                        _errorMessage!,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                )
+              : const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.video,
+                            size: 100,
+                          ),
+                          Gap(10),
+                          Text(
+                            "Aucune vidéo n'a encore été téléchargée. Sélectionnez une vidéo bien retouchée de votre logement.",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        height: 155,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if (EstateCreationModelBuilder().editing)
-              SavingEstateButton(
-                onrefresh: () {
-                  context.pop(true);
-                },
-              ),
-            TextButton(
-              onPressed: () {
-                AppDialog.confirm(
-                  context: context,
-                  content: EstateCreationModelBuilder().editing
-                      ? 'Voulez-vous annuler la modification de cette résidence ?'
-                      : 'Voulez-vous annuler la création de cette résidence ?',
-                  rollback: () {
-                    context.pop();
-                    if (context.canPop()) {
-                      context.pop();
-                    }
-                  },
-                );
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.video_call),
+        onPressed: () async {
+          showModalBottomSheet<String>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            builder: (context) => const FractionallySizedBox(
+              heightFactor: 0.9,
+              child: UploadVideoPage(),
+            ),
+          ).then(
+            (value) {
+              setState(() {
+                if (value != null && value.isNotEmpty) {
+                  EstateCreationModelBuilder().video = value;
+                  // Redémarrer le téléchargement de la nouvelle vidéo
+                  _isLoading = true;
+                  _downloadAndPlayVideo(
+                      "https://api-v2.immoplus.ci/files/raw/public/${EstateCreationModelBuilder().video}.mp4");
+                }
+              });
+            },
+          );
+        },
+      ),
+      bottomNavigationBar: EstateCreationModelBuilder().editing
+          ? SizedBox()
+          : StepBottomButton(
+              onPrevious: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstatePicturesLogmentPage.name);
               },
-              style: TextButton.styleFrom(
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.red),
-                  foregroundColor: Colors.red),
-              child: const Text('Annuler'),
+              onNext: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateDescriptionEditorPage.name);
+              },
             ),
-          ],
-        ),
-      ),
     );
   }
 }
