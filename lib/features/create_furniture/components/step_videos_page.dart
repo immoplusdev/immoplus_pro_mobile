@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_manager.dart';
 import 'package:immoplus_pro/features/shared_widgets/upload_video_page.dart';
+import 'package:immoplus_pro/request_path.dart';
 import 'package:video_player/video_player.dart';
 
 class StepVideosPage extends StatefulWidget {
@@ -21,204 +19,97 @@ class StepVideosPage extends StatefulWidget {
 
 class _StepVideosPageState extends State<StepVideosPage> {
   final _manager = FurnitureCreationManager();
-  static const bool _videoStepDisabled = true;
 
   VideoPlayerController? _controller;
   ChewieController? _chewieController;
   bool _isLoading = true;
-  String? _errorMessage;
-  int _loadToken = 0;
-  String _lastLoadedVideoValue = '';
+
+  String _videoUrlFromId(String id) {
+    final clean = id.trim();
+    if (clean.isEmpty) return '';
+    if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+    final base = RequestPath.baseUrl.endsWith('/') ? RequestPath.baseUrl : '${RequestPath.baseUrl}/';
+    return '${base}files/videos/raw/public/$clean';
+  }
 
   @override
   void initState() {
     super.initState();
-    if (_videoStepDisabled) {
+    final videoId = (_manager.video ?? '').trim();
+    if (videoId.isEmpty) {
       _isLoading = false;
+    } else {
+      _initializeVideoPlayer(videoId);
+    }
+  }
+
+  void _initializeVideoPlayer(String videoUrlOrId) {
+    final videoUrl = _videoUrlFromId(videoUrlOrId);
+    if (videoUrl.isEmpty) {
+      if (mounted) setState(() => _isLoading = false);
       return;
     }
-    _loadVideoFromManager();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _syncVideoFromManagerIfNeeded();
-  }
-
-  void _disposePlayers() {
     try {
       _chewieController?.dispose();
-    } catch (e) {
-      log('Erreur dispose chewie: $e');
-    }
-    try {
+      _chewieController = null;
       _controller?.dispose();
-    } catch (e) {
-      log('Erreur dispose video controller: $e');
+      _controller = null;
+      _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+        ..initialize().then((_) {
+          if (!mounted) return;
+          _initializeChewieController();
+          if (!mounted) return;
+          setState(() => _isLoading = false);
+        }).catchError((Object e) {
+          if (!mounted) return;
+          _controller?.dispose();
+          _controller = null;
+          _chewieController = null;
+          setState(() => _isLoading = false);
+        });
+    } catch (_) {
+      if (mounted) setState(() => _isLoading = false);
     }
-    _chewieController = null;
-    _controller = null;
   }
 
-  Future<void> _loadVideoFromManager() async {
-    final videoValue = (_manager.video ?? '').trim();
-    final currentToken = ++_loadToken;
-
-    _lastLoadedVideoValue = videoValue;
-
-    if (!mounted) return;
-
-    final videoId = videoValue;
-    if (videoId.isEmpty) {
-      _disposePlayers();
-      setState(() {
-        _isLoading = false;
-        _errorMessage = null;
-      });
-      return;
-    }
-
-    final videoUrl = _buildVideoUrl(videoId);
-    await _initializeVideoPlayer(videoUrl, currentToken);
-  }
-
-  void _syncVideoFromManagerIfNeeded() {
-    final currentValue = (_manager.video ?? '').trim();
-    if (currentValue == _lastLoadedVideoValue) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _loadVideoFromManager();
-    });
-  }
-
-  String _buildVideoUrl(String value) {
-    if (value.startsWith('http://') || value.startsWith('https://')) {
-      return value;
-    }
-    return 'https://api-v2.immoplus.ci/files/videos/raw/public/$value';
-  }
-
-  Future<void> _initializeVideoPlayer(String videoUrl, int currentToken) async {
-    log('Lecture de la video depuis : $videoUrl');
-
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-    }
-
-    _disposePlayers();
-
-    final controller = VideoPlayerController.networkUrl(
-      Uri.parse(videoUrl),
-      videoPlayerOptions: VideoPlayerOptions(
-        mixWithOthers: true,
-        allowBackgroundPlayback: false,
-      ),
-    );
-
-    try {
-      await controller.initialize().timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          throw Exception('Timeout: La video prend trop de temps a charger');
-        },
-      );
-
-      if (controller.value.hasError) {
-        throw Exception(
-          controller.value.errorDescription ?? 'Erreur inconnue du lecteur video',
+  void _initializeChewieController() {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+    final ar = _controller!.value.aspectRatio;
+    final aspectRatio = (ar > 0 && ar.isFinite) ? ar : 16 / 9;
+    _chewieController = ChewieController(
+      videoPlayerController: _controller!,
+      aspectRatio: aspectRatio,
+      autoPlay: false,
+      looping: false,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
         );
-      }
-
-      if (controller.value.duration == Duration.zero) {
-        throw Exception('Video invalide ou corrompue');
-      }
-
-      final chewieController = ChewieController(
-        videoPlayerController: controller,
-        aspectRatio: controller.value.aspectRatio,
-        autoPlay: false,
-        looping: false,
-        allowFullScreen: true,
-        allowMuting: true,
-        showControls: true,
-        errorBuilder: (context, errorMessage) {
-          return Center(
-            child: Text(
-              errorMessage,
-              style: const TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-          );
-        },
-      );
-
-      if (!mounted || currentToken != _loadToken) {
-        chewieController.dispose();
-        controller.dispose();
-        return;
-      }
-
-      setState(() {
-        _controller = controller;
-        _chewieController = chewieController;
-        _isLoading = false;
-        _errorMessage = null;
-      });
-    } on PlatformException catch (e) {
-      controller.dispose();
-      log('PlatformException video: ${e.code} ${e.message}');
-      if (!mounted || currentToken != _loadToken) return;
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Erreur video (${e.code}): ${e.message ?? 'Operation interrompue'}';
-      });
-    } catch (e) {
-      controller.dispose();
-      log('Erreur lors du chargement video: $e');
-      if (!mounted || currentToken != _loadToken) return;
-      setState(() {
-        _isLoading = false;
-        _errorMessage = e.toString();
-      });
-    }
+      },
+    );
   }
 
   @override
   void dispose() {
-    _loadToken++;
-    _disposePlayers();
+    _chewieController?.dispose();
+    _chewieController = null;
+    _controller?.dispose();
+    _controller = null;
     super.dispose();
+  }
+
+  bool get _showPlayer {
+    return _controller != null &&
+        (_controller!.value.isInitialized) &&
+        _chewieController != null;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_videoStepDisabled) {
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: const Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(FontAwesomeIcons.videoSlash, size: 72),
-                Gap(12),
-                Text(
-                  "L'etape video est temporairement desactivee.",
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
-    _syncVideoFromManagerIfNeeded();
+    final hasVideo = (_manager.video ?? '').trim().isNotEmpty;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -227,57 +118,67 @@ class _StepVideosPageState extends State<StepVideosPage> {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          (_manager.video ?? '').isNotEmpty
+          hasVideo
               ? SliverToBoxAdapter(
                   child: _isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : (_controller != null &&
-                              _chewieController != null &&
-                              _controller!.value.isInitialized)
-                          ? GestureDetector(
-                              onTap: () {
-                                try {
-                                  setState(() {
-                                    _controller!.value.isPlaying
-                                        ? _chewieController?.pause()
-                                        : _chewieController?.play();
-                                  });
-                                } catch (e) {
-                                  log('Erreur toggle play/pause: $e');
-                                }
+                      : _showPlayer
+                          ? LayoutBuilder(
+                              builder: (context, constraints) {
+                                final w = constraints.maxWidth;
+                                final ar = () {
+                                  final r = _controller!.value.aspectRatio;
+                                  return (r > 0 && r.isFinite) ? r : 16 / 9;
+                                }();
+                                final h = (w > 0 && ar > 0) ? w / ar : 220.0;
+                                final height = h.clamp(220.0, 400.0);
+                                return Container(
+                                  width: double.infinity,
+                                  height: height,
+                                  color: Colors.black,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _controller!.value.isPlaying
+                                            ? _chewieController?.pause()
+                                            : _chewieController?.play();
+                                      });
+                                    },
+                                    child: AspectRatio(
+                                      aspectRatio: ar,
+                                      child: Chewie(controller: _chewieController!),
+                                    ),
+                                  ),
+                                );
                               },
-                              child: AspectRatio(
-                                aspectRatio: _controller!.value.aspectRatio,
-                                child: Chewie(controller: _chewieController!),
-                              ),
                             )
                           : Center(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 24),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     const Icon(
                                       FontAwesomeIcons.video,
-                                      size: 100,
+                                      size: 80,
                                     ),
-                                    const Gap(10),
+                                    const Gap(12),
                                     const Text(
                                       'Erreur lors du chargement de la video.',
                                       textAlign: TextAlign.center,
                                     ),
-                                    if (_errorMessage != null) ...[
-                                      const Gap(8),
-                                      Text(
-                                        _errorMessage!,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                    const Gap(12),
+                                    const Gap(16),
                                     ElevatedButton.icon(
-                                      onPressed: _loadVideoFromManager,
+                                      onPressed: () {
+                                        final id = (_manager.video ?? '').trim();
+                                        if (id.isNotEmpty) {
+                                          setState(() => _isLoading = true);
+                                          _initializeVideoPlayer(id);
+                                        }
+                                      },
                                       icon: const Icon(Icons.refresh),
-                                      label: const Text('Reessayer'),
+                                      label: const Text('Réessayer'),
                                     ),
                                   ],
                                 ),
@@ -298,8 +199,7 @@ class _StepVideosPageState extends State<StepVideosPage> {
                           ),
                           Gap(10),
                           Text(
-                            "Aucune video n'a encore ete ajoutee. "
-                            'Selectionnez une video de votre meuble.',
+                            "Aucune video n'a encore été ajoutée. Sélectionnez une video de votre meuble.",
                             textAlign: TextAlign.center,
                           ),
                         ],
@@ -312,8 +212,8 @@ class _StepVideosPageState extends State<StepVideosPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.furnitureViolet,
         child: const Icon(Icons.video_call, color: Colors.white),
-        onPressed: () async {
-          final value = await showModalBottomSheet<String>(
+        onPressed: () {
+          showModalBottomSheet<String>(
             context: context,
             showDragHandle: true,
             isScrollControlled: true,
@@ -324,12 +224,14 @@ class _StepVideosPageState extends State<StepVideosPage> {
               heightFactor: 0.9,
               child: UploadVideoPage(),
             ),
-          );
-
-          if (value != null && value.isNotEmpty) {
-            _manager.video = value;
-            await _loadVideoFromManager();
-          }
+          ).then((value) {
+            if (!mounted) return;
+            if (value == null || value.isEmpty) return;
+            final trimmed = value.trim();
+            _manager.video = trimmed;
+            setState(() => _isLoading = true);
+            _initializeVideoPlayer(trimmed);
+          });
         },
       ),
     );

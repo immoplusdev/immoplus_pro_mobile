@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class FurnitureCreationNavigation {
 
-  static const int totalSteps = 6;
+  static const int totalSteps = 7;
 
 
   static late PageController pageController;

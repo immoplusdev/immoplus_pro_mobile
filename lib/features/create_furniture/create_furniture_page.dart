@@ -12,6 +12,7 @@ import 'package:immoplus_pro/features/create_furniture/components/step_location_
 import 'package:immoplus_pro/features/create_furniture/components/step_metadata_page.dart';
 import 'package:immoplus_pro/features/create_furniture/components/step_photos_page.dart';
 import 'package:immoplus_pro/features/create_furniture/components/step_prix_page.dart';
+import 'package:immoplus_pro/features/create_furniture/components/step_videos_page.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_manager.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
@@ -189,6 +190,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
                   StepPrixPage(),
                   StepLocationPage(),
                   StepPhotosPage(),
+                  StepVideosPage(),
                   StepMetadataPage(),
                 ],
               ),
@@ -271,7 +273,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
     'Prix',
     'Lieu',
     'Photos',
-    // 'Vidéo',
+    'Vidéo',
     'Caractéristiques',
   ];
 
@@ -281,6 +283,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
     FontAwesomeIcons.coins,
     FontAwesomeIcons.locationDot,
     FontAwesomeIcons.camera,
+    FontAwesomeIcons.video,
     FontAwesomeIcons.sliders,
   ];
 

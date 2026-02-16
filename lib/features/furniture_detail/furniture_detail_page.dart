@@ -10,6 +10,7 @@ import 'package:google_maps_custom_marker/google_maps_custom_marker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/furniture/furniture_model.dart';
+import 'package:immoplus_pro/data/models/furniture/furniture_status.dart';
 import 'package:immoplus_pro/features/create_furniture/create_furniture_page.dart';
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_manager.dart';
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_cubit.dart';
@@ -36,6 +37,8 @@ class FurnitureDetailPage extends StatefulWidget {
 }
 
 class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
+  bool _isUpdatingStatus = false;
+
   @override
   void initState() {
     super.initState();
@@ -52,7 +55,22 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
             context.pop(true);
           },
           error: (message) {
+            if (_isUpdatingStatus && mounted) {
+              setState(() => _isUpdatingStatus = false);
+            }
             CustomPopup.showErrorToast(text: message);
+          },
+          loaded: (furniture) {
+            if (_isUpdatingStatus && mounted) {
+              setState(() => _isUpdatingStatus = false);
+              final isNowInactive =
+                  furniture.status == FurnitureStatus.inactive;
+              CustomPopup.showSuccesToast(
+                text: isNowInactive
+                    ? 'Meuble marqué comme indisponible'
+                    : 'Meuble marqué comme actif',
+              );
+            }
           },
         );
       },
@@ -383,11 +401,13 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
         ],
       ),
 
-      // ── Bottom Bar : Modifier / Supprimer ──
+      // ── Bottom Bar : Supprimer / Badge état + Bouton action / Modifier ──
       bottomNavigationBar: _FurnitureBottomBar(
         furniture: furniture,
+        isUpdatingStatus: _isUpdatingStatus,
         onEdit: () => _onEdit(furniture),
         onDelete: () => _onDelete(furniture),
+        onToggleAvailability: () => _onToggleAvailability(furniture),
       ),
     );
   }
@@ -401,6 +421,33 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
         (furniture.type?.isNotEmpty ?? false) ||
         (furniture.etat?.isNotEmpty ?? false) ||
         (furniture.metadata?.isNotEmpty ?? false);
+  }
+
+  /// Parse une couleur API (hex) en [Color]. Gère 6 ou 8 caractères (préfixe FF si 6).
+  Color? _parseApiColor(String rawColor) {
+    var hex = rawColor.trim().toUpperCase().replaceFirst('#', '');
+    if (hex.length == 6) {
+      hex = 'FF$hex';
+    }
+    if (hex.length != 8) {
+      return null;
+    }
+    final value = int.tryParse(hex, radix: 16);
+    if (value == null) {
+      return null;
+    }
+    return Color(value);
+  }
+
+  /// Liste des couleurs affichables à partir de [furniture.metadata?.colors].
+  List<Color> _resolveAvailableColors(FurnitureModel furniture) {
+    final raw = furniture.metadata?['colors'];
+    if (raw == null) return const <Color>[];
+    if (raw is! List) return const <Color>[];
+    return raw
+        .map((e) => _parseApiColor(e.toString()))
+        .whereType<Color>()
+        .toList();
   }
 
   Widget _buildMetadataChips(FurnitureModel furniture) {
@@ -424,6 +471,60 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
       spacing: 8,
       runSpacing: 8,
       children: items.map((entry) {
+        // Couleurs : pastilles superposées au lieu du texte
+        final isColorsKey = entry.key == 'colors' || entry.key == 'Couleurs';
+        final availableColors = isColorsKey ? _resolveAvailableColors(furniture) : <Color>[];
+
+        if (isColorsKey && availableColors.isNotEmpty) {
+          return Container(
+            constraints: BoxConstraints(maxWidth: maxChipWidth),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.furnitureVioletLight,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.furnitureViolet.withValues(alpha: 0.2),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Couleurs : ',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: availableColors.asMap().entries.map((e) {
+                    final index = e.key;
+                    final color = e.value;
+                    return Transform.translate(
+                      offset: Offset(index * -8, 0),
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          );
+        }
+
+        if (isColorsKey && availableColors.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
         return Container(
           constraints: BoxConstraints(maxWidth: maxChipWidth),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -513,6 +614,18 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
     if (confirm == true && mounted) {
       context.read<FurnitureCubit>().deleteFurniture(furniture.id);
     }
+  }
+
+  /// Bascule la disponibilité : Actif → Indisponible, Indisponible → Actif (PATCH status).
+  void _onToggleAvailability(FurnitureModel furniture) {
+    setState(() => _isUpdatingStatus = true);
+    final newStatus = furniture.status == FurnitureStatus.inactive
+        ? FurnitureStatus.active
+        : FurnitureStatus.inactive;
+    context.read<FurnitureCubit>().updateFurniture(
+          furniture.id,
+          {'status': newStatus.name},
+        );
   }
 }
 
@@ -717,24 +830,46 @@ class _FurnitureMiniMapState extends State<_FurnitureMiniMap> {
 }
 
 // ════════════════════════════════════════════════════════════════════
-// BOTTOM BAR (Modifier / Supprimer)
+// BOTTOM BAR : Badge état (Actif / Indisponible) + Bouton action (Désactiver / Activer)
 // ════════════════════════════════════════════════════════════════════
 
+/// Vert = Actif (#22C55E), Orange = Indisponible (#F59E0B).
+/// Le badge affiche l'état actuel, le bouton affiche l'action (Désactiver / Activer).
 class _FurnitureBottomBar extends StatelessWidget {
   const _FurnitureBottomBar({
     required this.furniture,
+    required this.isUpdatingStatus,
     required this.onEdit,
     required this.onDelete,
+    required this.onToggleAvailability,
   });
 
   final FurnitureModel furniture;
+  final bool isUpdatingStatus;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final VoidCallback onToggleAvailability;
+
+  static const Color _green = Color(0xFF22C55E);
+  static const Color _orange = Color(0xFFF59E0B);
 
   @override
   Widget build(BuildContext context) {
+    final isInactive = furniture.status == FurnitureStatus.inactive;
+
+    const double buttonHeight = 44;
+    const double spacing = 12;
+    const double horizontalPadding = 20;
+    const double topPadding = 16;
+    const double bottomPadding = 24;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 24),
+      padding: EdgeInsets.fromLTRB(
+        horizontalPadding,
+        topPadding,
+        horizontalPadding,
+        bottomPadding,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -755,9 +890,10 @@ class _FurnitureBottomBar extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.redAccent,
                   side: const BorderSide(color: Colors.redAccent),
-                  minimumSize: const Size(0, 48),
+                  minimumSize: Size(0, buttonHeight),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onPressed: onDelete,
@@ -765,22 +901,144 @@ class _FurnitureBottomBar extends StatelessWidget {
               ),
             ),
 
-            const Gap(12),
+            Gap(spacing),
 
-            // ── Bouton Modifier ──
+            // ── Bouton action (Désactiver / Activer) — largeur réduite pour laisser place à Modifier ──
             Expanded(
-              flex: 2,
-              child: ElevatedButton.icon(
-                style: FurnitureTheme.primaryButtonStyle.copyWith(
-                  minimumSize: WidgetStateProperty.all(const Size(0, 48)),
+              flex: 1,
+              child: isUpdatingStatus
+                  ? Container(
+                      height: buttonHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.grey.shade100,
+                      ),
+                      child: const Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CupertinoActivityIndicator(),
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      height: buttonHeight,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: isInactive ? _green : _orange,
+                          side: BorderSide(
+                            color: isInactive ? _green : _orange,
+                          ),
+                          minimumSize: Size(0, buttonHeight),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: onToggleAvailability,
+                        child: Text(
+                          isInactive ? 'Activer' : 'Désactiver',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
+
+            Gap(spacing),
+
+            // ── Bouton Modifier (plus d’espace) ──
+            Expanded(
+              flex: 1,
+              child: SizedBox(
+                height: buttonHeight,
+                child: ElevatedButton.icon(
+                  style: FurnitureTheme.primaryButtonStyle.copyWith(
+                    minimumSize: WidgetStateProperty.all(Size(0, buttonHeight)),
+                    padding: WidgetStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    ),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: onEdit,
+                  icon: const Icon(FontAwesomeIcons.penToSquare, size: 12),
+                  label: const Text('Modifier', style: TextStyle(fontSize: 12)),
                 ),
-                onPressed: onEdit,
-                icon: const Icon(FontAwesomeIcons.penToSquare, size: 16),
-                label: const Text('Modifier'),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Badge affichant l'état actuel : Actif (vert ✔️) ou Indisponible (orange ⏸️).
+// ignore: unused_element
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.isInactive});
+
+  final bool isInactive;
+
+  static const Color _green = Color(0xFF22C55E);
+  static const Color _orange = Color(0xFFF59E0B);
+
+  @override
+  Widget build(BuildContext context) {
+    if (isInactive) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: _orange.withValues(alpha: 0.12),
+          border: Border.all(color: _orange, width: 1.2),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(FontAwesomeIcons.pause, size: 12, color: _orange),
+            const Gap(6),
+            Text(
+              'Indisponible',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: _orange,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: _green.withValues(alpha: 0.12),
+        border: Border.all(color: _green, width: 1.2),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(FontAwesomeIcons.check, size: 12, color: _green),
+          const Gap(6),
+          Text(
+            'Actif',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: _green,
+            ),
+          ),
+        ],
       ),
     );
   }

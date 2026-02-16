@@ -22,11 +22,10 @@ class FurnitureCubit extends Cubit<FurnitureState> {
     }
   }
 
-  /// Modifie partiellement un meuble. @marc
-
+  /// Modifie partiellement un meuble (PATCH).
+  /// N'émet pas [loading] pour éviter le shimmer plein écran ; la page affiche un petit loading sur le bouton.
   Future<void> updateFurniture(
       String id, Map<String, dynamic> fields) async {
-    emit(const FurnitureState.loading());
     try {
       final response = await FurnitureRepository.updateFurniture(
           id: id, fields: fields);
