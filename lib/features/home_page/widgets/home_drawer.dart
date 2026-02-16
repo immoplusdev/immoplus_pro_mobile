@@ -226,7 +226,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    title: const Text('Biens immobilier'),
+                    title: const Text('Biens immobiliers'),
                     trailing: Icon(
                       FontAwesomeIcons.circleChevronRight,
                       size: 15,
@@ -389,7 +389,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    title: const Text("Condition général d'utilisation"),
+                    title: const Text("Conditions générales d’utilisation"),
                   ),
                   const Gap(20),
                   ListTile(

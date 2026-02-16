@@ -49,7 +49,7 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
               child: Column(
                 children: [
                   Text(
-                    "Bien immobiliers",
+                    "Biens immobiliers",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Gap(10),
