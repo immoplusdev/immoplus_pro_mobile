@@ -27,8 +27,11 @@ class _StepVideosPageState extends State<StepVideosPage> {
   String _videoUrlFromId(String id) {
     final clean = id.trim();
     if (clean.isEmpty) return '';
-    if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
-    final base = RequestPath.baseUrl.endsWith('/') ? RequestPath.baseUrl : '${RequestPath.baseUrl}/';
+    if (clean.startsWith('http://') || clean.startsWith('https://'))
+      return clean;
+    final base = RequestPath.baseUrl.endsWith('/')
+        ? RequestPath.baseUrl
+        : '${RequestPath.baseUrl}/';
     return '${base}files/videos/raw/public/$clean';
   }
 
@@ -146,7 +149,8 @@ class _StepVideosPageState extends State<StepVideosPage> {
                                     },
                                     child: AspectRatio(
                                       aspectRatio: ar,
-                                      child: Chewie(controller: _chewieController!),
+                                      child: Chewie(
+                                          controller: _chewieController!),
                                     ),
                                   ),
                                 );
@@ -171,7 +175,8 @@ class _StepVideosPageState extends State<StepVideosPage> {
                                     const Gap(16),
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        final id = (_manager.video ?? '').trim();
+                                        final id =
+                                            (_manager.video ?? '').trim();
                                         if (id.isNotEmpty) {
                                           setState(() => _isLoading = true);
                                           _initializeVideoPlayer(id);
@@ -210,7 +215,7 @@ class _StepVideosPageState extends State<StepVideosPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.furnitureViolet,
+        backgroundColor: AppColors.primary,
         child: const Icon(Icons.video_call, color: Colors.white),
         onPressed: () {
           showModalBottomSheet<String>(

@@ -11,7 +11,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   isar_community_flutter_libs
   local_auth_windows
   permission_handler_windows
-  quill_native_bridge_windows
   share_plus
   url_launcher_windows
 )

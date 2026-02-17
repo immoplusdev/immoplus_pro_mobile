@@ -9,7 +9,6 @@ import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/lottie_assets.dart';
 
-
 class StepInfoPage extends StatefulWidget {
   const StepInfoPage({super.key});
 
@@ -43,13 +42,11 @@ class _StepInfoPageState extends State<StepInfoPage> {
       child: SafeArea(
         child: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-
           slivers: [
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 200, 
-                child: LottieAssets().furniture, 
-                
+                height: 200,
+                child: LottieAssets().furniture,
               ),
             ),
             const SliverPadding(
@@ -112,7 +109,7 @@ class _StepInfoPageState extends State<StepInfoPage> {
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  backgroundColor: AppColors.furnitureViolet,
+                  backgroundColor: AppColors.primary,
                   avatar: const Icon(
                     FontAwesomeIcons.doorOpen,
                     color: Colors.white,

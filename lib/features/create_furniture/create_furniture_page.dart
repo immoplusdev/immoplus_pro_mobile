@@ -304,7 +304,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
             stepRadius: 16,
             activeStepBackgroundColor: FurnitureTheme.stepperActiveColor,
             finishedStepBackgroundColor:
-                AppColors.furnitureViolet.withValues(alpha: 0.6),
+                AppColors.primary.withValues(alpha: 0.6),
             unreachedStepBackgroundColor: FurnitureTheme.stepperInactiveColor,
             showLoadingAnimation: false,
             steps: List.generate(_stepTitles.length, (index) {
@@ -313,9 +313,8 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
                   child: Icon(
                     _stepIcons[index],
                     size: 12,
-                    color: index == currentStep
-                        ? Colors.white
-                        : AppColors.furnitureViolet,
+                    color:
+                        index == currentStep ? Colors.white : AppColors.primary,
                   ),
                 ),
                 customTitle: Text(

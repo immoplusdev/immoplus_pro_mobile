@@ -21,7 +21,7 @@ class FurnitureTheme {
   // COULEURS
   // ──────────────────────────────────────────────
 
-  static const Color accent = AppColors.furnitureViolet;
+  static Color accent = AppColors.primary;
   static const Color accentLight = AppColors.furnitureVioletLight;
 
   static const Color _statusActiveColor = Color(0xFF2ECC71);
@@ -57,10 +57,10 @@ class FurnitureTheme {
   );
 
   /// Prix affiché — bold 18px violet
-  static TextStyle priceText = const TextStyle(
+  static TextStyle priceText = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w700,
-    color: AppColors.furnitureViolet,
+    color: AppColors.primary,
   );
 
   // ──────────────────────────────────────────────
@@ -91,7 +91,7 @@ class FurnitureTheme {
   /// - Pas de shadow
   static final ButtonStyle outlinedButtonStyle = OutlinedButton.styleFrom(
     foregroundColor: accent,
-    side: const BorderSide(color: AppColors.furnitureViolet, width: 1.2),
+    side: BorderSide(color: AppColors.primary, width: 1.2),
     elevation: 0,
     minimumSize: const Size(double.infinity, 50),
     shape: RoundedRectangleBorder(
@@ -144,12 +144,12 @@ class FurnitureTheme {
         color: Colors.grey.shade400,
         fontSize: 14,
       ),
-      labelStyle: const TextStyle(
+      labelStyle: TextStyle(
         color: Colors.black54,
         fontSize: 14,
       ),
-      floatingLabelStyle: const TextStyle(
-        color: AppColors.furnitureViolet,
+      floatingLabelStyle: TextStyle(
+        color: AppColors.primary,
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
@@ -166,7 +166,7 @@ class FurnitureTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: AppColors.furnitureViolet, width: 1.5),
+        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
@@ -185,7 +185,8 @@ class FurnitureTheme {
 
   /// InputDecorationTheme global pour un [Theme] wrapper si nécessaire.
   static InputDecorationTheme get inputDecorationTheme => InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
@@ -198,14 +199,14 @@ class FurnitureTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.furnitureViolet, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.redAccent),
         ),
-        floatingLabelStyle: const TextStyle(
-          color: AppColors.furnitureViolet,
+        floatingLabelStyle: TextStyle(
+          color: AppColors.primary,
           fontWeight: FontWeight.w500,
         ),
         errorStyle: const TextStyle(
@@ -294,7 +295,6 @@ class FurnitureTheme {
   static BoxDecoration get sectionCardDecoration => BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        
       );
 
   /// Padding standard à l'intérieur des cards de section.
@@ -308,13 +308,13 @@ class FurnitureTheme {
   // ──────────────────────────────────────────────
 
   /// Couleur du cercle actif dans le stepper.
-  static const Color stepperActiveColor = AppColors.furnitureViolet;
+  static Color stepperActiveColor = AppColors.primary;
 
   /// Couleur du cercle inactif.
   static Color stepperInactiveColor = Colors.grey.shade300;
 
   /// Couleur de la ligne de connexion complétée.
-  static const Color stepperLineActiveColor = AppColors.furnitureViolet;
+  static Color stepperLineActiveColor = AppColors.primary;
 
   /// Couleur de la ligne de connexion inactive.
   static Color stepperLineInactiveColor = Colors.grey.shade300;
@@ -328,9 +328,9 @@ class FurnitureTheme {
     return SizedBox(
       width: size,
       height: size,
-      child: const CircularProgressIndicator(
+      child: CircularProgressIndicator(
         strokeWidth: 2.5,
-        valueColor: AlwaysStoppedAnimation<Color>(AppColors.furnitureViolet),
+        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
       ),
     );
   }

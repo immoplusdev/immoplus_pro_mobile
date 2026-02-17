@@ -255,18 +255,18 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       horizontalTitleGap: 0,
                       leading: Icon(
                         FontAwesomeIcons.couch,
-                        color: AppColors.furnitureViolet,
+                        color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Mes meubles'),
                       trailing: Icon(
                         FontAwesomeIcons.circleChevronRight,
                         size: 15,
-                        color: AppColors.furnitureViolet,
+                        color: AppColors.primary,
                       ),
                     ),
                   ],
-                  
+
                   const Gap(10),
                   ListTile(
                     shape: RoundedRectangleBorder(
