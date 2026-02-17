@@ -34,6 +34,11 @@ import 'package:immoplus_pro/splash_screen.dart';
 
 import 'features/login_page/login_page.dart';
 
+// ── Furniture module ──
+import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
+import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page.dart';
+import 'package:immoplus_pro/features/create_furniture/create_furniture_page.dart';
+
 class AppRouter {
   static bool userIs = false;
   static bool alreadyOpened = false;
@@ -241,6 +246,26 @@ class AppRouter {
             onUpdateTap: onUpdateTap,
           );
         },
+      ),
+
+      // ── Furniture module ──
+      GoRoute(
+        path: '/furnitures',
+        name: FurnituresPage.name,
+        builder: (context, state) => const FurnituresPage(),
+      ),
+      GoRoute(
+        path: '/furnitures/detail/:id',
+        name: FurnitureDetailPage.name,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return FurnitureDetailPage(furnitureId: id);
+        },
+      ),
+      GoRoute(
+        path: '/create_furniture',
+        name: CreateFurniturePage.name,
+        builder: (context, state) => const CreateFurniturePage(),
       ),
     ],
   );

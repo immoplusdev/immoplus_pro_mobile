@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/configs/app_flavor.dart';
 import 'package:immoplus_pro/force_update_required_page.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:new_version_plus/model/version_status.dart';
@@ -17,11 +18,15 @@ class UpdateService {
 
   Future<void> checkForUpdate(BuildContext context,
       {bool forceUpdate = false}) async {
+    if (AppFlavor.isDev) return;
+
     try {
       final status = await _newVersion.getVersionStatus();
 
       if (status != null && status.canUpdate) {
-        if (forceUpdate) {
+        final shouldForceUpdate = forceUpdate && !AppFlavor.isDev;
+
+        if (shouldForceUpdate) {
           context.pushNamed(ForceUpdateRequiredPage.name, extra: () {
             _onTapUpdateButton(status);
           });

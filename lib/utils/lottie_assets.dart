@@ -6,6 +6,10 @@ class LottieAssets {
     'assets/lotties/success.json',
     repeat: false,
   );
+  final LottieBuilder _furniture = Lottie.asset(
+    'assets/lotties/furniture_1.json',
+    repeat: true,
+  );
   final LottieBuilder _fail = Lottie.asset(
     'assets/lotties/fail.json',
     repeat: false,
@@ -26,6 +30,7 @@ class LottieAssets {
     'assets/lotties/house.json',
     repeat: true,
   );
+  LottieBuilder get furniture => _furniture;
   LottieBuilder get success => _success;
   LottieBuilder get fail => _fail;
   LottieBuilder get cheking => _cheking;
