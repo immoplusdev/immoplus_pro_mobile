@@ -16,8 +16,8 @@ import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_cubit.dart';
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_state.dart';
 import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:map_launcher/map_launcher.dart' as mpl;
 import 'package:shimmer/shimmer.dart';
@@ -51,22 +51,22 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
       listener: (context, state) {
         state.whenOrNull(
           deleted: (message) {
-            CustomPopup.showSuccesToast(text: message);
+            ToastUtils.showSuccess(title: message);
             context.pop(true);
           },
           error: (message) {
             if (_isUpdatingStatus && mounted) {
               setState(() => _isUpdatingStatus = false);
             }
-            CustomPopup.showErrorToast(text: message);
+            ToastUtils.showError(title: message);
           },
           loaded: (furniture) {
             if (_isUpdatingStatus && mounted) {
               setState(() => _isUpdatingStatus = false);
               final isNowInactive =
                   furniture.status == FurnitureStatus.inactive;
-              CustomPopup.showSuccesToast(
-                text: isNowInactive
+              ToastUtils.showSuccess(
+                title: isNowInactive
                     ? 'Meuble marqué comme indisponible'
                     : 'Meuble marqué comme actif',
               );

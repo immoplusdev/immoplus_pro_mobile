@@ -19,6 +19,7 @@ import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_butto
 import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 
 /// Page principale de création/édition d'un meuble.
 
@@ -38,13 +39,11 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
   bool _validatePriceStep() {
     final prix = _manager.prix ?? 0;
     if (prix <= 0) {
-      CustomPopup.showErrorToast(text: 'Veuillez saisir un prix superieur a 0');
+      ToastUtils.showError(title: 'Veuillez saisir un prix superieur a 0');
       return false;
     }
     if (prix % 100 != 0) {
-      CustomPopup.showErrorToast(
-        text: 'Le prix doit etre un multiple de 100 FCFA',
-      );
+      ToastUtils.showError(title: 'Le prix doit etre un multiple de 100 FCFA');
       return false;
     }
     return true;
@@ -98,7 +97,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
           fields: _manager.build().toJson(),
         );
         CustomPopup.hideLoadingToast();
-        CustomPopup.showSuccesToast(text: 'Meuble modifié avec succès');
+        ToastUtils.showSuccess(title: 'Meuble modifié avec succès');
         _manager.reset();
         if (mounted) context.pop(true);
       } else {
@@ -111,12 +110,10 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
         CustomPopup.hideLoadingToast();
         final created = response.data;
         if (created != null) {
-          CustomPopup.showSuccesToast(
-            text: 'Meuble créé: ${created.titre}',
-          );
+          ToastUtils.showSuccess(title: 'Meuble créé: ${created.titre}');
         } else {
-          CustomPopup.showSuccesToast(
-            text: 'Meuble créé, mais réponse vide du serveur',
+          ToastUtils.showSuccess(
+            title: 'Meuble créé, mais réponse vide du serveur',
           );
         }
         _manager.reset();
@@ -124,7 +121,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
       }
     } catch (e) {
       CustomPopup.hideLoadingToast();
-      CustomPopup.showErrorToast(text: 'Erreur : $e');
+      ToastUtils.showError(title: 'Erreur : $e');
       log('Erreur soumission meuble : $e', name: 'CREATE_FURNITURE');
     } finally {
       if (mounted) {
