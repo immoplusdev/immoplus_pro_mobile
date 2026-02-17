@@ -162,7 +162,7 @@ class _EstatesPageState extends State<EstatesPage> {
                     ),
                     const Gap(30),
                     Text(
-                      "Aucune bien immobilier trouvés",
+                      "Aucun bien immobilier trouvé",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),

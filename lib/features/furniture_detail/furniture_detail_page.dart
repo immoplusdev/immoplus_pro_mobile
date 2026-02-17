@@ -380,13 +380,13 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                     children: [
                       Icon(
                         FontAwesomeIcons.circlePlay,
-                        color: AppColors.furnitureViolet,
+                        color: AppColors.primary,
                       ),
                       const Gap(10),
                       Text(
                         'Vidéo disponible',
                         style: TextStyle(
-                          color: AppColors.furnitureViolet,
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -473,7 +473,8 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
       children: items.map((entry) {
         // Couleurs : pastilles superposées au lieu du texte
         final isColorsKey = entry.key == 'colors' || entry.key == 'Couleurs';
-        final availableColors = isColorsKey ? _resolveAvailableColors(furniture) : <Color>[];
+        final availableColors =
+            isColorsKey ? _resolveAvailableColors(furniture) : <Color>[];
 
         if (isColorsKey && availableColors.isNotEmpty) {
           return Container(
@@ -483,7 +484,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
               color: AppColors.furnitureVioletLight,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppColors.furnitureViolet.withValues(alpha: 0.2),
+                color: AppColors.primary.withValues(alpha: 0.2),
               ),
             ),
             child: Row(
@@ -532,7 +533,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
             color: AppColors.furnitureVioletLight,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: AppColors.furnitureViolet.withValues(alpha: 0.2),
+              color: AppColors.primary.withValues(alpha: 0.2),
             ),
           ),
           child: RichText(
@@ -552,7 +553,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                   text: _formatMetadataValue(entry.key, entry.value),
                   style: TextStyle(
                     fontSize: 13,
-                    color: AppColors.furnitureViolet,
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -623,9 +624,9 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
         ? FurnitureStatus.active
         : FurnitureStatus.inactive;
     context.read<FurnitureCubit>().updateFurniture(
-          furniture.id,
-          {'status': newStatus.name},
-        );
+      furniture.id,
+      {'status': newStatus.name},
+    );
   }
 }
 
@@ -667,7 +668,7 @@ class _FurnitureAppBar extends StatelessWidget {
             child: Center(
               child: Icon(
                 CupertinoIcons.chevron_back,
-                color: AppColors.furnitureViolet,
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -789,7 +790,7 @@ class _FurnitureMiniMapState extends State<_FurnitureMiniMap> {
       imagePixelRatio: 2,
       title: widget.furniture.titre,
       textSize: 35,
-      backgroundColor: AppColors.furnitureViolet,
+      backgroundColor: AppColors.primary,
     );
 
     if (mounted) {
@@ -1071,7 +1072,7 @@ class _SectionCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 16, color: AppColors.furnitureViolet),
+                Icon(icon, size: 16, color: AppColors.primary),
                 const Gap(8),
                 Text(
                   title,

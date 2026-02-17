@@ -164,13 +164,13 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: AppColors.furnitureViolet.withValues(alpha: 0.18),
+            color: AppColors.primary.withValues(alpha: 0.18),
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.furnitureViolet,
+          borderSide: BorderSide(
+            color: AppColors.primary,
             width: 1.5,
           ),
         ),
@@ -195,11 +195,9 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         maxHeight: 260,
       );
 
-  DropdownItemDecoration get _dropdownItemDecoration =>
-      DropdownItemDecoration(
-        selectedBackgroundColor:
-            AppColors.furnitureViolet.withValues(alpha: 0.08),
-        selectedTextColor: AppColors.furnitureViolet,
+  DropdownItemDecoration get _dropdownItemDecoration => DropdownItemDecoration(
+        selectedBackgroundColor: AppColors.primary.withValues(alpha: 0.08),
+        selectedTextColor: AppColors.primary,
         textColor: Colors.black87,
       );
 
@@ -228,7 +226,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-            color: AppColors.furnitureViolet.withValues(alpha: 0.4),
+            color: AppColors.primary.withValues(alpha: 0.4),
           ),
         ),
       );
@@ -244,7 +242,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
   }
 
   Future<void> _openColorPicker() async {
-    Color pickerColor = AppColors.furnitureViolet;
+    Color pickerColor = AppColors.primary;
 
     final bool picked = await ColorPicker(
       color: pickerColor,
@@ -309,16 +307,14 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
           const SliverGap(16),
-
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
-              child: Text('Details du meuble', style: FurnitureTheme.sectionTitle),
+              child:
+                  Text('Details du meuble', style: FurnitureTheme.sectionTitle),
             ),
           ),
-
           const SliverGap(20),
-
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
@@ -347,9 +343,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                         _syncMetadata();
                       },
                     ),
-
                     const Gap(16),
-
                     Text('Type', style: FurnitureTheme.fieldLabel),
                     const Gap(8),
                     MultiDropdown<String>(
@@ -369,9 +363,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                         _syncMetadata();
                       },
                     ),
-
                     const Gap(16),
-
                     Text('Couleur', style: FurnitureTheme.fieldLabel),
                     const Gap(4),
                     Text(
@@ -433,26 +425,22 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: AppColors.furnitureViolet
-                                    .withValues(alpha: 0.5),
+                                color: AppColors.primary.withValues(alpha: 0.5),
                                 width: 2,
                                 strokeAlign: BorderSide.strokeAlignInside,
                               ),
-                              color: AppColors.furnitureViolet
-                                  .withValues(alpha: 0.08),
+                              color: AppColors.primary.withValues(alpha: 0.08),
                             ),
                             child: Icon(
                               Icons.add,
-                              color: AppColors.furnitureViolet,
+                              color: AppColors.primary,
                               size: 22,
                             ),
                           ),
                         ),
                       ],
                     ),
-
                     const Gap(20),
-
                     Text('Etat', style: FurnitureTheme.fieldLabel),
                     const Gap(10),
                     SizedBox(
@@ -463,7 +451,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                           backgroundColor:
                               WidgetStateProperty.resolveWith((states) {
                             if (states.contains(WidgetState.selected)) {
-                              return AppColors.furnitureViolet;
+                              return AppColors.primary;
                             }
                             return Colors.white;
                           }),
@@ -476,8 +464,7 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
                           }),
                           side: WidgetStateProperty.all(
                             BorderSide(
-                              color: AppColors.furnitureViolet
-                                  .withValues(alpha: 0.3),
+                              color: AppColors.primary.withValues(alpha: 0.3),
                             ),
                           ),
                           shape: WidgetStateProperty.all(
@@ -514,7 +501,6 @@ class _StepMetadataPageState extends State<StepMetadataPage> {
               ),
             ),
           ),
-
           const SliverGap(100),
         ],
       ),

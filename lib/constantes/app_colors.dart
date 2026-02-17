@@ -23,6 +23,6 @@ class AppColors {
   static Color ECECEC = Color(0xffECECEC);
 
   // Furniture module
-  static const Color furnitureViolet = Color(0xFF4227DE);
+  // static const Color furnitureViolet = Color(0xFF4227DE);
   static const Color furnitureVioletLight = Color(0x1A4227DE); // 10% opacity
 }

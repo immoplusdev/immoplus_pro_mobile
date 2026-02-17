@@ -80,7 +80,7 @@ class _StepPrixPageState extends State<StepPrixPage> {
                 style: Theme.of(context)
                     .textTheme
                     .headlineLarge!
-                    .copyWith(color: AppColors.furnitureViolet),
+                    .copyWith(color: AppColors.primary),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Veuillez entrer un montant';

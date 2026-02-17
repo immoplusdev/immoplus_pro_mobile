@@ -35,7 +35,8 @@ class _StepPhotosPageState extends State<StepPhotosPage> {
     final remaining = _maxImages - _uploadingImages.length;
     if (remaining <= 0) return;
 
-    final pickedImages = await ImagePickerService.pickMultipleImages(context: context);
+    final pickedImages =
+        await ImagePickerService.pickMultipleImages(context: context);
     if (pickedImages.isEmpty) return;
 
     setState(() {
@@ -113,8 +114,7 @@ class _StepPhotosPageState extends State<StepPhotosPage> {
       ),
       floatingActionButton: _uploadingImages.length < _maxImages
           ? FloatingActionButton(
-              backgroundColor:
-                  _isUploading ? Colors.grey : AppColors.furnitureViolet,
+              backgroundColor: _isUploading ? Colors.grey : AppColors.primary,
               onPressed: _isUploading ? null : _pickImages,
               child: _isUploading
                   ? const SizedBox(

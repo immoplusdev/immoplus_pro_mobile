@@ -17,7 +17,6 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
 
-
 class FurnituresPage extends StatefulWidget {
   const FurnituresPage({super.key});
 
@@ -189,7 +188,7 @@ class _FurnituresPageState extends State<FurnituresPage> {
       floatingActionButton: _hasItems
           ? FloatingActionButton.extended(
               onPressed: _tapCreateFurniture,
-              backgroundColor: AppColors.furnitureViolet,
+              backgroundColor: AppColors.primary,
               icon: const Icon(
                 FontAwesomeIcons.plus,
                 color: Colors.white,
@@ -203,7 +202,6 @@ class _FurnituresPageState extends State<FurnituresPage> {
     );
   }
 }
-
 
 /// Card d'un meuble dans la liste.
 
@@ -255,7 +253,8 @@ class _FurnitureListCard extends StatelessWidget {
             // ── Détails droite ──
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,8 +346,7 @@ class _FurnitureListCard extends StatelessWidget {
 
   /// Affiche l'image du meuble ou un placeholder gris.
   Widget _buildImage() {
-    final hasImage =
-        furniture.images != null && furniture.images!.isNotEmpty;
+    final hasImage = furniture.images != null && furniture.images!.isNotEmpty;
 
     if (!hasImage) {
       return Container(
