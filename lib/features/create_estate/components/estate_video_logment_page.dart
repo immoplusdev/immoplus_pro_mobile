@@ -239,9 +239,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
           );
         },
       ),
-      bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstatePicturesLogmentPage.name);
