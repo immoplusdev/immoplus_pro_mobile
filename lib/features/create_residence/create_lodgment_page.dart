@@ -12,7 +12,6 @@ import 'package:immoplus_pro/features/create_residence/screens/video_logment_pag
 import 'package:immoplus_pro/features/create_residence/screens/wellcome_page.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 
 class CreateLodgmentPage extends StatefulWidget {
@@ -50,6 +49,20 @@ class _CreateLodgmentPageState extends State<CreateLodgmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            appBar: AppBar(
+        title: Text(
+          ResidenceCreationModelBuilder().editing ? 'Modifier residence' : 'Nouvelle residence',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black87,
+      ),
       body: SafeArea(
         child: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -89,12 +102,6 @@ class _CreateLodgmentPageState extends State<CreateLodgmentPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (ResidenceCreationModelBuilder().editing)
-              SavingButton(
-                onrefresh: () {
-                  context.pop(true);
-                },
-              ),
             TextButton(
               onPressed: () {
                 AppDialog.confirm(

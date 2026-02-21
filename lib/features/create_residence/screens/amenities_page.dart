@@ -8,7 +8,6 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/amentities_selection.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 class AmentitiesPage extends StatefulWidget {
@@ -63,9 +62,7 @@ class _AmentitiesPageState extends State<AmentitiesPage> {
           ),
         ],
       ),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onNext: ResidenceCreationModelBuilder().commodites.isNotEmpty
                   ? () {
                       //CreateLogmentRouter.router.goNamed(LogmentLocationPage.name);

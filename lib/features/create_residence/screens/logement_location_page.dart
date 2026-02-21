@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/configs/address.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/commune_selector_listtile.dart';
 import 'package:immoplus_pro/modules/ville_and_commune_selector/ville_selector_listtile.dart';
 import 'package:immoplus_pro/features/create_residence/screens/amenities_page.dart';
@@ -154,9 +153,7 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
       // floatingActionButton: FloatingActionButton(onPressed: () {
       //   log(ResidenceCreationModelBuilder().ville);
       // }),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(
                     pageName: AmentitiesPage.name);
