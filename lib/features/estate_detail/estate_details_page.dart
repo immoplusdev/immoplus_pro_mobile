@@ -9,11 +9,14 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
+import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/estate_detail/components/detail_rooms.dart';
-import 'package:immoplus_pro/features/estate_detail/components/estate_bottom_bar.dart';
 import 'package:immoplus_pro/features/estate_detail/cubit/estate_cubit.dart';
+import 'package:immoplus_pro/features/shared_widgets/detail_action_bottom_bar.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_title2.dart';
 import 'package:immoplus_pro/features/residence_detail/components/inititial_detail_screen.dart';
@@ -61,6 +64,49 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
 
   _getEstateById() {
     context.read<EstateCubit>().getEstate(id: widget.idProduct);
+  }
+
+  void _onEdit(BienImmobilierModel bien) {
+    EstateCreationModelBuilder().fromModel(bien);
+    context.pushNamed(CreateEstatePage.name).then((result) {
+      if (result == true && mounted) {
+        EstateCreationModelBuilder().reset();
+        context.read<EstateCubit>().getEstate(id: bien.id);
+      }
+    });
+  }
+
+  Future<void> _onDelete(BienImmobilierModel bien) async {
+    final result = await AppDialog.confirmDialog(
+      context: context,
+      content:
+          'Êtes-vous sûr de vouloir supprimer ce bien immobilier ? Cette action est irréversible.',
+    );
+    if (result == true && mounted) {
+      context.read<EstateCubit>().deleteEstate(id: bien.id);
+    }
+  }
+
+  Future<void> _onToggleAvailability(BienImmobilierModel bien) async {
+    if (bien.bienImmobilierDisponible) {
+      await AppDialog.confirm(
+        context: context,
+        content:
+            'Les biens indisponibles ne seront pas accessibles aux clients pour effectuer des réservations.',
+        rollback: () {
+          context.read<EstateCubit>().updateEstate(
+                id: bien.id,
+                data: {'bienImmobilierDisponible': false},
+              );
+          context.pop();
+        },
+      );
+    } else {
+      context.read<EstateCubit>().updateEstate(
+        id: bien.id,
+        data: {'bienImmobilierDisponible': true},
+      );
+    }
   }
 
   @override
@@ -190,8 +236,15 @@ class _EstateDetailsPageState extends State<EstateDetailsPage> {
                 const SliverToBoxAdapter(child: Gap(15)),
               ],
             ),
-            bottomNavigationBar: EstateBottomBar(
-              bienImmobilier: state.data,
+            bottomNavigationBar: DetailActionBottomBar(
+              isInactive: !state.data.bienImmobilierDisponible,
+              isUpdatingStatus: false,
+              onEdit: () => _onEdit(state.data),
+              onDelete: () => _onDelete(state.data),
+              onToggleAvailability: () => _onToggleAvailability(state.data),
+              config: const DetailActionBottomBarConfig(
+                editLabel: 'Modifier le bien',
+              ),
             ),
           );
         }

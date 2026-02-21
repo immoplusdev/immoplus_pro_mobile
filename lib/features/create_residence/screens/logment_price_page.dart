@@ -6,7 +6,6 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence/screens/description_editor_page.dart';
@@ -134,9 +133,7 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
           ],
         ),
       ),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onNextText: ResidenceCreationModelBuilder().editing
                   ? 'Modifier'
                   : 'Terminer',
@@ -159,9 +156,7 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                           .then(
                         (value) {
                           EasyLoading.dismiss();
-
-                          AppRouter.router.push(
-                              '/logment_page/${ResidenceCreationModelBuilder().id}');
+                          if (context.mounted) context.pop(true);
                         },
                       );
                     } catch (e) {

@@ -6,7 +6,6 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/list_piece_section.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/logment_type_selection.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 
 class TypeLogmentPage extends StatefulWidget {
@@ -74,9 +73,7 @@ class _TypeLogmentPageState extends State<TypeLogmentPage> {
       //   );
       //   print(data);
       // }),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(
                     pageName: WellcommePage.name);
