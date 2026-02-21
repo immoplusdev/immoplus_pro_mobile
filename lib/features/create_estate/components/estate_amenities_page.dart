@@ -58,9 +58,7 @@ class _EstateAmentitiesPageState extends State<EstateAmentitiesPage> {
           ),
         ],
       ),
-      bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onNext: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentLocationPage.name);

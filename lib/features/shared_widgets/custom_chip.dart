@@ -19,7 +19,7 @@ class CustomChip extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(20)),
     this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
     this.icon,
-    this.iconSize = 20,
+    this.iconSize = 18,
     this.label = '',
     this.labelStyle,
     this.iconPadding = const EdgeInsets.only(right: 2),

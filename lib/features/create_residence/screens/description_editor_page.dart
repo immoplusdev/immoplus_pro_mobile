@@ -127,9 +127,7 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
           ),
         ],
       ),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : ValueListenableBuilder<bool>(
+      bottomNavigationBar: ValueListenableBuilder<bool>(
               valueListenable: isEmpty,
               builder: (context, isEmptyValue, child) {
                 return StepBottomButton(
