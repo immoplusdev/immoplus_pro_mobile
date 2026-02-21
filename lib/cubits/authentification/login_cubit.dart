@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -34,6 +35,7 @@ import 'package:immoplus_pro/splash_screen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginUser {
   final String? firstName;
@@ -283,6 +285,69 @@ class LoginCubit extends Cubit<LoginCubitState> {
       CustomPopup.showErrorToast(
           text: 'Erreur lors de la connexion avec Facebook');
       emit(const LoginCubitState.initial());
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    emit(const LOGIN_LOADING());
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      socialLoginUser = SocialLoginUser(
+        firstName: credential.givenName,
+        lastName: credential.familyName,
+        email: credential.email ?? '',
+        provider: SocialProviderEnum.apple.value,
+      );
+      final emailFromToken =
+          credential.email ?? _extractEmailFromToken(credential.identityToken);
+      if (emailFromToken == null) {
+        CustomPopup.showErrorToast(
+            text: "Impossible d'obtenir l'adresse email de votre compte apple");
+        emit(const LoginCubitState.initial());
+        return;
+      }
+      final body = SocialLoginBody(
+        provider: SocialProviderEnum.apple.value,
+        token: credential.identityToken ?? '',
+        email: emailFromToken,
+        source: AccountSource.proApp.value,
+      );
+
+      await _performSocialLogin(body);
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        emit(const LoginCubitState.initial());
+        return;
+      }
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
+      emit(const LoginCubitState.initial());
+    } catch (e, s) {
+      log('Error Apple Sign-In: $e', stackTrace: s);
+      CustomPopup.showErrorToast(
+          text: 'Erreur lors de la connexion avec Apple');
+      emit(const LoginCubitState.initial());
+    }
+  }
+
+  String? _extractEmailFromToken(String? identityToken) {
+    if (identityToken == null) return null;
+    try {
+      final parts = identityToken.split('.');
+      if (parts.length < 2) return null;
+      final payload = utf8.decode(
+        base64Url.decode(base64Url.normalize(parts[1])),
+      );
+      final Map<String, dynamic> data = jsonDecode(payload);
+      return data['email'] as String?;
+    } catch (_) {
+      return null;
     }
   }
 
