@@ -59,9 +59,7 @@ class _EstatePicturesLogmentPageState extends State<EstatePicturesLogmentPage> {
                     color: Colors.white, strokeWidth: 2))
             : const Icon(Icons.add_photo_alternate_outlined),
       ),
-      bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateLogmentLocationPage.name);

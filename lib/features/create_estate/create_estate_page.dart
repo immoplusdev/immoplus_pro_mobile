@@ -11,7 +11,6 @@ import 'package:immoplus_pro/features/create_estate/components/estatedescription
 import 'package:immoplus_pro/features/create_estate/pregress_stepper_estate_creating.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
-import 'package:immoplus_pro/features/create_estate/widgets/saving_estate_button.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 
 class CreateEstatePage extends StatefulWidget {
@@ -85,16 +84,10 @@ class _CreateEstatePageState extends State<CreateEstatePage> {
       ),
       bottomNavigationBar: Container(
         color: Colors.white,
-        height: 155,
+        height: 80,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            if (EstateCreationModelBuilder().editing)
-              SavingEstateButton(
-                onrefresh: () {
-                  context.pop(true);
-                },
-              ),
             TextButton(
               onPressed: () {
                 AppDialog.confirm(

@@ -8,15 +8,18 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_manager.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/svgs_icons.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_title2.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_rooms.dart';
+import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
 import 'package:immoplus_pro/features/residence_detail/components/inititial_detail_screen.dart';
-import 'package:immoplus_pro/features/residence_detail/components/logment_bottom_bar.dart';
 import 'package:immoplus_pro/features/residence_detail/components/see_more_button.dart';
+import 'package:immoplus_pro/features/shared_widgets/detail_action_bottom_bar.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/features/residence_detail/cubit/logment_cubit.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
@@ -63,6 +66,49 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
 
   _getResidenceById() {
     context.read<LogmentCubit>().getResidence(id: widget.idProduct);
+  }
+
+  void _onEdit(ResidenceModel residence) {
+    ResidenceCreationModelBuilder().fromModel(residence);
+    context.pushNamed(CreateLodgmentPage.name).then((result) {
+      if (result == true && mounted) {
+        ResidenceCreationModelBuilder().reset();
+        context.read<LogmentCubit>().getResidence(id: residence.id);
+      }
+    });
+  }
+
+  Future<void> _onDelete(ResidenceModel residence) async {
+    final result = await AppDialog.confirmDialog(
+      context: context,
+      content:
+          'Êtes-vous sûr de vouloir supprimer cette résidence ? Cette action est irréversible.',
+    );
+    if (result == true && mounted) {
+      context.read<LogmentCubit>().deleteResidence(id: residence.id);
+    }
+  }
+
+  Future<void> _onToggleAvailability(ResidenceModel residence) async {
+    if (residence.residenceDisponible) {
+      await AppDialog.confirm(
+        context: context,
+        content:
+            'Les résidences indisponibles ne seront pas accessibles aux clients pour effectuer des réservations.',
+        rollback: () {
+          context.read<LogmentCubit>().updateResidence(
+                id: residence.id,
+                datas: {'residenceDisponible': false},
+              );
+          context.pop();
+        },
+      );
+    } else {
+      context.read<LogmentCubit>().updateResidence(
+        id: residence.id,
+        datas: {'residenceDisponible': true},
+      );
+    }
   }
 
   @override
@@ -449,8 +495,15 @@ class _ResidenceDetailsPageState extends State<ResidenceDetailsPage> {
                 const SliverToBoxAdapter(child: Gap(15)),
               ],
             ),
-            bottomNavigationBar: LogmentBottomBar(
-              logmentModel: state.data,
+            bottomNavigationBar: DetailActionBottomBar(
+              isInactive: !state.data.residenceDisponible,
+              isUpdatingStatus: false,
+              onEdit: () => _onEdit(state.data),
+              onDelete: () => _onDelete(state.data),
+              onToggleAvailability: () => _onToggleAvailability(state.data),
+              config: const DetailActionBottomBarConfig(
+                editLabel: 'Modifier',
+              ),
             ),
           );
         }

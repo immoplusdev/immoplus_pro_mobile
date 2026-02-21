@@ -61,9 +61,7 @@ class _EstateTypePageState extends State<EstateTypePage> {
           const SliverToBoxAdapter(),
         ],
       ),
-      bottomNavigationBar: EstateCreationModelBuilder().editing
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationEstateNavigation.goToPage(
                     pageName: EstateWellcommePage.name);

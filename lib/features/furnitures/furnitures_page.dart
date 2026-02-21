@@ -194,7 +194,7 @@ class _FurnituresPageState extends State<FurnituresPage> {
                 color: Colors.white,
               ),
               label: const Text(
-                'Ajouter',
+                'Ajouter Des Meubles',
                 style: TextStyle(color: Colors.white),
               ),
             )

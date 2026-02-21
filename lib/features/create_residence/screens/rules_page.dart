@@ -7,7 +7,6 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/increase_listtile.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/list_rule_section.dart';
-import 'package:immoplus_pro/features/create_residence/widgets/saving_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/time_selector.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
@@ -136,9 +135,7 @@ class _RulesPageState extends State<RulesPage> {
           const SliverToBoxAdapter(),
         ],
       ),
-      bottomNavigationBar: (ResidenceCreationModelBuilder().editing)
-          ? SizedBox()
-          : StepBottomButton(
+      bottomNavigationBar: StepBottomButton(
               onPrevious: () {
                 CreationResidenceNavigation.goToPage(
                     pageName: VideoLogmentPage.name);

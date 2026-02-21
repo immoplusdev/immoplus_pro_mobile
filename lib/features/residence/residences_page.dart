@@ -185,7 +185,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
                     ),
                     const Gap(30),
                     const Text(
-                      "Vous n’avez pas encore ajouté de résidence sur ImmoPlus. Commencez dès maintenant en ajoutant vos biens selon les critères requis.",
+                      "Vous n’avez pas encore ajouté de résidence sur ImmoPlus. Co  mmencez dès maintenant en ajoutant vos biens selon les critères requis.",
                       textAlign: TextAlign.center,
                     ),
                     Gap(20),
