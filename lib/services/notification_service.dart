@@ -7,6 +7,8 @@ import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/core/enum/push_notification_type.dart';
 import 'package:immoplus_pro/core/extensions/go_router_extensions.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/firebase_options.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
@@ -56,6 +58,14 @@ class NotificationService {
             AppRouter.router.pushIfDifferent(route);
           } else {
             log('⚠️ Pas de route pour type: $typeString', name: 'NOTIFICATION');
+          }
+
+          if (type == PushNotificationType.newReservationWaiting) {
+            final ctx = NavigationService.navigatorKey.currentContext;
+            if (ctx != null) {
+              getIt<PendingReservationOverlayService>()
+                  .checkAndShowOverlay(ctx);
+            }
           }
         }
       }

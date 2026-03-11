@@ -22,6 +22,7 @@ import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dar
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
+import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -280,6 +281,31 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         20,
                       ),
                     )),
+                    tileColor: Colors.white,
+                    onTap: () {
+                      context.push(PendingReservationsPage.route());
+                    },
+                    horizontalTitleGap: 0,
+                    leading: Icon(
+                      Icons.pending_actions_outlined,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    title: const AutoSizeText(
+                      'Réservations en attente',
+                      maxLines: 1,
+                    ),
+                    trailing: Icon(
+                      FontAwesomeIcons.circleChevronRight,
+                      size: 15,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  const Divider(
+                    height: 0,
+                    thickness: 0.8,
+                  ),
+                  ListTile(
                     tileColor: Colors.white,
                     onTap: () {
                       context.pushNamed(BookingHistoryPage.name);

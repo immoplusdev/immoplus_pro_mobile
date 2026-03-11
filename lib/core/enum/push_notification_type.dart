@@ -1,6 +1,7 @@
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
+import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
@@ -13,9 +14,10 @@ enum PushNotificationType {
   bienImmobilier, // Biens immobiliers
   demandeVisite, // Demandes de visite
   payment, // Paiements
-  wallet; // Wallet
+  wallet, // Wallet
+  newReservationWaiting; // Nouvelle réservation en attente
 
-  /// 🎯 Retourne la route correspondante
+  /// Retourne la route correspondante
   String? getRoute(String? id) {
     switch (this) {
       case PushNotificationType.reservation:
@@ -34,6 +36,9 @@ enum PushNotificationType {
             ? EstateDetailsPage.route(id: id)
             : EstatesPage.route();
 
+      case PushNotificationType.newReservationWaiting:
+        return PendingReservationsPage.route();
+
       case PushNotificationType.wallet:
       // return HomePage.route();
       case PushNotificationType.payment:
@@ -43,7 +48,7 @@ enum PushNotificationType {
     }
   }
 
-  /// 🎯 Convertir une string en enum
+  /// Convertir une string en enum
   static PushNotificationType? fromString(String? type) {
     if (type == null) return null;
 
@@ -71,6 +76,9 @@ enum PushNotificationType {
 
       case 'wallet':
         return PushNotificationType.wallet;
+
+      case 'new_reservation_waiting':
+        return PushNotificationType.newReservationWaiting;
 
       default:
         return null;
