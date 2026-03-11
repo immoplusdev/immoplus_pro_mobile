@@ -297,15 +297,17 @@ class LoginCubit extends Cubit<LoginCubitState> {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
+      inspect(credential);
 
+      final emailFromToken =
+          credential.email ?? _extractEmailFromToken(credential.identityToken);
       socialLoginUser = SocialLoginUser(
         firstName: credential.givenName,
         lastName: credential.familyName,
-        email: credential.email ?? '',
+        email: emailFromToken ?? '',
         provider: SocialProviderEnum.apple.value,
       );
-      final emailFromToken =
-          credential.email ?? _extractEmailFromToken(credential.identityToken);
+
       if (emailFromToken == null) {
         CustomPopup.showErrorToast(
             text: "Impossible d'obtenir l'adresse email de votre compte apple");

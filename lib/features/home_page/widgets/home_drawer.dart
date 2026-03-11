@@ -16,6 +16,8 @@ import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
+import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
+import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
@@ -396,16 +398,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
                   ListTile(
                     tileColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(
-                          20,
-                        ),
-                        bottomRight: Radius.circular(
-                          20,
-                        ),
-                      ),
-                    ),
                     onTap: () {
                       showModalBottomSheet(
                         shape: RoundedRectangleBorder(
@@ -423,7 +415,41 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    title: const Text("Conditions générales d’utilisation"),
+                    title: const Text("Conditions générales d'utilisation"),
+                  ),
+                  const Divider(
+                    height: 0,
+                    thickness: 0.8,
+                  ),
+                  ListTile(
+                    tileColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                    onTap: () {
+                      context.pushNamed(
+                        ContractPage.routeName,
+                        extra: {
+                          'isSigned': false,
+                          'mode': ContractMode.sign,
+                        },
+                      );
+                    },
+                    horizontalTitleGap: 0,
+                    leading: Icon(
+                      Icons.description_outlined,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                    title: const Text('Mon Contrat'),
+                    trailing: Icon(
+                      FontAwesomeIcons.circleChevronRight,
+                      size: 15,
+                      color: AppColors.primary,
+                    ),
                   ),
                   const Gap(20),
                   ListTile(

@@ -2,6 +2,9 @@
 
 part of 'furniture_model.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
 
 _$FurnitureModelImpl _$$FurnitureModelImplFromJson(Map<String, dynamic> json) =>
     _$FurnitureModelImpl(

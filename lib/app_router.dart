@@ -34,6 +34,10 @@ import 'package:immoplus_pro/splash_screen.dart';
 
 import 'features/login_page/login_page.dart';
 
+// ── Contract module ──
+import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
+import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
+
 // ── Furniture module ──
 import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
 import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page.dart';
@@ -244,6 +248,20 @@ class AppRouter {
           final onUpdateTap = state.extra as Function()?;
           return ForceUpdateRequiredPage(
             onUpdateTap: onUpdateTap,
+          );
+        },
+      ),
+
+      // ── Contract module ──
+      GoRoute(
+        path: ContractPage.routePath,
+        name: ContractPage.routeName,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return ContractPage(
+            isSigned: extra?['isSigned'] as bool? ?? false,
+            mode: extra?['mode'] as ContractMode? ?? ContractMode.sign,
+            onSigned: extra?['onSigned'] as VoidCallback?,
           );
         },
       ),

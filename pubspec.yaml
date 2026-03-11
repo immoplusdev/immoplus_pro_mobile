@@ -122,6 +122,7 @@ dependencies:
   flex_color_picker: ^3.7.2
   multi_dropdown: ^3.1.0
   sign_in_with_apple: ^7.0.1
+  syncfusion_flutter_signaturepad: ^32.2.9
 
 dev_dependencies:
   flutter_test:

@@ -11,7 +11,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
 import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
-import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/cgu_checkbox.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
@@ -57,8 +57,11 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
 
     _formController = FormController(
       productId: 0,
-      firstName: TextEditingController(text: ''),
-      lastName: TextEditingController(text: ''),
+      firstName: TextEditingController(
+          text: widget.dataRouterRegistration.firstName ?? ""),
+      lastName: TextEditingController(
+        text: widget.dataRouterRegistration.lastName ?? '',
+      ),
       activity: TextEditingController(text: ''),
       phoneNumber: TextEditingController(text: ''),
       email: TextEditingController(text: widget.dataRouterRegistration.email),
@@ -66,6 +69,16 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
     );
     _formKey = GlobalKey<FormState>();
   }
+
+  bool get _isSocialLogin => widget.dataRouterRegistration.provider != null;
+
+  bool get _firstNameProvided =>
+      _isSocialLogin &&
+      (widget.dataRouterRegistration.firstName ?? '').isNotEmpty;
+
+  bool get _lastNameProvided =>
+      _isSocialLogin &&
+      (widget.dataRouterRegistration.lastName ?? '').isNotEmpty;
 
   @override
   void dispose() {
@@ -137,6 +150,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                   child: CustomTextField(
                     controller: _formController.firstName,
                     prefixIcon: const Icon(FontAwesomeIcons.user),
+                    isEnabled: _firstNameProvided ? false : true,
                     labelText: "Nom",
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
@@ -149,6 +163,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                     controller: _formController.lastName,
                     prefixIcon: const Icon(FontAwesomeIcons.user),
                     labelText: "Prénom",
+                    isEnabled: _lastNameProvided ? false : true,
                     validator: (String? value) =>
                         FormUtils.fieldValidator(value: value),
                   ),
@@ -187,7 +202,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     focusNode: _emailFocus,
-                    readOnly: true,
+                    isEnabled: false,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_passwordFocus),
@@ -274,46 +289,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
 
                 // CGU Checkbox
                 SliverToBoxAdapter(
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: _cguNotifier,
-                    builder: (BuildContext context, bool value, child) {
-                      return Row(
-                        children: [
-                          Checkbox(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            value: value,
-                            fillColor: value
-                                ? WidgetStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : WidgetStateProperty.all(Colors.white),
-                            onChanged: (val) {
-                              _cguNotifier.value = !_cguNotifier.value;
-                            },
-                          ),
-                          const Text("j'approuve les"),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const GeneralConditionPage(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Termes & conditions',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  child: CguCheckbox(cguNotifier: _cguNotifier),
                 ),
 
                 const SliverGap(20),
