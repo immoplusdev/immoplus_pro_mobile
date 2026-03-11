@@ -13,15 +13,24 @@ class PendingReservationOverlayService {
 
   OverlayEntry? _overlayEntry;
 
-  Future<ReservationModel?> _fetchLatest() async {
+  /// utilisé désormais aussi pour refresh la card
+  final ValueNotifier<int> refreshNotifier = ValueNotifier<int>(0);
+
+  void refreshPendingReservation() {
+    refreshNotifier.value++;
+  }
+
+  Future<ReservationModel?> fetchLatestPendingReservation() async {
     try {
       final ownerId = SessionManager().currentUser?.userId;
       if (ownerId == null) return null;
+
       final result = await LogmentRepository.getReservationsEnAttenteReponse(
         ownerId: ownerId,
         perPage: 1,
         page: 1,
       );
+
       if (result.data.isNotEmpty) return result.data.first;
       return null;
     } catch (_) {
@@ -30,7 +39,7 @@ class PendingReservationOverlayService {
   }
 
   Future<void> checkAndShowOverlay(BuildContext context) async {
-    final reservation = await _fetchLatest();
+    final reservation = await fetchLatestPendingReservation();
     dismissOverlay();
     if (reservation == null) return;
 

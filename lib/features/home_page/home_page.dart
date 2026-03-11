@@ -15,6 +15,7 @@ import 'package:immoplus_pro/features/home_page/pages/booking_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/visit_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/home_router.dart';
 import 'package:immoplus_pro/features/home_page/widgets/home_drawer.dart';
+import 'package:immoplus_pro/features/home_page/widgets/pending_reservation_banner.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       }
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
-      getIt<PendingReservationOverlayService>().checkAndShowOverlay(context);
+      // getIt<PendingReservationOverlayService>().checkAndShowOverlay(context);
     });
   }
 
@@ -243,10 +244,19 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: const HomeDrawer(),
-        body: Router(
-          routerDelegate: HomeRouter.router.routerDelegate,
-          routeInformationParser: HomeRouter.router.routeInformationParser,
-          routeInformationProvider: HomeRouter.router.routeInformationProvider,
+        body: Column(
+          children: [
+            const PendingReservationBanner(),
+            Expanded(
+              child: Router(
+                routerDelegate: HomeRouter.router.routerDelegate,
+                routeInformationParser:
+                    HomeRouter.router.routeInformationParser,
+                routeInformationProvider:
+                    HomeRouter.router.routeInformationProvider,
+              ),
+            ),
+          ],
         ),
       ),
     );

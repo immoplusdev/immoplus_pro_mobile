@@ -35,6 +35,29 @@ class NotificationService {
   }
 
   void setupNotificationListener() {
+    /// Notification reçue pendant que l'app est ouverte
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      final data = event.notification.additionalData;
+
+      if (data != null) {
+        final typeString = data['type'] as String?;
+        final type = PushNotificationType.fromString(typeString);
+
+        if (type == PushNotificationType.newReservationWaiting) {
+          log(
+            '🔔 New pending reservation received → refresh pending reservation banner',
+            name: 'NOTIFICATION',
+          );
+
+          getIt<PendingReservationOverlayService>().refreshPendingReservation();
+        }
+      }
+
+      event.preventDefault();
+      event.notification.display();
+    });
+
+    /// Notification cliquée
     OneSignal.Notifications.addClickListener((event) {
       final data = event.notification.additionalData;
       if (data != null) {

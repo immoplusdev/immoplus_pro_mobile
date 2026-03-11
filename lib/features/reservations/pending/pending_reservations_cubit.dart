@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -36,6 +38,7 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     try {
       await LogmentRepository.accepterReservation(reservationId);
       pagingController.refresh();
+      getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());
     } catch (e) {
       emit(RequestState.error(error: e.toString()));
