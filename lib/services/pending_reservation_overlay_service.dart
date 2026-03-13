@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
-import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
-import 'package:immoplus_pro/services/pending_reservation_overlay_widget.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:injectable/injectable.dart';
 
@@ -11,9 +8,7 @@ import 'package:injectable/injectable.dart';
 class PendingReservationOverlayService {
   PendingReservationOverlayService();
 
-  OverlayEntry? _overlayEntry;
-
-  /// utilisé désormais aussi pour refresh la card
+  /// utilisé pour refresh la card
   final ValueNotifier<int> refreshNotifier = ValueNotifier<int>(0);
 
   void refreshPendingReservation() {
@@ -36,28 +31,5 @@ class PendingReservationOverlayService {
     } catch (_) {
       return null;
     }
-  }
-
-  Future<void> checkAndShowOverlay(BuildContext context) async {
-    final reservation = await fetchLatestPendingReservation();
-    dismissOverlay();
-    if (reservation == null) return;
-
-    _overlayEntry = OverlayEntry(
-      builder: (_) => PendingReservationOverlayWidget(
-        reservation: reservation,
-        onDismiss: dismissOverlay,
-        onNavigate: () {
-          dismissOverlay();
-          AppRouter.router.push(PendingReservationsPage.route());
-        },
-      ),
-    );
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-
-  void dismissOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
   }
 }

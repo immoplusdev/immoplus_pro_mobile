@@ -20,7 +20,6 @@ import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
-import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -59,7 +58,6 @@ class _HomePageState extends State<HomePage> {
       }
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
-      // getIt<PendingReservationOverlayService>().checkAndShowOverlay(context);
     });
   }
 
@@ -246,7 +244,7 @@ class _HomePageState extends State<HomePage> {
         drawer: const HomeDrawer(),
         body: Column(
           children: [
-            const PendingReservationBanner(),
+            const ReservationPendingBanner(),
             Expanded(
               child: Router(
                 routerDelegate: HomeRouter.router.routerDelegate,
