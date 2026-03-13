@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/core/services/share_service.dart';
@@ -52,48 +53,49 @@ class DetailLogmentAppBar extends StatelessWidget {
         ),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            iconSize: 20,
-            key: _shareButtonKey,
-            onPressed: () async {
-              // Code for the placeholder:
-              final String shareUrl =
-                  'https://app.immoplus.ci/residence_detail/${logmentModel.id}';
-
-              final String shareText =
-                  'Découvrez la résidence ${logmentModel.nom} sur ImmoPlus.\n'
-                  'Prix de réservation : ${logmentModel.prixReservation} F.\n'
-                  'Lien : $shareUrl';
-
-              final origin =
-                  ShareService.getSharePositionFromKey(_shareButtonKey);
-              await ShareService.shareText(
-                text: shareText,
-                sharePositionOrigin: origin,
-                subject: 'Partager ma résidence ImmoPlus',
-              );
-            },
-            style: IconButton.styleFrom(
-              iconSize: 25,
-              fixedSize: const Size(18, 18),
+        if (logmentModel.validationStatus == ValidationStatus.valide)
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
               padding: EdgeInsets.zero,
-            ),
-            icon: Container(
-              width: 40,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
-              child: Center(
-                child: FaIcon(
-                  FontAwesomeIcons.shareNodes,
-                  color: AppColors.primary,
+              iconSize: 20,
+              key: _shareButtonKey,
+              onPressed: () async {
+                // Code for the placeholder:
+                final String shareUrl =
+                    'https://app.immoplus.ci/residence_detail/${logmentModel.id}';
+
+                final String shareText =
+                    'Découvrez la résidence ${logmentModel.nom} sur ImmoPlus.\n'
+                    'Prix de réservation : ${logmentModel.prixReservation} F.\n'
+                    'Lien : $shareUrl';
+
+                final origin =
+                    ShareService.getSharePositionFromKey(_shareButtonKey);
+                await ShareService.shareText(
+                  text: shareText,
+                  sharePositionOrigin: origin,
+                  subject: 'Partager ma résidence ImmoPlus',
+                );
+              },
+              style: IconButton.styleFrom(
+                iconSize: 25,
+                fixedSize: const Size(18, 18),
+                padding: EdgeInsets.zero,
+              ),
+              icon: Container(
+                width: 40,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white),
+                child: Center(
+                  child: FaIcon(
+                    FontAwesomeIcons.shareNodes,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
         // Padding(
         //   padding: const EdgeInsets.only(right: 10),
         //   child: CircleAvatar(

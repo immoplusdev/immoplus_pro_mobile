@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/core/services/share_service.dart';
@@ -51,41 +52,42 @@ class DetailEstateAppBar extends StatelessWidget {
         ),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            iconSize: 20,
-            onPressed: () async {
-              final shareText = 'Découvrez ce bien immobilier sur ImmoPlus\n'
-                  'Description : ${bienImmobilier.description}.\n'
-                  'Prix : ${bienImmobilier.prix} F\n'
-                  'Adresse : ${bienImmobilier.adresse}.\n';
-
-              final origin =
-                  ShareService.getSharePositionFromKey(_shareButtonKey);
-              await ShareService.shareText(
-                  text: shareText, sharePositionOrigin: origin);
-            },
-            style: IconButton.styleFrom(
-              iconSize: 25,
-              fixedSize: Size(18, 18),
+        if (bienImmobilier.validationStatus == ValidationStatus.valide)
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
               padding: EdgeInsets.zero,
-            ),
-            icon: Container(
-              key: _shareButtonKey,
-              width: 30,
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-              child: Center(
-                child: Icon(
-                  CupertinoIcons.share,
-                  color: AppColors.primary,
+              iconSize: 20,
+              onPressed: () async {
+                final shareText = 'Découvrez ce bien immobilier sur ImmoPlus\n'
+                    'Description : ${bienImmobilier.description}.\n'
+                    'Prix : ${bienImmobilier.prix} F\n'
+                    'Adresse : ${bienImmobilier.adresse}.\n';
+
+                final origin =
+                    ShareService.getSharePositionFromKey(_shareButtonKey);
+                await ShareService.shareText(
+                    text: shareText, sharePositionOrigin: origin);
+              },
+              style: IconButton.styleFrom(
+                iconSize: 25,
+                fixedSize: Size(18, 18),
+                padding: EdgeInsets.zero,
+              ),
+              icon: Container(
+                key: _shareButtonKey,
+                width: 30,
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                child: Center(
+                  child: Icon(
+                    CupertinoIcons.share,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
         // Padding(
         //   padding: const EdgeInsets.only(right: 10),
         //   child: CircleAvatar(

@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:immoplus_pro/common/account_source.dart';
 import 'package:immoplus_pro/common/enums.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/cubits/authentification/social_body_enum.dart';
@@ -31,6 +32,7 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
@@ -99,6 +101,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       DioClient().dio.options.headers['Authorization'] =
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
+      getIt<NotificationService>().suscribeCurrentUser();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
       if (NavigationService.navigatorKey.currentContext!.canPop()) {
         NavigationService.navigatorKey.currentContext!.pop();
@@ -385,6 +388,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       DioClient().dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
+      getIt<NotificationService>().suscribeCurrentUser();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
       if (NavigationService.navigatorKey.currentContext!.canPop()) {
         NavigationService.navigatorKey.currentContext!.pop();
