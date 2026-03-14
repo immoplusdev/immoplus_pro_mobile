@@ -86,29 +86,12 @@ class PendingReservationCard extends StatelessWidget {
               ],
             ),
             const Gap(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  Utils.formatCurrency(
-                      reservationModel.montantTotalReservation),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: AppColors.primary),
-                ),
-                if (reservationModel.clientPhoneNumber.isNotEmpty)
-                  Row(
-                    children: [
-                      Icon(Icons.phone, size: 14, color: Colors.grey.shade600),
-                      const Gap(4),
-                      Text(
-                        reservationModel.clientPhoneNumber,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-              ],
+            Text(
+              Utils.formatCurrency(reservationModel.montantTotalReservation),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: AppColors.primary),
             ),
             const Gap(10),
             BlocBuilder<PendingReservationsCubit, RequestState>(
