@@ -8,11 +8,13 @@ class TimeSelector extends StatefulWidget {
       required this.icon,
       required this.subtitle,
       required this.onUpdate,
-      required this.initialValue});
+      required this.initialValue,
+      this.disabled = false});
   final Widget icon;
   final String subtitle;
   final void Function(String)? onUpdate;
   final String initialValue;
+  final bool disabled;
   @override
   State<TimeSelector> createState() => _TimeSelectorState();
 }
@@ -21,8 +23,10 @@ class _TimeSelectorState extends State<TimeSelector> {
   TimeOfDay? _selectedTime;
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
+    return Opacity(
+      opacity: widget.disabled ? 0.4 : 1.0,
+      child: ListTile(
+      onTap: widget.disabled ? null : () {
         showTimePicker(
           initialTime: TimeOfDay.now(),
           context: context,
@@ -63,6 +67,7 @@ class _TimeSelectorState extends State<TimeSelector> {
       subtitle: Text(widget.subtitle),
       titleTextStyle: Theme.of(context).textTheme.headlineMedium,
       subtitleTextStyle: Theme.of(context).textTheme.bodySmall,
+    ),
     );
   }
 }
