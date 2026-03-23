@@ -42,12 +42,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i166.EasyLoadingHandler>(
         () => _i166.EasyLoadingHandler());
     gh.lazySingleton<_i178.DeepLinkServices>(() => _i178.DeepLinkServices());
+    gh.lazySingleton<_i579.PendingReservationOverlayService>(
+        () => _i579.PendingReservationOverlayService());
     gh.lazySingleton<_i215.RemoteConfigService>(
         () => _i215.RemoteConfigService());
     gh.lazySingleton<_i873.NotificationService>(
         () => _i873.NotificationService());
-    gh.lazySingleton<_i579.PendingReservationOverlayService>(
-        () => _i579.PendingReservationOverlayService());
     gh.factory<_i581.PinCodeCubit>(() => _i581.PinCodeCubit(
           gh<_i177.PinCodeRepository>(),
           gh<_i521.BiometryService>(),

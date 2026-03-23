@@ -184,11 +184,15 @@ class _ReservationProvider implements ReservationProvider {
     String ownerId, {
     int? perPage,
     int? page,
+    String? orderBy,
+    String? orderDir,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'_per_page': perPage,
       r'_page': page,
+      r'_order_by': orderBy,
+      r'_order_dir': orderDir,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

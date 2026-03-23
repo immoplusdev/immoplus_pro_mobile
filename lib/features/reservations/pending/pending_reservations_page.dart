@@ -62,55 +62,112 @@ class _PendingReservationsPageState extends State<PendingReservationsPage> {
             }
           },
           child: SafeArea(
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () async {
-                    _cubit.pagingController.refresh();
-                  },
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: CupertinoSlidingSegmentedControl<
+                        PendingReservationFilter>(
+                      groupValue: _cubit.currentFilter,
+                      children: const {
+                        PendingReservationFilter.enAttenteReponse:
+                            Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          child: Text(
+                            'En attente de réponse',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                        PendingReservationFilter.enAttentePaiement:
+                            Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          child: Text(
+                            'En attente de paiement',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
+                      },
+                      onValueChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _cubit.setFilter(value);
+                          });
+                        }
+                      },
+                      backgroundColor: AppColors.scafold,
+                      thumbColor: Colors.white,
+                    ),
+                  ),
                 ),
-                PagedSliverList<int, ReservationModel>(
-                  pagingController: _cubit.pagingController,
-                  builderDelegate: PagedChildBuilderDelegate(
-                    firstPageProgressIndicatorBuilder: (context) => Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: List.generate(
-                          5,
-                          (index) => const BookingLoadingCard(),
+                Expanded(
+                  child: CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    slivers: [
+                      CupertinoSliverRefreshControl(
+                        onRefresh: () async {
+                          _cubit.pagingController.refresh();
+                        },
+                      ),
+                      PagedSliverList<int, ReservationModel>(
+                        pagingController: _cubit.pagingController,
+                        builderDelegate: PagedChildBuilderDelegate(
+                          firstPageProgressIndicatorBuilder: (context) =>
+                              Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: List.generate(
+                                5,
+                                (index) => const BookingLoadingCard(),
+                              ),
+                            ),
+                          ),
+                          noItemsFoundIndicatorBuilder: (context) => Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 18),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Gap(80),
+                                SvgPicture.asset(
+                                  "assets/svgs/undraw/4.svg",
+                                  width: 200,
+                                ),
+                                const Gap(30),
+                                Text(
+                                  "Aucune reservation en attente",
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const Gap(20),
+                                Text(
+                                  _cubit.currentFilter ==
+                                          PendingReservationFilter
+                                              .enAttenteReponse
+                                      ? "Vous n'avez aucune reservation en attente de réponse pour le moment."
+                                      : "Vous n'avez aucune reservation en attente de paiement par le client pour le moment.",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                          itemBuilder: (context, item, index) =>
+                              PendingReservationCard(
+                            reservationModel: item,
+                            showActions: _cubit.currentFilter ==
+                                PendingReservationFilter.enAttenteReponse,
+                          ),
                         ),
                       ),
-                    ),
-                    noItemsFoundIndicatorBuilder: (context) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Gap(80),
-                          SvgPicture.asset(
-                            "assets/svgs/undraw/4.svg",
-                            width: 200,
-                          ),
-                          const Gap(30),
-                          Text(
-                            "Aucune reservation en attente",
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const Gap(20),
-                          const Text(
-                            "Vous n'avez aucune reservation en attente de reponse pour le moment.",
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                    itemBuilder: (context, item, index) =>
-                        PendingReservationCard(reservationModel: item),
+                    ],
                   ),
                 ),
               ],

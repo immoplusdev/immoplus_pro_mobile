@@ -11,9 +11,14 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
 
 class PendingReservationCard extends StatelessWidget {
-  const PendingReservationCard({super.key, required this.reservationModel});
+  const PendingReservationCard({
+    super.key,
+    required this.reservationModel,
+    this.showActions = true,
+  });
 
   final ReservationModel reservationModel;
+  final bool showActions;
 
   @override
   Widget build(BuildContext context) {
@@ -93,59 +98,61 @@ class PendingReservationCard extends StatelessWidget {
                   .titleLarge!
                   .copyWith(color: AppColors.primary),
             ),
-            const Gap(10),
-            BlocBuilder<PendingReservationsCubit, RequestState>(
-              builder: (context, state) {
-                final isLoading = state is REQUEST_LOADING;
-                return Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: isLoading
-                            ? null
-                            : () {
-                                context
-                                    .read<PendingReservationsCubit>()
-                                    .accepter(reservationModel.id);
-                              },
-                        icon: const Icon(Icons.check_circle_outline,
-                            color: Colors.white),
-                        label: const Text('ACCEPTER',
-                            style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+            if (showActions) ...[
+              const Gap(10),
+              BlocBuilder<PendingReservationsCubit, RequestState>(
+                builder: (context, state) {
+                  final isLoading = state is REQUEST_LOADING;
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  context
+                                      .read<PendingReservationsCubit>()
+                                      .accepter(reservationModel.id);
+                                },
+                          icon: const Icon(Icons.check_circle_outline,
+                              color: Colors.white),
+                          label: const Text('ACCEPTER',
+                              style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Gap(10),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: isLoading
-                            ? null
-                            : () {
-                                context
-                                    .read<PendingReservationsCubit>()
-                                    .refuser(reservationModel.id);
-                              },
-                        icon: const Icon(Icons.cancel_outlined,
-                            color: Colors.white),
-                        label: const Text('REFUSER',
-                            style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                      const Gap(10),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  context
+                                      .read<PendingReservationsCubit>()
+                                      .refuser(reservationModel.id);
+                                },
+                          icon: const Icon(Icons.cancel_outlined,
+                              color: Colors.white),
+                          label: const Text('REFUSER',
+                              style: TextStyle(color: Colors.white)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
-            ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ],
         ),
       ),

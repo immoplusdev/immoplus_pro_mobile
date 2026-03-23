@@ -42,10 +42,11 @@ abstract class ReservationProvider {
 
   @GET("/reservations/data/en-attente-reponse/owner/{ownerId}")
   Future<ReservationsCollection> getReservationsEnAttenteReponse(
-    @Path('ownerId') String ownerId, {
-    @Query('_per_page') int? perPage,
-    @Query('_page') int? page,
-  });
+      @Path('ownerId') String ownerId,
+      {@Query('_per_page') int? perPage,
+      @Query('_page') int? page,
+      @Query("_order_by") String? orderBy,
+      @Query("_order_dir") String? orderDir});
 
   @POST("/reservations/action/accepter/{id}")
   Future<ReservationResponse> accepterReservation(

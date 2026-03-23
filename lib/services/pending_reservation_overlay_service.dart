@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immoplus_pro/common/order_dir.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -24,6 +25,8 @@ class PendingReservationOverlayService {
         ownerId: ownerId,
         perPage: 1,
         page: 1,
+        orderBy: OrderByField.createdAt.value,
+        orderDir: OrderDir.desc.value,
       );
 
       if (result.data.isNotEmpty) return result.data.first;

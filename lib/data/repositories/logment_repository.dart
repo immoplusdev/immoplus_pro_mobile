@@ -262,6 +262,8 @@ class LogmentRepository {
     required String ownerId,
     int? perPage,
     int? page,
+    String? orderBy,
+    String? orderDir,
   }) async {
     try {
       final response = await ReservationProvider(DioClient().dio)
@@ -269,6 +271,8 @@ class LogmentRepository {
         ownerId,
         perPage: perPage,
         page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
       );
       return response;
     } on DioException catch (dioError) {
