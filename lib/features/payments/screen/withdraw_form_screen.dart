@@ -32,7 +32,6 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
   void initState() {
     amountController = TextEditingController();
     phoneNumberController = TextEditingController();
-    // selectedOperator = OrderPaymentController.items.first;
     super.initState();
   }
 
@@ -129,12 +128,14 @@ class _WithdrawFormScreenState extends State<WithdrawFormScreen> {
                       textInputAction: TextInputAction.done,
                       labelText: 'Numéro de telephone valide',
                       prefixIcon: const Icon(CupertinoIcons.phone),
-                      validator: (String? value) =>
-                          PaymentUtils.numberValidator(
-                              number: value!.replaceAll(' ', ''),
-                              operatorName: OrderPaymentController
-                                      .selectedOperator.value ??
-                                  ''),
+                      validator: (String? value) {
+                        if (selectedOperator?.value == null) {
+                          return 'Veuillez choisir un opérateur';
+                        }
+                        return PaymentUtils.numberValidator(
+                            number: value!.replaceAll(' ', ''),
+                            operatorName: selectedOperator?.value ?? "");
+                      },
                       inputFormatters: [
                         MaskTextInputFormatter(
                             mask: '## ## ## ## ##',
