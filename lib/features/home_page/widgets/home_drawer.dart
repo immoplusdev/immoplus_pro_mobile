@@ -19,9 +19,8 @@ import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
 import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
 import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
-import 'package:immoplus_pro/features/profil/update_password_page.dart';
+import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
-import 'package:immoplus_pro/features/shared_widgets/custom_chip.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -410,13 +409,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                       size: 20,
                     ),
-                    title: const Text('Modifier mot de passe'),
-                    onTap: () => context.pushNamed(UpdatePasswordPage.name),
-                    // trailing: Icon(
-                    //   FontAwesomeIcons.circleChevronRight,
-                    //   size: 15,
-                    //   color: AppColors.primary,
-                    // ),
+                    title: const Text('Changer mes identifiants de connexion'),
+                    trailing: Icon(
+                      FontAwesomeIcons.circleChevronRight,
+                      size: 15,
+                      color: AppColors.primary,
+                    ),
+                    onTap: () => context.pushNamed(ChangeCredentialsPage.name),
                   ),
                   const Divider(
                     height: 0,

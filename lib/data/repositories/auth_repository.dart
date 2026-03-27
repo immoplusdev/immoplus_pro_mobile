@@ -16,6 +16,7 @@ import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
+import 'package:immoplus_pro/data/models/auth/contact_change_models.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
@@ -307,6 +308,44 @@ class AuthRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to social login: $error');
+    }
+  }
+
+  static Future<ContactChangeResponse> requestContactChange(
+      {required RequestContactChangeBody body}) async {
+    try {
+      final response =
+          await AuthProvider(DioClient().dio).requestContactChange(body);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to request contact change: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to request contact change: $error');
+    }
+  }
+
+  static Future<UpdateUserResponseModel> confirmContactChange(
+      {required ConfirmContactChangeBody body}) async {
+    try {
+      final response =
+          await AuthProvider(DioClient().dio).confirmContactChange(body);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to confirm contact change: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      log("RequestResponseExeption");
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to confirm contact change: $error');
     }
   }
 

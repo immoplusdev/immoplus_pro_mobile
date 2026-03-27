@@ -2,15 +2,15 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:immoplus_pro/core/services/auth_service.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:immoplus_pro/core/logger/immo_logger.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
+import 'package:immoplus_pro/core/services/auth_service.dart';
 import 'package:immoplus_pro/data/enums/api_error_code.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:toastification/toastification.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 
 const _silentErrorCodes = {
   ApiErrorCode.jwtTokenExpired,
@@ -91,6 +91,7 @@ class ErrorInterceptor extends Interceptor {
   void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
     final context = NavigationService.navigatorKey.currentContext;
     final message = apiErrorResponse?.message ?? _manageResponse(response);
+
     if (context == null) {
       Fluttertoast.showToast(
         msg: message,
@@ -100,19 +101,9 @@ class ErrorInterceptor extends Interceptor {
       return;
     }
 
-    toastification.show(
-      type: ToastificationType.error,
-      context: context,
-      title: const Text("Oops, quelque chose s'est mal passé."),
-      description: Text(
-        message,
-        maxLines: 6,
-        overflow: TextOverflow.ellipsis,
-      ),
-      autoCloseDuration: const Duration(seconds: 5),
-      showProgressBar: false,
-      alignment: Alignment.bottomCenter,
-      style: ToastificationStyle.flatColored,
+    ToastUtils.showError(
+      title: "Oops, quelque chose s'est mal passé.",
+      description: message,
     );
   }
 
