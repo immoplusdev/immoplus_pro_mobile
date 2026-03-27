@@ -37,7 +37,7 @@ class _Constants {
   static const double shadowOffsetY = 4;
 
   static const double titleFontSize = 16;
-  static const double descriptionFontSize = 14;
+  static const double descriptionFontSize = 12;
   static const double iconSize = 22;
   static const double iconSpacing = 12;
   static const double descriptionSpacing = 4;
@@ -101,10 +101,10 @@ class FigmaToast extends StatelessWidget {
                   const SizedBox(height: _Constants.descriptionSpacing),
                   Text(
                     description!,
-                    style: const TextStyle(
-                      color: _Constants.descriptionColor,
-                      fontSize: _Constants.descriptionFontSize,
-                    ),
+                    style: TextStyle(
+                        color: color.withOpacity(.8),
+                        fontSize: _Constants.descriptionFontSize,
+                        fontWeight: FontWeight.w200),
                   ),
                 ],
               )
