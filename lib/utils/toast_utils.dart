@@ -1,163 +1,101 @@
 import 'package:flutter/material.dart';
-import 'package:toastification/toastification.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/widgets/figma_toast.dart';
+import 'package:toastification/toastification.dart';
 
 class ToastUtils {
-  /// Durée par défaut des toasts
   static const Duration _defaultDuration = Duration(seconds: 5);
 
-  /// Affiche un toast d'erreur
+  static BuildContext get _ctx =>
+      NavigationService.navigatorKey.currentContext!;
+
   static void showError({
     String? title,
     String? description,
     Duration? duration,
     Alignment? alignment,
-    bool showProgressBar = false,
-    ToastificationStyle style = ToastificationStyle.flatColored,
-  }) {
-    toastification.show(
-      type: ToastificationType.error,
-      context: NavigationService.navigatorKey.currentContext,
-      title: Text(title ?? "Une erreur est survenue"),
-      description: description != null
-          ? Text(
-              description,
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
-      autoCloseDuration: duration ?? _defaultDuration,
-      showProgressBar: showProgressBar,
-      alignment: alignment ?? Alignment.bottomCenter,
-      style: style,
-    );
-  }
+  }) =>
+      showCustomToast(
+        type: FigmaToastType.error,
+        title: title ?? 'Une erreur est survenue',
+        description: description,
+        duration: duration,
+        alignment: alignment,
+      );
 
-  /// Affiche un toast de succès
   static void showSuccess({
     String? title,
     String? description,
     Duration? duration,
     Alignment? alignment,
-    bool showProgressBar = false,
-    ToastificationStyle style = ToastificationStyle.flatColored,
-  }) {
-    toastification.show(
-      type: ToastificationType.success,
-      context: NavigationService.navigatorKey.currentContext,
-      title: Text(title ?? ""),
-      description: description != null
-          ? Text(
-              description,
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
-      autoCloseDuration: duration ?? _defaultDuration,
-      showProgressBar: showProgressBar,
-      alignment: alignment ?? Alignment.bottomCenter,
-      style: style,
-    );
-  }
+  }) =>
+      showCustomToast(
+        type: FigmaToastType.success,
+        title: title ?? 'Opération réussie',
+        description: description,
+        duration: duration,
+        alignment: alignment,
+      );
 
-  /// Affiche un toast d'information
   static void showInfo({
     required String title,
     String? description,
     Duration? duration,
     Alignment? alignment,
-    bool showProgressBar = false,
-    ToastificationStyle style = ToastificationStyle.flatColored,
-  }) {
-    toastification.show(
-      type: ToastificationType.info,
-      context: NavigationService.navigatorKey.currentContext,
-      title: Text(title),
-      description: description != null
-          ? Text(
-              description,
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-            )
-          : null,
-      autoCloseDuration: duration ?? _defaultDuration,
-      showProgressBar: showProgressBar,
-      alignment: alignment ?? Alignment.bottomCenter,
-      style: style,
-    );
-  }
+  }) =>
+      showCustomToast(
+        type: FigmaToastType.info,
+        title: title,
+        description: description,
+        duration: duration,
+        alignment: alignment,
+      );
 
-  /// Affiche un toast d'avertissement
   static void showWarning({
     required String title,
     String? description,
     Duration? duration,
     Alignment? alignment,
-    bool showProgressBar = false,
-    ToastificationStyle style = ToastificationStyle.flatColored,
-  }) {
-    toastification.show(
-      type: ToastificationType.warning,
-      context: NavigationService.navigatorKey.currentContext,
-      title: Text(title),
-      description: description != null ? Text(description) : null,
-      autoCloseDuration: duration ?? _defaultDuration,
-      showProgressBar: showProgressBar,
-      alignment: alignment ?? Alignment.bottomCenter,
-      style: style,
-    );
-  }
+  }) =>
+      showCustomToast(
+        type: FigmaToastType.warning,
+        title: title,
+        description: description,
+        duration: duration,
+        alignment: alignment,
+      );
 
-  /// Toast d'erreur rapide (méthode raccourcie)
-  static void error(String? message) {
-    showError(title: message ?? "Une erreur est survenue");
-  }
+  // ── Raccourcis ────────────────────────────────────────────────────────────
 
-  /// Toast de succès rapide (méthode raccourcie)
-  static void success(String? message) {
-    showSuccess(title: message ?? "Opération effectuée avec succès");
-  }
+  static void error(String? message) =>
+      showError(title: message ?? 'Une erreur est survenue');
 
-  /// Toast d'info rapide (méthode raccourcie)
-  static void info(String message) {
-    showInfo(title: message);
-  }
+  static void success(String? message) =>
+      showSuccess(title: message ?? 'Opération effectuée avec succès');
 
-  /// Toast d'avertissement rapide (méthode raccourcie)
-  static void warning(String message) {
-    showWarning(title: message);
-  }
+  static void info(String message) => showInfo(title: message);
 
-  /// Toast avec style personnalisé
-  static void showCustom({
-    required ToastificationType type,
+  static void warning(String message) => showWarning(title: message);
+
+  static void dismissAll() => toastification.dismissAll();
+
+  static void showCustomToast({
+    required FigmaToastType type,
     required String title,
     String? description,
     Duration? duration,
     Alignment? alignment,
-    bool showProgressBar = false,
-    ToastificationStyle style = ToastificationStyle.flatColored,
-    Widget? icon,
-    Color? primaryColor,
-    Color? backgroundColor,
   }) {
-    toastification.show(
-      type: type,
-      context: NavigationService.navigatorKey.currentContext,
-      title: Text(title),
-      description: description != null ? Text(description) : null,
+    toastification.showCustom(
+      context: _ctx,
       autoCloseDuration: duration ?? _defaultDuration,
-      showProgressBar: showProgressBar,
       alignment: alignment ?? Alignment.bottomCenter,
-      style: style,
-      icon: icon,
-      primaryColor: primaryColor,
-      backgroundColor: backgroundColor,
+      builder: (context, holder) => FigmaToast(
+        type: type,
+        title: title,
+        description: description,
+        holder: holder,
+      ),
     );
-  }
-
-  /// Ferme tous les toasts
-  static void dismissAll() {
-    toastification.dismissAll();
   }
 }

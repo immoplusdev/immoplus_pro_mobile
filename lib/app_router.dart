@@ -41,6 +41,14 @@ import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 // ── Pending reservations ──
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 
+// ── Contact change ──
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus_pro/data/enums/contact_change_type.dart';
+import 'package:immoplus_pro/features/contact_change/cubit/contact_change_cubit.dart';
+import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
+import 'package:immoplus_pro/features/contact_change/view/confirm_contact_change_page.dart';
+import 'package:immoplus_pro/features/contact_change/view/request_contact_change_page.dart';
+
 // ── Furniture module ──
 import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
 import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page.dart';
@@ -274,6 +282,37 @@ class AppRouter {
         path: PendingReservationsPage.routePath(),
         name: PendingReservationsPage.name,
         builder: (context, state) => const PendingReservationsPage(),
+      ),
+
+      // ── Contact change ──
+      GoRoute(
+        path: '/settings/credentials',
+        name: ChangeCredentialsPage.name,
+        builder: (context, state) => const ChangeCredentialsPage(),
+      ),
+      GoRoute(
+        path: '/settings/change-contact',
+        name: RequestContactChangePage.name,
+        builder: (context, state) {
+          final type = state.extra as ContactChangeType;
+          return BlocProvider(
+            create: (_) => ContactChangeCubit(),
+            child: RequestContactChangePage(type: type),
+          );
+        },
+        routes: [
+          GoRoute(
+            path: 'confirm',
+            name: ConfirmContactChangePage.name,
+            builder: (context, state) {
+              final type = state.extra as ContactChangeType;
+              return BlocProvider(
+                create: (_) => ContactChangeCubit(),
+                child: ConfirmContactChangePage(type: type),
+              );
+            },
+          ),
+        ],
       ),
 
       // ── Furniture module ──
