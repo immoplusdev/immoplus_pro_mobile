@@ -23,24 +23,21 @@ class DescriptionEditorPage extends StatefulWidget {
 class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
   late SelectionCardData currentSlected;
   late QuillController _controller = _controller = QuillController.basic();
-  ValueNotifier<bool> isEmpty = ValueNotifier<bool>(true);
+  late ValueNotifier<bool> isEmpty;
   @override
   void initState() {
     super.initState();
-    //PregressStepperResidenceCreating.setStepe(7);
-    if (ResidenceCreationModelBuilder().description.isNotEmpty) {
+    final existingDescription = ResidenceCreationModelBuilder().description;
+    if (existingDescription.isNotEmpty) {
       final mdDocument = md.Document(encodeHtml: false);
       final mdToDelta = MarkdownToDelta(markdownDocument: mdDocument);
-      // Convertir Markdown en Delta
-      final delta =
-          mdToDelta.convert(ResidenceCreationModelBuilder().description);
-
-      // Initialiser le QuillController avec le Delta
+      final delta = mdToDelta.convert(existingDescription);
       _controller = quill.QuillController(
         document: quill.Document.fromDelta(delta),
         selection: const TextSelection.collapsed(offset: 0),
       );
     }
+    isEmpty = ValueNotifier<bool>(_controller.document.isEmpty());
     //  Future.delayed(const Duration(seconds: 1),(){
 
     //  }),
@@ -128,32 +125,29 @@ class _DescriptionEditorPageState extends State<DescriptionEditorPage> {
         ],
       ),
       bottomNavigationBar: ValueListenableBuilder<bool>(
-              valueListenable: isEmpty,
-              builder: (context, isEmptyValue, child) {
-                return StepBottomButton(
-                  onNext: isEmptyValue
-                      ? null
-                      : () {
-                          _controller.document.toDelta();
-                          List deltaJson =
-                              _controller.document.toDelta().toJson();
+          valueListenable: isEmpty,
+          builder: (context, isEmptyValue, child) {
+            return StepBottomButton(
+              onNext: isEmptyValue
+                  ? null
+                  : () {
+                      _controller.document.toDelta();
+                      List deltaJson = _controller.document.toDelta().toJson();
 
-                          final html =
-                              DeltaToHTML.encodeJson(deltaJson).toString();
-                          ResidenceCreationModelBuilder().description =
-                              html2md.convert(html);
-                          CreationResidenceNavigation.goToPage(
-                              pageName: LogmentPricePage.name);
+                      final html = DeltaToHTML.encodeJson(deltaJson).toString();
+                      ResidenceCreationModelBuilder().description =
+                          html2md.convert(html);
+                      CreationResidenceNavigation.goToPage(
+                          pageName: LogmentPricePage.name);
 
-                          //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
-                        },
-                  onPrevious: () {
-                    CreationResidenceNavigation.goToPage(
-                        pageName: RulesPage.name);
-                    //CreateLogmentRouter.router.goNamed(RulesPage.name);
-                  },
-                );
-              }),
+                      //CreateLogmentRouter.router.goNamed(LogmentPricePage.name);
+                    },
+              onPrevious: () {
+                CreationResidenceNavigation.goToPage(pageName: RulesPage.name);
+                //CreateLogmentRouter.router.goNamed(RulesPage.name);
+              },
+            );
+          }),
     );
   }
 }

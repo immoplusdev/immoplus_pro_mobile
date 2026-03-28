@@ -49,9 +49,11 @@ class _CreateLodgmentPageState extends State<CreateLodgmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         title: Text(
-          ResidenceCreationModelBuilder().editing ? 'Modifier residence' : 'Nouvelle residence',
+          ResidenceCreationModelBuilder().editing
+              ? 'Modifier residence'
+              : 'Nouvelle residence',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
