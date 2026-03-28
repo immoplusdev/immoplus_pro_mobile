@@ -188,26 +188,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     },
                     horizontalTitleGap: 0,
                     leading: ImmoIcon(ImmoIcons.resi, color: AppColors.primary),
-
-                    // Icon(
-                    //   FontAwesomeIcons.key,
-                    //   color: AppColors.primary,
-                    //   size: 20,
-                    // ),
                     title: const Text('Mes résidences'),
-
                     trailing: Icon(
                       FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
                   ),
-                  // if (currentUser!.isEntreprise)
                   const Divider(
                     height: 0,
                     thickness: 0.8,
                   ),
-                  // if (currentUser!.isEntreprise)
                   ListTile(
                     tileColor: Colors.white,
                     // Arrondi en bas seulement si "Mes meubles" est masqué (customer)
@@ -325,12 +316,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       color: AppColors.primary,
                     ),
                   ),
-                  // if (currentUser!.isEntreprise)
                   const Divider(
                     height: 0,
                     thickness: 0.8,
                   ),
-                  // if (currentUser!.isEntreprise)
                   ListTile(
                     tileColor: Colors.white,
                     shape: const RoundedRectangleBorder(
@@ -441,41 +430,47 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       size: 20,
                     ),
                     title: const Text("Conditions générales d'utilisation"),
-                  ),
-                  const Divider(
-                    height: 0,
-                    thickness: 0.8,
-                  ),
-                  ListTile(
-                    tileColor: Colors.white,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
                         bottomRight: Radius.circular(20),
                       ),
                     ),
-                    onTap: () {
-                      context.pushNamed(
-                        ContractPage.routeName,
-                        extra: {
-                          'isSigned': false,
-                          'mode': ContractMode.sign,
-                        },
-                      );
-                    },
-                    horizontalTitleGap: 0,
-                    leading: Icon(
-                      Icons.description_outlined,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                    title: const Text('Mon Contrat'),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
-                      size: 15,
-                      color: AppColors.primary,
-                    ),
                   ),
+                  // const Divider(
+                  //   height: 0,
+                  //   thickness: 0.8,
+                  // ),
+                  // ListTile(
+                  //   tileColor: Colors.white,
+                  //   shape: const RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.only(
+                  //       bottomLeft: Radius.circular(20),
+                  //       bottomRight: Radius.circular(20),
+                  //     ),
+                  //   ),
+                  //   onTap: () {
+                  //     context.pushNamed(
+                  //       ContractPage.routeName,
+                  //       extra: {
+                  //         'isSigned': false,
+                  //         'mode': ContractMode.sign,
+                  //       },
+                  //     );
+                  //   },
+                  //   horizontalTitleGap: 0,
+                  //   leading: Icon(
+                  //     Icons.description_outlined,
+                  //     color: AppColors.primary,
+                  //     size: 20,
+                  //   ),
+                  //   title: const Text('Mon Contrat'),
+                  //   trailing: Icon(
+                  //     FontAwesomeIcons.circleChevronRight,
+                  //     size: 15,
+                  //     color: AppColors.primary,
+                  //   ),
+                  // ),
                   const Gap(20),
                   ListTile(
                     horizontalTitleGap: 0,
