@@ -258,6 +258,63 @@ class LogmentRepository {
     }
   }
 
+  static Future<ReservationsCollection> getReservationsEnAttenteReponse({
+    required String ownerId,
+    int? perPage,
+    int? page,
+    String? orderBy,
+    String? orderDir,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .getReservationsEnAttenteReponse(
+        ownerId,
+        perPage: perPage,
+        page: page,
+        orderBy: orderBy,
+        orderDir: orderDir,
+      );
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load reservations: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to load reservations: $error');
+    }
+  }
+
+  static Future<ReservationResponse> accepterReservation(String id) async {
+    try {
+      final response =
+          await ReservationProvider(DioClient().dio).accepterReservation(id);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to accept reservation: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to accept reservation: $error');
+    }
+  }
+
+  static Future<ReservationResponse> refuserReservation(
+    String id, {
+    String? notes,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .refuserReservation(id, notes: notes);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to refuse reservation: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to refuse reservation: $error');
+    }
+  }
+
   static Future<ResidenceResponse> updateUnavailabilityDates({
     required String id,
     required List<String> dates,

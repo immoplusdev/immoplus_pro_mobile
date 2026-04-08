@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/data/models/reservations/status_reservation.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'client_model.dart';
 import 'proprietaire_model.dart';
@@ -24,6 +25,8 @@ class ReservationModel with _$ReservationModel {
     @Default('') String clientPhoneNumber,
     @Default('') String createdAt,
     @Default('') String updatedAt,
+    @Default(null) String? delaisProprietaireReponse,
+    @Default(null) String? delaisPaiementClient,
     @Default(ResidenceModel()) ResidenceModel residence,
     @Default(ClientModel()) ClientModel client,
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,
@@ -31,4 +34,9 @@ class ReservationModel with _$ReservationModel {
 
   factory ReservationModel.fromJson(Map<String, dynamic> json) =>
       _$ReservationModelFromJson(json);
+}
+
+extension ReservationModelX on ReservationModel {
+  StatusReservation? get statusEnum =>
+      StatusReservation.fromString(statusReservation);
 }

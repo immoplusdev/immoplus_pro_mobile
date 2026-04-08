@@ -9,6 +9,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
+import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -139,6 +140,7 @@ class _VisitPageState extends State<VisitPage> {
   }
 
   _tapCreateEstate() async {
+    EstateCreationModelBuilder().reset();
     final result = await AppRouter.router.pushNamed(CreateEstatePage.name);
     if (result == true && mounted) {
       AppRouter.router.pushNamed(EstatesPage.name);

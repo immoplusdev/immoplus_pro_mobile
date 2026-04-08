@@ -29,7 +29,7 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
 
-  StatusFacture _selectedStatus = StatusFacture.all;
+  StatusFacture _selectedStatus = StatusFacture.paid;
 
   Map<String, dynamic>? _buildWhereClause() {
     final conditions = <String>[];
@@ -75,12 +75,12 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
     });
   }
 
-  void _onFilterChanged(StatusFacture status) {
-    setState(() {
-      _selectedStatus = status;
-    });
-    _pagingController.refresh();
-  }
+  // void _onFilterChanged(StatusFacture status) {
+  //   setState(() {
+  //     _selectedStatus = status;
+  //   });
+  //   _pagingController.refresh();
+  // }
 
   @override
   void initState() {
@@ -114,52 +114,52 @@ class _BookingHistoryPageState extends State<BookingHistoryPage> {
                 _pagingController.refresh();
               },
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
-                child: Row(
-                  children: StatusFacture.values.map((status) {
-                    final isSelected = _selectedStatus == status;
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: GestureDetector(
-                        onTap: () => _onFilterChanged(status),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.transparent,
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : Colors.grey.shade300,
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Text(
-                            status.label,
-                            style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey.shade700,
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
+            //     child: Row(
+            //       children: StatusFacture.values.map((status) {
+            //         final isSelected = _selectedStatus == status;
+            //         return Padding(
+            //           padding: const EdgeInsets.only(right: 10),
+            //           child: GestureDetector(
+            //             onTap: () => _onFilterChanged(status),
+            //             child: Container(
+            //               padding: const EdgeInsets.symmetric(
+            //                 horizontal: 20,
+            //                 vertical: 10,
+            //               ),
+            //               decoration: BoxDecoration(
+            //                 color: isSelected
+            //                     ? AppColors.primary
+            //                     : Colors.transparent,
+            //                 border: Border.all(
+            //                   color: isSelected
+            //                       ? AppColors.primary
+            //                       : Colors.grey.shade300,
+            //                   width: 1.5,
+            //                 ),
+            //                 borderRadius: BorderRadius.circular(25),
+            //               ),
+            //               child: Text(
+            //                 status.label,
+            //                 style: TextStyle(
+            //                   color: isSelected
+            //                       ? Colors.white
+            //                       : Colors.grey.shade700,
+            //                   fontWeight: isSelected
+            //                       ? FontWeight.w600
+            //                       : FontWeight.normal,
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         );
+            //       }).toList(),
+            //     ),
+            //   ),
+            // ),
             PagedSliverList<int, ReservationModel>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(

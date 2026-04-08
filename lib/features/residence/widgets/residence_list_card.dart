@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
@@ -96,31 +97,34 @@ class ResidenceListCard extends StatelessWidget {
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GestureDetector(
-                              onTap: () async {
-                                // Code for the placeholder:
-                                final String shareUrl =
-                                    'https://app.immoplus.ci/residence_detail/${residence.id}';
+                          if (residence.validationStatus ==
+                              ValidationStatus.valide)
+                            GestureDetector(
+                                onTap: () async {
+                                  // Code for the placeholder:
+                                  final String shareUrl =
+                                      'https://app.immoplus.ci/residence_detail/${residence.id}';
 
-                                final String shareText =
-                                    'Découvrez la résidence ${residence.nom} sur ImmoPlus.\n'
-                                    'Prix de réservation : ${residence.prixReservation} F.\n'
-                                    'Lien : $shareUrl';
+                                  final String shareText =
+                                      'Découvrez la résidence ${residence.nom} sur ImmoPlus.\n'
+                                      'Prix de réservation : ${residence.prixReservation} F.\n'
+                                      'Lien : $shareUrl';
 
-                                final origin =
-                                    ShareService.getSharePositionFromKey(
-                                        _shareButtonKey);
-                                await ShareService.shareText(
-                                    text: shareText,
-                                    sharePositionOrigin: origin,
-                                    subject: 'Partager ma résidence ImmoPlus');
-                              },
-                              child: FaIcon(
-                                key: _shareButtonKey,
-                                CupertinoIcons.share,
-                                color: AppColors.primary,
-                                size: 19,
-                              )),
+                                  final origin =
+                                      ShareService.getSharePositionFromKey(
+                                          _shareButtonKey);
+                                  await ShareService.shareText(
+                                      text: shareText,
+                                      sharePositionOrigin: origin,
+                                      subject:
+                                          'Partager ma résidence ImmoPlus');
+                                },
+                                child: FaIcon(
+                                  key: _shareButtonKey,
+                                  CupertinoIcons.share,
+                                  color: AppColors.primary,
+                                  size: 19,
+                                )),
                         ],
                       ),
 

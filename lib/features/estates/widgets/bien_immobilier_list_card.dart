@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
@@ -95,32 +96,34 @@ class BienImmoblierListCard extends StatelessWidget {
                                 .copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GestureDetector(
-                            onTap: () async {
-                              // Code for the placeholder:
-                              final String shareUrl =
-                                  'https://app.immoplus.ci/residence_detail/${bienImmobilierModel.id}';
+                        if (bienImmobilierModel.validationStatus ==
+                            ValidationStatus.valide)
+                          GestureDetector(
+                              onTap: () async {
+                                // Code for the placeholder:
+                                final String shareUrl =
+                                    'https://app.immoplus.ci/residence_detail/${bienImmobilierModel.id}';
 
-                              final String shareText =
-                                  'Découvrez la résidence ${bienImmobilierModel.nom} sur ImmoPlus.\n'
-                                  'Prix de réservation : ${bienImmobilierModel.prix} F/${bienImmobilierModel.typeLocation}.\n'
-                                  'Lien : $shareUrl';
+                                final String shareText =
+                                    'Découvrez la résidence ${bienImmobilierModel.nom} sur ImmoPlus.\n'
+                                    'Prix de réservation : ${bienImmobilierModel.prix} F/${bienImmobilierModel.typeLocation}.\n'
+                                    'Lien : $shareUrl';
 
-                              final origin =
-                                  ShareService.getSharePositionFromKey(
-                                      _shareButtonKey);
-                              await ShareService.shareText(
-                                text: shareText,
-                                subject: 'Partager ce bien immobilier',
-                                sharePositionOrigin: origin,
-                              );
-                            },
-                            child: FaIcon(
-                              key: _shareButtonKey,
-                              CupertinoIcons.share,
-                              color: AppColors.primary,
-                              size: 19,
-                            )),
+                                final origin =
+                                    ShareService.getSharePositionFromKey(
+                                        _shareButtonKey);
+                                await ShareService.shareText(
+                                  text: shareText,
+                                  subject: 'Partager ce bien immobilier',
+                                  sharePositionOrigin: origin,
+                                );
+                              },
+                              child: FaIcon(
+                                key: _shareButtonKey,
+                                CupertinoIcons.share,
+                                color: AppColors.primary,
+                                size: 19,
+                              )),
                       ],
                     ),
 

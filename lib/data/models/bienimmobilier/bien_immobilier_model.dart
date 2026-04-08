@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
 import 'package:immoplus_pro/data/models/residence/piece_model.dart';
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
@@ -44,4 +45,9 @@ class BienImmobilierModel with _$BienImmobilierModel {
 
   factory BienImmobilierModel.fromJson(Map<String, dynamic> json) =>
       _$BienImmobilierModelFromJson(json);
+}
+
+extension BienImmobilierModelX on BienImmobilierModel {
+  ValidationStatus get validationStatus =>
+      ValidationStatus.fromString(statusValidation);
 }
