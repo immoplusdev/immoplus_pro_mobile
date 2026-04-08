@@ -11,6 +11,7 @@ import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart'; // ✅ Ajoutez cet import
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
 import 'package:immoplus_pro/widgets/social_button_widget.dart';
@@ -41,26 +42,32 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
   }
 
   Future<void> _sendOtpCode() async {
-    if (_isLoading) return;
+    if (_isLoading || !mounted) return;
+    await AppDialog.show(
+      title: 'Envoyer le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _doSendOtp(useWhatsapp: true),
+      onSecond: () => _doSendOtp(useWhatsapp: false),
+    );
+  }
 
-    setState(() {
-      _isLoading = true;
-    });
-
+  Future<void> _doSendOtp({required bool useWhatsapp}) async {
+    setState(() => _isLoading = true);
     try {
-      final response = await AuthRepository.sendOtp(
-        body: SendOptModel(
-          phoneNumber: PhoneNumberHandler.formatPhoneNumber(
-            phoneNumber,
-          ),
-        ),
+      final body = SendOptModel(
+        phoneNumber: PhoneNumberHandler.formatPhoneNumber(phoneNumber),
       );
+      final response = useWhatsapp
+          ? await AuthRepository.sendWhatsappOtp(body: body)
+          : await AuthRepository.sendOtp(body: body);
 
       if (!mounted) return;
 
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
         FocusScope.of(context).unfocus();
-
         OTPState.phoneNumber = phoneNumber;
         widget.pageController.nextPage(
           duration: const Duration(milliseconds: 300),
@@ -79,11 +86,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         text: "Envoi de OTP code échoué, veuillez réessayer",
       );
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -167,3 +170,4 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     );
   }
 }
+

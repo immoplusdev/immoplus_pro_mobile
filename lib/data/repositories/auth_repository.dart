@@ -140,6 +140,23 @@ class AuthRepository {
     }
   }
 
+  static Future<HttpResponse> sendWhatsappOtp(
+      {required SendOptModel body}) async {
+    try {
+      final response =
+          await AuthProvider(DioClient().dio).sendWhatsappOtp(body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      inspect(error);
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
   static Future<AccountCreationResponse> loginWithOtp(
       {required LoginOtpBody body}) async {
     try {

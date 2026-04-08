@@ -14,6 +14,7 @@ import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
 import 'package:sms_autofill/sms_autofill.dart';
@@ -44,6 +45,45 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
 
   void _listenForCode() async {
     await SmsAutoFill().listenForCode();
+  }
+
+  Future<void> _resendOtp() async {
+    await AppDialog.show(
+      title: 'Renvoyer le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _doResendOtp(useWhatsapp: true),
+      onSecond: () => _doResendOtp(useWhatsapp: false),
+    );
+  }
+
+  Future<void> _doResendOtp({required bool useWhatsapp}) async {
+    try {
+      final body = SendOptModel(
+        phoneNumber: PhoneNumberHandler.formatPhoneNumber(OTPState.phoneNumber),
+      );
+      final response = useWhatsapp
+          ? await AuthRepository.sendWhatsappOtp(body: body)
+          : await AuthRepository.sendOtp(body: body);
+
+      if (!mounted) return;
+      if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
+        FocusScope.of(context).unfocus();
+      } else {
+        CustomPopup.showErrorToast(
+          text: 'Envoi du code échoué, veuillez ressayer',
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      CustomPopup.toast(
+        color: Colors.red,
+        toastPosition: EasyLoadingToastPosition.bottom,
+        text: "Envoi de OTP code échoué, veuillez réessayer",
+      );
+    }
   }
 
   @override
@@ -181,31 +221,7 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
                     fontWeight: FontWeight.bold,
                   ),
                   recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      try {
-                        final response = await AuthRepository.sendOtp(
-                          body: SendOptModel(
-                            phoneNumber: PhoneNumberHandler.formatPhoneNumber(
-                              OTPState.phoneNumber,
-                            ),
-                          ),
-                        );
-                        if (StatusCodeHandler.isSuccess(
-                            response.response.statusCode)) {
-                          FocusScope.of(context).unfocus();
-                        } else {
-                          CustomPopup.showErrorToast(
-                            text: 'Envoi du code échoué, veuillez ressayer',
-                          );
-                        }
-                      } catch (e) {
-                        CustomPopup.toast(
-                          color: Colors.red,
-                          toastPosition: EasyLoadingToastPosition.bottom,
-                          text: "Envoi de OTP code échoué, veuillez réessayer",
-                        );
-                      }
-                    },
+                    ..onTap = _resendOtp,
                 ),
               ],
             ),
@@ -215,3 +231,4 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
     );
   }
 }
+
