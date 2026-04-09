@@ -70,13 +70,20 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   // }
 
   /// Getter pour determiner si on doit afficher le numéro du client
-  bool shouldShowClientPhone(DemandeVisitResponse demandeVisitResponse) {
+  (bool, String) shouldShowClientPhone(
+      DemandeVisitResponse demandeVisitResponse) {
     // Cas 1: Express - afficher si on a payé
     if (hasExpress(demandeVisitResponse)) {
-      return hasPaid(demandeVisitResponse);
+      return (
+        hasPaid(demandeVisitResponse),
+        "Vous avez pas accès au numéro du client tant que celui ci n'a pas payé la visite"
+      );
     }
     // Cas 2: Normal (pas express) - afficher
-    return true;
+    return (
+      demandeVisitResponse.data.datesDemandeVisite.isNotEmpty,
+      "Vous avez pas accès au numéro du client tant que vous n'avez pas programmé la visite"
+    );
   }
 
   @override
@@ -94,7 +101,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
 
           final clientPhoneNumber =
               state.demandeVisitResponse.data.client?.phoneNumber ?? "";
-
+          final (canShow, message) =
+              shouldShowClientPhone(state.demandeVisitResponse);
           return Scaffold(
             backgroundColor: AppColors.scafold,
             body: SafeArea(
@@ -294,36 +302,6 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                         ),
                       ),
                     ),
-                  const SliverToBoxAdapter(child: Divider()),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    sliver: SliverToBoxAdapter(
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        tileColor: Colors.white,
-                        onTap: () {
-                          ContactUtils.showContact(id: widget.id);
-                        },
-                        horizontalTitleGap: 0,
-                        leading: Icon(
-                          FontAwesomeIcons.key,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        title: const AutoSizeText(
-                          'Contacter nous',
-                          maxLines: 1,
-                        ),
-                        trailing: Icon(
-                          FontAwesomeIcons.circleChevronRight,
-                          size: 15,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ),
                   const SliverToBoxAdapter(
                     child: Divider(
                       height: 0,
@@ -334,7 +312,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     sliver: SliverToBoxAdapter(
-                      child: shouldShowClientPhone(state.demandeVisitResponse)
+                      child: canShow
                           ? ListTile(
                               tileColor: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -359,8 +337,37 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                 color: AppColors.primary,
                               ),
                             )
-                          : Text(
-                              "Vous avez pas accès au numéro du client tant que celui ci n'a pas payé la visite"),
+                          : Text(message),
+                    ),
+                  ),
+                  const SliverToBoxAdapter(child: Divider()),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    sliver: SliverToBoxAdapter(
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        tileColor: Colors.white,
+                        onTap: () {
+                          ContactUtils.showContact(id: widget.id);
+                        },
+                        horizontalTitleGap: 0,
+                        leading: Icon(
+                          FontAwesomeIcons.key,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        title: const AutoSizeText(
+                          'Service client',
+                          maxLines: 1,
+                        ),
+                        trailing: Icon(
+                          FontAwesomeIcons.circleChevronRight,
+                          size: 15,
+                          color: AppColors.primary,
+                        ),
+                      ),
                     ),
                   ),
                 ],

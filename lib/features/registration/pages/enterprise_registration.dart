@@ -8,7 +8,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/registration_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart';
 import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
-import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/cgu_checkbox.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
@@ -215,46 +215,7 @@ class _EnterpriseRegistrationPageState
 
                 // CGU Checkbox
                 SliverToBoxAdapter(
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: _cguNotifier,
-                    builder: (BuildContext context, bool value, child) {
-                      return Row(
-                        children: [
-                          Checkbox(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            value: value,
-                            fillColor: value
-                                ? WidgetStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : WidgetStateProperty.all(Colors.white),
-                            onChanged: (val) {
-                              _cguNotifier.value = !_cguNotifier.value;
-                            },
-                          ),
-                          const Text("j'approuve les"),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const GeneralConditionPage(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Termes & conditions',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  child: CguCheckbox(cguNotifier: _cguNotifier),
                 ),
 
                 // File Uploader

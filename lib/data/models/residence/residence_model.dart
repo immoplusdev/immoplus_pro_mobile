@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
 import 'package:immoplus_pro/data/models/residence/date_reservation_model.dart';
 import 'package:immoplus_pro/data/models/residence/piece_model.dart';
@@ -39,4 +40,9 @@ class ResidenceModel with _$ResidenceModel {
 
   factory ResidenceModel.fromJson(Map<String, dynamic> json) =>
       _$ResidenceModelFromJson(json);
+}
+
+extension ResidenceModelX on ResidenceModel {
+  ValidationStatus get validationStatus =>
+      ValidationStatus.fromString(statusValidation);
 }

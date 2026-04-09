@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,13 +14,13 @@ import 'package:immoplus_pro/features/home_page/pages/booking_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/visit_page.dart';
 import 'package:immoplus_pro/features/home_page/utils/home_router.dart';
 import 'package:immoplus_pro/features/home_page/widgets/home_drawer.dart';
+import 'package:immoplus_pro/features/home_page/widgets/pending_reservation_banner.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
-import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
 
 class HomePage extends StatefulWidget {
@@ -241,10 +240,19 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         drawer: const HomeDrawer(),
-        body: Router(
-          routerDelegate: HomeRouter.router.routerDelegate,
-          routeInformationParser: HomeRouter.router.routeInformationParser,
-          routeInformationProvider: HomeRouter.router.routeInformationProvider,
+        body: Column(
+          children: [
+            const ReservationPendingBanner(),
+            Expanded(
+              child: Router(
+                routerDelegate: HomeRouter.router.routerDelegate,
+                routeInformationParser:
+                    HomeRouter.router.routeInformationParser,
+                routeInformationProvider:
+                    HomeRouter.router.routeInformationProvider,
+              ),
+            ),
+          ],
         ),
       ),
     );

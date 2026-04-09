@@ -55,6 +55,7 @@ class _RulesPageState extends State<RulesPage> {
               onUpdate: (p0) {
                 setState(() {
                   ResidenceCreationModelBuilder().heureEntree = p0;
+                  ResidenceCreationModelBuilder().heureDepart = p0;
                 });
               },
               icon: const Icon(
@@ -70,11 +71,8 @@ class _RulesPageState extends State<RulesPage> {
               initialValue: ResidenceCreationModelBuilder().heureDepart.isEmpty
                   ? '00:00'
                   : ResidenceCreationModelBuilder().heureDepart,
-              onUpdate: (p0) {
-                setState(() {
-                  ResidenceCreationModelBuilder().heureDepart = p0;
-                });
-              },
+              onUpdate: null,
+              disabled: true,
               icon: const Icon(
                 FontAwesomeIcons.doorClosed,
                 color: Colors.black,
@@ -136,31 +134,29 @@ class _RulesPageState extends State<RulesPage> {
         ],
       ),
       bottomNavigationBar: StepBottomButton(
-              onPrevious: () {
+        onPrevious: () {
+          CreationResidenceNavigation.goToPage(pageName: VideoLogmentPage.name);
+          // CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
+        },
+        onNext: (ResidenceCreationModelBuilder().dureeMaxSejour == 0 ||
+                ResidenceCreationModelBuilder().dureeMinSejour == 0 ||
+                ResidenceCreationModelBuilder().heureEntree.isEmpty)
+            ? null
+            : () {
+                final builder = ResidenceCreationModelBuilder();
+                if (builder.dureeMinSejour >= builder.dureeMaxSejour) {
+                  // Afficher un message d'erreur
+                  ToastUtils.showError(
+                    description:
+                        "La durée minimum doit être inférieure à la durée maximum",
+                  );
+                  return; // ❌ Ne pas naviguer
+                }
                 CreationResidenceNavigation.goToPage(
-                    pageName: VideoLogmentPage.name);
-                // CreateLogmentRouter.router.goNamed(VideoLogmentPage.name);
+                    pageName: DescriptionEditorPage.name);
+                //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
               },
-              onNext: (ResidenceCreationModelBuilder().dureeMaxSejour == 0 ||
-                      ResidenceCreationModelBuilder().dureeMinSejour == 0 ||
-                      ResidenceCreationModelBuilder().heureDepart.isEmpty ||
-                      ResidenceCreationModelBuilder().heureEntree.isEmpty)
-                  ? null
-                  : () {
-                      final builder = ResidenceCreationModelBuilder();
-                      if (builder.dureeMinSejour >= builder.dureeMaxSejour) {
-                        // Afficher un message d'erreur
-                        ToastUtils.showError(
-                          description:
-                              "La durée minimum doit être inférieure à la durée maximum",
-                        );
-                        return; // ❌ Ne pas naviguer
-                      }
-                      CreationResidenceNavigation.goToPage(
-                          pageName: DescriptionEditorPage.name);
-                      //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
-                    },
-            ),
+      ),
     );
   }
 }

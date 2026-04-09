@@ -13,6 +13,7 @@ import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
+import 'package:immoplus_pro/data/models/auth/contact_change_models.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_body.dart';
@@ -89,4 +90,14 @@ abstract class AuthProvider {
 
   @GET('/configs')
   Future<ConfigModel> getCongig();
+
+  @POST('/users/request-contact-change')
+  Future<ContactChangeResponse> requestContactChange(
+    @Body() RequestContactChangeBody body,
+  );
+
+  @POST('/users/confirm-contact-change')
+  Future<UpdateUserResponseModel> confirmContactChange(
+    @Body() ConfirmContactChangeBody body,
+  );
 }

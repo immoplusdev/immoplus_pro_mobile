@@ -1,0 +1,4 @@
+enum ContractMode {
+  sign,
+  read,
+}

@@ -25,24 +25,22 @@ class _EstateDescriptionEditorPageState
     extends State<EstateDescriptionEditorPage> {
   late SelectionCardData currentSlected;
   late QuillController _controller = _controller = QuillController.basic();
-  ValueNotifier<bool> isEmpty = ValueNotifier<bool>(true);
+  late ValueNotifier<bool> isEmpty;
 
   @override
   void initState() {
     super.initState();
-    //PregressStepperEstateCreating.setStepe(8);
-    if (EstateCreationModelBuilder().description.isNotEmpty) {
+    final existingDescription = EstateCreationModelBuilder().description;
+    if (existingDescription.isNotEmpty) {
       final mdDocument = md.Document(encodeHtml: false);
       final mdToDelta = MarkdownToDelta(markdownDocument: mdDocument);
-      // Convertir Markdown en Delta
-      final delta = mdToDelta.convert(EstateCreationModelBuilder().description);
-
-      // Initialiser le QuillController avec le Delta
+      final delta = mdToDelta.convert(existingDescription);
       _controller = quill.QuillController(
         document: quill.Document.fromDelta(delta),
         selection: const TextSelection.collapsed(offset: 0),
       );
     }
+    isEmpty = ValueNotifier<bool>(_controller.document.isEmpty());
     //  Future.delayed(const Duration(seconds: 1),(){
 
     //  }),
@@ -115,29 +113,27 @@ class _EstateDescriptionEditorPageState
         ],
       ),
       bottomNavigationBar: ValueListenableBuilder<bool>(
-              valueListenable: isEmpty,
-              builder: (context, isEmptyValue, child) {
-                return StepBottomButton(
-                  onNext: isEmptyValue
-                      ? null
-                      : () {
-                          _controller.document.toDelta();
-                          List deltaJson =
-                              _controller.document.toDelta().toJson();
+          valueListenable: isEmpty,
+          builder: (context, isEmptyValue, child) {
+            return StepBottomButton(
+              onNext: isEmptyValue
+                  ? null
+                  : () {
+                      _controller.document.toDelta();
+                      List deltaJson = _controller.document.toDelta().toJson();
 
-                          final html =
-                              DeltaToHTML.encodeJson(deltaJson).toString();
-                          EstateCreationModelBuilder().description =
-                              html2md.convert(html);
-                          CreationEstateNavigation.goToPage(
-                              pageName: EstateLogmentPricePage.name);
-                        },
-                  onPrevious: () {
-                    CreationEstateNavigation.goToPage(
-                        pageName: EstateVideoLogmentPage.name);
-                  },
-                );
-              }),
+                      final html = DeltaToHTML.encodeJson(deltaJson).toString();
+                      EstateCreationModelBuilder().description =
+                          html2md.convert(html);
+                      CreationEstateNavigation.goToPage(
+                          pageName: EstateLogmentPricePage.name);
+                    },
+              onPrevious: () {
+                CreationEstateNavigation.goToPage(
+                    pageName: EstateVideoLogmentPage.name);
+              },
+            );
+          }),
     );
   }
 }

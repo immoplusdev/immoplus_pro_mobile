@@ -2,6 +2,9 @@
 
 part of 'furniture_collection_response.dart';
 
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
 
 _$FurnitureCollectionResponseImpl _$$FurnitureCollectionResponseImplFromJson(
         Map<String, dynamic> json) =>

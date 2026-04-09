@@ -184,28 +184,28 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    add,
-    basket,
-    bell,
-    compte,
-    delet,
-    empt,
-    empty,
-    failed,
-    find,
-    go,
-    history,
-    home,
-    location,
-    logoImmo,
-    map,
-    panier,
-    pending,
-    profil,
-    search,
-    substract,
-    success,
-  ];
+        add,
+        basket,
+        bell,
+        compte,
+        delet,
+        empt,
+        empty,
+        failed,
+        find,
+        go,
+        history,
+        home,
+        location,
+        logoImmo,
+        map,
+        panier,
+        pending,
+        profil,
+        search,
+        substract,
+        success,
+      ];
 }
 
 class $AssetsImgGen {
@@ -266,22 +266,22 @@ class $AssetsImgGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    email,
-    img,
-    immeubleDeBureaux,
-    logo,
-    logoPlain,
-    orderJpg,
-    orderPng,
-    panorama,
-    panorama2,
-    panoramaCropped,
-    serviceJpg,
-    servicePng,
-    utilisateur,
-    visit,
-    voidImage,
-  ];
+        email,
+        img,
+        immeubleDeBureaux,
+        logo,
+        logoPlain,
+        orderJpg,
+        orderPng,
+        panorama,
+        panorama2,
+        panoramaCropped,
+        serviceJpg,
+        servicePng,
+        utilisateur,
+        visit,
+        voidImage,
+      ];
 }
 
 class $AssetsLottiesGen {
@@ -301,7 +301,16 @@ class $AssetsLottiesGen {
       'assets/lotties/furniture-isolated-edited.json';
 
   /// File path: assets/lotties/furniture.json
-  String get furniture => 'assets/lotties/furniture_1.json';
+  String get furniture => 'assets/lotties/furniture.json';
+
+  /// File path: assets/lotties/furniture_1.json
+  String get furniture1 => 'assets/lotties/furniture_1.json';
+
+  /// File path: assets/lotties/furniture_2.json
+  String get furniture2 => 'assets/lotties/furniture_2.json';
+
+  /// File path: assets/lotties/furniture_3.json
+  String get furniture3 => 'assets/lotties/furniture_3.json';
 
   /// File path: assets/lotties/furnitures_s1.json
   String get furnituresS1 => 'assets/lotties/furnitures_s1.json';
@@ -326,19 +335,22 @@ class $AssetsLottiesGen {
 
   /// List of all assets
   List<String> get values => [
-    cheking,
-    deliveryProgress,
-    fail,
-    furnitureIsolatedEdited,
-    furniture,
-    furnituresS1,
-    house,
-    orderChecking,
-    resetPassword,
-    rocket,
-    success,
-    tXdlifYfFw1,
-  ];
+        cheking,
+        deliveryProgress,
+        fail,
+        furnitureIsolatedEdited,
+        furniture,
+        furniture1,
+        furniture2,
+        furniture3,
+        furnituresS1,
+        house,
+        orderChecking,
+        resetPassword,
+        rocket,
+        success,
+        tXdlifYfFw1,
+      ];
 }
 
 class $AssetsSvgsGen {
@@ -505,50 +517,50 @@ class $AssetsSvgsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    bed,
-    buildingUserSolid,
-    bureau,
-    coeur,
-    coeur1,
-    coeur2,
-    compte,
-    cottage,
-    directionsCar,
-    dryCleaning,
-    faceId,
-    facebook,
-    fanSolid,
-    gmail,
-    google,
-    googleMaps,
-    historique,
-    home,
-    homeFILL,
-    kitchenSetSolid,
-    kitchen,
-    land,
-    localLaundry,
-    location,
-    loupe,
-    markers,
-    meubles,
-    microwave,
-    moving,
-    oven,
-    panier,
-    recent,
-    resi,
-    service,
-    smileCircleSvgrepoCom,
-    studio,
-    terrain,
-    tv,
-    villa,
-    visua,
-    volumeOff,
-    wifi,
-    wind,
-  ];
+        bed,
+        buildingUserSolid,
+        bureau,
+        coeur,
+        coeur1,
+        coeur2,
+        compte,
+        cottage,
+        directionsCar,
+        dryCleaning,
+        faceId,
+        facebook,
+        fanSolid,
+        gmail,
+        google,
+        googleMaps,
+        historique,
+        home,
+        homeFILL,
+        kitchenSetSolid,
+        kitchen,
+        land,
+        localLaundry,
+        location,
+        loupe,
+        markers,
+        meubles,
+        microwave,
+        moving,
+        oven,
+        panier,
+        recent,
+        resi,
+        service,
+        smileCircleSvgrepoCom,
+        studio,
+        terrain,
+        tv,
+        villa,
+        visua,
+        volumeOff,
+        wifi,
+        wind,
+      ];
 }
 
 class $AssetsSvgsUndrawGen {
@@ -583,16 +595,16 @@ class $AssetsSvgsUndrawGen {
 
   /// List of all assets
   List<String> get values => [
-    a1,
-    a2,
-    a3,
-    a4,
-    a5,
-    a6,
-    compteCopie,
-    etoile,
-    house,
-  ];
+        a1,
+        a2,
+        a3,
+        a4,
+        a5,
+        a6,
+        compteCopie,
+        etoile,
+        house,
+      ];
 }
 
 class Assets {
