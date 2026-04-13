@@ -661,9 +661,14 @@ class _HomePageV2State extends State<HomePageV2>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              Utils.formatCurrency(double.parse(amount)),
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Flexible(
+              child: Text(
+                Utils.formatCurrency(double.parse(amount)),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
             ),
             const Gap(_Constants.gapSmall),
             const Padding(

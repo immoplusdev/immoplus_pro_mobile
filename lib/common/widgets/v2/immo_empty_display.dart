@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 class ImmoEmptyDisplay extends StatelessWidget {
@@ -21,7 +20,7 @@ class ImmoEmptyDisplay extends StatelessWidget {
           children: [
             Image.asset(
               "assets/svgs/empty.png",
-              width: 200,
+              width: 150,
             ),
             const Gap(30),
             Text(

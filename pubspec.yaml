@@ -182,6 +182,7 @@ flutter:
     - assets/img/onboarding/
     - assets/img/panorama.jpg
     - assets/gif/
+    - assets/svgs/
     - assets/svgs/icons/
     - assets/svgs/undraw/
 
