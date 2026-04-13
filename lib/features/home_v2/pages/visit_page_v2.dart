@@ -98,6 +98,9 @@ class _VisitPageV2State extends State<VisitPageV2> {
             parent: AlwaysScrollableScrollPhysics(),
           ),
           slivers: [
+            SliverOverlapInjector(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            ),
             PagedSliverList<int, DemandeVisiteModel>(
               pagingController: _pagingController,
               builderDelegate: PagedChildBuilderDelegate(

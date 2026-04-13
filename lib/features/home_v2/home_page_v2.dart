@@ -261,9 +261,11 @@ class _HomePageV2State extends State<HomePageV2>
               ),
 
               // Onglets et Filtres épinglés (pinned)
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: _SliverAppBarDelegate(
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverAppBarDelegate(
                   Container(
                     color: Colors.white,
                     child: Column(
@@ -342,8 +344,8 @@ class _HomePageV2State extends State<HomePageV2>
                         // Filtres statiques
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 5, vertical: 15),
+                          padding: const EdgeInsets.only(
+                              left: 5, right: 5, top: 15, bottom: 5),
                           child: Row(
                             children: _buildCurrentFilters(),
                           ),
@@ -353,7 +355,8 @@ class _HomePageV2State extends State<HomePageV2>
                   ),
                 ),
               ),
-            ];
+            ),
+          ];
           },
           body: TabBarView(
             controller: _tabController,

@@ -13,6 +13,9 @@ import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/v2/immo_empty_display.dart';
 import 'package:immoplus_pro/data/models/reservations/status_reservation.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
+import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
+import 'package:immoplus_pro/app_states/request_state.dart';
 
 enum BookingFilterV2 { all, pending, paid, attentePro, attentePaiement }
 
@@ -27,6 +30,7 @@ class BookingPageV2 extends StatefulWidget {
 class _BookingPageV2State extends State<BookingPageV2> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
+  final PendingReservationsCubit _pendingCubit = PendingReservationsCubit();
 
   @override
   void initState() {
@@ -111,6 +115,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
   void dispose() {
     widget.filterNotifier.removeListener(_onFilterChanged);
     _pagingController.dispose();
+    _pendingCubit.close();
     super.dispose();
   }
 
@@ -118,39 +123,59 @@ class _BookingPageV2State extends State<BookingPageV2> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          _pagingController.refresh();
-          context.read<WalletCubit>().onGetWallet();
-        },
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          slivers: [
-            PagedSliverList<int, ReservationModel>(
-              pagingController: _pagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                firstPageProgressIndicatorBuilder: (context) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: List.generate(
-                      5,
-                      (index) => const BookingLoadingCard(),
+      body: BlocProvider.value(
+        value: _pendingCubit,
+        child: BlocListener<PendingReservationsCubit, RequestState>(
+          listener: (context, state) {
+            if (state is REQUEST_SUCCESS) {
+              _pagingController.refresh();
+            }
+          },
+          child: RefreshIndicator(
+            onRefresh: () async {
+              _pagingController.refresh();
+              context.read<WalletCubit>().onGetWallet();
+            },
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              slivers: [
+                SliverOverlapInjector(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
+                PagedSliverList<int, ReservationModel>(
+                  pagingController: _pagingController,
+                  builderDelegate: PagedChildBuilderDelegate(
+                    firstPageProgressIndicatorBuilder: (context) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        children: List.generate(
+                          5,
+                          (index) => const BookingLoadingCard(),
+                        ),
+                      ),
                     ),
+                    noItemsFoundIndicatorBuilder: (context) =>
+                        const ImmoEmptyDisplay(
+                      text:
+                          "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
+                    ),
+                    itemBuilder: (context, item, index) {
+                      if (widget.filterNotifier.value ==
+                          BookingFilterV2.attentePro) {
+                        return PendingReservationCardV2(reservationModel: item);
+                      }
+                      return BookingCardV2(
+                        reservationModel: item,
+                      );
+                    },
                   ),
                 ),
-                noItemsFoundIndicatorBuilder: (context) =>
-                    const ImmoEmptyDisplay(
-                  text:
-                      "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
-                ),
-                itemBuilder: (context, item, index) => BookingCardV2(
-                  reservationModel: item,
-                ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
