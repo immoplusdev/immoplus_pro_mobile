@@ -18,11 +18,13 @@ import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.da
 import 'package:immoplus_pro/features/main_navigation_v2/main_navigation_v2.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
-import 'package:immoplus_pro/features/statistics_v2/statistics_page_v2.dart';
+import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
+import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.dart';
+import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
@@ -118,7 +120,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/statistics_v2',
-                builder: (context, state) => const StatisticsPageV2(),
+                builder: (context, state) => const OwnerStatsPage(),
               ),
             ],
           ),
@@ -444,6 +446,20 @@ class AppRouter {
           final furniture = state.extra as FurnitureModel?;
           return CreateFurniturePageV2(initialFurniture: furniture);
         },
+      ),
+
+      // ── My Feed ──
+      GoRoute(
+        path: MyFeedPage.routePath(),
+        name: MyFeedPage.name,
+        builder: (context, state) => const MyFeedPage(),
+      ),
+
+      // ── Notifications ──
+      GoRoute(
+        path: NotificationPage.routePath(),
+        name: NotificationPage.name,
+        builder: (context, state) => const NotificationPage(),
       ),
     ],
   );

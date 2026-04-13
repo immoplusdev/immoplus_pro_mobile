@@ -13,6 +13,8 @@ import 'package:immoplus_pro/features/home_page/pages/visit_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
+import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.dart';
+import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
@@ -163,7 +165,7 @@ class _HomePageV2State extends State<HomePageV2>
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => context.push(NotificationPage.routePath()),
                               icon: const Icon(Iconsax.notification,
                                   color: Colors.white),
                             )
@@ -260,14 +262,12 @@ class _HomePageV2State extends State<HomePageV2>
                             label: "Mes résidences",
                             onTap: () => context.pushNamed(ResidencesPageV2.name),
                           ),
-                          _buildDashboardAction(
-                            iconWidget: Icon(Iconsax.play,
-                                color: AppColors.primary, size: 22),
-                            label: "Mon feed",
-                            onTap: () {
-                              // Ne fait rien pour l'instant selon la demande
-                            },
-                          ),
+                          // _buildDashboardAction(
+                          //   iconWidget: Icon(Iconsax.play,
+                          //       color: AppColors.primary, size: 22),
+                          //   label: "Mon feed",
+                          //   onTap: () => context.push(MyFeedPage.routePath()),
+                          // ),
                         ],
                       ),
                     ],
