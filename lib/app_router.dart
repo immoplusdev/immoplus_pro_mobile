@@ -9,7 +9,6 @@ import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page_v2.dart';
 import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
 import 'package:immoplus_pro/features/login_page/register_page.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
@@ -20,6 +19,8 @@ import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
 import 'package:immoplus_pro/features/statistics_v2/statistics_page_v2.dart';
 import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
+import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
@@ -83,13 +84,7 @@ class AppRouter {
         path: '/',
         builder: (context, state) => SplashScreen(),
       ),
-      GoRoute(
-        path: '/home_v1',
-        name: 'HOME_PAGE_V1',
-        builder: (context, state) => HomePage(
-          paiementId: state.extra as String?,
-        ),
-      ),
+
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainNavigationV2(navigationShell: navigationShell);
@@ -99,7 +94,7 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: '/home',
-                name: HomePage.name,
+                name: HomePageV2.name,
                 builder: (context, state) => HomePageV2(
                   paiementId: state.extra as String?,
                 ),
@@ -138,7 +133,7 @@ class AppRouter {
         name: PinCodePage.name,
         builder: (context, state) => PinCodePage(
           onSuccess: () {
-            context.goNamed(HomePage.name);
+            context.goNamed(HomePageV2.name);
           },
         ),
       ),
@@ -164,11 +159,19 @@ class AppRouter {
         builder: (context, state) => const PaymentsPage(),
         name: PaymentsPage.name,
       ),
-      // GoRoute(
-      //   path: '/registration',
-      //   builder: (context, state) => const RegistrationMainScreean(),
-      //   name: RegistrationMainScreean.name,
-      // ),
+      GoRoute(
+        path: '/payments_v2',
+        builder: (context, state) => const PaymentsPageV2(),
+        name: PaymentsPageV2.name,
+      ),
+      GoRoute(
+        path: '/pin_code_v2',
+        builder: (context, state) {
+          final onSuccess = state.extra as VoidCallback;
+          return PinCodePageV2(onSuccess: onSuccess);
+        },
+        name: PinCodePageV2.name,
+      ),
       GoRoute(
         path: '/${AuthenticationPage.name}',
         name: AuthenticationPage.name,
