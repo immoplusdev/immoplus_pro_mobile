@@ -709,7 +709,7 @@ class _Constants {
 
   // Icons & Avatar
   static const double avatarRadius = 32.0;
-  static const double iconSizeLarge = 28.0;
+  static const double iconSizeLarge = 22.0;
 
   // Colors
   static const Color primaryAccent = Color(0xFF2744DE);
