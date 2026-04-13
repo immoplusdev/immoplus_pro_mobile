@@ -10,6 +10,7 @@ import 'package:immoplus_pro/constantes/immo_icons.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
+import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
@@ -176,7 +177,8 @@ class _HomePageV2State extends State<HomePageV2>
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => context
+                                        .push(NotificationPage.routePath()),
                                     icon: const Icon(
                                       Iconsax.notification,
                                       color: Colors.white,
@@ -247,12 +249,12 @@ class _HomePageV2State extends State<HomePageV2>
                             onTap: () =>
                                 context.pushNamed(ResidencesPageV2.name),
                           ),
-                          _buildDashboardAction(
-                            iconWidget: const Icon(Iconsax.play,
-                                color: _Constants.primaryAccent, size: 24),
-                            label: "Mon feed",
-                            onTap: () {},
-                          ),
+                          // _buildDashboardAction(
+                          //   iconWidget: Icon(Iconsax.play,
+                          //       color: AppColors.primary, size: 22),
+                          //   label: "Mon feed",
+                          //   onTap: () => context.push(MyFeedPage.routePath()),
+                          // ),
                         ],
                       ),
                     ],
@@ -262,101 +264,102 @@ class _HomePageV2State extends State<HomePageV2>
 
               // Onglets et Filtres épinglés (pinned)
               SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverPersistentHeader(
                   pinned: true,
                   delegate: _SliverAppBarDelegate(
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Custom Tab Design (Button style)
-                        Container(
-                          height: _Constants.tabHeight,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                  color: Colors.grey.shade200, width: 1),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Custom Tab Design (Button style)
+                          Container(
+                            height: _Constants.tabHeight,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                    color: Colors.grey.shade200, width: 1),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () => _tabController.animateTo(0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _tabController.index == 0
+                                            ? AppColors.primary
+                                            : Colors.white,
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Historique de réservation",
+                                        style: TextStyle(
+                                          color: _tabController.index == 0
+                                              ? Colors.white
+                                              : AppColors.primary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () => _tabController.animateTo(1),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _tabController.index == 1
+                                            ? AppColors.primary
+                                            : Colors.white,
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "Historique de visite",
+                                        style: TextStyle(
+                                          color: _tabController.index == 1
+                                              ? Colors.white
+                                              : AppColors.primary,
+                                          fontWeight: _tabController.index == 1
+                                              ? FontWeight.bold
+                                              : FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () => _tabController.animateTo(0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _tabController.index == 0
-                                          ? AppColors.primary
-                                          : Colors.white,
-                                      borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Historique de réservation",
-                                      style: TextStyle(
-                                        color: _tabController.index == 0
-                                            ? Colors.white
-                                            : AppColors.primary,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () => _tabController.animateTo(1),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _tabController.index == 1
-                                          ? AppColors.primary
-                                          : Colors.white,
-                                      borderRadius: const BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Historique de visite",
-                                      style: TextStyle(
-                                        color: _tabController.index == 1
-                                            ? Colors.white
-                                            : AppColors.primary,
-                                        fontWeight: _tabController.index == 1
-                                            ? FontWeight.bold
-                                            : FontWeight.w500,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          // Filtres statiques
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.only(
+                                left: 5, right: 5, top: 15, bottom: 5),
+                            child: Row(
+                              children: _buildCurrentFilters(),
+                            ),
                           ),
-                        ),
-                        // Filtres statiques
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(
-                              left: 5, right: 5, top: 15, bottom: 5),
-                          child: Row(
-                            children: _buildCurrentFilters(),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ];
+            ];
           },
           body: TabBarView(
             controller: _tabController,

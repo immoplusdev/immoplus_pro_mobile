@@ -47,7 +47,7 @@ class MainNavigationV2 extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Iconsax.add_square),
             activeIcon: Icon(Iconsax.add_square5),
-            label: 'Créations',
+            label: 'Publier',
           ),
           BottomNavigationBarItem(
             icon: Icon(Iconsax.chart),

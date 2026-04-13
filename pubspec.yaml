@@ -124,6 +124,7 @@ dependencies:
   sign_in_with_apple: ^7.0.1
   syncfusion_flutter_signaturepad: ^32.2.9
   iconsax: ^0.0.8
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:
