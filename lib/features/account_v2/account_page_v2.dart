@@ -120,54 +120,54 @@ class _AccountPageV2State extends State<AccountPageV2> {
             const Gap(30),
 
             // SECTION 1 : Propriétés
-            _buildSection(
-              title: "Propriétés",
-              children: [
-                _buildActionItem(
-                  icon: ImmoIcons.resi,
-                  title: "Mes résidences",
-                  onTap: () => context.pushNamed(ResidencesPage.name),
-                ),
-                _buildActionItem(
-                  icon: FontAwesomeIcons.treeCity,
-                  title: "Biens immobiliers",
-                  onTap: () => context.pushNamed(EstatesPage.name),
-                  isLast: currentUser?.roleName == Roles.customer.name,
-                ),
-                if (currentUser?.roleName != Roles.customer.name)
-                  _buildActionItem(
-                    icon: FontAwesomeIcons.couch,
-                    title: "Mes meubles",
-                    onTap: () => context.pushNamed(FurnituresPage.name),
-                    isLast: true,
-                  ),
-              ],
-            ),
+            // _buildSection(
+            //   title: "Propriétés",
+            //   children: [
+            //     _buildActionItem(
+            //       icon: ImmoIcons.resi,
+            //       title: "Mes résidences",
+            //       onTap: () => context.pushNamed(ResidencesPage.name),
+            //     ),
+            //     _buildActionItem(
+            //       icon: FontAwesomeIcons.treeCity,
+            //       title: "Biens immobiliers",
+            //       onTap: () => context.pushNamed(EstatesPage.name),
+            //       isLast: currentUser?.roleName == Roles.customer.name,
+            //     ),
+            //     if (currentUser?.roleName != Roles.customer.name)
+            //       _buildActionItem(
+            //         icon: FontAwesomeIcons.couch,
+            //         title: "Mes meubles",
+            //         onTap: () => context.pushNamed(FurnituresPage.name),
+            //         isLast: true,
+            //       ),
+            //   ],
+            // ),
 
-            const Gap(25),
+            // const Gap(25),
 
-            // SECTION 2 : Historiques
-            _buildSection(
-              title: "Historiques et réservations",
-              children: [
-                _buildActionItem(
-                  icon: Icons.pending_actions_outlined,
-                  title: "Réservations en attente",
-                  onTap: () => context.push(PendingReservationsPage.route()),
-                ),
-                _buildActionItem(
-                  icon: FontAwesomeIcons.suitcaseRolling,
-                  title: "Historique des réservations",
-                  onTap: () => context.pushNamed(BookingHistoryPage.name),
-                ),
-                _buildActionItem(
-                  icon: FontAwesomeIcons.route,
-                  title: "Historique des visites",
-                  onTap: () => context.pushNamed(VisitHistoryPage.name),
-                  isLast: true,
-                ),
-              ],
-            ),
+            // // SECTION 2 : Historiques
+            // _buildSection(
+            //   title: "Historiques et réservations",
+            //   children: [
+            //     _buildActionItem(
+            //       icon: Icons.pending_actions_outlined,
+            //       title: "Réservations en attente",
+            //       onTap: () => context.push(PendingReservationsPage.route()),
+            //     ),
+            //     _buildActionItem(
+            //       icon: FontAwesomeIcons.suitcaseRolling,
+            //       title: "Historique des réservations",
+            //       onTap: () => context.pushNamed(BookingHistoryPage.name),
+            //     ),
+            //     _buildActionItem(
+            //       icon: FontAwesomeIcons.route,
+            //       title: "Historique des visites",
+            //       onTap: () => context.pushNamed(VisitHistoryPage.name),
+            //       isLast: true,
+            //     ),
+            //   ],
+            // ),
 
             const Gap(25),
 
@@ -225,7 +225,7 @@ class _AccountPageV2State extends State<AccountPageV2> {
                 ),
               ),
             ),
-            
+
             const Gap(15),
 
             Center(
@@ -247,7 +247,8 @@ class _AccountPageV2State extends State<AccountPageV2> {
     );
   }
 
-  Widget _buildSection({required String title, required List<Widget> children}) {
+  Widget _buildSection(
+      {required String title, required List<Widget> children}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -287,7 +288,8 @@ class _AccountPageV2State extends State<AccountPageV2> {
       children: [
         ListTile(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
           leading: Container(
             width: 40,
             height: 40,
