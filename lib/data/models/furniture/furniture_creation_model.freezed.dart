@@ -25,7 +25,9 @@ mixin _$FurnitureCreationModel {
   String get description => throw _privateConstructorUsedError;
   int get prix => throw _privateConstructorUsedError;
   String get adresse => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get ville => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get commune => throw _privateConstructorUsedError;
   GeoJsonPoint? get position => throw _privateConstructorUsedError;
   double? get lat => throw _privateConstructorUsedError;
@@ -59,8 +61,8 @@ abstract class $FurnitureCreationModelCopyWith<$Res> {
       String description,
       int prix,
       String adresse,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       GeoJsonPoint? position,
       double? lat,
       double? lng,
@@ -189,8 +191,8 @@ abstract class _$$FurnitureCreationModelImplCopyWith<$Res>
       String description,
       int prix,
       String adresse,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       GeoJsonPoint? position,
       double? lat,
       double? lng,
@@ -312,8 +314,8 @@ class _$FurnitureCreationModelImpl implements _FurnitureCreationModel {
       required this.description,
       required this.prix,
       required this.adresse,
-      this.ville,
-      this.commune,
+      @JsonKey(includeIfNull: false) this.ville,
+      @JsonKey(includeIfNull: false) this.commune,
       this.position,
       this.lat,
       this.lng,
@@ -339,8 +341,10 @@ class _$FurnitureCreationModelImpl implements _FurnitureCreationModel {
   @override
   final String adresse;
   @override
+  @JsonKey(includeIfNull: false)
   final String? ville;
   @override
+  @JsonKey(includeIfNull: false)
   final String? commune;
   @override
   final GeoJsonPoint? position;
@@ -455,8 +459,8 @@ abstract class _FurnitureCreationModel implements FurnitureCreationModel {
       required final String description,
       required final int prix,
       required final String adresse,
-      final String? ville,
-      final String? commune,
+      @JsonKey(includeIfNull: false) final String? ville,
+      @JsonKey(includeIfNull: false) final String? commune,
       final GeoJsonPoint? position,
       final double? lat,
       final double? lng,
@@ -480,8 +484,10 @@ abstract class _FurnitureCreationModel implements FurnitureCreationModel {
   @override
   String get adresse;
   @override
+  @JsonKey(includeIfNull: false)
   String? get ville;
   @override
+  @JsonKey(includeIfNull: false)
   String? get commune;
   @override
   GeoJsonPoint? get position;

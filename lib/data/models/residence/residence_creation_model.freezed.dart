@@ -27,8 +27,10 @@ mixin _$ResidenceCreationModel {
   String get description => throw _privateConstructorUsedError;
   int get prixReservation => throw _privateConstructorUsedError;
   String get adresse => throw _privateConstructorUsedError;
-  String get ville => throw _privateConstructorUsedError;
-  String get commune => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get ville => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get commune => throw _privateConstructorUsedError;
   PositionModel get position => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
@@ -68,8 +70,8 @@ abstract class $ResidenceCreationModelCopyWith<$Res> {
       String description,
       int prixReservation,
       String adresse,
-      String ville,
-      String commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       PositionModel position,
       String? video,
       List<String> images,
@@ -110,8 +112,8 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
     Object? description = null,
     Object? prixReservation = null,
     Object? adresse = null,
-    Object? ville = null,
-    Object? commune = null,
+    Object? ville = freezed,
+    Object? commune = freezed,
     Object? position = null,
     Object? video = freezed,
     Object? images = null,
@@ -152,14 +154,14 @@ class _$ResidenceCreationModelCopyWithImpl<$Res,
           ? _value.adresse
           : adresse // ignore: cast_nullable_to_non_nullable
               as String,
-      ville: null == ville
+      ville: freezed == ville
           ? _value.ville
           : ville // ignore: cast_nullable_to_non_nullable
-              as String,
-      commune: null == commune
+              as String?,
+      commune: freezed == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -246,8 +248,8 @@ abstract class _$$ResidenceCreationModelImplCopyWith<$Res>
       String description,
       int prixReservation,
       String adresse,
-      String ville,
-      String commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       PositionModel position,
       String? video,
       List<String> images,
@@ -288,8 +290,8 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
     Object? description = null,
     Object? prixReservation = null,
     Object? adresse = null,
-    Object? ville = null,
-    Object? commune = null,
+    Object? ville = freezed,
+    Object? commune = freezed,
     Object? position = null,
     Object? video = freezed,
     Object? images = null,
@@ -330,14 +332,14 @@ class __$$ResidenceCreationModelImplCopyWithImpl<$Res>
           ? _value.adresse
           : adresse // ignore: cast_nullable_to_non_nullable
               as String,
-      ville: null == ville
+      ville: freezed == ville
           ? _value.ville
           : ville // ignore: cast_nullable_to_non_nullable
-              as String,
-      commune: null == commune
+              as String?,
+      commune: freezed == commune
           ? _value.commune
           : commune // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -408,8 +410,8 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
       this.description = '',
       this.prixReservation = 0,
       this.adresse = '',
-      this.ville = '',
-      this.commune = '',
+      @JsonKey(includeIfNull: false) this.ville,
+      @JsonKey(includeIfNull: false) this.commune,
       this.position = const PositionModel(),
       this.video,
       final List<String> images = const [],
@@ -449,11 +451,11 @@ class _$ResidenceCreationModelImpl implements _ResidenceCreationModel {
   @JsonKey()
   final String adresse;
   @override
-  @JsonKey()
-  final String ville;
+  @JsonKey(includeIfNull: false)
+  final String? ville;
   @override
-  @JsonKey()
-  final String commune;
+  @JsonKey(includeIfNull: false)
+  final String? commune;
   @override
   @JsonKey()
   final PositionModel position;
@@ -617,8 +619,8 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
       final String description,
       final int prixReservation,
       final String adresse,
-      final String ville,
-      final String commune,
+      @JsonKey(includeIfNull: false) final String? ville,
+      @JsonKey(includeIfNull: false) final String? commune,
       final PositionModel position,
       final String? video,
       final List<String> images,
@@ -650,9 +652,11 @@ abstract class _ResidenceCreationModel implements ResidenceCreationModel {
   @override
   String get adresse;
   @override
-  String get ville;
+  @JsonKey(includeIfNull: false)
+  String? get ville;
   @override
-  String get commune;
+  @JsonKey(includeIfNull: false)
+  String? get commune;
   @override
   PositionModel get position;
   @override

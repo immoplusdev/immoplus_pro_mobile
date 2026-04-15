@@ -15,8 +15,8 @@ _$ResidenceCreationModelImpl _$$ResidenceCreationModelImplFromJson(
       description: json['description'] as String? ?? '',
       prixReservation: (json['prixReservation'] as num?)?.toInt() ?? 0,
       adresse: json['adresse'] as String? ?? '',
-      ville: json['ville'] as String? ?? '',
-      commune: json['commune'] as String? ?? '',
+      ville: json['ville'] as String?,
+      commune: json['commune'] as String?,
       position: json['position'] == null
           ? const PositionModel()
           : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
@@ -53,8 +53,8 @@ Map<String, dynamic> _$$ResidenceCreationModelImplToJson(
       'description': instance.description,
       'prixReservation': instance.prixReservation,
       'adresse': instance.adresse,
-      'ville': instance.ville,
-      'commune': instance.commune,
+      if (instance.ville case final value?) 'ville': value,
+      if (instance.commune case final value?) 'commune': value,
       'position': instance.position,
       'video': instance.video,
       'images': instance.images,
