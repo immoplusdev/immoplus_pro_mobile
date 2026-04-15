@@ -25,7 +25,7 @@ import 'package:immoplus_pro/features/booking/widgets/logment_info.dart';
 import 'package:immoplus_pro/features/booking/widgets/planing_booking_card_detail.dart';
 import 'package:immoplus_pro/features/home_page/pages/booking_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
-
+import 'package:iconsax/iconsax.dart';
 class BookingDetailPage extends StatefulWidget {
   const BookingDetailPage({super.key, required this.id});
   final String id;
@@ -56,7 +56,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           final clientName =
               "${state.reservationResponse.data.client.firstName} ${state.reservationResponse.data.client.lastName}";
           return Scaffold(
-            backgroundColor: AppColors.scafold,
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: CustomScrollView(
                 slivers: [
@@ -73,13 +73,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListTile(
                       visualDensity: const VisualDensity(vertical: -4),
-                      tileColor: CupertinoColors.white,
+                      tileColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
+                      ),
                       leading: CircleAvatar(
                         backgroundImage: Utils.getImage(
                             id: state.reservationResponse.data.residence.images
-                                .first),
+                                .firstOrNull ?? ""),
                       ),
                       title: Text(
                           state.reservationResponse.data.residence.nom ??
@@ -93,7 +95,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w700)),
                         TextSpan(
-                            text: ' Par nuit',
+                            text: ' /nuitée',
                             style: TextStyle(color: Colors.grey.shade600))
                       ])),
                       trailing: UnconstrainedBox(
@@ -135,31 +137,33 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       child: ListTile(
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                         ),
-                        title: const Text('Identifiant de la réservation:'),
+                        title: const Text('Identifiant de la réservation'),
                         subtitle:
                             SelectableText(state.reservationResponse.data.id),
                         dense: true,
                         trailing: IconButton(
                           color: AppColors.primary,
-                          icon: const Icon(FontAwesomeIcons.copy),
+                          icon: const Icon(Iconsax.copy),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(
                                     text: state.reservationResponse.data.id))
                                 .then((value) {
-                              //Vibrate.feedback(FeedbackType.impact);
                               EasyLoading.showToast('Identifiant copié');
                             }).catchError((err) {
                               EasyLoading.showToast(err.toString());
                             });
                           },
                         ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+                        titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey.shade600,
+                        ),
                         subtitleTextStyle: Theme.of(context)
                             .textTheme
                             .titleSmall!
-                            .copyWith(color: Colors.purple),
+                            .copyWith(color: AppColors.customBlue, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -189,11 +193,19 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       child: ListTile(
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                         ),
-                        leading: Icon(
-                          FontAwesomeIcons.headset,
-                          color: AppColors.primary,
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Iconsax.headphone,
+                            color: AppColors.primary,
+                          ),
                         ),
                         title: const AutoSizeText(
                           "Contacter ImmoPLus",
@@ -203,12 +215,12 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             'Contacter le service client pour toute annulation ou réclamation.'),
                         titleTextStyle: Theme.of(context)
                             .textTheme
-                            .titleLarge!
-                            .copyWith(color: AppColors.primary),
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold, color: AppColors.primary),
                         subtitleTextStyle:
                             Theme.of(context).textTheme.bodySmall,
                         trailing: Icon(
-                          CupertinoIcons.chevron_right_circle_fill,
+                          Iconsax.arrow_right_3,
                           color: AppColors.primary,
                         ),
                         onTap: () async {
@@ -224,22 +236,19 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       child: ListTile(
                         tileColor: Colors.white,
                         enabled: true,
-                        //dense: true,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                         ),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: const CircleAvatar(
-                            //backgroundColor: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 5),
-                              child: Icon(
-                                FontAwesomeIcons.solidUser,
-                                size: 35,
-                                //color: Colors.green,
-                              ),
-                            ),
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Iconsax.user,
+                            color: AppColors.primary,
                           ),
                         ),
                         title: const Text("Joindre le client"),
@@ -252,15 +261,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 .reservationResponse.data.clientPhoneNumber),
                           ],
                         ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+                        titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                         trailing: Icon(
-                          FontAwesomeIcons.phoneFlip,
+                          Iconsax.call,
                           color: AppColors.primary,
                         ),
                         subtitleTextStyle: Theme.of(context)
                             .textTheme
-                            .titleLarge!
-                            .copyWith(color: AppColors.primary),
+                            .titleSmall!
+                            .copyWith(color: AppColors.customBlue),
                         onTap: () async {
                           final phone = state
                               .reservationResponse.data.clientPhoneNumber
@@ -329,7 +338,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
         child: ListTile(
           tileColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
           ),
           title: Text(title),
           subtitle: SelectableText(
@@ -337,15 +347,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!
-                .copyWith(color: Colors.purple, fontSize: 18),
+                .copyWith(color: AppColors.customBlue, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           dense: true,
           onTap: onTap,
           trailing: Icon(
-            FontAwesomeIcons.copy,
+            Iconsax.copy,
             color: AppColors.primary,
           ),
-          titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+          titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
         ),
       ),
     );

@@ -50,6 +50,9 @@ class _HomePageV2State extends State<HomePageV2>
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
 
+  int _totalReservations = 0;
+  int _totalVisits = 0;
+
   @override
   void initState() {
     super.initState();
@@ -123,9 +126,9 @@ class _HomePageV2State extends State<HomePageV2>
                               color: AppColors.primary,
                               borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(
-                                    _Constants.radiusExtraLarge),
+                                    _Constants.radiusMedium),
                                 bottomRight: Radius.circular(
-                                    _Constants.radiusExtraLarge),
+                                    _Constants.radiusMedium),
                               ),
                             ),
                           ),
@@ -196,7 +199,7 @@ class _HomePageV2State extends State<HomePageV2>
                     Positioned(
                       left: _Constants.paddingStandard,
                       right: _Constants.paddingStandard,
-                      bottom: 15,
+                      bottom: 12,
                       child: _isUnlocked
                           ? _buildUnlockedWalletBanner()
                           : _buildLockedWalletBanner(),
@@ -274,68 +277,144 @@ class _HomePageV2State extends State<HomePageV2>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Custom Tab Design (Button style)
+             
                           Container(
-                            height: _Constants.tabHeight,
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: _Constants.paddingStandard,
+                                vertical: 8),
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                    color: Colors.grey.shade200, width: 1),
+                                  color: Colors.grey.shade200, 
+                                  width: 2
+                                )
                               ),
                             ),
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () => _tabController.animateTo(0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: _tabController.index == 0
-                                            ? AppColors.primary
-                                            : Colors.white,
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
+                                    child: Transform.translate(
+                                      offset: const Offset(0, 2),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: _tabController.index == 0
+                                                  ? AppColors.primary
+                                                  : Colors.transparent,
+                                              width: 2.5,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Historique de réservation",
-                                        style: TextStyle(
-                                          color: _tabController.index == 0
-                                              ? Colors.white
-                                              : AppColors.primary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Réservations",
+                                              style: TextStyle(
+                                                color: _tabController.index == 0
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade600,
+                                                fontWeight: _tabController.index == 0
+                                                    ? FontWeight.bold
+                                                    : FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const Gap(6),
+                                            Container(
+                                              height: 17,
+                                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: _tabController.index == 0
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade100,
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: _tabController.index == 0
+                                                    ? null
+                                                    : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                              ),
+                                              child: Text(
+                                                "$_totalReservations",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: _tabController.index == 0
+                                                      ? Colors.white
+                                                      : Colors.grey.shade600,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                                 Expanded(
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () => _tabController.animateTo(1),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: _tabController.index == 1
-                                            ? AppColors.primary
-                                            : Colors.white,
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
+                                    child: Transform.translate(
+                                      offset: const Offset(0, 2),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: _tabController.index == 1
+                                                  ? AppColors.primary
+                                                  : Colors.transparent,
+                                              width: 2.5,
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Historique de visite",
-                                        style: TextStyle(
-                                          color: _tabController.index == 1
-                                              ? Colors.white
-                                              : AppColors.primary,
-                                          fontWeight: _tabController.index == 1
-                                              ? FontWeight.bold
-                                              : FontWeight.w500,
-                                          fontSize: 14,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Visites",
+                                              style: TextStyle(
+                                                color: _tabController.index == 1
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade600,
+                                                fontWeight: _tabController.index == 1
+                                                    ? FontWeight.bold
+                                                    : FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const Gap(6),
+                                            Container(
+                                              height: 17,
+                                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: _tabController.index == 1
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade100,
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: _tabController.index == 1
+                                                    ? null
+                                                    : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                              ),
+                                              child: Text(
+                                                "$_totalVisits",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: _tabController.index == 1
+                                                      ? Colors.white
+                                                      : Colors.grey.shade600,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -344,6 +423,9 @@ class _HomePageV2State extends State<HomePageV2>
                               ],
                             ),
                           ),
+
+
+                          
                           // Filtres statiques
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -364,8 +446,26 @@ class _HomePageV2State extends State<HomePageV2>
           body: TabBarView(
             controller: _tabController,
             children: [
-              BookingPageV2(filterNotifier: _bookingFilterNotifier),
-              VisitPageV2(filterNotifier: _visitFilterNotifier),
+              BookingPageV2(
+                filterNotifier: _bookingFilterNotifier,
+                onCountChanged: (count) {
+                  if (_totalReservations != count) {
+                    Future.microtask(() {
+                      if (mounted) setState(() => _totalReservations = count);
+                    });
+                  }
+                },
+              ),
+              VisitPageV2(
+                filterNotifier: _visitFilterNotifier,
+                onCountChanged: (count) {
+                  if (_totalVisits != count) {
+                    Future.microtask(() {
+                      if (mounted) setState(() => _totalVisits = count);
+                    });
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -408,19 +508,19 @@ class _HomePageV2State extends State<HomePageV2>
   List<Widget> _buildCurrentFilters() {
     if (_tabController.index == 0) {
       return [
+        // _buildFilterChip(
+        //     "Tous",
+        //     _bookingFilterNotifier.value == BookingFilterV2.all,
+        //     () => setState(
+        //         () => _bookingFilterNotifier.value = BookingFilterV2.all)),
         _buildFilterChip(
-            "Tous",
-            _bookingFilterNotifier.value == BookingFilterV2.all,
-            () => setState(
-                () => _bookingFilterNotifier.value = BookingFilterV2.all)),
-        _buildFilterChip(
-          "Attente pro",
+          "En attente de réponse",
           _bookingFilterNotifier.value == BookingFilterV2.attentePro,
           () => setState(
               () => _bookingFilterNotifier.value = BookingFilterV2.attentePro),
         ),
         _buildFilterChip(
-          "Attente paiement",
+          "En attente paiement",
           _bookingFilterNotifier.value == BookingFilterV2.attentePaiement,
           () => setState(() =>
               _bookingFilterNotifier.value = BookingFilterV2.attentePaiement),
@@ -444,7 +544,7 @@ class _HomePageV2State extends State<HomePageV2>
             () => setState(
                 () => _visitFilterNotifier.value = VisitFilterV2.express)),
         _buildFilterChip(
-            "Demande normal",
+            "Demande normale",
             _visitFilterNotifier.value == VisitFilterV2.normal,
             () => setState(
                 () => _visitFilterNotifier.value = VisitFilterV2.normal)),
@@ -485,28 +585,31 @@ class _HomePageV2State extends State<HomePageV2>
             height: _Constants.walletBannerHeight,
             padding: const EdgeInsets.all(_Constants.paddingLarge),
             decoration: _Constants.bannerDecoration,
-            child: UnconstrainedBox(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                decoration: BoxDecoration(
-                  color: _Constants.primaryAccent,
-                  borderRadius:
-                      BorderRadius.circular(_Constants.radiusCircular),
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.lock_outline, color: Colors.white, size: 18),
-                    Gap(_Constants.gapMedium),
-                    Text(
-                      "Cliquez ici pour déverrouiller votre coffre",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12),
-                    ),
-                  ],
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: _Constants.primaryAccent,
+                    borderRadius:
+                        BorderRadius.circular(_Constants.radiusCircular),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.lock_outline, color: Colors.white, size: 18),
+                      Gap(_Constants.gapMedium),
+                      Text(
+                        "Cliquez ici pour déverrouiller votre coffre",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -689,8 +792,8 @@ class _Constants {
   static const double blueHeaderHeight = 180.0;
   static const double walletBannerHeight = 130.0;
 
-  static const double stickyHeaderHeight = 105.0;
-  static const double tabHeight = 35.0;
+  static const double stickyHeaderHeight = 125.0;
+  static const double tabHeight = 48.0;
   static const double actionCircleSize = 55.0;
 
   // Padding & Spacing

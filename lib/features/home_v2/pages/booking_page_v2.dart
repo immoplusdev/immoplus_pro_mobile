@@ -16,12 +16,20 @@ import 'package:immoplus_pro/data/models/reservations/reservations_collection.da
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
 import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/features/booking/booking_history_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
+import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
+import 'package:immoplus_pro/app_states/request_state.dart';
 
 enum BookingFilterV2 { all, pending, paid, attentePro, attentePaiement }
 
 class BookingPageV2 extends StatefulWidget {
   final ValueNotifier<BookingFilterV2> filterNotifier;
-  const BookingPageV2({super.key, required this.filterNotifier});
+  final ValueChanged<int>? onCountChanged;
+  const BookingPageV2({super.key, required this.filterNotifier, this.onCountChanged});
 
   @override
   State<BookingPageV2> createState() => _BookingPageV2State();
@@ -99,6 +107,18 @@ class _BookingPageV2State extends State<BookingPageV2> {
         );
       }
 
+      if (pageKey == 1) {
+        widget.onCountChanged?.call(result.totalCount);
+        
+        final data = result.data ?? [];
+        if (data.length > 3) {
+          _pagingController.appendLastPage(data.take(3).toList());
+        } else {
+          _pagingController.appendLastPage(data);
+        }
+        return;
+      }
+
       final isLastPage = result.hasNext == false;
       if (isLastPage) {
         _pagingController.appendLastPage(result.data);
@@ -162,6 +182,32 @@ class _BookingPageV2State extends State<BookingPageV2> {
                       text:
                           "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
                     ),
+                    noMoreItemsIndicatorBuilder: (context) {
+                      if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+                        return const SizedBox();
+                      }
+                      return Transform.translate(
+                        offset: const Offset(0, -15),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () {
+                                context.pushNamed(BookingHistoryPage.name); 
+                              },
+                              child: Text(
+                                "Tout afficher",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                     itemBuilder: (context, item, index) {
                       if (widget.filterNotifier.value ==
                           BookingFilterV2.attentePro) {

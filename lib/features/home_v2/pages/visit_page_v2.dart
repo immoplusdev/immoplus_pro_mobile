@@ -10,12 +10,16 @@ import 'package:immoplus_pro/features/home_v2/widgets/visit_card_v2.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/v2/immo_empty_display.dart';
+import 'package:immoplus_pro/features/visits/visit_history_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 
 enum VisitFilterV2 { all, express, normal }
 
 class VisitPageV2 extends StatefulWidget {
   final ValueNotifier<VisitFilterV2> filterNotifier;
-  const VisitPageV2({super.key, required this.filterNotifier});
+  final ValueChanged<int>? onCountChanged;
+  const VisitPageV2({super.key, required this.filterNotifier, this.onCountChanged});
 
   @override
   State<VisitPageV2> createState() => _VisitPageV2State();
@@ -64,6 +68,18 @@ class _VisitPageV2State extends State<VisitPageV2> {
         orderDir: OrderDir.desc.value,
         where: QueryBuilder.build(filters: filters),
       );
+
+      if (pageKey == 1) {
+        widget.onCountChanged?.call(result.totalCount);
+        
+        final data = result.data ?? [];
+        if (data.length > 3) {
+          _pagingController.appendLastPage(data.take(3).toList());
+        } else {
+          _pagingController.appendLastPage(data);
+        }
+        return;
+      }
 
       final isLastPage = result.hasNext == false;
       if (isLastPage) {
@@ -118,6 +134,32 @@ class _VisitPageV2State extends State<VisitPageV2> {
                   text:
                       "Vous n'avez aucune visite pour le moment. Toutes les visites en cours s'afficheront ici.",
                 ),
+                noMoreItemsIndicatorBuilder: (context) {
+                  if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
+                    return const SizedBox();
+                  }
+                  return Transform.translate(
+                    offset: const Offset(0, -8),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            context.pushNamed(VisitHistoryPage.name); 
+                          },
+                          child: Text(
+                            "Tout afficher",
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
                 itemBuilder: (context, item, index) => VisitCardV2(
                   demandeVisiteModel: item,
                 ),

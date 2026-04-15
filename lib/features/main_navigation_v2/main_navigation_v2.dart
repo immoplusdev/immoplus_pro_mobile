@@ -36,8 +36,10 @@ class MainNavigationV2 extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         currentIndex: navigationShell.currentIndex,
         onTap: _onTap,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
+        selectedLabelStyle:
+            const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        unselectedLabelStyle:
+            const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Iconsax.trend_up),
