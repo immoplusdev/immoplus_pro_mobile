@@ -326,30 +326,31 @@ class _HomePageV2State extends State<HomePageV2>
                                               ),
                                             ),
                                             const Gap(6),
-                                            Container(
-                                              height: 17,
-                                              padding: const EdgeInsets.symmetric(horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 0
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius: BorderRadius.circular(10),
-                                                border: _tabController.index == 0
-                                                    ? null
-                                                    : Border.all(color: Colors.grey.shade300, width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalReservations",
-                                                style: TextStyle(
-                                                  fontSize: 10,
+                                            if (_totalReservations > 0)
+                                              Container(
+                                                height: 17,
+                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
                                                   color: _tabController.index == 0
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
+                                                      ? AppColors.primary
+                                                      : Colors.grey.shade100,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: _tabController.index == 0
+                                                      ? null
+                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                ),
+                                                child: Text(
+                                                  "$_totalReservations",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: _tabController.index == 0
+                                                        ? Colors.white
+                                                        : Colors.grey.shade600,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -390,30 +391,31 @@ class _HomePageV2State extends State<HomePageV2>
                                               ),
                                             ),
                                             const Gap(6),
-                                            Container(
-                                              height: 17,
-                                              padding: const EdgeInsets.symmetric(horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 1
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius: BorderRadius.circular(10),
-                                                border: _tabController.index == 1
-                                                    ? null
-                                                    : Border.all(color: Colors.grey.shade300, width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalVisits",
-                                                style: TextStyle(
-                                                  fontSize: 10,
+                                            if (_totalVisits > 0)
+                                              Container(
+                                                height: 17,
+                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
                                                   color: _tabController.index == 1
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
+                                                      ? AppColors.primary
+                                                      : Colors.grey.shade100,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: _tabController.index == 1
+                                                      ? null
+                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                ),
+                                                child: Text(
+                                                  "$_totalVisits",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: _tabController.index == 1
+                                                        ? Colors.white
+                                                        : Colors.grey.shade600,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
                                           ],
                                         ),
                                       ),
@@ -539,7 +541,7 @@ class _HomePageV2State extends State<HomePageV2>
             () =>
                 setState(() => _visitFilterNotifier.value = VisitFilterV2.all)),
         _buildFilterChip(
-            "Demande Express",
+            "Demande express",
             _visitFilterNotifier.value == VisitFilterV2.express,
             () => setState(
                 () => _visitFilterNotifier.value = VisitFilterV2.express)),

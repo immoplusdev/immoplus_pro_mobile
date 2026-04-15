@@ -99,33 +99,37 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             style: TextStyle(color: Colors.grey.shade600))
                       ])),
                       trailing: UnconstrainedBox(
-                        child: CustomChip(
-                          icon: (BookingUtils.getBookingStatus(
-                                      state.reservationResponse.data
-                                          .datesReservation.first.date!,
-                                      state.reservationResponse.data
-                                          .datesReservation.last.date!) ==
-                                  BookingStatus.ongoing)
-                              ? FontAwesomeIcons.suitcaseRolling
-                              : CupertinoIcons.calendar_today,
-                          iconSize: 12,
-                          backgroundColor: (BookingUtils.getBookingStatus(
-                                      state.reservationResponse.data
-                                          .datesReservation.first.date!,
-                                      state.reservationResponse.data
-                                          .datesReservation.last.date!) !=
-                                  BookingStatus.ongoing)
-                              ? Colors.blueGrey.shade200
-                              : Colors.green.shade100,
-                          label: BookingUtils.getStatusText(
-                              startDate: state.reservationResponse.data
-                                  .datesReservation.first.date!,
-                              endDate: state.reservationResponse.data
-                                  .datesReservation.last.date!),
-                          labelStyle: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontSize: 10),
+                        child: Builder(
+                          builder: (context) {
+                            final status = BookingUtils.getBookingStatus(
+                                state.reservationResponse.data
+                                    .datesReservation.first.date!,
+                                state.reservationResponse.data
+                                    .datesReservation.last.date!);
+                            final statusColor = BookingUtils.getStatusColor(status);
+                            
+                            return CustomChip(
+                              icon: BookingUtils.getStatusIcon(status),
+                              iconSize: 14,
+                              iconColor: statusColor,
+                              backgroundColor: statusColor.withOpacity(0.1),
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              borderRadius: BorderRadius.circular(10),
+                              label: BookingUtils.getStatusText(
+                                  startDate: state.reservationResponse.data
+                                      .datesReservation.first.date!,
+                                  endDate: state.reservationResponse.data
+                                      .datesReservation.last.date!),
+                              labelStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: statusColor,
+                                  ),
+                            );
+                          }
                         ),
                       ),
                     ),
@@ -188,94 +192,161 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   )),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
-                        ),
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Iconsax.headphone,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                        title: const AutoSizeText(
-                          "Contacter ImmoPLus",
-                          maxLines: 1,
-                        ),
-                        subtitle: const Text(
-                            'Contacter le service client pour toute annulation ou réclamation.'),
-                        titleTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold, color: AppColors.primary),
-                        subtitleTextStyle:
-                            Theme.of(context).textTheme.bodySmall,
-                        trailing: Icon(
-                          Iconsax.arrow_right_3,
-                          color: AppColors.primary,
-                        ),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      child: InkWell(
                         onTap: () async {
                           ContactUtils.showContact(id: widget.id);
                         },
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.customBlue.withOpacity(0.08)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.02),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade50,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Iconsax.headphone,
+                                  color: AppColors.primary.withOpacity(0.7),
+                                  size: 20,
+                                ),
+                              ),
+                              const Gap(16),
+                              const Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Contacter ImmoPLus",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1A1A1A),
+                                      ),
+                                    ),
+                                    Gap(4),
+                                    Text(
+                                      'Une question ou besoin d\'assistance ?',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                Iconsax.arrow_right_3,
+                                color: Colors.grey.shade400,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10)
-                          .copyWith(bottom: 10),
-                      child: ListTile(
-                        tileColor: Colors.white,
-                        enabled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
-                        ),
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Iconsax.user,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                        title: const Text("Joindre le client"),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (clientName.trim().isNotEmpty) Text(clientName),
-                            Text(state
-                                .reservationResponse.data.clientPhoneNumber),
-                          ],
-                        ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                        trailing: Icon(
-                          Iconsax.call,
-                          color: AppColors.primary,
-                        ),
-                        subtitleTextStyle: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: AppColors.customBlue),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      child: InkWell(
                         onTap: () async {
                           final phone = state
                               .reservationResponse.data.clientPhoneNumber
                               .split('-');
                           Utils.makePhoneCall(phone.last);
                         },
+                        borderRadius: BorderRadius.circular(16),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppColors.customBlue.withOpacity(0.08)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.02),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade50,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Iconsax.user,
+                                  color: AppColors.primary.withOpacity(0.7),
+                                  size: 20,
+                                ),
+                              ),
+                              const Gap(16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Joindre le client",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1A1A1A),
+                                      ),
+                                    ),
+                                    const Gap(4),
+                                    Text(
+                                      clientName.trim().isNotEmpty ? clientName : 'Client ImmoPlus',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.customBlue,
+                                      ),
+                                    ),
+                                    Text(
+                                      state.reservationResponse.data.clientPhoneNumber,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Icon(
+                                  Iconsax.call,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),

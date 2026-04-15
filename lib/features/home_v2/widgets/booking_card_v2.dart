@@ -255,7 +255,7 @@ class BookingCardV2 extends StatelessWidget {
       ),
       context: context,
       builder: (context) => FractionallySizedBox(
-        heightFactor: 0.85,
+        heightFactor: 0.60,
         child: BookingDetailPage(id: reservationModel.id),
       ),
     );

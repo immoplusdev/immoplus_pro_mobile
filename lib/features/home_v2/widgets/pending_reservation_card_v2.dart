@@ -22,15 +22,15 @@ class PendingReservationCardV2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DateFormat formatDate = DateFormat('d MMMM yyyy');
-    
+
     final propertyName = reservationModel.residence.nom;
     final address = reservationModel.residence.adresse;
-    final imageUrl = reservationModel.residence.miniature ?? 
-                   reservationModel.residence.images.firstOrNull;
+    final imageUrl = reservationModel.residence.miniature ??
+        reservationModel.residence.images.firstOrNull;
 
     final startDate = Utils.toDateTime(reservationModel.dateDebut);
     final endDate = Utils.toDateTime(reservationModel.dateFin);
-    
+
     final checkInTime = reservationModel.residence.heureEntree;
     final checkOutTime = reservationModel.residence.heureDepart;
     final duration = reservationModel.datesReservation.length;
@@ -67,14 +67,16 @@ class PendingReservationCardV2 extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                               color: Colors.grey.shade50,
-                              child: Icon(Iconsax.image, color: Colors.grey.shade300, size: 24),
+                              child: Icon(Iconsax.image,
+                                  color: Colors.grey.shade300, size: 24),
                             ),
                           )
                         : Container(
                             width: 55,
                             height: 55,
                             color: Colors.grey.shade50,
-                            child: Icon(Iconsax.image, color: Colors.grey.shade300, size: 24),
+                            child: Icon(Iconsax.image,
+                                color: Colors.grey.shade300, size: 24),
                           ),
                   ),
                   const Gap(14),
@@ -103,7 +105,8 @@ class PendingReservationCardV2 extends StatelessWidget {
                             const Gap(8),
                             // Duration Badge
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               // decoration: BoxDecoration(
                               //   color: AppColors.customBlue.withOpacity(0.08),
                               //   borderRadius: BorderRadius.circular(8),
@@ -120,7 +123,8 @@ class PendingReservationCardV2 extends StatelessWidget {
                             const Gap(4),
                             // Status Badge
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFF7E6),
                                 borderRadius: BorderRadius.circular(8),
@@ -137,11 +141,12 @@ class PendingReservationCardV2 extends StatelessWidget {
                           ],
                         ),
                         const Gap(6),
-                        
+
                         // Address Row
                         Row(
                           children: [
-                            Icon(Iconsax.location, size: 14, color: AppColors.primary),
+                            Icon(Iconsax.location,
+                                size: 14, color: AppColors.primary),
                             const Gap(4),
                             Expanded(
                               child: Text(
@@ -158,11 +163,12 @@ class PendingReservationCardV2 extends StatelessWidget {
                           ],
                         ),
                         const Gap(10),
-                        
+
                         // Dates Row (Start -> End)
                         Row(
                           children: [
-                            Icon(Iconsax.calendar_1, size: 14, color: AppColors.primary),
+                            Icon(Iconsax.calendar_1,
+                                size: 14, color: AppColors.primary),
                             const Gap(4),
                             Text(
                               formatDate.format(startDate),
@@ -173,7 +179,8 @@ class PendingReservationCardV2 extends StatelessWidget {
                               ),
                             ),
                             const Gap(4),
-                            Icon(Iconsax.arrow_right_3, size: 14, color: Colors.grey.shade400),
+                            Icon(Iconsax.arrow_right_3,
+                                size: 14, color: Colors.grey.shade400),
                             const Gap(4),
                             Text(
                               formatDate.format(endDate),
@@ -186,7 +193,7 @@ class PendingReservationCardV2 extends StatelessWidget {
                           ],
                         ),
                         // const Gap(6),
-                        
+
                         // Times Row (CheckIn -> CheckOut)
                         // Row(
                         //   children: [
@@ -224,7 +231,7 @@ class PendingReservationCardV2 extends StatelessWidget {
               BlocBuilder<PendingReservationsCubit, RequestState>(
                 builder: (context, state) {
                   final isLoading = state is REQUEST_LOADING;
-                  
+
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -235,10 +242,13 @@ class PendingReservationCardV2 extends StatelessWidget {
                                 .read<PendingReservationsCubit>()
                                 .refuser(reservationModel.id),
                         icon: const Icon(Iconsax.close_circle, size: 16),
-                        label: const Text("Refuser", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        label: const Text("Refuser",
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.red.shade400,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
@@ -250,19 +260,23 @@ class PendingReservationCardV2 extends StatelessWidget {
                             : () => context
                                 .read<PendingReservationsCubit>()
                                 .accepter(reservationModel.id),
-                        icon: isLoading 
+                        icon: isLoading
                             ? const SizedBox(
-                                width: 14, 
-                                height: 14, 
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
-                              )
+                                width: 14,
+                                height: 14,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 2, color: Colors.white))
                             : const Icon(Iconsax.tick_circle, size: 16),
-                        label: const Text("Accepter", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                        label: const Text("Accepter",
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary, // Using primary color instead of green raw
+                          backgroundColor: AppColors
+                              .primary, // Using primary color instead of green raw
                           foregroundColor: Colors.white,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(
@@ -296,7 +310,7 @@ class PendingReservationCardV2 extends StatelessWidget {
       ),
       context: context,
       builder: (context) => FractionallySizedBox(
-        heightFactor: 0.85,
+        heightFactor: 0.60,
         child: BookingDetailPage(id: reservationModel.id),
       ),
     );

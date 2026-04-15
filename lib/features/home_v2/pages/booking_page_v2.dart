@@ -109,14 +109,6 @@ class _BookingPageV2State extends State<BookingPageV2> {
 
       if (pageKey == 1) {
         widget.onCountChanged?.call(result.totalCount);
-        
-        final data = result.data ?? [];
-        if (data.length > 3) {
-          _pagingController.appendLastPage(data.take(3).toList());
-        } else {
-          _pagingController.appendLastPage(data);
-        }
-        return;
       }
 
       final isLastPage = result.hasNext == false;
@@ -182,32 +174,6 @@ class _BookingPageV2State extends State<BookingPageV2> {
                       text:
                           "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
                     ),
-                    noMoreItemsIndicatorBuilder: (context) {
-                      if (_pagingController.itemList == null || _pagingController.itemList!.isEmpty) {
-                        return const SizedBox();
-                      }
-                      return Transform.translate(
-                        offset: const Offset(0, -15),
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          child: Center(
-                            child: TextButton(
-                              onPressed: () {
-                                context.pushNamed(BookingHistoryPage.name); 
-                              },
-                              child: Text(
-                                "Tout afficher",
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                     itemBuilder: (context, item, index) {
                       if (widget.filterNotifier.value ==
                           BookingFilterV2.attentePro) {

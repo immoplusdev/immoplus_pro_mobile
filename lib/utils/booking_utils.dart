@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+
 enum BookingStatus { upcoming, ongoing, completed }
 
 class BookingUtils {
@@ -18,7 +21,7 @@ class BookingUtils {
     }
   }
 
-  static getStatusText(
+  static String getStatusText(
       {required DateTime startDate, required DateTime endDate}) {
     switch (getBookingStatus(startDate, endDate)) {
       case BookingStatus.upcoming:
@@ -27,6 +30,28 @@ class BookingUtils {
         return 'Séjour en cours';
       case BookingStatus.completed:
         return 'Séjour terminé';
+    }
+  }
+
+  static IconData getStatusIcon(BookingStatus status) {
+    switch (status) {
+      case BookingStatus.upcoming:
+        return Iconsax.calendar_1;
+      case BookingStatus.ongoing:
+        return Iconsax.timer_1;
+      case BookingStatus.completed:
+        return Iconsax.tick_circle;
+    }
+  }
+
+  static Color getStatusColor(BookingStatus status) {
+    switch (status) {
+      case BookingStatus.upcoming:
+        return const Color(0xFF3498DB); // Blue
+      case BookingStatus.ongoing:
+        return const Color(0xFF2ECC71); // Green
+      case BookingStatus.completed:
+        return const Color(0xFF95A5A6); // Grey
     }
   }
 }

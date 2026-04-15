@@ -95,9 +95,12 @@ class VisitCardV2 extends StatelessWidget {
                         const Gap(8),
                         // Type Badge
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: isExpress ? const Color(0xFFFF9800).withOpacity(0.1) : Colors.grey.shade100,
+                            color: isExpress
+                                ? const Color(0xFFFF9800).withOpacity(0.1)
+                                : Colors.grey.shade100,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -105,7 +108,9 @@ class VisitCardV2 extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 8,
                               fontWeight: FontWeight.w600,
-                              color: isExpress ? Colors.orange.shade800 : Colors.grey.shade700,
+                              color: isExpress
+                                  ? Colors.orange.shade800
+                                  : Colors.grey.shade700,
                             ),
                           ),
                         ),
@@ -113,7 +118,8 @@ class VisitCardV2 extends StatelessWidget {
                         if (isPaid) ...[
                           const Gap(4),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: const Color(0xFF1CA53F).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(6),
@@ -130,7 +136,8 @@ class VisitCardV2 extends StatelessWidget {
                         ] else if (isExpress) ...[
                           const Gap(4),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: Colors.red.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(6),
@@ -138,7 +145,8 @@ class VisitCardV2 extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Iconsax.empty_wallet, size: 10, color: Colors.red.shade700),
+                                Icon(Iconsax.empty_wallet,
+                                    size: 10, color: Colors.red.shade700),
                                 const Gap(4),
                                 Flexible(
                                   child: Text(
@@ -158,14 +166,15 @@ class VisitCardV2 extends StatelessWidget {
                         ],
                       ],
                     ),
-                    
+
                     const Gap(6),
-                    
+
                     // Creation Date Row
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(Iconsax.calendar_add, size: 12, color: Colors.grey.shade500),
+                        Icon(Iconsax.calendar_add,
+                            size: 12, color: Colors.grey.shade500),
                         const Gap(4),
                         Expanded(
                           child: Text(
@@ -182,12 +191,13 @@ class VisitCardV2 extends StatelessWidget {
                       ],
                     ),
                     const Gap(8),
-                    
+
                     // Scheduled Date Row
                     if (!hasDate)
                       Row(
                         children: [
-                          Icon(Iconsax.calendar_tick, size: 14, color: AppColors.primary),
+                          Icon(Iconsax.calendar_tick,
+                              size: 14, color: AppColors.primary),
                           const Gap(4),
                           Expanded(
                             child: Text(
@@ -205,7 +215,8 @@ class VisitCardV2 extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Iconsax.calendar_1, size: 14, color: AppColors.primary),
+                          Icon(Iconsax.calendar_1,
+                              size: 14, color: AppColors.primary),
                           const Gap(4),
                           Text(
                             Utils.formatDatenly(dateTime: firstDate!),
@@ -216,7 +227,8 @@ class VisitCardV2 extends StatelessWidget {
                             ),
                           ),
                           const Spacer(),
-                          Icon(Iconsax.clock, size: 14, color: AppColors.primary),
+                          Icon(Iconsax.clock,
+                              size: 14, color: AppColors.primary),
                           const Gap(4),
                           Text(
                             Utils.formatTimeOnly(dateTime: firstDate!),
@@ -253,10 +265,9 @@ class VisitCardV2 extends StatelessWidget {
       ),
       context: context,
       builder: (context) => FractionallySizedBox(
-        heightFactor: 0.85,
+        heightFactor: 0.60,
         child: VisitDetailPage(id: demandeVisiteModel.id),
       ),
     );
   }
 }
- 
