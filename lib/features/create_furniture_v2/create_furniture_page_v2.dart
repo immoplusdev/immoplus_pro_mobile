@@ -12,10 +12,12 @@ import 'package:immoplus_pro/utils/toast_utils.dart';
 
 class CreateFurniturePageV2 extends StatefulWidget {
   final FurnitureModel? initialFurniture;
+  final String? listingRoute;
 
   const CreateFurniturePageV2({
     super.key,
     this.initialFurniture,
+    this.listingRoute,
   });
 
   static const name = 'CREATE_FURNITURE_PAGE_V2';
@@ -79,7 +81,11 @@ class _CreateFurniturePageV2State extends State<CreateFurniturePageV2> {
                   ? "Meuble mis à jour"
                   : "Meuble créé avec succès",
             );
-            context.pop(true);
+            if (widget.listingRoute != null) {
+              context.replaceNamed(widget.listingRoute!);
+            } else {
+              context.pop(true);
+            }
           }
           if (state.error != null) {
             ToastUtils.showError(title: "Erreur", description: state.error);

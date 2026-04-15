@@ -8,6 +8,9 @@ import 'package:immoplus_pro/gen/assets.gen.dart';
 import '../create_estate_v2/create_estate_page_v2.dart';
 import '../create_furniture_v2/create_furniture_page_v2.dart';
 import '../create_residence_v2/create_lodgment_page_v2.dart';
+import '../estates/estates_page_v2.dart';
+import '../furnitures/furnitures_page_v2.dart';
+import '../residence/residences_page_v2.dart';
 
 class CreationsPageV2 extends StatelessWidget {
   const CreationsPageV2({super.key});
@@ -46,19 +49,34 @@ class CreationsPageV2 extends StatelessWidget {
               _CreationButton(
                 title: "Meubles",
                 iconValue: Assets.svgs.lobby,
-                onTap: () => context.pushNamed(CreateFurniturePageV2.name),
+                onTap: () => context.pushNamed(
+                  CreateFurniturePageV2.name,
+                  extra: <String, dynamic>{
+                    'listingRoute': FurnituresPageV2.name,
+                  },
+                ),
               ),
               const Gap(15),
               _CreationButton(
                 title: "Résidence",
                 iconValue: Assets.svgs.house,
-                onTap: () => context.pushNamed(CreateLodgmentPageV2.name),
+                onTap: () => context.pushNamed(
+                  CreateLodgmentPageV2.name,
+                  extra: <String, dynamic>{
+                    'listingRoute': ResidencesPageV2.name,
+                  },
+                ),
               ),
               const Gap(15),
               _CreationButton(
                 title: "Bien immobilier",
                 iconValue: Assets.svgs.buildings,
-                onTap: () => context.pushNamed(CreateEstatePageV2.name),
+                onTap: () => context.pushNamed(
+                  CreateEstatePageV2.name,
+                  extra: <String, dynamic>{
+                    'listingRoute': EstatesPageV2.name,
+                  },
+                ),
               ),
             ],
           ),

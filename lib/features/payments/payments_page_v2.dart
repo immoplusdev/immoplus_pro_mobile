@@ -8,7 +8,7 @@ import 'package:immoplus_pro/features/payments/components/wallet_transaction_lis
 import 'package:immoplus_pro/features/payments/components/withdrawal_request_list.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_model.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
-import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen.dart';
+import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
 
 class PaymentsPageV2 extends StatefulWidget {
   const PaymentsPageV2({super.key});
@@ -88,23 +88,13 @@ class _PaymentsPageV2State extends State<PaymentsPageV2> {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.outbound_outlined),
         onPressed: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: AppColors.scafold,
-            showDragHandle: true,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-            builder: (context) => const FractionallySizedBox(
-              heightFactor: 0.9,
-              child: WithdrawFormScreen(),
-            ),
-          ).then((value) {
-            if (value is WithdrawalRequestModel) {
-              pagingControllerWidrawalList.refresh();
-              context.read<WalletCubit>().onGetWallet();
-            }
-          });
+          final cubit = context.read<WalletCubit>();
+          final value = await context
+              .pushNamed<WithdrawalRequestModel>(WithdrawFormScreenV2.name);
+          if (value is WithdrawalRequestModel && mounted) {
+            pagingControllerWidrawalList.refresh();
+            cubit.onGetWallet();
+          }
         },
         backgroundColor: AppColors.primary,
         label: const Text("Demande de Retrait"),

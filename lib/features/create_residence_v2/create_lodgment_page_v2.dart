@@ -16,7 +16,8 @@ import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 
 class CreateLodgmentPageV2 extends StatefulWidget {
   final ResidenceModel? initialResidence;
-  const CreateLodgmentPageV2({super.key, this.initialResidence});
+  final String? listingRoute;
+  const CreateLodgmentPageV2({super.key, this.initialResidence, this.listingRoute});
 
   static const name = 'CREATE_LODGMENT_PAGE_V2';
 
@@ -97,7 +98,11 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
                     ? "Résidence modifiée avec succès"
                     : "Résidence créée avec succès",
               );
-              context.pop(true);
+              if (widget.listingRoute != null) {
+                context.replaceNamed(widget.listingRoute!);
+              } else {
+                context.pop(true);
+              }
             } else if (state.submissionSuccess == false) {
               CustomPopup.showErrorToast(
                 text: state.id != null

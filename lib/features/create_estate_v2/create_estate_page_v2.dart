@@ -15,7 +15,8 @@ import 'pages/step4_price_page.dart';
 
 class CreateEstatePageV2 extends StatefulWidget {
   final BienImmobilierModel? initialEstate;
-  const CreateEstatePageV2({super.key, this.initialEstate});
+  final String? listingRoute;
+  const CreateEstatePageV2({super.key, this.initialEstate, this.listingRoute});
 
   static const name = 'CREATE_ESTATE_PAGE_V2';
 
@@ -96,7 +97,11 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                     ? "Bien immobilier modifié avec succès"
                     : "Bien immobilier créé avec succès",
               );
-              context.pop(true);
+              if (widget.listingRoute != null) {
+                context.replaceNamed(widget.listingRoute!);
+              } else {
+                context.pop(true);
+              }
             } else if (state.submissionSuccess == false) {
               CustomPopup.showErrorToast(
                 text: state.id != null

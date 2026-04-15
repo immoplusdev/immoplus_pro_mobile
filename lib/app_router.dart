@@ -21,6 +21,7 @@ import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats
 import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
+import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
@@ -151,10 +152,19 @@ class AppRouter {
       ),
       GoRoute(
         path: '/create_estate_v2',
-        builder: (context, state) => CreateEstatePageV2(
-          initialEstate: state.extra as BienImmobilierModel?,
-        ),
         name: CreateEstatePageV2.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is BienImmobilierModel) {
+            return CreateEstatePageV2(initialEstate: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateEstatePageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateEstatePageV2();
+        },
       ),
       GoRoute(
         path: '/payments',
@@ -165,6 +175,11 @@ class AppRouter {
         path: '/payments_v2',
         builder: (context, state) => const PaymentsPageV2(),
         name: PaymentsPageV2.name,
+      ),
+      GoRoute(
+        path: '/withdraw_form_v2',
+        name: WithdrawFormScreenV2.name,
+        builder: (context, state) => const WithdrawFormScreenV2(),
       ),
       GoRoute(
         path: '/pin_code_v2',
@@ -205,10 +220,19 @@ class AppRouter {
       ),
       GoRoute(
         path: '/create_lodgment_v2',
-        builder: (context, state) => CreateLodgmentPageV2(
-          initialResidence: state.extra as ResidenceModel?,
-        ),
         name: CreateLodgmentPageV2.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is ResidenceModel) {
+            return CreateLodgmentPageV2(initialResidence: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateLodgmentPageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateLodgmentPageV2();
+        },
       ),
       GoRoute(
         path: '/plage_page',
@@ -446,8 +470,16 @@ class AppRouter {
         path: '/create_furniture_v2',
         name: CreateFurniturePageV2.name,
         builder: (context, state) {
-          final furniture = state.extra as FurnitureModel?;
-          return CreateFurniturePageV2(initialFurniture: furniture);
+          final extra = state.extra;
+          if (extra is FurnitureModel) {
+            return CreateFurniturePageV2(initialFurniture: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateFurniturePageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateFurniturePageV2();
         },
       ),
 
