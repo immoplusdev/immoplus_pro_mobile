@@ -53,7 +53,7 @@ class MainNavigationV2 extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Iconsax.chart),
-            activeIcon: Icon(Iconsax.chart_21),
+            activeIcon: Icon(Iconsax.chart),
             label: 'Statistique',
           ),
           BottomNavigationBarItem(
