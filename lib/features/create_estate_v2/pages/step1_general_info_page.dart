@@ -75,6 +75,8 @@ class _Step1EstateGeneralInfoPageState
                       p.adresse != c.adresse,
                   builder: (context, state) {
                     return LocationSelectorV2(
+                      showVille: false,
+                      showCommune: false,
                       currentVille: state.ville,
                       currentCommune: state.commune,
                       currentAdresse: state.adresse,
@@ -147,12 +149,17 @@ class _Step1EstateGeneralInfoPageState
           builder: (context, state) {
             final isValid = state.nom.isNotEmpty &&
                 state.typeBienImmobilier.isNotEmpty &&
-                state.ville.isNotEmpty &&
-                state.commune.isNotEmpty &&
                 state.adresse.isNotEmpty;
             return CreationNavigationButtonsV2(
               onPrevious: widget.onPrevious,
               onNext: isValid ? widget.onNext : null,
+              onSave: isValid
+                  ? (state.id != null
+                      ? () => context.read<EstateCreationCubitV2>().submit()
+                      : widget.onNext)
+                  : null,
+              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              showNext: state.id != null,
             );
           },
         ),
@@ -162,6 +169,8 @@ class _Step1EstateGeneralInfoPageState
 
   InputDecoration _inputDecoration() {
     return InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),

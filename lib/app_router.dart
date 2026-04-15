@@ -115,15 +115,6 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/activities_placeholder',
-                builder: (context, state) =>
-                    const Scaffold(body: Center(child: Text("Page Activités"))),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
                 path: '/statistics_v2',
                 builder: (context, state) => const OwnerStatsPage(),
               ),

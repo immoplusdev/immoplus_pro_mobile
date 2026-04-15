@@ -204,7 +204,20 @@ class _Step4RulesPricePageState extends State<Step4RulesPricePage> {
                       widget.onNext();
                     }
                   : null,
-              nextText: state.id != null ? "Sauvegarder" : "Finaliser",
+              onSave: isValid
+                  ? () {
+                      if (state.dureeMinSejour >= state.dureeMaxSejour) {
+                        ToastUtils.showError(
+                          description:
+                              "La durée minimum doit être inférieure à la durée maximum",
+                        );
+                        return;
+                      }
+                      context.read<ResidenceCreationCubitV2>().submit();
+                    }
+                  : null,
+              saveText: state.id != null ? "Enregistrer les modifications" : "Finaliser et publier",
+              showNext: state.id != null,
             );
           },
         ),

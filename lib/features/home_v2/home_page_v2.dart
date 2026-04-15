@@ -221,7 +221,7 @@ class _HomePageV2State extends State<HomePageV2>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Tableau de board",
+                        "Tableau de bord",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

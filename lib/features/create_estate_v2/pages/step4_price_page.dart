@@ -119,7 +119,13 @@ class _Step4EstatePricePageState extends State<Step4EstatePricePage> {
             return CreationNavigationButtonsV2(
               onPrevious: widget.onPrevious,
               onNext: isValid ? widget.onNext : null,
-              nextText: state.id != null ? "Sauvegarder" : "Terminer",
+              onSave: isValid
+                  ? (state.id != null
+                      ? () => context.read<EstateCreationCubitV2>().submit()
+                      : widget.onNext)
+                  : null,
+              saveText: state.id != null ? "Enregistrer les modifications" : "Terminer et publier",
+              showNext: state.id != null,
             );
           },
         ),

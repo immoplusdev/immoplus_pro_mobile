@@ -216,6 +216,13 @@ class _Step3EstateMediaPageState extends State<Step3EstateMediaPage> {
             return CreationNavigationButtonsV2(
               onPrevious: widget.onPrevious,
               onNext: isValid ? widget.onNext : null,
+              onSave: isValid
+                  ? (state.id != null
+                      ? () => context.read<EstateCreationCubitV2>().submit()
+                      : widget.onNext)
+                  : null,
+              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              showNext: state.id != null,
             );
           },
         ),

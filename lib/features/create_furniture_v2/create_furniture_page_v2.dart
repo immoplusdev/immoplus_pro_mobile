@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_furniture_v2/pages/step2_furniture_
 import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 
 class CreateFurniturePageV2 extends StatefulWidget {
   final FurnitureModel? initialFurniture;

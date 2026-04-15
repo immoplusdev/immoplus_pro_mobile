@@ -1,74 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 
 class CreationNavigationButtonsV2 extends StatelessWidget {
   final VoidCallback onPrevious;
   final VoidCallback? onNext;
-  final String nextText;
-  final String previousText;
+  final VoidCallback? onSave;
+  final String saveText;
+  final bool showNext;
 
   const CreationNavigationButtonsV2({
     super.key,
     required this.onPrevious,
     this.onNext,
-    this.nextText = "Continuer",
-    this.previousText = "Précédent",
+    this.onSave,
+    this.saveText = "Enregistrer",
+    this.showNext = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 15.0),
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    
+    return Container(
+      height: 72 + bottomPadding,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 12 + bottomPadding),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.withOpacity(0.2),
+            width: 0.5,
+          ),
+        ),
+      ),
       child: Row(
         children: [
+          // Gauche — Bouton icône rond ←
+          GestureDetector(
+            onTap: onPrevious,
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey.shade300, width: 1),
+                color: Colors.white,
+              ),
+              child: const Icon(
+                Icons.arrow_back,
+                color: Color(0xFF4B5563),
+                size: 20,
+              ),
+            ),
+          ),
+          const Gap(8),
+          
+          // Centre — Bouton Enregistrer (CTA principal)
           Expanded(
-            child: InkWell(
-              onTap: onPrevious,
-              borderRadius: BorderRadius.circular(25),
+            child: GestureDetector(
+              onTap: onSave,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 18),
+                height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: AppColors.primary, width: 1.5),
+                  color: (onSave == null) ? Colors.grey.shade200 : AppColors.primary,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  previousText,
+                  saveText,
                   style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    color: (onSave == null) ? Colors.grey.shade500 : Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ),
           ),
-          const Gap(15),
-          Expanded(
-            child: InkWell(
+          
+          if (showNext) ...[
+            const Gap(8),
+            // Droite — Bouton icône rond →
+            GestureDetector(
               onTap: onNext,
-              borderRadius: BorderRadius.circular(25),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 18),
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color:
-                      onNext == null ? Colors.grey.shade300 : AppColors.primary,
-                  borderRadius: BorderRadius.circular(25),
+                  shape: BoxShape.circle,
+                  color: (onNext == null) ? Colors.grey.shade200 : AppColors.primary,
                 ),
-                alignment: Alignment.center,
-                child: Text(
-                  nextText,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                child: Icon(
+                  Icons.arrow_forward,
+                  color: (onNext == null) ? Colors.grey.shade400 : Colors.white,
+                  size: 20,
                 ),
               ),
             ),
-          ),
+          ],
         ],
       ),
     );

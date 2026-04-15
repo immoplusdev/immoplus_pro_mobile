@@ -211,11 +211,18 @@ class FurnitureCreationCubitV2 extends Cubit<FurnitureCreationStateV2> {
 
     emit(state.copyWith(isLoading: true, error: null));
 
+    final ville = state.furniture?.ville?.isEmpty == true ? null : state.furniture?.ville;
+    final commune = state.furniture?.commune?.isEmpty == true ? null : state.furniture?.commune;
+
     try {
       if (isEditing) {
+        final fields = state.furniture!.toJson();
+        if (ville == null) fields.remove('ville');
+        if (commune == null) fields.remove('commune');
+        
         await FurnitureRepository.updateFurniture(
           id: state.furniture!.id,
-          fields: state.furniture!.toJson(),
+          fields: fields,
         );
       } else {
         final creationModel = FurnitureCreationModel(
@@ -223,8 +230,8 @@ class FurnitureCreationCubitV2 extends Cubit<FurnitureCreationStateV2> {
           description: state.furniture!.description,
           prix: state.furniture!.prix,
           adresse: state.furniture!.adresse,
-          ville: state.furniture!.ville,
-          commune: state.furniture!.commune,
+          ville: ville,
+          commune: commune,
           position: state.furniture!.position,
           lat: state.furniture!.lat,
           lng: state.furniture!.lng,

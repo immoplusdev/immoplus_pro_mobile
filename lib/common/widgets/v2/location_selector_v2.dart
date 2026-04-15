@@ -17,6 +17,8 @@ class LocationSelectorV2 extends StatefulWidget {
   final Function(VilleModel) onVilleSelected;
   final Function(CommuneModel) onCommuneSelected;
   final Function(Address) onPositionSelected;
+  final bool showVille;
+  final bool showCommune;
 
   const LocationSelectorV2({
     super.key,
@@ -26,6 +28,8 @@ class LocationSelectorV2 extends StatefulWidget {
     required this.onVilleSelected,
     required this.onCommuneSelected,
     required this.onPositionSelected,
+    this.showVille = true,
+    this.showCommune = true,
   });
 
   @override
@@ -42,30 +46,34 @@ class _LocationSelectorV2State extends State<LocationSelectorV2> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Gap(10),
-        SelectorTileV2(
-          icon: FontAwesomeIcons.city,
-          title: "Sélectionner une ville",
-          value: _localSelectedVille?.name ??
-              ((widget.currentVille?.isNotEmpty ?? false)
-                  ? widget.currentVille
-                  : null),
-          hasValue: _localSelectedVille != null ||
-              (widget.currentVille?.isNotEmpty ?? false),
-          onTap: () => _showVilleSelector(context),
-        ),
-        const Gap(10),
-        SelectorTileV2(
-          icon: FontAwesomeIcons.mountainCity,
-          title: "Sélectionner une commune",
-          value: _localSelectedCommune?.name ??
-              ((widget.currentCommune?.isNotEmpty ?? false)
-                  ? widget.currentCommune
-                  : null),
-          hasValue: _localSelectedCommune != null ||
-              (widget.currentCommune?.isNotEmpty ?? false),
-          onTap: () => _showCommuneSelector(context),
-        ),
-        const Gap(10),
+        if (widget.showVille) ...[
+          SelectorTileV2(
+            icon: FontAwesomeIcons.city,
+            title: "Sélectionner une ville",
+            value: _localSelectedVille?.name ??
+                ((widget.currentVille?.isNotEmpty ?? false)
+                    ? widget.currentVille
+                    : null),
+            hasValue: _localSelectedVille != null ||
+                (widget.currentVille?.isNotEmpty ?? false),
+            onTap: () => _showVilleSelector(context),
+          ),
+          const Gap(10),
+        ],
+        if (widget.showCommune) ...[
+          SelectorTileV2(
+            icon: FontAwesomeIcons.mountainCity,
+            title: "Sélectionner une commune",
+            value: _localSelectedCommune?.name ??
+                ((widget.currentCommune?.isNotEmpty ?? false)
+                    ? widget.currentCommune
+                    : null),
+            hasValue: _localSelectedCommune != null ||
+                (widget.currentCommune?.isNotEmpty ?? false),
+            onTap: () => _showCommuneSelector(context),
+          ),
+          const Gap(10),
+        ],
         SelectorTileV2(
           icon: FontAwesomeIcons.locationDot,
           title: "Position du bien",
@@ -88,7 +96,7 @@ class _LocationSelectorV2State extends State<LocationSelectorV2> {
       ),
       showDragHandle: true,
       builder: (context) => const FractionallySizedBox(
-        heightFactor: 0.835,
+        heightFactor: 0.70,
         child: VilleSelectorPage(),
       ),
     ).then((value) {

@@ -133,6 +133,8 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
                       p.furniture?.commune != c.furniture?.commune,
                   builder: (context, state) {
                     return LocationSelectorV2(
+                      showVille: false,
+                      showCommune: false,
                       currentVille: state.villeName,
                       currentCommune: state.communeName,
                       currentAdresse: state.furniture?.adresse,
@@ -264,6 +266,15 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
             return CreationNavigationButtonsV2(
               onPrevious: widget.onPrevious,
               onNext: isValid ? widget.onNext : null,
+              onSave: isValid
+                  ? (state.furniture?.id.isNotEmpty == true
+                      ? () => context.read<FurnitureCreationCubitV2>().submit()
+                      : widget.onNext)
+                  : null,
+              saveText: state.furniture?.id.isNotEmpty == true
+                  ? "Enregistrer les modifications"
+                  : "Continuer",
+              showNext: state.furniture?.id.isNotEmpty == true,
             );
           },
         ),
@@ -273,6 +284,8 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
 
   InputDecoration _inputDecoration() {
     return InputDecoration(
+      filled: true,
+      fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),

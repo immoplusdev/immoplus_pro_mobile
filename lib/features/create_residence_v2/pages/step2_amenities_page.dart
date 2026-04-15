@@ -50,6 +50,13 @@ class Step2AmenitiesPage extends StatelessWidget {
             return CreationNavigationButtonsV2(
               onPrevious: onPrevious,
               onNext: isValid ? onNext : null,
+              onSave: isValid
+                  ? (state.id != null
+                      ? () => context.read<ResidenceCreationCubitV2>().submit()
+                      : onNext)
+                  : null,
+              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              showNext: state.id != null,
             );
           },
         ),

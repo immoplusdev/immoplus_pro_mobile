@@ -261,9 +261,13 @@ class _Step2FurnitureDetailsPageState extends State<Step2FurnitureDetailsPage> {
             return CreationNavigationButtonsV2(
               onPrevious: widget.onPrevious,
               onNext: isValid ? widget.onNext : null,
-              nextText: context.read<FurnitureCreationCubitV2>().isEditing
-                  ? "Enregistrer"
-                  : "Créer",
+              onSave: isValid
+                  ? () => context.read<FurnitureCreationCubitV2>().submit()
+                  : null,
+              saveText: context.read<FurnitureCreationCubitV2>().isEditing
+                  ? "Enregistrer les modifications"
+                  : "Finaliser et créer",
+              showNext: context.read<FurnitureCreationCubitV2>().isEditing,
             );
           },
         ),
