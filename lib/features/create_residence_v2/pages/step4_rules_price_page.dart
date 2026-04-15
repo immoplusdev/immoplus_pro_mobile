@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_residence_v2/logic/residence_creation_cubit_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_navigation_buttons_v2.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 
 class Step4RulesPricePage extends StatefulWidget {
@@ -218,15 +220,15 @@ class _Step4RulesPricePageState extends State<Step4RulesPricePage> {
     return Row(
       children: [
         Container(
-          width: 45,
-          height: 45,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F0FE),
-            borderRadius: BorderRadius.circular(12),
-          ),
+              color: const Color(0xFFE8F0FE), shape: BoxShape.circle),
           child: Center(
-            child: Icon(Icons.home, color: AppColors.primary, size: 22),
-          ),
+              child: SvgPicture.asset(
+            Assets.svgs.house,
+            width: 20,
+          )),
         ),
         const Gap(15),
         Expanded(

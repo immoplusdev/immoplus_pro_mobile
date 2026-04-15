@@ -1,10 +1,10 @@
 import 'package:delta_to_html/delta_to_html.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:gap/gap.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:immoplus_pro/common/widgets/v2/add_media_box_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_description_editor_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_navigation_buttons_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/location_selector_v2.dart';
@@ -190,9 +190,8 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _buildAddMediaBox(
-                            context,
-                            icon: Icons.add_photo_alternate_outlined,
+                          AddMediaBoxV2(
+                            isVideo: false,
                             text: "Ajouter",
                             onTap: _pickImages,
                           ),
@@ -240,10 +239,9 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
                         ],
                       );
                     }
-                    return _buildAddMediaBox(
-                      context,
+                    return AddMediaBoxV2(
                       width: double.infinity,
-                      icon: Icons.video_call_outlined,
+                      isVideo: true,
                       text: "Ajouter une vidéo",
                       onTap: _pickVideo,
                     );
@@ -287,45 +285,6 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide(color: AppColors.primary),
-      ),
-    );
-  }
-
-  Widget _buildAddMediaBox(BuildContext context,
-      {required IconData icon,
-      required String text,
-      required VoidCallback onTap,
-      double? width,
-      double? height}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
-      child: DottedBorder(
-        color: AppColors.primary.withOpacity(0.5),
-        strokeWidth: 1.5,
-        dashPattern: const [8, 4],
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(15),
-        child: Container(
-          width: width ?? 100,
-          height: height ?? 100,
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: AppColors.primary, size: 28),
-              const Gap(8),
-              Text(
-                text,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }

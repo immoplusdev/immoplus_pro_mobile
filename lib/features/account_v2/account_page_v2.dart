@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -21,6 +22,7 @@ import 'package:immoplus_pro/features/contact_change/view/change_credentials_pag
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 
@@ -176,7 +178,7 @@ class _AccountPageV2State extends State<AccountPageV2> {
               title: "Paramètres de compte",
               children: [
                 _buildActionItem(
-                  icon: FontAwesomeIcons.userPen,
+                  icon: Assets.svgs.userEdit,
                   title: "Modifier mes informations",
                   onTap: () async {
                     await context.pushNamed(EditAccount.name);
@@ -185,12 +187,12 @@ class _AccountPageV2State extends State<AccountPageV2> {
                   },
                 ),
                 _buildActionItem(
-                  icon: FontAwesomeIcons.userShield,
+                  icon: Assets.svgs.userSquare,
                   title: "Changer mes identifiants de connexion",
                   onTap: () => context.pushNamed(ChangeCredentialsPage.name),
                 ),
                 _buildActionItem(
-                  icon: FontAwesomeIcons.fileContract,
+                  icon: Assets.svgs.documentText,
                   title: "Conditions générales d'utilisation",
                   onTap: () {
                     showModalBottomSheet(
@@ -279,7 +281,7 @@ class _AccountPageV2State extends State<AccountPageV2> {
   }
 
   Widget _buildActionItem({
-    required dynamic icon,
+    required String icon,
     required String title,
     required VoidCallback onTap,
     bool isLast = false,
@@ -293,14 +295,8 @@ class _AccountPageV2State extends State<AccountPageV2> {
           leading: Container(
             width: 40,
             height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(10),
-            ),
             child: Center(
-              child: icon is ImmoIcons
-                  ? ImmoIcon(icon, color: AppColors.primary)
-                  : Icon(icon as IconData, color: AppColors.primary, size: 18),
+              child: SvgPicture.asset(icon),
             ),
           ),
           title: Text(

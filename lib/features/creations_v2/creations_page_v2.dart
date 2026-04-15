@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/constantes/immo_icons.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 
 import '../create_estate_v2/create_estate_page_v2.dart';
 import '../create_furniture_v2/create_furniture_page_v2.dart';
@@ -45,19 +45,19 @@ class CreationsPageV2 extends StatelessWidget {
               const Gap(40),
               _CreationButton(
                 title: "Meubles",
-                iconValue: FontAwesomeIcons.couch,
+                iconValue: Assets.svgs.lobby,
                 onTap: () => context.pushNamed(CreateFurniturePageV2.name),
               ),
               const Gap(15),
               _CreationButton(
                 title: "Résidence",
-                iconValue: ImmoIcons.resi,
+                iconValue: Assets.svgs.house,
                 onTap: () => context.pushNamed(CreateLodgmentPageV2.name),
               ),
               const Gap(15),
               _CreationButton(
                 title: "Bien immobilier",
-                iconValue: FontAwesomeIcons.building,
+                iconValue: Assets.svgs.buildings,
                 onTap: () => context.pushNamed(CreateEstatePageV2.name),
               ),
             ],
@@ -70,7 +70,7 @@ class CreationsPageV2 extends StatelessWidget {
 
 class _CreationButton extends StatefulWidget {
   final String title;
-  final Object iconValue;
+  final String iconValue;
   final VoidCallback onTap;
 
   const _CreationButton({
@@ -90,8 +90,6 @@ class _CreationButtonState extends State<_CreationButton> {
   Widget build(BuildContext context) {
     final bgColor = _isPressed ? AppColors.primary : Colors.white;
     final contentColor = _isPressed ? Colors.white : Colors.black87;
-    final iconBgColor =
-        _isPressed ? Colors.transparent : const Color(0xFFE8F0FE);
     final borderColor =
         _isPressed ? AppColors.primary : AppColors.primary.withOpacity(0.3);
 
@@ -115,24 +113,9 @@ class _CreationButtonState extends State<_CreationButton> {
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(
-                color: iconBgColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: widget.iconValue is ImmoIcons
-                    ? ImmoIcon(
-                        widget.iconValue as ImmoIcons,
-                        color: _isPressed ? Colors.white : AppColors.primary,
-                      )
-                    : Icon(
-                        widget.iconValue as IconData,
-                        color: _isPressed ? Colors.white : AppColors.primary,
-                        size: 20,
-                      ),
-              ),
+              child: Center(child: SvgPicture.asset(widget.iconValue)),
             ),
-            const Gap(15),
+            const Gap(5),
             Expanded(
               child: Text(
                 widget.title,

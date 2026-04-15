@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_estate_v2/enums/estate_payment_frequency.dart';
@@ -148,9 +149,8 @@ class _Step4EstatePricePageState extends State<Step4EstatePricePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            SvgPicture.asset(
               freq.icon,
-              size: 30,
               color: isSelected ? AppColors.primary : Colors.grey.shade400,
             ),
             const Gap(10),

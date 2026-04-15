@@ -356,11 +356,55 @@ class $AssetsLottiesGen {
 class $AssetsSvgsGen {
   const $AssetsSvgsGen();
 
+  /// File path: assets/svgs/buildings.svg
+  String get buildings => 'assets/svgs/buildings.svg';
+
+  /// Directory path: assets/svgs/creation_icon
+  $AssetsSvgsCreationIconGen get creationIcon =>
+      const $AssetsSvgsCreationIconGen();
+
+  /// File path: assets/svgs/document-text.svg
+  String get documentText => 'assets/svgs/document-text.svg';
+
+  /// File path: assets/svgs/dollard.svg
+  String get dollard => 'assets/svgs/dollard.svg';
+
+  /// File path: assets/svgs/empty.png
+  AssetGenImage get empty => const AssetGenImage('assets/svgs/empty.png');
+
+  /// File path: assets/svgs/house.svg
+  String get house => 'assets/svgs/house.svg';
+
   /// Directory path: assets/svgs/icons
   $AssetsSvgsIconsGen get icons => const $AssetsSvgsIconsGen();
 
+  /// File path: assets/svgs/lobby.svg
+  String get lobby => 'assets/svgs/lobby.svg';
+
+  /// File path: assets/svgs/retrait_dollars.svg
+  String get retraitDollars => 'assets/svgs/retrait_dollars.svg';
+
   /// Directory path: assets/svgs/undraw
   $AssetsSvgsUndrawGen get undraw => const $AssetsSvgsUndrawGen();
+
+  /// File path: assets/svgs/user-edit.svg
+  String get userEdit => 'assets/svgs/user-edit.svg';
+
+  /// File path: assets/svgs/user-square.svg
+  String get userSquare => 'assets/svgs/user-square.svg';
+
+  /// List of all assets
+  List<dynamic> get values => [
+        buildings,
+        documentText,
+        dollard,
+        empty,
+        house,
+        lobby,
+        retraitDollars,
+        userEdit,
+        userSquare,
+      ];
 }
 
 class $AssetsImgOnboardingGen {
@@ -380,6 +424,38 @@ class $AssetsImgOnboardingGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [a1, a2, a3, a4];
+}
+
+class $AssetsSvgsCreationIconGen {
+  const $AssetsSvgsCreationIconGen();
+
+  /// File path: assets/svgs/creation_icon/calendar.svg
+  String get calendar => 'assets/svgs/creation_icon/calendar.svg';
+
+  /// File path: assets/svgs/creation_icon/calendar_clock.svg
+  String get calendarClock => 'assets/svgs/creation_icon/calendar_clock.svg';
+
+  /// File path: assets/svgs/creation_icon/calendar_jours.svg
+  String get calendarJours => 'assets/svgs/creation_icon/calendar_jours.svg';
+
+  /// File path: assets/svgs/creation_icon/gallery-import.svg
+  String get galleryImport => 'assets/svgs/creation_icon/gallery-import.svg';
+
+  /// File path: assets/svgs/creation_icon/tag.svg
+  String get tag => 'assets/svgs/creation_icon/tag.svg';
+
+  /// File path: assets/svgs/creation_icon/video-add.svg
+  String get videoAdd => 'assets/svgs/creation_icon/video-add.svg';
+
+  /// List of all assets
+  List<String> get values => [
+        calendar,
+        calendarClock,
+        calendarJours,
+        galleryImport,
+        tag,
+        videoAdd,
+      ];
 }
 
 class $AssetsSvgsIconsGen {

@@ -1,10 +1,11 @@
 import 'package:delta_to_html/delta_to_html.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:gap/gap.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:immoplus_pro/common/widgets/v2/add_media_box_v2.dart';
+import 'package:immoplus_pro/common/widgets/v2/creation_description_editor_v2.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
@@ -129,11 +130,10 @@ class _Step3MediaPageState extends State<Step3MediaPage> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          _buildAddMediaBox(
-                            context,
+                          AddMediaBoxV2(
                             width: 100,
                             height: 100,
-                            icon: Icons.add_photo_alternate_outlined,
+                            isVideo: false,
                             text: "Ajouter",
                             onTap: _pickImages,
                           ),
@@ -178,80 +178,16 @@ class _Step3MediaPageState extends State<Step3MediaPage> {
                               ),
                             ],
                           )
-                        : _buildAddMediaBox(
-                            context,
-                            icon: Icons.video_call_outlined,
+                        : AddMediaBoxV2(
+                            isVideo: true,
                             text: "Ajouter une vidéo",
                             onTap: _pickVideo,
                           ),
 
                     const Gap(25),
-                    const Text("Description de votre bien :",
-                        style: TextStyle(color: Colors.grey, fontSize: 13)),
-                    const Gap(10),
-
-                    // EDITOR BOX (Isolated from full page rebuilds)
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade200),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(14)),
-                            ),
-                            child: quill.QuillSimpleToolbar(
-                              controller: _controller,
-                              config: const quill.QuillSimpleToolbarConfig(
-                                  showSearchButton: false,
-                                  showListCheck: false,
-                                  showColorButton: false,
-                                  showCodeBlock: false,
-                                  showLink: false,
-                                  showRedo: false,
-                                  showSuperscript: false,
-                                  showSubscript: false,
-                                  showUnderLineButton: false,
-                                  showBackgroundColorButton: false,
-                                  toolbarSize: 40,
-                                  showInlineCode: false,
-                                  showFontSize: false,
-                                  showFontFamily: false,
-                                  showQuote: false,
-                                  showHeaderStyle: false,
-                                  showStrikeThrough: false,
-                                  showClearFormat: false,
-                                  iconTheme: quill.QuillIconTheme(
-                                    iconButtonUnselectedData:
-                                        quill.IconButtonData(
-                                            color: Colors.white),
-                                    iconButtonSelectedData:
-                                        quill.IconButtonData(
-                                            color: Colors.black87),
-                                  )),
-                            ),
-                          ),
-                          Container(
-                            height: 180,
-                            padding: const EdgeInsets.all(12),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(14)),
-                            ),
-                            child: quill.QuillEditor.basic(
-                              controller: _controller,
-                              config: const quill.QuillEditorConfig(
-                                showCursor: true,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    CreationDescriptionEditorV2(
+                      controller: _controller,
+                      label: "Description de votre bien :",
                     ),
 
                     // UPLOADING STATUS
@@ -286,47 +222,6 @@ class _Step3MediaPageState extends State<Step3MediaPage> {
           },
         ),
       ],
-    );
-  }
-
-  Widget _buildAddMediaBox(BuildContext context,
-      {required IconData icon,
-      required String text,
-      required VoidCallback onTap,
-      double? width,
-      double? height}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
-      child: DottedBorder(
-        color: AppColors.primary.withOpacity(0.5),
-        strokeWidth: 1.5,
-        dashPattern: const [8, 4],
-        borderType: BorderType.RRect,
-        radius: const Radius.circular(15),
-        child: Container(
-          width: width ?? 100,
-          height: height ?? 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: AppColors.primary, size: 28),
-              const Gap(8),
-              Text(
-                text,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

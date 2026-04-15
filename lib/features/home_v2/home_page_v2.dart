@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/constantes/immo_icons.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
+import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
@@ -230,21 +230,33 @@ class _HomePageV2State extends State<HomePageV2>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildDashboardAction(
-                            iconWidget: const Icon(FontAwesomeIcons.treeCity,
-                                color: _Constants.primaryAccent, size: 24),
+                            iconWidget: Center(
+                              child: SvgPicture.asset(
+                                Assets.svgs.buildings,
+                                width: 30,
+                              ),
+                            ),
                             label: "Bien immobilier",
                             onTap: () => context.pushNamed(EstatesPageV2.name),
                           ),
                           _buildDashboardAction(
-                            iconWidget: const Icon(FontAwesomeIcons.couch,
-                                color: _Constants.primaryAccent, size: 24),
+                            iconWidget: Center(
+                              child: SvgPicture.asset(
+                                Assets.svgs.lobby,
+                                width: 30,
+                              ),
+                            ),
                             label: "Mes meubles",
                             onTap: () =>
                                 context.pushNamed(FurnituresPageV2.name),
                           ),
                           _buildDashboardAction(
-                            iconWidget: const ImmoIcon(ImmoIcons.resi,
-                                color: _Constants.primaryAccent),
+                            iconWidget: Center(
+                              child: SvgPicture.asset(
+                                Assets.svgs.house,
+                                width: 30,
+                              ),
+                            ),
                             label: "Mes résidences",
                             onTap: () =>
                                 context.pushNamed(ResidencesPageV2.name),
@@ -549,11 +561,10 @@ class _HomePageV2State extends State<HomePageV2>
                           borderRadius:
                               BorderRadius.circular(_Constants.radiusCircular),
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.monetization_on_outlined,
-                                color: Colors.white, size: 18),
+                            SvgPicture.asset("assets/svgs/retrait_dollars.svg"),
                             Gap(_Constants.gapSmall),
                             Text(
                               "Retrait",
@@ -572,7 +583,8 @@ class _HomePageV2State extends State<HomePageV2>
                           child: _buildBalanceColumnFixed(
                             label: "Solde disponible",
                             amount: wallet.availableBalance.toString(),
-                            dotColor: Color(0xff1CA53F),
+                            dotColor: Color(0xff1CA53F).withOpacity(.2),
+                            dolarColor: Color(0xff1CA53F),
                           ),
                         ),
                         Container(
@@ -584,7 +596,8 @@ class _HomePageV2State extends State<HomePageV2>
                           child: _buildBalanceColumnFixed(
                             label: "Solde en cours",
                             amount: wallet.pendingBalance.toString(),
-                            dotColor: const Color(0xffF59E0B),
+                            dotColor: const Color(0xffF59E0B).withOpacity(.2),
+                            dolarColor: Color(0xffF59E0B),
                             crossAxisAlignment: CrossAxisAlignment.end,
                           ),
                         ),
@@ -624,6 +637,7 @@ class _HomePageV2State extends State<HomePageV2>
     required String label,
     required String amount,
     required Color dotColor,
+    required Color dolarColor,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
   }) {
     return Column(
@@ -634,11 +648,13 @@ class _HomePageV2State extends State<HomePageV2>
           children: [
             if (crossAxisAlignment == CrossAxisAlignment.start) ...[
               Container(
-                width: 8,
-                height: 8,
+                padding: EdgeInsets.all(5),
                 decoration:
                     BoxDecoration(color: dotColor, shape: BoxShape.circle),
-                // child: Icon(Icons.money),
+                child: SvgPicture.asset(
+                  "assets/svgs/dollard.svg",
+                  color: dolarColor,
+                ),
               ),
               const Gap(_Constants.gapSmall),
             ],
@@ -650,10 +666,16 @@ class _HomePageV2State extends State<HomePageV2>
             if (crossAxisAlignment == CrossAxisAlignment.end) ...[
               const Gap(_Constants.gapSmall),
               Container(
-                  width: 8,
-                  height: 8,
-                  decoration:
-                      BoxDecoration(color: dotColor, shape: BoxShape.circle)),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: dotColor,
+                  shape: BoxShape.circle,
+                ),
+                child: SvgPicture.asset(
+                  "assets/svgs/dollard.svg",
+                  color: dolarColor,
+                ),
+              ),
             ],
           ],
         ),
