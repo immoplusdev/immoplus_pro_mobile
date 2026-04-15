@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
@@ -104,7 +104,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
           final (canShow, message) =
               shouldShowClientPhone(state.demandeVisitResponse);
           return Scaffold(
-            backgroundColor: AppColors.scafold,
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: CustomScrollView(
                 slivers: [
@@ -130,15 +130,16 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       child: ListTile(
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                         ),
-                        title: const Text('Identifiant de la demande:'),
+                        title: const Text('Identifiant de la demande'),
                         subtitle: SelectableText(
                             state.demandeVisitResponse.data.id.toString()),
                         dense: true,
                         trailing: IconButton(
                           color: AppColors.primary,
-                          icon: const Icon(FontAwesomeIcons.copy),
+                          icon: const Icon(Iconsax.copy),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(
                                     text: state.demandeVisitResponse.data.id
@@ -151,11 +152,13 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                             });
                           },
                         ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium,
+                        titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey.shade600,
+                        ),
                         subtitleTextStyle: Theme.of(context)
                             .textTheme
                             .titleSmall!
-                            .copyWith(color: Colors.purple),
+                            .copyWith(color: AppColors.customBlue, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -173,9 +176,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
-                              .copyWith(
-                                  color:
-                                      const Color.fromARGB(255, 166, 41, 41)),
+                              .copyWith(color: AppColors.primary, fontSize: 13),
                         ),
                       ),
                     ),
@@ -184,56 +185,52 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10)
                             .copyWith(bottom: 10),
-                        child: Shimmer.fromColors(
-                          baseColor: Colors.redAccent,
-                          highlightColor: CupertinoColors.white,
-                          period: const Duration(seconds: 5),
-                          child: ListTile(
-                            onTap: () {
-                              VisitManager.getDateTime(
-                                      lastDate: lastDateAcceptVisit,
-                                      firstDate: startDate,
-                                      initialDate: initialDate)
-                                  .then(
-                                (value) async {
-                                  if (value != null) {
-                                    EasyLoading.instance.backgroundColor =
-                                        Colors.red;
-                                    EasyLoading.show(
-                                        status: 'Veuillez patienter..');
-                                    BienImmobilierRepository.programmerVisit(
-                                            state.demandeVisitResponse.data.id,
-                                            value)
-                                        .then((value) {
-                                      if (value != null) {
-                                        EasyLoading.dismiss();
-                                        context
-                                            .read<VisitCubit>()
-                                            .getVisit(id: widget.id);
-                                      }
-                                    });
-                                  }
-                                },
-                              );
-                            },
-                            leading: const Icon(
-                              FontAwesomeIcons.calendarXmark,
-                              color: Colors.redAccent,
-                            ),
-                            tileColor: Colors.red.shade100,
-                            horizontalTitleGap: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            title: const AutoSizeText(
-                                maxLines: 1,
-                                "Sélectionner le jour et l'heure de la visite"),
-                            trailing: const Icon(
-                              FontAwesomeIcons.circleChevronRight,
-                              color: Colors.redAccent,
-                            ),
-                            titleTextStyle:
-                                Theme.of(context).textTheme.titleMedium,
+                        child: ListTile(
+                          onTap: () {
+                            VisitManager.getDateTime(
+                                    lastDate: lastDateAcceptVisit,
+                                    firstDate: startDate,
+                                    initialDate: initialDate)
+                                .then(
+                              (value) async {
+                                if (value != null) {
+                                  EasyLoading.instance.backgroundColor =
+                                      AppColors.primary;
+                                  EasyLoading.show(
+                                      status: 'Veuillez patienter..');
+                                  BienImmobilierRepository.programmerVisit(
+                                          state.demandeVisitResponse.data.id,
+                                          value)
+                                      .then((value) {
+                                    if (value != null) {
+                                      EasyLoading.dismiss();
+                                      context
+                                          .read<VisitCubit>()
+                                          .getVisit(id: widget.id);
+                                    }
+                                  });
+                                }
+                              },
+                            );
+                          },
+                          leading: Icon(
+                            Iconsax.calendar_tick,
+                            color: AppColors.primary,
+                          ),
+                          tileColor: Colors.white,
+                          horizontalTitleGap: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
+                          ),
+                          title: AutoSizeText(
+                              maxLines: 1,
+                              "Choisissez le jour et l'heure de la visite",
+                              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)
+                          ),
+                          trailing: Icon(
+                            Iconsax.arrow_right_3,
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -274,40 +271,32 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           //   );
                           // },
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                           ),
                           tileColor: Colors.white,
                           leading: CircleAvatar(
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: AppColors.primary.withOpacity(0.1),
                             child: Icon(
-                              FontAwesomeIcons.calendarDay,
+                              Iconsax.calendar_1,
                               color: AppColors.primary,
                             ),
                           ),
                           contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 5),
-                          horizontalTitleGap: 4,
+                              const EdgeInsets.symmetric(horizontal: 10),
+                          horizontalTitleGap: 10,
                           title: const Text("Jour et heure de visite"),
                           subtitle: AutoSizeText(Utils.formatDateTime(
                               dateTime: state.demandeVisitResponse.data
                                   .datesDemandeVisite.first.date!)),
                           subtitleTextStyle:
-                              Theme.of(context).textTheme.titleLarge,
+                              Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, fontSize: 16),
                           titleTextStyle:
-                              Theme.of(context).textTheme.bodyMedium,
-                          // trailing: Icon(
-                          //   FontAwesomeIcons.circleChevronRight,
-                          //   color: AppColors.primary,
-                          // ),
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
                         ),
                       ),
                     ),
-                  const SliverToBoxAdapter(
-                    child: Divider(
-                      height: 0,
-                      thickness: 0.8,
-                    ),
-                  ),
+                  const SliverGap(5),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
@@ -316,55 +305,59 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                           ? ListTile(
                               tileColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                               ),
                               onTap: () {
                                 Utils.makePhoneCall(clientPhoneNumber);
                               },
-                              horizontalTitleGap: 0,
+                              horizontalTitleGap: 10,
                               leading: Icon(
-                                FontAwesomeIcons.buildingUser,
+                                Iconsax.call,
                                 color: AppColors.primary,
-                                size: 20,
+                                size: 22,
                               ),
                               title: const AutoSizeText(
                                 'Contacter le client',
                                 maxLines: 1,
+                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                               trailing: Icon(
-                                FontAwesomeIcons.circleChevronRight,
-                                size: 15,
+                                Iconsax.arrow_right_3,
+                                size: 18,
                                 color: AppColors.primary,
                               ),
                             )
                           : Text(message),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: Divider()),
+                  const SliverGap(5),
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 20),
                     sliver: SliverToBoxAdapter(
                       child: ListTile(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
                         ),
                         tileColor: Colors.white,
                         onTap: () {
                           ContactUtils.showContact(id: widget.id);
                         },
-                        horizontalTitleGap: 0,
+                        horizontalTitleGap: 10,
                         leading: Icon(
-                          FontAwesomeIcons.key,
+                          Iconsax.support,
                           color: AppColors.primary,
-                          size: 20,
+                          size: 22,
                         ),
                         title: const AutoSizeText(
                           'Service client',
                           maxLines: 1,
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
                         trailing: Icon(
-                          FontAwesomeIcons.circleChevronRight,
-                          size: 15,
+                          Iconsax.arrow_right_3,
+                          size: 18,
                           color: AppColors.primary,
                         ),
                       ),

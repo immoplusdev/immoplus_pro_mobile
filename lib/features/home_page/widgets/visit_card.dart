@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/common/date_creation_widget.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
@@ -83,33 +84,44 @@ class VisitCard extends StatelessWidget {
                 ],
               ),
               DateCreationWidget(createdAt: demandeVisiteModel.createdAt),
-              Text("📍 ${demandeVisiteModel.bienImmobilier?.adresse ?? "_"}"),
-              const Gap(10),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        FontAwesomeIcons.circleUser,
-                        size: 15,
-                      ),
-                      const Gap(5),
-                      Text("Touchez pour voir plus")
-                      // Text("${demandeVisiteModel.clientPhoneNumber}")
-                    ],
-                  ),
-                  AutoSizeText(
-                    maxLines: 1,
-                    Utils.formatCurrency(
-                        demandeVisiteModel.montantTotalDemandeVisite),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(color: AppColors.primary),
-                  ),
-                ],
-              ),
+  children: [
+    Icon(Iconsax.location, size: 16, color: Colors.grey),
+    SizedBox(width: 4),
+    Expanded(
+      child: Text(
+        demandeVisiteModel.bienImmobilier?.adresse ?? "_",
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ],
+),
+              // const Gap(10),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         const Icon(
+              //           FontAwesomeIcons.circleUser,
+              //           size: 15,
+              //         ),
+              //         const Gap(5),
+              //         Text("Touchez pour voir plus")
+              //         // Text("${demandeVisiteModel.clientPhoneNumber}")
+              //       ],
+              //     ),
+              //     AutoSizeText(
+              //       maxLines: 1,
+              //       Utils.formatCurrency(
+              //           demandeVisiteModel.montantTotalDemandeVisite),
+              //       style: Theme.of(context)
+              //           .textTheme
+              //           .titleMedium!
+              //           .copyWith(color: AppColors.primary),
+              //     ),
+              //   ],
+              // ),
               Divider(
                 thickness: 0.5,
                 color: Colors.grey.shade300,

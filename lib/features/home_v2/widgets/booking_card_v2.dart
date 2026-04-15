@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
@@ -18,11 +19,11 @@ class BookingCardV2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DateFormat formatDate = DateFormat('d MMMM yyyy');
-    
+
     final propertyName = reservationModel.residence.nom;
     final address = reservationModel.residence.adresse;
-    final imageUrl = reservationModel.residence.miniature ?? 
-                   reservationModel.residence.images.firstOrNull;
+    final imageUrl = reservationModel.residence.miniature ??
+        reservationModel.residence.images.firstOrNull;
 
     // Dates logic
     final startDate = Utils.toDateTime(reservationModel.dateDebut);
@@ -32,7 +33,7 @@ class BookingCardV2 extends StatelessWidget {
 
     // Status logic
     final isPaid = reservationModel.statusFacture.toLowerCase() == 'paye';
-    
+
     // Duration
     final duration = reservationModel.datesReservation.length;
 
@@ -41,13 +42,13 @@ class BookingCardV2 extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _showDetail(context),
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.customBlue,
-              width: .25,
+              color: AppColors.customBlue.withOpacity(0.1),
+              width: 1,
             ),
           ),
           child: Column(
@@ -59,172 +60,175 @@ class BookingCardV2 extends StatelessWidget {
                 children: [
                   // 1. Image
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(12),
                     child: imageUrl != null && imageUrl.isNotEmpty
                         ? CachedNetworkImage(
                             imageUrl: Utils.getImagePath(id: imageUrl),
-                            width: 70,
-                            height: 70,
+                            width: 55,
+                            height: 55,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
-                              color: Colors.grey.shade100,
-                              child: const Icon(Icons.image, color: Colors.grey),
+                              color: Colors.grey.shade50,
+                              child: Icon(Iconsax.image,
+                                  color: Colors.grey.shade300, size: 24),
                             ),
                           )
                         : Container(
-                            width: 70,
-                            height: 70,
-                            color: Colors.grey.shade100,
-                            child: const Icon(Icons.image, color: Colors.grey),
+                            width: 55,
+                            height: 55,
+                            color: Colors.grey.shade50,
+                            child: Icon(Iconsax.image,
+                                color: Colors.grey.shade300, size: 24),
                           ),
                   ),
-                  const Gap(15),
+                  const Gap(14),
 
                   // 2. Info Column
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Réservation $propertyName",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1A1A1A),
-                          ),
-                        ),
-                        const Gap(2),
-                        Text(
-                          "📍 ${address.isNotEmpty ? address : '_'}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        const Gap(8),
+                        // Title + Badges Inline
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.login_rounded, size: 14, color: Colors.grey),
-                            const Gap(5),
                             Expanded(
                               child: Text(
-                                "${formatDate.format(startDate)} à $checkInTime",
+                                propertyName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
+                            const Gap(8),
+                            // Duration Badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              // decoration: BoxDecoration(
+                              //   color: AppColors.customBlue.withOpacity(0.08),
+                              //   borderRadius: BorderRadius.circular(20),
+                              // ),
+                              child: Text(
+                                "$duration jr${duration > 1 ? 's' : ''}",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.customBlue,
+                                ),
+                              ),
+                            ),
+                            const Gap(4),
+                            // Status Badge
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: isPaid
+                                    ? const Color(0xFF1CA53F).withOpacity(0.1)
+                                    : const Color(0xFFFFF7E6),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                isPaid
+                                    ? "Payée : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}"
+                                    : "À payer : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}",
+                                style: TextStyle(
+                                  fontSize: 8,
+                                  color: isPaid
+                                      ? const Color(0xFF1CA53F)
+                                      : Colors.orange.shade800,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const Gap(4),
-                        Row(
-                          children: [
-                            const Icon(Icons.logout_rounded, size: 14, color: Colors.grey),
-                            const Gap(5),
-                            Expanded(
-                              child: Text(
-                                "${formatDate.format(endDate)} avant $checkOutTime",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                        const Gap(6),
 
-                  // 3. Right Status
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.customBlue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          "$duration jour${duration > 1 ? 's' : ''}",
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.customBlue,
-                          ),
-                        ),
-                      ),
-                      if (isPaid) ...[
-                        const Gap(8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1CA53F).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            "Payée",
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Color(0xFF1CA53F),
-                              fontWeight: FontWeight.bold,
+                        // Address Section
+                        Row(
+                          children: [
+                            Icon(Iconsax.location,
+                                size: 14, color: AppColors.primary),
+                            const Gap(4),
+                            Expanded(
+                              child: Text(
+                                address.isNotEmpty ? address : 'Pas d\'adresse',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                        const Gap(10),
+
+                        // Dates Row (Start -> End)
+                        Row(
+                          children: [
+                            Icon(Iconsax.calendar_1,
+                                size: 14, color: AppColors.primary),
+                            const Gap(4),
+                            Text(
+                              formatDate.format(startDate),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.customBlue,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Gap(4),
+                            Icon(Iconsax.arrow_right_3,
+                                size: 14, color: Colors.grey.shade400),
+                            const Gap(4),
+                            Text(
+                              formatDate.format(endDate),
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.customBlue,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // const Gap(6),
+
+                        // Times Row (CheckIn -> CheckOut)
+                        // Row(
+                        //   children: [
+                        //     Icon(Iconsax.clock, size: 14, color: AppColors.primary),
+                        //     const Gap(4),
+                        //     Text(
+                        //       checkInTime,
+                        //       style: TextStyle(
+                        //         fontSize: 11,
+                        //         color: Colors.grey.shade600,
+                        //         fontWeight: FontWeight.w600,
+                        //       ),
+                        //     ),
+                        //     const Gap(4),
+                        //     Icon(Iconsax.arrow_right_3, size: 14, color: Colors.grey.shade400),
+                        //     const Gap(4),
+                        //     Text(
+                        //       checkOutTime,
+                        //       style: TextStyle(
+                        //         fontSize: 11,
+                        //         color: Colors.grey.shade600,
+                        //         fontWeight: FontWeight.w600,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
-                    ],
-                  ),
-                ],
-              ),
-              const Gap(12),
-              Divider(height: 1, color: Colors.grey.shade100),
-              const Gap(8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Créée le ${formatDate.format(Utils.toDateTime(reservationModel.createdAt))}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const Gap(2),
-                      Row(
-                        children: [
-                          Icon(Icons.touch_app_outlined,
-                              size: 12, color: Colors.grey.shade400),
-                          const Gap(4),
-                          Text(
-                            "Touchez pour voir plus ...",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Text(
-                    Utils.formatCurrency(reservationModel.montantTotalReservation),
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.customBlue,
                     ),
                   ),
                 ],
@@ -238,20 +242,20 @@ class BookingCardV2 extends StatelessWidget {
 
   void _showDetail(BuildContext context) {
     showModalBottomSheet(
-      backgroundColor: AppColors.scafold,
+      backgroundColor: Colors.white,
       showDragHandle: true,
       enableDrag: true,
       isScrollControlled: true,
       useRootNavigator: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       context: context,
       builder: (context) => FractionallySizedBox(
-        heightFactor: 0.8,
+        heightFactor: 0.60,
         child: BookingDetailPage(id: reservationModel.id),
       ),
     );

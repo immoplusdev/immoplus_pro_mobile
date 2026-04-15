@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
@@ -13,115 +14,169 @@ class ContactUtils {
   static showContact({String? id}) => showModalBottomSheet(
         context: NavigationService.navigatorKey.currentContext!,
         showDragHandle: true,
-        backgroundColor: AppColors.scafold,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        builder: (context) => FractionallySizedBox(
-          heightFactor: 0.6,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        builder: (context) => Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              // Header
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      shape: BoxShape.circle,
                     ),
-                    leading: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        FontAwesomeIcons.whatsapp,
-                        color: Colors.green,
-                      ),
+                    child: Icon(
+                      Iconsax.message_question,
+                      color: AppColors.primary,
+                      size: 28,
                     ),
-                    title: const Text("Écrivez-nous sur WhatsApp"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.green,
-                    ),
-                    onTap: () async {
-                      Utils.whatsapp(
-                          phoneNumber: getIt<SessionManager>()
-                              .configModel!
-                              .data!
-                              .contactPhoneNumber);
-                    },
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    "Besoin d'aide ?",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Notre équipe est là pour vous accompagner",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    leading: const Icon(
-                      FontAwesomeIcons.headset,
-                      color: Colors.black,
-                    ),
-                    title: const Text("Appeller notre service client"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.black,
-                    ),
-                    onTap: () async {
-                      Utils.makePhoneCall(getIt<SessionManager>()
+              const SizedBox(height: 24),
+
+              // WhatsApp
+              _buildContactItem(
+                context: context,
+                icon: Iconsax.message,
+                iconColor: const Color(0xFF25D366),
+                title: "Écrivez-nous sur WhatsApp",
+                onTap: () {
+                  Navigator.pop(context);
+                  Utils.whatsapp(
+                    phoneNumber: getIt<SessionManager>()
+                        .configModel!
+                        .data!
+                        .contactPhoneNumber,
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+
+              // Call
+              _buildContactItem(
+                context: context,
+                icon: Iconsax.call,
+                iconColor: AppColors.primary,
+                title: "Appeler le service client",
+                onTap: () {
+                  Navigator.pop(context);
+                  Utils.makePhoneCall(
+                    getIt<SessionManager>()
+                        .configModel!
+                        .data!
+                        .contactPhoneNumber,
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+
+              // Email
+              _buildContactItem(
+                context: context,
+                icon: Iconsax.sms,
+                iconColor: const Color(0xFFEB4132),
+                title: "Envoyez-nous un e-mail",
+                onTap: () {
+                  Navigator.pop(context);
+                  if (id != null) {
+                    Utils.bookingMail(
+                      id: id,
+                      email: getIt<SessionManager>()
                           .configModel!
                           .data!
-                          .contactPhoneNumber);
-                    },
-                  ),
-                ),
+                          .contactEmail,
+                    );
+                  }
+                },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10)
-                    .copyWith(bottom: 10),
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(20),
-                  child: ListTile(
-                    tileColor: Colors.white,
-                    enabled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    leading: SvgPicture.asset(
-                      SVGMap.map['gmail']!,
-                      height: 30,
-                    ),
-                    title: const Text("Envoyez-nous un e-mail"),
-                    titleTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right_circle_fill,
-                      color: Colors.red,
-                    ),
-                    onTap: () async {
-                      if (id != null) {
-                        Utils.bookingMail(
-                            id: id,
-                            email: getIt<SessionManager>()
-                                .configModel!
-                                .data!
-                                .contactEmail);
-                      }
-                    },
-                  ),
-                ),
-              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
       );
+
+  static Widget _buildContactItem({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.shade100),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF2D2D2D),
+                ),
+              ),
+            ),
+            Icon(
+              Iconsax.arrow_right_3,
+              color: Colors.grey.shade300,
+              size: 16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

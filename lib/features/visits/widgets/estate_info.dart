@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 
@@ -10,8 +11,11 @@ class EstateInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       visualDensity: const VisualDensity(vertical: -4),
-      tileColor: CupertinoColors.tertiarySystemFill,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      tileColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
+      ),
       leading: CircleAvatar(
           //backgroundImage: Utils.getImage(id: bienImmobilierModel.images.first),
           ),

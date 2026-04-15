@@ -10,12 +10,16 @@ import 'package:immoplus_pro/features/home_v2/widgets/visit_card_v2.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/v2/immo_empty_display.dart';
+import 'package:immoplus_pro/features/visits/visit_history_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 
 enum VisitFilterV2 { all, express, normal }
 
 class VisitPageV2 extends StatefulWidget {
   final ValueNotifier<VisitFilterV2> filterNotifier;
-  const VisitPageV2({super.key, required this.filterNotifier});
+  final ValueChanged<int>? onCountChanged;
+  const VisitPageV2({super.key, required this.filterNotifier, this.onCountChanged});
 
   @override
   State<VisitPageV2> createState() => _VisitPageV2State();
@@ -64,6 +68,10 @@ class _VisitPageV2State extends State<VisitPageV2> {
         orderDir: OrderDir.desc.value,
         where: QueryBuilder.build(filters: filters),
       );
+
+      if (pageKey == 1) {
+        widget.onCountChanged?.call(result.totalCount);
+      }
 
       final isLastPage = result.hasNext == false;
       if (isLastPage) {
