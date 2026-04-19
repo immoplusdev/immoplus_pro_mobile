@@ -26,7 +26,9 @@ mixin _$FurnitureModel {
   String get description => throw _privateConstructorUsedError;
   String get adresse => throw _privateConstructorUsedError;
   int get prix => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get ville => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get commune => throw _privateConstructorUsedError;
   GeoJsonPoint? get position => throw _privateConstructorUsedError;
   double? get lat => throw _privateConstructorUsedError;
@@ -66,8 +68,8 @@ abstract class $FurnitureModelCopyWith<$Res> {
       String description,
       String adresse,
       int prix,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       GeoJsonPoint? position,
       double? lat,
       double? lng,
@@ -230,8 +232,8 @@ abstract class _$$FurnitureModelImplCopyWith<$Res>
       String description,
       String adresse,
       int prix,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       GeoJsonPoint? position,
       double? lat,
       double? lng,
@@ -387,8 +389,8 @@ class _$FurnitureModelImpl implements _FurnitureModel {
       required this.description,
       required this.adresse,
       required this.prix,
-      this.ville,
-      this.commune,
+      @JsonKey(includeIfNull: false) this.ville,
+      @JsonKey(includeIfNull: false) this.commune,
       this.position,
       this.lat,
       this.lng,
@@ -422,8 +424,10 @@ class _$FurnitureModelImpl implements _FurnitureModel {
   @override
   final int prix;
   @override
+  @JsonKey(includeIfNull: false)
   final String? ville;
   @override
+  @JsonKey(includeIfNull: false)
   final String? commune;
   @override
   final GeoJsonPoint? position;
@@ -567,8 +571,8 @@ abstract class _FurnitureModel implements FurnitureModel {
       required final String description,
       required final String adresse,
       required final int prix,
-      final String? ville,
-      final String? commune,
+      @JsonKey(includeIfNull: false) final String? ville,
+      @JsonKey(includeIfNull: false) final String? commune,
       final GeoJsonPoint? position,
       final double? lat,
       final double? lng,
@@ -600,8 +604,10 @@ abstract class _FurnitureModel implements FurnitureModel {
   @override
   int get prix;
   @override
+  @JsonKey(includeIfNull: false)
   String? get ville;
   @override
+  @JsonKey(includeIfNull: false)
   String? get commune;
   @override
   GeoJsonPoint? get position;

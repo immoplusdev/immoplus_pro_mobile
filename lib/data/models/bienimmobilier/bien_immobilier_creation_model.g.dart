@@ -27,8 +27,8 @@ _$BienImmobilierCreationModelImpl _$$BienImmobilierCreationModelImplFromJson(
               .toList() ??
           const [],
       video: json['video'] as String? ?? '',
-      ville: json['ville'] as String? ?? '',
-      commune: json['commune'] as String? ?? '',
+      ville: json['ville'] as String?,
+      commune: json['commune'] as String?,
       adresse: json['adresse'] as String? ?? '',
       position: json['position'] == null
           ? const PositionModel()
@@ -55,8 +55,8 @@ Map<String, dynamic> _$$BienImmobilierCreationModelImplToJson(
       'tags': instance.tags,
       'images': instance.images,
       'video': instance.video,
-      'ville': instance.ville,
-      'commune': instance.commune,
+      if (instance.ville case final value?) 'ville': value,
+      if (instance.commune case final value?) 'commune': value,
       'adresse': instance.adresse,
       'position': instance.position,
       'prix': instance.prix,

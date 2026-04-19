@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
 
 class ButtonMap extends StatelessWidget {
@@ -8,19 +9,23 @@ class ButtonMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: CupertinoColors.tertiarySystemFill,
-      foregroundColor: Colors.black,
+    return Container(
+      height: 48,
+      width: 48,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(14),
+      ),
       child: IconButton(
-        onPressed: () async {
-          print("Cracra");
+        onPressed: () {
           FocusScope.of(context).unfocus();
-          // final address =
-          //     await Get.toNamed(Routes.LOCATION_MAP, preventDuplicates: false);
           AppRouter.router.pushNamed(LocationMapPage.name);
-          // Get.back(result: address);
         },
-        icon: const Icon(CupertinoIcons.map),
+        icon: Icon(
+          Iconsax.map_1,
+          color: AppColors.white,
+          size: 22,
+        ),
       ),
     );
   }

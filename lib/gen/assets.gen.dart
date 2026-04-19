@@ -95,25 +95,25 @@ class $AssetsIconGen {
 
   /// List of all assets
   List<dynamic> get values => [
-        cash,
-        eco,
-        express,
-        icon,
-        icon3,
-        iconLarge,
-        iconRadius,
-        leading,
-        logoBlanc,
-        logoBleu,
-        marker,
-        marker1,
-        marker2,
-        moov,
-        mtn,
-        normal,
-        om,
-        wave,
-      ];
+    cash,
+    eco,
+    express,
+    icon,
+    icon3,
+    iconLarge,
+    iconRadius,
+    leading,
+    logoBlanc,
+    logoBleu,
+    marker,
+    marker1,
+    marker2,
+    moov,
+    mtn,
+    normal,
+    om,
+    wave,
+  ];
 }
 
 class $AssetsIconsGen {
@@ -184,28 +184,28 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-        add,
-        basket,
-        bell,
-        compte,
-        delet,
-        empt,
-        empty,
-        failed,
-        find,
-        go,
-        history,
-        home,
-        location,
-        logoImmo,
-        map,
-        panier,
-        pending,
-        profil,
-        search,
-        substract,
-        success,
-      ];
+    add,
+    basket,
+    bell,
+    compte,
+    delet,
+    empt,
+    empty,
+    failed,
+    find,
+    go,
+    history,
+    home,
+    location,
+    logoImmo,
+    map,
+    panier,
+    pending,
+    profil,
+    search,
+    substract,
+    success,
+  ];
 }
 
 class $AssetsImgGen {
@@ -266,22 +266,22 @@ class $AssetsImgGen {
 
   /// List of all assets
   List<dynamic> get values => [
-        email,
-        img,
-        immeubleDeBureaux,
-        logo,
-        logoPlain,
-        orderJpg,
-        orderPng,
-        panorama,
-        panorama2,
-        panoramaCropped,
-        serviceJpg,
-        servicePng,
-        utilisateur,
-        visit,
-        voidImage,
-      ];
+    email,
+    img,
+    immeubleDeBureaux,
+    logo,
+    logoPlain,
+    orderJpg,
+    orderPng,
+    panorama,
+    panorama2,
+    panoramaCropped,
+    serviceJpg,
+    servicePng,
+    utilisateur,
+    visit,
+    voidImage,
+  ];
 }
 
 class $AssetsLottiesGen {
@@ -335,32 +335,76 @@ class $AssetsLottiesGen {
 
   /// List of all assets
   List<String> get values => [
-        cheking,
-        deliveryProgress,
-        fail,
-        furnitureIsolatedEdited,
-        furniture,
-        furniture1,
-        furniture2,
-        furniture3,
-        furnituresS1,
-        house,
-        orderChecking,
-        resetPassword,
-        rocket,
-        success,
-        tXdlifYfFw1,
-      ];
+    cheking,
+    deliveryProgress,
+    fail,
+    furnitureIsolatedEdited,
+    furniture,
+    furniture1,
+    furniture2,
+    furniture3,
+    furnituresS1,
+    house,
+    orderChecking,
+    resetPassword,
+    rocket,
+    success,
+    tXdlifYfFw1,
+  ];
 }
 
 class $AssetsSvgsGen {
   const $AssetsSvgsGen();
 
+  /// File path: assets/svgs/buildings.svg
+  String get buildings => 'assets/svgs/buildings.svg';
+
+  /// Directory path: assets/svgs/creation_icon
+  $AssetsSvgsCreationIconGen get creationIcon =>
+      const $AssetsSvgsCreationIconGen();
+
+  /// File path: assets/svgs/document-text.svg
+  String get documentText => 'assets/svgs/document-text.svg';
+
+  /// File path: assets/svgs/dollard.svg
+  String get dollard => 'assets/svgs/dollard.svg';
+
+  /// File path: assets/svgs/empty.png
+  AssetGenImage get empty => const AssetGenImage('assets/svgs/empty.png');
+
+  /// File path: assets/svgs/house.svg
+  String get house => 'assets/svgs/house.svg';
+
   /// Directory path: assets/svgs/icons
   $AssetsSvgsIconsGen get icons => const $AssetsSvgsIconsGen();
 
+  /// File path: assets/svgs/lobby.svg
+  String get lobby => 'assets/svgs/lobby.svg';
+
+  /// File path: assets/svgs/retrait_dollars.svg
+  String get retraitDollars => 'assets/svgs/retrait_dollars.svg';
+
   /// Directory path: assets/svgs/undraw
   $AssetsSvgsUndrawGen get undraw => const $AssetsSvgsUndrawGen();
+
+  /// File path: assets/svgs/user-edit.svg
+  String get userEdit => 'assets/svgs/user-edit.svg';
+
+  /// File path: assets/svgs/user-square.svg
+  String get userSquare => 'assets/svgs/user-square.svg';
+
+  /// List of all assets
+  List<dynamic> get values => [
+    buildings,
+    documentText,
+    dollard,
+    empty,
+    house,
+    lobby,
+    retraitDollars,
+    userEdit,
+    userSquare,
+  ];
 }
 
 class $AssetsImgOnboardingGen {
@@ -380,6 +424,38 @@ class $AssetsImgOnboardingGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [a1, a2, a3, a4];
+}
+
+class $AssetsSvgsCreationIconGen {
+  const $AssetsSvgsCreationIconGen();
+
+  /// File path: assets/svgs/creation_icon/calendar.svg
+  String get calendar => 'assets/svgs/creation_icon/calendar.svg';
+
+  /// File path: assets/svgs/creation_icon/calendar_clock.svg
+  String get calendarClock => 'assets/svgs/creation_icon/calendar_clock.svg';
+
+  /// File path: assets/svgs/creation_icon/calendar_jours.svg
+  String get calendarJours => 'assets/svgs/creation_icon/calendar_jours.svg';
+
+  /// File path: assets/svgs/creation_icon/gallery-import.svg
+  String get galleryImport => 'assets/svgs/creation_icon/gallery-import.svg';
+
+  /// File path: assets/svgs/creation_icon/tag.svg
+  String get tag => 'assets/svgs/creation_icon/tag.svg';
+
+  /// File path: assets/svgs/creation_icon/video-add.svg
+  String get videoAdd => 'assets/svgs/creation_icon/video-add.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    calendar,
+    calendarClock,
+    calendarJours,
+    galleryImport,
+    tag,
+    videoAdd,
+  ];
 }
 
 class $AssetsSvgsIconsGen {
@@ -517,50 +593,50 @@ class $AssetsSvgsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-        bed,
-        buildingUserSolid,
-        bureau,
-        coeur,
-        coeur1,
-        coeur2,
-        compte,
-        cottage,
-        directionsCar,
-        dryCleaning,
-        faceId,
-        facebook,
-        fanSolid,
-        gmail,
-        google,
-        googleMaps,
-        historique,
-        home,
-        homeFILL,
-        kitchenSetSolid,
-        kitchen,
-        land,
-        localLaundry,
-        location,
-        loupe,
-        markers,
-        meubles,
-        microwave,
-        moving,
-        oven,
-        panier,
-        recent,
-        resi,
-        service,
-        smileCircleSvgrepoCom,
-        studio,
-        terrain,
-        tv,
-        villa,
-        visua,
-        volumeOff,
-        wifi,
-        wind,
-      ];
+    bed,
+    buildingUserSolid,
+    bureau,
+    coeur,
+    coeur1,
+    coeur2,
+    compte,
+    cottage,
+    directionsCar,
+    dryCleaning,
+    faceId,
+    facebook,
+    fanSolid,
+    gmail,
+    google,
+    googleMaps,
+    historique,
+    home,
+    homeFILL,
+    kitchenSetSolid,
+    kitchen,
+    land,
+    localLaundry,
+    location,
+    loupe,
+    markers,
+    meubles,
+    microwave,
+    moving,
+    oven,
+    panier,
+    recent,
+    resi,
+    service,
+    smileCircleSvgrepoCom,
+    studio,
+    terrain,
+    tv,
+    villa,
+    visua,
+    volumeOff,
+    wifi,
+    wind,
+  ];
 }
 
 class $AssetsSvgsUndrawGen {
@@ -595,22 +671,23 @@ class $AssetsSvgsUndrawGen {
 
   /// List of all assets
   List<String> get values => [
-        a1,
-        a2,
-        a3,
-        a4,
-        a5,
-        a6,
-        compteCopie,
-        etoile,
-        house,
-      ];
+    a1,
+    a2,
+    a3,
+    a4,
+    a5,
+    a6,
+    compteCopie,
+    etoile,
+    house,
+  ];
 }
 
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env.dev';
+  // static const String aEnv = '.env.prod';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const String googleMapStyle = 'assets/google_map_style.json';

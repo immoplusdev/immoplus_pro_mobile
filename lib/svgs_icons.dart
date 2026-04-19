@@ -21,7 +21,8 @@ class SVGMap {
     'tv': './assets/svgs/icons/tv.svg',
     'volume_off': './assets/svgs/icons/volume_off.svg',
     'terrain': './assets/svgs/icons/terrain.svg',
-    'smile-circle-svgrepo-com': './assets/svgs/icons/smile-circle-svgrepo-com.svg',
+    'smile-circle-svgrepo-com':
+        './assets/svgs/icons/smile-circle-svgrepo-com.svg',
     'land': './assets/svgs/icons/land.svg',
     'visua': './assets/svgs/icons/visua.svg',
     'wifi': './assets/svgs/icons/wifi.svg',

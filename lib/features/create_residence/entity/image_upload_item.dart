@@ -7,18 +7,19 @@ enum UploadStatus {
 }
 
 class ImageUploadItem {
-  final String id = DateTime.now().microsecondsSinceEpoch.toString();
+  final String id;
   final File? file;
   UploadStatus status;
   String? uploadedId;
   String? errorMessage;
 
   ImageUploadItem({
+    String? id,
     this.file,
     required this.status,
     this.uploadedId,
     this.errorMessage,
-  });
+  }) : id = id ?? DateTime.now().microsecondsSinceEpoch.toString();
 
   ImageUploadItem copyWith({
     UploadStatus? status,
@@ -26,6 +27,7 @@ class ImageUploadItem {
     String? errorMessage,
   }) {
     return ImageUploadItem(
+      id: id,
       file: file,
       status: status ?? this.status,
       uploadedId: uploadedId ?? this.uploadedId,

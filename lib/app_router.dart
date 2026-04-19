@@ -7,11 +7,26 @@ import 'package:immoplus_pro/features/authentification/choose_account_type_page.
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/create_residence/create_lodgment_page.dart';
-import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
-import 'package:immoplus_pro/features/estates/estates_page.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/estate_detail/estate_details_page_v2.dart';
+import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
 import 'package:immoplus_pro/features/login_page/register_page.dart';
+import 'package:immoplus_pro/data/models/residence/residence_model.dart';
+import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
+// V2 Imports
+import 'package:immoplus_pro/features/main_navigation_v2/main_navigation_v2.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
+import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
+import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
+import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
+import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
+import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
+import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
+import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
+import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
+import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.dart';
+import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
@@ -26,7 +41,9 @@ import 'package:immoplus_pro/features/registration/pages/send_email_opt_page.dar
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
+import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
+import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/force_update_required_page.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
@@ -51,7 +68,11 @@ import 'package:immoplus_pro/features/contact_change/view/request_contact_change
 
 // ── Furniture module ──
 import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
+import 'package:immoplus_pro/features/furnitures/furnitures_page_v2.dart';
 import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page.dart';
+import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page_v2.dart';
+import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_cubit.dart';
+import 'package:immoplus_pro/data/models/furniture/furniture_model.dart';
 import 'package:immoplus_pro/features/create_furniture/create_furniture_page.dart';
 
 class AppRouter {
@@ -66,19 +87,56 @@ class AppRouter {
         path: '/',
         builder: (context, state) => SplashScreen(),
       ),
-      GoRoute(
-        path: HomePage.routePath(),
-        name: HomePage.name,
-        builder: (context, state) => HomePage(
-          paiementId: state.extra as String?,
-        ),
+
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainNavigationV2(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                name: HomePageV2.name,
+                builder: (context, state) => HomePageV2(
+                  paiementId: state.extra as String?,
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/creations_v2',
+                builder: (context, state) => const CreationsPageV2(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/statistics_v2',
+                builder: (context, state) => const OwnerStatsPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/account_v2',
+                name: AccountPageV2.name,
+                builder: (context, state) => const AccountPageV2(),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: '/pin_code',
         name: PinCodePage.name,
         builder: (context, state) => PinCodePage(
           onSuccess: () {
-            context.goNamed(HomePage.name);
+            context.goNamed(HomePageV2.name);
           },
         ),
       ),
@@ -93,15 +151,44 @@ class AppRouter {
         name: CreateEstatePage.name,
       ),
       GoRoute(
+        path: '/create_estate_v2',
+        name: CreateEstatePageV2.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is BienImmobilierModel) {
+            return CreateEstatePageV2(initialEstate: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateEstatePageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateEstatePageV2();
+        },
+      ),
+      GoRoute(
         path: '/payments',
         builder: (context, state) => const PaymentsPage(),
         name: PaymentsPage.name,
       ),
-      // GoRoute(
-      //   path: '/registration',
-      //   builder: (context, state) => const RegistrationMainScreean(),
-      //   name: RegistrationMainScreean.name,
-      // ),
+      GoRoute(
+        path: '/payments_v2',
+        builder: (context, state) => const PaymentsPageV2(),
+        name: PaymentsPageV2.name,
+      ),
+      GoRoute(
+        path: '/withdraw_form_v2',
+        name: WithdrawFormScreenV2.name,
+        builder: (context, state) => const WithdrawFormScreenV2(),
+      ),
+      GoRoute(
+        path: '/pin_code_v2',
+        builder: (context, state) {
+          final onSuccess = state.extra as VoidCallback;
+          return PinCodePageV2(onSuccess: onSuccess);
+        },
+        name: PinCodePageV2.name,
+      ),
       GoRoute(
         path: '/${AuthenticationPage.name}',
         name: AuthenticationPage.name,
@@ -132,6 +219,22 @@ class AppRouter {
         name: CreateLodgmentPage.name,
       ),
       GoRoute(
+        path: '/create_lodgment_v2',
+        name: CreateLodgmentPageV2.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is ResidenceModel) {
+            return CreateLodgmentPageV2(initialResidence: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateLodgmentPageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateLodgmentPageV2();
+        },
+      ),
+      GoRoute(
         path: '/plage_page',
         builder: (context, state) => const PlacePage(),
         name: PlacePage.name,
@@ -142,15 +245,28 @@ class AppRouter {
         builder: (context, state) => const ResidencesPage(),
       ),
       GoRoute(
-        path: EstatesPage.routePath(),
-        name: EstatesPage.name,
-        builder: (context, state) => const EstatesPage(),
+        path: EstatesPageV2.routePath,
+        name: EstatesPageV2.name,
+        builder: (context, state) => const EstatesPageV2(),
       ),
       GoRoute(
-        path: EstateDetailsPage.routePath(),
-        builder: (context, state) => EstateDetailsPage(
+        path: EstateDetailsPageV2.routePath(),
+        name: EstateDetailsPageV2.name,
+        builder: (context, state) => EstateDetailsPageV2(
           idProduct: state.pathParameters['id'].toString(),
         ),
+      ),
+      GoRoute(
+        path: ResidenceDetailsPageV2.routePath(),
+        name: ResidenceDetailsPageV2.name,
+        builder: (context, state) => ResidenceDetailsPageV2(
+          idProduct: state.pathParameters['id'].toString(),
+        ),
+      ),
+      GoRoute(
+        path: ResidencesPageV2.routePath,
+        name: ResidencesPageV2.name,
+        builder: (context, state) => const ResidencesPageV2(),
       ),
       GoRoute(
         path: ResidenceDetailsPage.routePath(),
@@ -322,6 +438,11 @@ class AppRouter {
         builder: (context, state) => const FurnituresPage(),
       ),
       GoRoute(
+        path: '/furnitures_v2',
+        name: FurnituresPageV2.name,
+        builder: (context, state) => const FurnituresPageV2(),
+      ),
+      GoRoute(
         path: '/furnitures/detail/:id',
         name: FurnitureDetailPage.name,
         builder: (context, state) {
@@ -330,9 +451,50 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/furnitures/detail_v2/:id',
+        name: FurnitureDetailPageV2.name,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return BlocProvider(
+            create: (context) => FurnitureCubit(),
+            child: FurnitureDetailPageV2(furnitureId: id),
+          );
+        },
+      ),
+      GoRoute(
         path: '/create_furniture',
         name: CreateFurniturePage.name,
         builder: (context, state) => const CreateFurniturePage(),
+      ),
+      GoRoute(
+        path: '/create_furniture_v2',
+        name: CreateFurniturePageV2.name,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is FurnitureModel) {
+            return CreateFurniturePageV2(initialFurniture: extra);
+          }
+          if (extra is Map<String, dynamic>) {
+            return CreateFurniturePageV2(
+              listingRoute: extra['listingRoute'] as String?,
+            );
+          }
+          return const CreateFurniturePageV2();
+        },
+      ),
+
+      // ── My Feed ──
+      GoRoute(
+        path: MyFeedPage.routePath(),
+        name: MyFeedPage.name,
+        builder: (context, state) => const MyFeedPage(),
+      ),
+
+      // ── Notifications ──
+      GoRoute(
+        path: NotificationPage.routePath(),
+        name: NotificationPage.name,
+        builder: (context, state) => const NotificationPage(),
       ),
     ],
   );

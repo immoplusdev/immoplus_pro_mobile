@@ -30,7 +30,9 @@ mixin _$BienImmobilierCreationModel {
   List<String>? get tags => throw _privateConstructorUsedError;
   List<String>? get images => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get ville => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
   String? get commune => throw _privateConstructorUsedError;
   String? get adresse => throw _privateConstructorUsedError;
   PositionModel? get position => throw _privateConstructorUsedError;
@@ -67,8 +69,8 @@ abstract class $BienImmobilierCreationModelCopyWith<$Res> {
       List<String>? tags,
       List<String>? images,
       String? video,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       String? adresse,
       PositionModel? position,
       int? prix,
@@ -219,8 +221,8 @@ abstract class _$$BienImmobilierCreationModelImplCopyWith<$Res>
       List<String>? tags,
       List<String>? images,
       String? video,
-      String? ville,
-      String? commune,
+      @JsonKey(includeIfNull: false) String? ville,
+      @JsonKey(includeIfNull: false) String? commune,
       String? adresse,
       PositionModel? position,
       int? prix,
@@ -352,8 +354,8 @@ class _$BienImmobilierCreationModelImpl
       final List<String>? tags = const [],
       final List<String>? images = const [],
       this.video = '',
-      this.ville = '',
-      this.commune = '',
+      @JsonKey(includeIfNull: false) this.ville,
+      @JsonKey(includeIfNull: false) this.commune,
       this.adresse = '',
       this.position = const PositionModel(),
       this.prix = 0,
@@ -420,10 +422,10 @@ class _$BienImmobilierCreationModelImpl
   @JsonKey()
   final String? video;
   @override
-  @JsonKey()
+  @JsonKey(includeIfNull: false)
   final String? ville;
   @override
-  @JsonKey()
+  @JsonKey(includeIfNull: false)
   final String? commune;
   @override
   @JsonKey()
@@ -538,8 +540,8 @@ abstract class _BienImmobilierCreationModel
       final List<String>? tags,
       final List<String>? images,
       final String? video,
-      final String? ville,
-      final String? commune,
+      @JsonKey(includeIfNull: false) final String? ville,
+      @JsonKey(includeIfNull: false) final String? commune,
       final String? adresse,
       final PositionModel? position,
       final int? prix,
@@ -569,8 +571,10 @@ abstract class _BienImmobilierCreationModel
   @override
   String? get video;
   @override
+  @JsonKey(includeIfNull: false)
   String? get ville;
   @override
+  @JsonKey(includeIfNull: false)
   String? get commune;
   @override
   String? get adresse;
