@@ -24,6 +24,7 @@ mixin _$ResidencesCollection {
   int? get currentPage => throw _privateConstructorUsedError;
   int? get totalPages => throw _privateConstructorUsedError;
   int? get pageSize => throw _privateConstructorUsedError;
+  int? get totalCount => throw _privateConstructorUsedError;
   bool? get hasNext => throw _privateConstructorUsedError;
   bool? get hasPrevious => throw _privateConstructorUsedError;
 
@@ -48,6 +49,7 @@ abstract class $ResidencesCollectionCopyWith<$Res> {
       int? currentPage,
       int? totalPages,
       int? pageSize,
+      int? totalCount,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -72,6 +74,7 @@ class _$ResidencesCollectionCopyWithImpl<$Res,
     Object? currentPage = freezed,
     Object? totalPages = freezed,
     Object? pageSize = freezed,
+    Object? totalCount = freezed,
     Object? hasNext = freezed,
     Object? hasPrevious = freezed,
   }) {
@@ -91,6 +94,10 @@ class _$ResidencesCollectionCopyWithImpl<$Res,
       pageSize: freezed == pageSize
           ? _value.pageSize
           : pageSize // ignore: cast_nullable_to_non_nullable
+              as int?,
+      totalCount: freezed == totalCount
+          ? _value.totalCount
+          : totalCount // ignore: cast_nullable_to_non_nullable
               as int?,
       hasNext: freezed == hasNext
           ? _value.hasNext
@@ -117,6 +124,7 @@ abstract class _$$ResidencesCollectionImplCopyWith<$Res>
       int? currentPage,
       int? totalPages,
       int? pageSize,
+      int? totalCount,
       bool? hasNext,
       bool? hasPrevious});
 }
@@ -138,6 +146,7 @@ class __$$ResidencesCollectionImplCopyWithImpl<$Res>
     Object? currentPage = freezed,
     Object? totalPages = freezed,
     Object? pageSize = freezed,
+    Object? totalCount = freezed,
     Object? hasNext = freezed,
     Object? hasPrevious = freezed,
   }) {
@@ -157,6 +166,10 @@ class __$$ResidencesCollectionImplCopyWithImpl<$Res>
       pageSize: freezed == pageSize
           ? _value.pageSize
           : pageSize // ignore: cast_nullable_to_non_nullable
+              as int?,
+      totalCount: freezed == totalCount
+          ? _value.totalCount
+          : totalCount // ignore: cast_nullable_to_non_nullable
               as int?,
       hasNext: freezed == hasNext
           ? _value.hasNext
@@ -178,6 +191,7 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
       this.currentPage = 0,
       this.totalPages = 0,
       this.pageSize = 0,
+      this.totalCount = 0,
       this.hasNext = false,
       this.hasPrevious = false})
       : _data = data;
@@ -207,6 +221,9 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
   final int? pageSize;
   @override
   @JsonKey()
+  final int? totalCount;
+  @override
+  @JsonKey()
   final bool? hasNext;
   @override
   @JsonKey()
@@ -214,7 +231,7 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
 
   @override
   String toString() {
-    return 'ResidencesCollection(data: $data, currentPage: $currentPage, totalPages: $totalPages, pageSize: $pageSize, hasNext: $hasNext, hasPrevious: $hasPrevious)';
+    return 'ResidencesCollection(data: $data, currentPage: $currentPage, totalPages: $totalPages, pageSize: $pageSize, totalCount: $totalCount, hasNext: $hasNext, hasPrevious: $hasPrevious)';
   }
 
   @override
@@ -229,6 +246,8 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
                 other.totalPages == totalPages) &&
             (identical(other.pageSize, pageSize) ||
                 other.pageSize == pageSize) &&
+            (identical(other.totalCount, totalCount) ||
+                other.totalCount == totalCount) &&
             (identical(other.hasNext, hasNext) || other.hasNext == hasNext) &&
             (identical(other.hasPrevious, hasPrevious) ||
                 other.hasPrevious == hasPrevious));
@@ -242,6 +261,7 @@ class _$ResidencesCollectionImpl implements _ResidencesCollection {
       currentPage,
       totalPages,
       pageSize,
+      totalCount,
       hasNext,
       hasPrevious);
 
@@ -269,6 +289,7 @@ abstract class _ResidencesCollection implements ResidencesCollection {
       final int? currentPage,
       final int? totalPages,
       final int? pageSize,
+      final int? totalCount,
       final bool? hasNext,
       final bool? hasPrevious}) = _$ResidencesCollectionImpl;
 
@@ -283,6 +304,8 @@ abstract class _ResidencesCollection implements ResidencesCollection {
   int? get totalPages;
   @override
   int? get pageSize;
+  @override
+  int? get totalCount;
   @override
   bool? get hasNext;
   @override

@@ -11,6 +11,7 @@ class BienImmobilierCollection with _$BienImmobilierCollection {
     @Default(0) int? currentPage,
     @Default(0) int? totalPages,
     @Default(0) int? pageSize,
+    @Default(0) int? totalCount,
     @Default(false) bool? hasNext,
     @Default(false) bool? hasPrevious,
   }) = _BienImmobilierCollection;

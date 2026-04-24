@@ -72,7 +72,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
       );
 
       setState(() {
-        _totalCount = _pagingController.itemList?.length ?? 0;
+        _totalCount = result.totalCount ?? 0;
       });
 
       final isLastPage = result.hasNext == false;

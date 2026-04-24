@@ -12,6 +12,7 @@ class ResidencesCollection with _$ResidencesCollection {
     @Default(0) int? currentPage,
     @Default(0) int? totalPages,
     @Default(0) int? pageSize,
+    @Default(0) int? totalCount,
     @Default(false) bool? hasNext,
     @Default(false) bool? hasPrevious,
   }) = _ResidencesCollection;

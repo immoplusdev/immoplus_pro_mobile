@@ -16,6 +16,7 @@ _$ResidencesCollectionImpl _$$ResidencesCollectionImplFromJson(
       currentPage: (json['currentPage'] as num?)?.toInt() ?? 0,
       totalPages: (json['totalPages'] as num?)?.toInt() ?? 0,
       pageSize: (json['pageSize'] as num?)?.toInt() ?? 0,
+      totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
       hasNext: json['hasNext'] as bool? ?? false,
       hasPrevious: json['hasPrevious'] as bool? ?? false,
     );
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$ResidencesCollectionImplToJson(
       'currentPage': instance.currentPage,
       'totalPages': instance.totalPages,
       'pageSize': instance.pageSize,
+      'totalCount': instance.totalCount,
       'hasNext': instance.hasNext,
       'hasPrevious': instance.hasPrevious,
     };
