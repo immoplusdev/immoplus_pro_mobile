@@ -216,7 +216,9 @@ class _Step4RulesPricePageState extends State<Step4RulesPricePage> {
                       context.read<ResidenceCreationCubitV2>().submit();
                     }
                   : null,
-              saveText: state.id != null ? "Enregistrer les modifications" : "Finaliser et publier",
+              saveText: state.id != null
+                  ? "Enregistrer les modifications"
+                  : "Finaliser et publier",
               showNext: state.id != null,
             );
           },
@@ -326,13 +328,13 @@ class _Step4RulesPricePageState extends State<Step4RulesPricePage> {
           ),
         ),
         InkWell(
-          onTap: onAdd,
-          child: Icon(Icons.add_circle, color: AppColors.primary, size: 28),
+          onTap: onRemove,
+          child: Icon(Icons.remove_circle, color: AppColors.primary, size: 28),
         ),
         const Gap(10),
         InkWell(
-          onTap: onRemove,
-          child: Icon(Icons.remove_circle, color: AppColors.primary, size: 28),
+          onTap: onAdd,
+          child: Icon(Icons.add_circle, color: AppColors.primary, size: 28),
         ),
       ],
     );

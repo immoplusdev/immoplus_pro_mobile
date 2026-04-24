@@ -17,7 +17,7 @@ import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_
 import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
 import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 
@@ -91,23 +91,23 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
     try {
       if (_manager.editing && _manager.editingId != null) {
         // ── Mode édition : PATCH ──
-        CustomPopup.showLoagingToast(text: 'Modification en cours…');
+        EasyLoadingHandler.showLoadingToast(text: 'Modification en cours…');
         await FurnitureRepository.updateFurniture(
           id: _manager.editingId!,
           fields: _manager.build().toJson(),
         );
-        CustomPopup.hideLoadingToast();
+        EasyLoadingHandler.hideLoadingToast();
         ToastUtils.showSuccess(title: 'Meuble modifié avec succès');
         _manager.reset();
         if (mounted) context.pop(true);
       } else {
         // ── Mode création : POST ──
-        CustomPopup.showLoagingToast(text: 'Création en cours…');
+        EasyLoadingHandler.showLoadingToast(text: 'Création en cours…');
         final response = await FurnitureRepository.createFurniture(
           model: _manager.build(),
         );
         inspect(response);
-        CustomPopup.hideLoadingToast();
+        EasyLoadingHandler.hideLoadingToast();
         final created = response.data;
         if (created != null) {
           ToastUtils.showSuccess(title: 'Meuble créé: ${created.titre}');
@@ -120,7 +120,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
         if (mounted) context.pop(true);
       }
     } catch (e) {
-      CustomPopup.hideLoadingToast();
+      EasyLoadingHandler.hideLoadingToast();
       ToastUtils.showError(title: 'Erreur : $e');
       log('Erreur soumission meuble : $e', name: 'CREATE_FURNITURE');
     } finally {

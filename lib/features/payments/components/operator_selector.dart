@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:immoplus_pro/data/models/payment/operator_model.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 class OperatorSelector extends StatelessWidget {
   final List<OperatorModel> operators;
@@ -38,7 +38,7 @@ class OperatorSelector extends StatelessWidget {
               selected: operator == selectedOperator,
               onTap: () {
                 if (operator.id == 0) {
-                  CustomPopup.toast(
+                  EasyLoadingHandler.toast(
                       text:
                           "Ce moyen de retrait n'est pas disponible pour le moment");
                 } else {

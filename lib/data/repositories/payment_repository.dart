@@ -1,12 +1,9 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/core/request_response_exeption.dart';
 import 'package:immoplus_pro/data/models/payment/crate_payement_request_dto.dart';
@@ -15,7 +12,6 @@ import 'package:immoplus_pro/data/models/payment/payment_intent_body.dart';
 import 'package:immoplus_pro/data/models/payment/payment_itent_model.dart';
 import 'package:immoplus_pro/data/models/payment/payments_model_collection.dart';
 import 'package:immoplus_pro/data/providers/payment_provider.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:retrofit/dio.dart';
@@ -58,7 +54,7 @@ class PaymentRepository {
         log(rep['message']);
 
         if (rep['message'] != null) {
-          //CustomPopup.showErrorToast(text: rep['message'].toString());
+          //EasyLoadingHandler.showErrorToast(text: rep['message'].toString());
           AppDialog.info(
             context: NavigationService.navigatorKey.currentContext!,
             content: rep['message'].toString(),

@@ -14,7 +14,7 @@ import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manage
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class EstateLogmentPricePage extends StatefulWidget {
@@ -137,7 +137,7 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                 if (_formKey.currentState!.validate()) {
                   if (EstateCreationModelBuilder().editing) {
                     try {
-                      CustomPopup.showLoagingToast(
+                      EasyLoadingHandler.showLoadingToast(
                           text: "Modification en cours");
 
                       EstateCreationModelBuilder().prix =
@@ -150,17 +150,17 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                                   EstateCreationModelBuilder().build().toJson())
                           .then(
                         (value) {
-                          EasyLoading.dismiss();
+                          EasyLoadingHandler.hideLoadingToast();
                           if (context.mounted) context.pop(true);
                         },
                       );
                     } catch (e) {
                       EasyLoading.dismiss();
-                      CustomPopup.showErrorToast(text: 'Modification échoué');
+                      EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
                     }
                   } else {
                     try {
-                      EasyLoading.show(status: "Création en cours");
+                      EasyLoadingHandler.showLoadingToast(text: "Création en cours");
                       EstateCreationModelBuilder().prix =
                           _controller.numberValue.toInt();
                       await SessionManager().getCurrentUser();
@@ -168,7 +168,7 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                               model: EstateCreationModelBuilder().build())
                           .then(
                         (value) {
-                          EasyLoading.dismiss();
+                          EasyLoadingHandler.hideLoadingToast();
                           EstateCreationModelBuilder().reset();
                           context.pop(true);
                           // AppRouter.router.goNamed(EstatesPage.name);

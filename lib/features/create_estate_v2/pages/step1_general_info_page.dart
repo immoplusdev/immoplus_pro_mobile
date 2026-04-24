@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_estate_v2/logic/estate_creation_cub
 import 'package:immoplus_pro/data/models/residence/position_model.dart';
 import 'package:immoplus_pro/common/widgets/v2/location_selector_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_navigation_buttons_v2.dart';
+import 'package:immoplus_pro/common/widgets/v2/piece_counter_v2.dart';
 
 class Step1EstateGeneralInfoPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -122,7 +123,8 @@ class _Step1EstateGeneralInfoPageState
                               type: type.value,
                               title: type.label,
                               iconKey: type.iconKey,
-                              isSelected: state.typeBienImmobilier == type.value,
+                              isSelected:
+                                  state.typeBienImmobilier == type.value,
                             ),
                           );
                         }).toList(),
@@ -136,11 +138,46 @@ class _Step1EstateGeneralInfoPageState
                 const Text("Nombre de pièces du logement :",
                     style: TextStyle(color: Colors.grey, fontSize: 13)),
                 const Gap(15),
-                _buildPieceCounter(context, "Salon"),
-                _buildPieceCounter(context, "Chambre"),
-                _buildPieceCounter(context, "Salle de bains"),
-                _buildPieceCounter(context, "Cuisine"),
-                _buildPieceCounter(context, "Salle à manger"),
+                BlocBuilder<EstateCreationCubitV2, EstateCreationStateV2>(
+                  buildWhen: (p, c) => p.pieces != c.pieces,
+                  builder: (context, state) {
+                    final cubit = context.read<EstateCreationCubitV2>();
+                    return Column(
+                      children: [
+                        PieceCounterV2(
+                          title: "Salon",
+                          value: cubit.getPieceQuantity("Salon"),
+                          onUpdate: (delta) =>
+                              cubit.updatePieceQuantity("Salon", delta),
+                        ),
+                        PieceCounterV2(
+                          title: "Chambre",
+                          value: cubit.getPieceQuantity("Chambre"),
+                          onUpdate: (delta) =>
+                              cubit.updatePieceQuantity("Chambre", delta),
+                        ),
+                        PieceCounterV2(
+                          title: "Salle de bains",
+                          value: cubit.getPieceQuantity("Salle de bains"),
+                          onUpdate: (delta) => cubit.updatePieceQuantity(
+                              "Salle de bains", delta),
+                        ),
+                        PieceCounterV2(
+                          title: "Cuisine",
+                          value: cubit.getPieceQuantity("Cuisine"),
+                          onUpdate: (delta) =>
+                              cubit.updatePieceQuantity("Cuisine", delta),
+                        ),
+                        PieceCounterV2(
+                          title: "Salle à manger",
+                          value: cubit.getPieceQuantity("Salle à manger"),
+                          onUpdate: (delta) => cubit.updatePieceQuantity(
+                              "Salle à manger", delta),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -158,7 +195,9 @@ class _Step1EstateGeneralInfoPageState
                       ? () => context.read<EstateCreationCubitV2>().submit()
                       : widget.onNext)
                   : null,
-              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              saveText: state.id != null
+                  ? "Enregistrer les modifications"
+                  : "Continuer",
               showNext: state.id != null,
             );
           },
@@ -228,56 +267,6 @@ class _Step1EstateGeneralInfoPageState
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildPieceCounter(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15.0),
-      child: Row(
-        children: [
-          BlocBuilder<EstateCreationCubitV2, EstateCreationStateV2>(
-            buildWhen: (p, c) => p.pieces != c.pieces,
-            builder: (context, state) {
-              final val =
-                  context.read<EstateCreationCubitV2>().getPieceQuantity(title);
-              return Text(
-                val.toString().padLeft(2, '0'),
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              );
-            },
-          ),
-          const Gap(15),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ),
-          InkWell(
-            onTap: () => context
-                .read<EstateCreationCubitV2>()
-                .updatePieceQuantity(title, 1),
-            child: Icon(Icons.add_circle, color: AppColors.primary, size: 28),
-          ),
-          const Gap(10),
-          InkWell(
-            onTap: () {
-              final val = context
-                  .read<EstateCreationCubitV2>()
-                  .getPieceQuantity(title);
-              if (val > 0) {
-                context
-                    .read<EstateCreationCubitV2>()
-                    .updatePieceQuantity(title, -1);
-              }
-            },
-            child:
-                Icon(Icons.remove_circle, color: AppColors.primary, size: 28),
-          ),
-        ],
       ),
     );
   }

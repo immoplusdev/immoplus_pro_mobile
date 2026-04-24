@@ -8,7 +8,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:video_player/video_player.dart';
 
 class UploadVideoPageV2 extends StatefulWidget {
@@ -63,7 +63,7 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
     if (_videoPath.isEmpty) return;
 
     setState(() => _isUploading = true);
-    CustomPopup.showLoagingToast(text: "Envoi de la vidéo...");
+    EasyLoadingHandler.showLoadingToast(text: "Envoi de la vidéo...");
 
     try {
       FileDataModel response =
@@ -75,10 +75,10 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
       }
     } catch (e) {
       if (mounted) {
-        CustomPopup.showErrorToast(text: "Échec de l'envoi");
+        EasyLoadingHandler.showErrorToast(text: "Échec de l'envoi");
       }
     } finally {
-      CustomPopup.hideLoadingToast();
+      EasyLoadingHandler.hideLoadingToast();
       if (mounted) {
         setState(() => _isUploading = false);
       }

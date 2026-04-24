@@ -4,9 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,10 +13,9 @@ import 'package:immoplus_pro/core/address_exception.dart';
 import 'package:immoplus_pro/data/models/configs/address.dart';
 import 'package:immoplus_pro/data/models/configs/autocomplete_response.dart';
 import 'package:immoplus_pro/data/models/configs/reverse_geocoding_response.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/location_module/data/geocoding_api_repository.dart';
 import 'package:immoplus_pro/features/location_module/data/places_api_repository.dart';
-import 'package:immoplus_pro/features/location_module/location_page.dart';
 import 'package:immoplus_pro/services/location_service.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 // ignore: implementation_imports
@@ -114,17 +111,17 @@ class LocationController extends GetxController
     change(state, status: RxStatus.loading());
 
     try {
-      CustomPopup.showLoagingToast();
+      EasyLoadingHandler.showLoadingToast();
       final position = await LocationService.getCurrentPosition()
           .onError((error, stackTrace) => throw AddressException());
 
       final locationAdreess = await _getAddressFromGeocodingApi(
           latitude: position.latitude, longitude: position.longitude);
 
-      EasyLoading.dismiss();
+      EasyLoadingHandler.hideLoadingToast();
       AppRouter.router.pop(locationAdreess);
     } catch (e) {
-      CustomPopup.hideLoadingToast();
+      EasyLoadingHandler.hideLoadingToast();
       change(state, status: RxStatus.error(e.toString()));
       return;
     }
@@ -250,9 +247,9 @@ class LocationController extends GetxController
             element.placeId != null && element.placeId == item.placeId) ??
         item;
     try {
-      CustomPopup.showLoagingToast();
+      EasyLoadingHandler.showLoadingToast();
       PredictionPickerModel detail = await getDetailsPrediction(item.placeId!);
-      EasyLoading.dismiss();
+      EasyLoadingHandler.hideLoadingToast();
       final address = Address(
         id: int.tryParse(item.id ?? ""),
         placeId: item.placeId,

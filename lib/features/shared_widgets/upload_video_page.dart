@@ -9,7 +9,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 
@@ -146,26 +146,26 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
             const EdgeInsets.symmetric(horizontal: 30).copyWith(bottom: 20),
         child: ElevatedButton.icon(
           onPressed: () async {
-            CustomPopup.showLoagingToast(text: "Traitement vidéo...");
+            EasyLoadingHandler.showLoadingToast(text: "Traitement vidéo...");
             try {
               if (videoPath.isNotEmpty) {
                 // File? fileToSend =
                 //     await CoreUtils.convertirEtCompresserVideo(videoPath);
 
-                CustomPopup.showLoagingToast(text: "Envoi de la vidéo...");
+                EasyLoadingHandler.showLoadingToast(text: "Envoi de la vidéo...");
 
                 FileDataModel response =
                     await AuthRepository.uplaodFile(file: File(videoPath));
                 if (response.data != null) {
                   context.pop<String>(response.data!.id);
-                  EasyLoading.dismiss();
+                  EasyLoadingHandler.hideLoadingToast();
                 }
               } else {
-                CustomPopup.showErrorToast(text: "Envoi échoué");
+                EasyLoadingHandler.showErrorToast(text: "Envoi échoué");
               }
             } catch (e) {
               EasyLoading.dismiss();
-              // CustomPopup.showErrorToast(
+              // EasyLoadingHandler.showErrorToast(
               //     text: "Envoi échoué", dismissOnTap: true);
             }
           },
