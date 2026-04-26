@@ -238,7 +238,7 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
                           child:
                               const Text("Gérer les dates d'indisponibilité"),
                         ),
-                        // const Gap(30),
+                        const Gap(40),
                         // // const DetailDivider(),
                         // const Gap(30),
                         // const Align(
