@@ -6,6 +6,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_estate_v2/enums/estate_payment_frequency.dart';
 import 'package:immoplus_pro/features/create_estate_v2/logic/estate_creation_cubit_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_navigation_buttons_v2.dart';
+import 'package:immoplus_pro/common/widgets/v2/price_field_v2.dart';
 
 class Step4EstatePricePage extends StatefulWidget {
   final VoidCallback onNext;
@@ -49,35 +50,13 @@ class _Step4EstatePricePageState extends State<Step4EstatePricePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Prix du bien :",
-                    style: TextStyle(color: Colors.grey, fontSize: 13)),
-                const Gap(15),
-                TextField(
+                PriceFieldV2(
+                  label: "Prix du bien :",
                   controller: _prixController,
-                  keyboardType: TextInputType.number,
                   onChanged: (val) {
                     final prix = int.tryParse(val) ?? 0;
                     context.read<EstateCreationCubitV2>().updatePrix(prix);
                   },
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF3F4F6),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: const Padding(
-                      padding: EdgeInsets.only(right: 20, top: 16),
-                      child: Text("fcfa",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.normal)),
-                    ),
-                  ),
                 ),
                 const Gap(30),
                 const Text("Fréquence de paiement / Type de vente :",
@@ -124,7 +103,9 @@ class _Step4EstatePricePageState extends State<Step4EstatePricePage> {
                       ? () => context.read<EstateCreationCubitV2>().submit()
                       : widget.onNext)
                   : null,
-              saveText: state.id != null ? "Enregistrer les modifications" : "Terminer et publier",
+              saveText: state.id != null
+                  ? "Enregistrer les modifications"
+                  : "Terminer et publier",
               showNext: state.id != null,
             );
           },

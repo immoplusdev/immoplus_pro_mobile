@@ -125,10 +125,10 @@ class _HomePageV2State extends State<HomePageV2>
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(
-                                    _Constants.radiusMedium),
-                                bottomRight: Radius.circular(
-                                    _Constants.radiusMedium),
+                                bottomLeft:
+                                    Radius.circular(_Constants.radiusMedium),
+                                bottomRight:
+                                    Radius.circular(_Constants.radiusMedium),
                               ),
                             ),
                           ),
@@ -245,17 +245,6 @@ class _HomePageV2State extends State<HomePageV2>
                           _buildDashboardAction(
                             iconWidget: Center(
                               child: SvgPicture.asset(
-                                Assets.svgs.lobby,
-                                width: 30,
-                              ),
-                            ),
-                            label: "Mes meubles",
-                            onTap: () =>
-                                context.pushNamed(FurnituresPageV2.name),
-                          ),
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
                                 Assets.svgs.house,
                                 width: 30,
                               ),
@@ -264,6 +253,18 @@ class _HomePageV2State extends State<HomePageV2>
                             onTap: () =>
                                 context.pushNamed(ResidencesPageV2.name),
                           ),
+                          _buildDashboardAction(
+                            iconWidget: Center(
+                              child: SvgPicture.asset(
+                                Assets.svgs.lobby,
+                                width: 30,
+                              ),
+                            ),
+                            label: "Mes meubles",
+                            onTap: () =>
+                                context.pushNamed(FurnituresPageV2.name),
+                          ),
+
                           // _buildDashboardAction(
                           //   iconWidget: Icon(Iconsax.play,
                           //       color: AppColors.primary, size: 22),
@@ -289,18 +290,14 @@ class _HomePageV2State extends State<HomePageV2>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-             
                           Container(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: _Constants.paddingStandard,
                                 vertical: 8),
                             decoration: BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200, 
-                                  width: 2
-                                )
-                              ),
+                                  bottom: BorderSide(
+                                      color: Colors.grey.shade200, width: 2)),
                             ),
                             child: Row(
                               children: [
@@ -310,8 +307,10 @@ class _HomePageV2State extends State<HomePageV2>
                                     child: Transform.translate(
                                       offset: const Offset(0, 2),
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                         decoration: BoxDecoration(
                                           border: Border(
                                             bottom: BorderSide(
@@ -323,7 +322,8 @@ class _HomePageV2State extends State<HomePageV2>
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Réservations",
@@ -331,9 +331,10 @@ class _HomePageV2State extends State<HomePageV2>
                                                 color: _tabController.index == 0
                                                     ? AppColors.primary
                                                     : Colors.grey.shade600,
-                                                fontWeight: _tabController.index == 0
-                                                    ? FontWeight.bold
-                                                    : FontWeight.w600,
+                                                fontWeight:
+                                                    _tabController.index == 0
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -341,22 +342,32 @@ class _HomePageV2State extends State<HomePageV2>
                                             if (_totalReservations > 0)
                                               Container(
                                                 height: 17,
-                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                  color: _tabController.index == 0
+                                                  color: _tabController.index ==
+                                                          0
                                                       ? AppColors.primary
                                                       : Colors.grey.shade100,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: _tabController.index == 0
-                                                      ? null
-                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 0
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
                                                 ),
                                                 child: Text(
                                                   "$_totalReservations",
                                                   style: TextStyle(
                                                     fontSize: 10,
-                                                    color: _tabController.index == 0
+                                                    color: _tabController
+                                                                .index ==
+                                                            0
                                                         ? Colors.white
                                                         : Colors.grey.shade600,
                                                     fontWeight: FontWeight.bold,
@@ -375,8 +386,10 @@ class _HomePageV2State extends State<HomePageV2>
                                     child: Transform.translate(
                                       offset: const Offset(0, 2),
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                         decoration: BoxDecoration(
                                           border: Border(
                                             bottom: BorderSide(
@@ -388,7 +401,8 @@ class _HomePageV2State extends State<HomePageV2>
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Visites",
@@ -396,9 +410,10 @@ class _HomePageV2State extends State<HomePageV2>
                                                 color: _tabController.index == 1
                                                     ? AppColors.primary
                                                     : Colors.grey.shade600,
-                                                fontWeight: _tabController.index == 1
-                                                    ? FontWeight.bold
-                                                    : FontWeight.w600,
+                                                fontWeight:
+                                                    _tabController.index == 1
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -406,22 +421,32 @@ class _HomePageV2State extends State<HomePageV2>
                                             if (_totalVisits > 0)
                                               Container(
                                                 height: 17,
-                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                  color: _tabController.index == 1
+                                                  color: _tabController.index ==
+                                                          1
                                                       ? AppColors.primary
                                                       : Colors.grey.shade100,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: _tabController.index == 1
-                                                      ? null
-                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 1
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
                                                 ),
                                                 child: Text(
                                                   "$_totalVisits",
                                                   style: TextStyle(
                                                     fontSize: 10,
-                                                    color: _tabController.index == 1
+                                                    color: _tabController
+                                                                .index ==
+                                                            1
                                                         ? Colors.white
                                                         : Colors.grey.shade600,
                                                     fontWeight: FontWeight.bold,
@@ -438,8 +463,6 @@ class _HomePageV2State extends State<HomePageV2>
                             ),
                           ),
 
-
-                          
                           // Filtres statiques
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,

@@ -184,27 +184,27 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "À propos de ce logement",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const Gap(12),
-                        MarkdownBody(
-                          data: residence.description ?? '',
-                          styleSheet: MarkdownStyleSheet(
-                            p: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.black87,
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                        const Gap(30),
-                        // const DetailDivider(),
-                        const Gap(30),
+                        // const Text(
+                        //   "À propos de ce logement",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.w800,
+                        //   ),
+                        // ),
+                        // const Gap(12),
+                        // MarkdownBody(
+                        //   data: residence.description ?? '',
+                        //   styleSheet: MarkdownStyleSheet(
+                        //     p: const TextStyle(
+                        //       fontSize: 15,
+                        //       color: Colors.black87,
+                        //       height: 1.5,
+                        //     ),
+                        //   ),
+                        // ),
+                        // const Gap(30),
+                        // // const DetailDivider(),
+                        // const Gap(30),
                         const Text(
                           "Disponibilité",
                           style: TextStyle(
@@ -238,29 +238,29 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
                           child:
                               const Text("Gérer les dates d'indisponibilité"),
                         ),
-                        const Gap(30),
-                        // const DetailDivider(),
-                        const Gap(30),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Règles de la maison",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        const Gap(16),
+                        // const Gap(30),
+                        // // const DetailDivider(),
+                        // const Gap(30),
+                        // const Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Text(
+                        //     "Règles de la maison",
+                        //     style: TextStyle(
+                        //       fontSize: 18,
+                        //       fontWeight: FontWeight.w800,
+                        //     ),
+                        //   ),
+                        // ),
+                        // const Gap(16),
                       ],
                     ),
                   ),
                 ),
 
                 // RULES (Already a Sliver)
-                DetailLogmentRules(logmentModel: residence),
+                // DetailLogmentRules(logmentModel: residence),
 
-                const SliverToBoxAdapter(child: Gap(100)),
+                // const SliverToBoxAdapter(child: Gap(100)),
               ],
             ),
             bottomNavigationBar: DetailActionBottomBar(

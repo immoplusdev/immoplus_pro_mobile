@@ -47,12 +47,12 @@ class CreationsPageV2 extends StatelessWidget {
               ),
               const Gap(40),
               _CreationButton(
-                title: "Meubles",
-                iconValue: Assets.svgs.lobby,
+                title: "Bien immobilier",
+                iconValue: Assets.svgs.buildings,
                 onTap: () => context.pushNamed(
-                  CreateFurniturePageV2.name,
+                  CreateEstatePageV2.name,
                   extra: <String, dynamic>{
-                    'listingRoute': FurnituresPageV2.name,
+                    'listingRoute': EstatesPageV2.name,
                   },
                 ),
               ),
@@ -69,12 +69,12 @@ class CreationsPageV2 extends StatelessWidget {
               ),
               const Gap(15),
               _CreationButton(
-                title: "Bien immobilier",
-                iconValue: Assets.svgs.buildings,
+                title: "Meubles",
+                iconValue: Assets.svgs.lobby,
                 onTap: () => context.pushNamed(
-                  CreateEstatePageV2.name,
+                  CreateFurniturePageV2.name,
                   extra: <String, dynamic>{
-                    'listingRoute': EstatesPageV2.name,
+                    'listingRoute': FurnituresPageV2.name,
                   },
                 ),
               ),

@@ -9,6 +9,7 @@ import 'package:immoplus_pro/features/create_furniture/constants/furniture_taxon
 import 'package:immoplus_pro/features/create_furniture_v2/logic/furniture_creation_cubit_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/widgets/furniture_selector_sheet.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus_pro/common/widgets/v2/price_field_v2.dart';
 
 class Step2FurnitureDetailsPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -220,34 +221,13 @@ class _Step2FurnitureDetailsPageState extends State<Step2FurnitureDetailsPage> {
                 ),
                 const Gap(25),
 
-                // Prix du bien
-                const Text("Prix du bien :",
-                    style: TextStyle(color: Colors.grey, fontSize: 13)),
-                const Gap(8),
-                TextField(
+                PriceFieldV2(
+                  label: "Prix du bien :",
                   controller: _priceController,
-                  keyboardType: TextInputType.number,
                   onChanged: (val) {
                     final p = int.tryParse(val) ?? 0;
                     context.read<FurnitureCreationCubitV2>().updatePrix(p);
                   },
-                  decoration: InputDecoration(
-                    suffixIcon: const Padding(
-                      padding: EdgeInsets.only(right: 15),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("fcfa", style: TextStyle(color: Colors.grey))
-                          ]),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    filled: true,
-                    fillColor: Colors.grey.shade100,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                        borderSide: BorderSide.none),
-                  ),
                 ),
                 const Gap(30),
               ],

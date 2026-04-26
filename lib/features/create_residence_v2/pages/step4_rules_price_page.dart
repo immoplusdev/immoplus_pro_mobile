@@ -6,6 +6,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/create_residence_v2/logic/residence_creation_cubit_v2.dart';
 import 'package:immoplus_pro/common/widgets/v2/creation_navigation_buttons_v2.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/common/widgets/v2/price_field_v2.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 
 class Step4RulesPricePage extends StatefulWidget {
@@ -148,35 +149,13 @@ class _Step4RulesPricePageState extends State<Step4RulesPricePage> {
                   },
                 ),
                 const Gap(25),
-                const Text("Prix du séjour par jour :",
-                    style: TextStyle(color: Colors.grey, fontSize: 13)),
-                const Gap(10),
-                TextField(
+                PriceFieldV2(
+                  label: "Prix du séjour par jour :",
                   controller: _prixController,
-                  keyboardType: TextInputType.number,
                   onChanged: (val) {
                     final prix = int.tryParse(val) ?? 0;
                     context.read<ResidenceCreationCubitV2>().updatePrix(prix);
                   },
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: const Color(0xFFF3F4F6),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: const Padding(
-                      padding: EdgeInsets.only(right: 20, top: 16),
-                      child: Text("fcfa",
-                          style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.normal)),
-                    ),
-                  ),
                 ),
                 const Gap(40),
               ],
