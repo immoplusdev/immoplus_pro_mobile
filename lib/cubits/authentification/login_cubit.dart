@@ -196,7 +196,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await SessionManager().getCurrentUser();
 
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext?.pop();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }

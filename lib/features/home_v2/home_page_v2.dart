@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
+import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
@@ -140,55 +142,61 @@ class _HomePageV2State extends State<HomePageV2>
                                 horizontal: _Constants.paddingStandard,
                                 vertical: _Constants.paddingMedium,
                               ),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: _Constants.avatarRadius,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage:
-                                        (currentUser?.avatar != null)
+                              child: BlocBuilder<LoginCubit, LoginCubitState>(
+                                builder: (context, state) {
+                                  currentUser = SessionManager().currentUser;
+                                  return Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: _Constants.avatarRadius,
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: (currentUser?.avatar !=
+                                                null)
                                             ? CachedNetworkImageProvider(
                                                 Utils.getImagePath(
                                                     id: currentUser!.avatar!))
                                             : const NetworkImage(
                                                     _Constants.defaultAvatarUrl)
                                                 as ImageProvider,
-                                  ),
-                                  const Gap(_Constants.gapMedium),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      ),
+                                      const Gap(_Constants.gapMedium),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Text(
+                                              "Bienvenue dans votre dashboard",
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const Text(
-                                          "Bienvenue dans votre dashboard",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 14,
-                                          ),
+                                      ),
+                                      const Gap(_Constants.gapMedium),
+                                      IconButton(
+                                        onPressed: () => context
+                                            .push(NotificationPage.routePath()),
+                                        icon: const Icon(
+                                          Iconsax.notification,
+                                          color: Colors.white,
+                                          size: _Constants.iconSizeLarge,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () => context
-                                        .push(NotificationPage.routePath()),
-                                    icon: const Icon(
-                                      Iconsax.notification,
-                                      color: Colors.white,
-                                      size: _Constants.iconSizeLarge,
-                                    ),
-                                  )
-                                ],
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ),
