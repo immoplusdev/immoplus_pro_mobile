@@ -11,6 +11,7 @@ import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_grid_card.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -110,7 +111,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: () => context.goNamed(HomePageV2.name),
         ),
         actions: [
           IconButton(

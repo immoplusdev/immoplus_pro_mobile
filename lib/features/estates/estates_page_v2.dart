@@ -9,9 +9,9 @@ import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/estates/widgets/estate_grid_card.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page_v2.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus_pro/core/models/query_filter.dart';
@@ -25,6 +25,10 @@ class EstatesPageV2 extends StatefulWidget {
 
   static const name = 'ESTATES_PAGE_V2';
   static const routePath = '/estate_page_v2';
+
+  static String route() {
+    return '/estate_page';
+  }
 
   @override
   State<EstatesPageV2> createState() => _EstatesPageV2State();
@@ -110,7 +114,7 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: () => context.goNamed(HomePageV2.name),
         ),
         actions: [
           IconButton(

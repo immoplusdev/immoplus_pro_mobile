@@ -15,6 +15,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/services/image_picker_service.dart';
 import 'package:immoplus_pro/data/models/furniture/geo_json_point.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/logic/furniture_creation_cubit_v2.dart';
+import 'package:immoplus_pro/features/create_residence/entity/image_upload_item.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/upload_image_item_card.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:markdown_quill/markdown_quill.dart';
@@ -188,36 +189,54 @@ class _Step1FurnitureGeneralPageState extends State<Step1FurnitureGeneralPage> {
                 const Gap(15),
                 BlocBuilder<FurnitureCreationCubitV2, FurnitureCreationStateV2>(
                   builder: (context, state) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          AddMediaBoxV2(
-                            isVideo: false,
-                            text: "Ajouter",
-                            onTap: _pickImages,
-                          ),
-                          ...state.uploadingImages.map((item) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: UploadImageItemCard(
-                                  key: ValueKey(item.id),
-                                  imageItem: item,
-                                  onItemUpdated: (updated) => context
-                                      .read<FurnitureCreationCubitV2>()
-                                      .updateUploadingImage(updated),
-                                  onDelete: () => context
-                                      .read<FurnitureCreationCubitV2>()
-                                      .removeUploadingImage(item.id),
-                                ),
+                    final isUploading = state.uploadingImages
+                        .any((i) => i.status == UploadStatus.uploading);
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              AddMediaBoxV2(
+                                isVideo: false,
+                                text: "Ajouter",
+                                onTap: _pickImages,
                               ),
-                            );
-                          }),
+                              ...state.uploadingImages.map((item) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                    child: UploadImageItemCard(
+                                      key: ValueKey(item.id),
+                                      imageItem: item,
+                                      onItemUpdated: (updated) => context
+                                          .read<FurnitureCreationCubitV2>()
+                                          .updateUploadingImage(updated),
+                                      onDelete: () => context
+                                          .read<FurnitureCreationCubitV2>()
+                                          .removeUploadingImage(item.id),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                        if (isUploading) ...[
+                          const Gap(10),
+                          Text(
+                            "Téléchargement en cours...",
+                            style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 12,
+                                fontStyle: FontStyle.italic),
+                          ),
                         ],
-                      ),
+                      ],
                     );
                   },
                 ),

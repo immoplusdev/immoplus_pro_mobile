@@ -32,32 +32,13 @@ class _UploadImageItemCardState extends State<UploadImageItemCard> {
   void initState() {
     super.initState();
     _currentItem = widget.imageItem;
-
-    if (_currentItem.canUploadToServer) {
-      _startUpload();
-    }
   }
 
-  Future<void> _startUpload() async {
-    final result = await ImageUploadService.uploadImage(_currentItem.file!);
-
-    if (mounted) {
-      setState(() {
-        if (result.isSuccess) {
-          _currentItem = _currentItem.copyWith(
-            status: UploadStatus.success,
-            uploadedId: result.imageId,
-          );
-        } else {
-          _currentItem = _currentItem.copyWith(
-            status: UploadStatus.failed,
-            errorMessage: result.errorMessage,
-          );
-        }
-      });
-
-      // Notifier la page parent du changement
-      widget.onItemUpdated?.call(_currentItem);
+  @override
+  void didUpdateWidget(covariant UploadImageItemCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.imageItem != oldWidget.imageItem) {
+      _currentItem = widget.imageItem;
     }
   }
 

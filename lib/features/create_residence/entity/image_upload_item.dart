@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 enum UploadStatus {
   uploading,
@@ -19,7 +20,7 @@ class ImageUploadItem {
     required this.status,
     this.uploadedId,
     this.errorMessage,
-  }) : id = id ?? DateTime.now().microsecondsSinceEpoch.toString();
+  }) : id = id ?? const Uuid().v4();
 
   ImageUploadItem copyWith({
     UploadStatus? status,

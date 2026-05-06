@@ -1,7 +1,7 @@
+import 'package:immoplus_pro/features/shared_widgets/custom_flutter_carousel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/validation_status.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -37,13 +37,13 @@ class DetailEstateAppBar extends StatelessWidget {
           },
           style: IconButton.styleFrom(
             iconSize: 20,
-            fixedSize: Size(18, 18),
+            fixedSize: const Size(18, 18),
             padding: EdgeInsets.zero,
           ),
           icon: Container(
               width: 30,
               decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                  const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
               child: Center(
                   child: Icon(
                 CupertinoIcons.chevron_back,
@@ -71,14 +71,14 @@ class DetailEstateAppBar extends StatelessWidget {
               },
               style: IconButton.styleFrom(
                 iconSize: 25,
-                fixedSize: Size(18, 18),
+                fixedSize: const Size(18, 18),
                 padding: EdgeInsets.zero,
               ),
               icon: Container(
                 key: _shareButtonKey,
                 width: 30,
                 decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                    const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                 child: Center(
                   child: Icon(
                     CupertinoIcons.share,
@@ -115,97 +115,26 @@ class DetailEstateAppBar extends StatelessWidget {
         // ),
       ],
       flexibleSpace: FlexibleSpaceBar(
-        //title: Text('SliverAppBar'),
-        background: FlutterCarousel(
-          items: bienImmobilier.images!
-              .map<Widget>(
-                (e) => GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MosaicLogmentImages(
-                            tag: e,
-                            imageUrls: bienImmobilier.images,
-                          ),
-                        ));
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => ViewerImage(
-                    //           tag: e.directusFilesId!,
-                    //           url: Utils.getImagePath(id: e.directusFilesId!)),
-                    //     ));
-                  },
-                  child: Hero(
-                    tag: e,
-                    child: Container(
-                      foregroundDecoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.grey.shade700,
-                            Colors.transparent,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0, 0.4],
-                        ),
-                      ),
-                      width: double.infinity,
-                      child: CachedNetworkImage(
-                        imageUrl: Utils.getImagePath(
-                            id: e), //https://pbs.twimg.com/profile_banners/1444928438331224069/1633448972/600x200
-
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade400,
-                          period: Duration(milliseconds: 500),
-                          child: Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            color: Colors.white,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        fit: BoxFit
-                            .cover, // or other BoxFit values as per your design
-                      ),
-                    ),
-                  ),
+        background: CustomFlutterCarousel(
+          images: bienImmobilier.images ?? [],
+          height: 500,
+          aspectRatio: 16 / 9,
+          showGradient: true,
+          onImageTap: (index) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MosaicLogmentImages(
+                  tag: bienImmobilier.images![index],
+                  imageUrls: bienImmobilier.images!,
                 ),
-              )
-              .toList(),
-          options: FlutterCarouselOptions(
-            height: 500,
-            aspectRatio: 16 / 9,
-            viewportFraction: 1.0,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: false,
-            autoPlayInterval: const Duration(seconds: 2),
-            autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: false,
-            //controller: CarouselController(),
-            onPageChanged: (e, x) {},
-            pageSnapping: true,
-            scrollDirection: Axis.horizontal,
-            pauseAutoPlayOnTouch: true,
-            pauseAutoPlayOnManualNavigate: true,
-            pauseAutoPlayInFiniteScroll: false,
-            enlargeStrategy: CenterPageEnlargeStrategy.scale,
-            disableCenter: false,
-            showIndicator: true,
-            indicatorMargin: 20,
-            slideIndicator: CircularSlideIndicator(
-                // indicatorRadius: 3,
-                // itemSpacing: 10,
-                ),
-            floatingIndicator: true,
-          ),
+              ),
+            );
+          },
         ),
       ),
+
+
     );
   }
 }
