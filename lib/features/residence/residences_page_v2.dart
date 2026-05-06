@@ -18,7 +18,38 @@ import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
 import 'package:iconsax/iconsax.dart';
 
-enum ResidenceFilter { all, enAttentedeValidation, rejete, valide }
+enum ResidenceFilter {
+  all,
+  enAttentedeValidation,
+  rejete,
+  valide;
+
+  String get label {
+    switch (this) {
+      case ResidenceFilter.all:
+        return "Tous";
+      case ResidenceFilter.enAttentedeValidation:
+        return "En attente de validation";
+      case ResidenceFilter.rejete:
+        return "Rejeté";
+      case ResidenceFilter.valide:
+        return "Validé";
+    }
+  }
+
+  String get value {
+    switch (this) {
+      case ResidenceFilter.all:
+        return "all";
+      case ResidenceFilter.enAttentedeValidation:
+        return "en_attente_validation";
+      case ResidenceFilter.rejete:
+        return "rejete";
+      case ResidenceFilter.valide:
+        return "valide";
+    }
+  }
+}
 
 class ResidencesPageV2 extends StatefulWidget {
   const ResidencesPageV2({super.key});
@@ -53,19 +84,19 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
         filters.add(QueryFilter(
           field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: "en_attente_validation",
+          value: ResidenceFilter.enAttentedeValidation.value,
         ));
       } else if (_activeFilter == ResidenceFilter.rejete) {
         filters.add(QueryFilter(
           field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: "rejete",
+          value: ResidenceFilter.rejete.value,
         ));
       } else if (_activeFilter == ResidenceFilter.valide) {
         filters.add(QueryFilter(
           field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: "valide",
+          value: ResidenceFilter.valide.value,
         ));
       }
 
@@ -177,14 +208,13 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildFilterChip("Tous", ResidenceFilter.all),
+                        _buildFilterChip(ResidenceFilter.all),
                         const Gap(12),
-                        _buildFilterChip("Validé", ResidenceFilter.valide),
+                        _buildFilterChip(ResidenceFilter.valide),
                         const Gap(12),
-                        _buildFilterChip("En attente de validation",
-                            ResidenceFilter.enAttentedeValidation),
+                        _buildFilterChip(ResidenceFilter.enAttentedeValidation),
                         const Gap(12),
-                        _buildFilterChip("Rejeté", ResidenceFilter.rejete),
+                        _buildFilterChip(ResidenceFilter.rejete),
                       ],
                     ),
                   ),
@@ -242,7 +272,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
     );
   }
 
-  Widget _buildFilterChip(String label, ResidenceFilter filter) {
+  Widget _buildFilterChip(ResidenceFilter filter) {
     final bool isSelected = _activeFilter == filter;
     return InkWell(
       onTap: () => _updateFilter(filter),
@@ -258,7 +288,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
           ),
         ),
         child: Text(
-          label,
+          filter.label,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black54,
             fontWeight: FontWeight.w600,

@@ -18,7 +18,38 @@ import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
 import 'package:iconsax/iconsax.dart';
 
-enum EstateFilter { all, available, appartement, villa, maison, studio }
+enum EstateFilter {
+  all,
+  enAttentedeValidation,
+  rejete,
+  valide;
+
+  String get label {
+    switch (this) {
+      case EstateFilter.all:
+        return "Tous";
+      case EstateFilter.enAttentedeValidation:
+        return "En attente de validation";
+      case EstateFilter.rejete:
+        return "Rejeté";
+      case EstateFilter.valide:
+        return "Validé";
+    }
+  }
+
+  String get value {
+    switch (this) {
+      case EstateFilter.all:
+        return "all";
+      case EstateFilter.enAttentedeValidation:
+        return "en_attente_validation";
+      case EstateFilter.rejete:
+        return "rejete";
+      case EstateFilter.valide:
+        return "valide";
+    }
+  }
+}
 
 class EstatesPageV2 extends StatefulWidget {
   const EstatesPageV2({super.key});
@@ -53,17 +84,23 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final List<QueryFilter> filters = [];
-      if (_activeFilter == EstateFilter.available) {
+      if (_activeFilter == EstateFilter.enAttentedeValidation) {
         filters.add(QueryFilter(
-          field: 'bienImmobilierDisponible',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: true,
+          value: EstateFilter.enAttentedeValidation.value,
         ));
-      } else if (_activeFilter != EstateFilter.all) {
+      } else if (_activeFilter == EstateFilter.rejete) {
         filters.add(QueryFilter(
-          field: 'typeBienImmobilier',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: _activeFilter.name,
+          value: EstateFilter.rejete.value,
+        ));
+      } else if (_activeFilter == EstateFilter.valide) {
+        filters.add(QueryFilter(
+          field: 'statusValidation',
+          operator: FilterOperator.eq,
+          value: EstateFilter.valide.value,
         ));
       }
 
@@ -176,23 +213,16 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildFilterChip("Tous", EstateFilter.all),
+                        _buildFilterChip(EstateFilter.all),
                         const Gap(12),
-                        _buildFilterChip("Disponible", EstateFilter.available),
+                        _buildFilterChip(EstateFilter.valide),
                         const Gap(12),
-                        _buildFilterChip(
-                            "Appartement", EstateFilter.appartement),
+                        _buildFilterChip(EstateFilter.enAttentedeValidation),
                         const Gap(12),
-                        _buildFilterChip("Villa", EstateFilter.villa),
+                        _buildFilterChip(EstateFilter.rejete),
                       ],
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.tune, color: Colors.black54),
-                  onPressed: () {
-                    // TODO: Filter modal
-                  },
                 ),
               ],
             ),
@@ -248,7 +278,7 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
     );
   }
 
-  Widget _buildFilterChip(String label, EstateFilter filter) {
+  Widget _buildFilterChip(EstateFilter filter) {
     final bool isSelected = _activeFilter == filter;
     return InkWell(
       onTap: () => _updateFilter(filter),
@@ -264,7 +294,7 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
           ),
         ),
         child: Text(
-          label,
+          filter.label,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black54,
             fontWeight: FontWeight.w600,
