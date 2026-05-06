@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
@@ -10,7 +9,6 @@ import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_grid_card.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
@@ -20,7 +18,7 @@ import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
 import 'package:iconsax/iconsax.dart';
 
-enum ResidenceFilter { all, available, occupied }
+enum ResidenceFilter { all, enAttentedeValidation, rejete, valide }
 
 class ResidencesPageV2 extends StatefulWidget {
   const ResidencesPageV2({super.key});
@@ -51,17 +49,23 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final List<QueryFilter> filters = [];
-      if (_activeFilter == ResidenceFilter.available) {
+      if (_activeFilter == ResidenceFilter.enAttentedeValidation) {
         filters.add(QueryFilter(
-          field: 'residenceDisponible',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: true,
+          value: "en_attente_validation",
         ));
-      } else if (_activeFilter == ResidenceFilter.occupied) {
+      } else if (_activeFilter == ResidenceFilter.rejete) {
         filters.add(QueryFilter(
-          field: 'residenceDisponible',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: false,
+          value: "rejete",
+        ));
+      } else if (_activeFilter == ResidenceFilter.valide) {
+        filters.add(QueryFilter(
+          field: 'statusValidation',
+          operator: FilterOperator.eq,
+          value: "valide",
         ));
       }
 
@@ -175,19 +179,15 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
                       children: [
                         _buildFilterChip("Tous", ResidenceFilter.all),
                         const Gap(12),
-                        _buildFilterChip(
-                            "Disponible", ResidenceFilter.available),
+                        _buildFilterChip("Validé", ResidenceFilter.valide),
                         const Gap(12),
-                        _buildFilterChip("Occupé", ResidenceFilter.occupied),
+                        _buildFilterChip("En attente de validation",
+                            ResidenceFilter.enAttentedeValidation),
+                        const Gap(12),
+                        _buildFilterChip("Rejeté", ResidenceFilter.rejete),
                       ],
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.tune, color: Colors.black54),
-                  onPressed: () {
-                    // TODO: Filter modal
-                  },
                 ),
               ],
             ),
