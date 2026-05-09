@@ -80,24 +80,14 @@ class _AccountPageV2State extends State<AccountPageV2> {
                             as ImageProvider,
                   ),
                   const Gap(15),
-                  if (currentUser!.isEntreprise)
-                    Text(
-                      "Entreprise : ${currentUser?.nomEntreprise}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  else
-                    Text(
-                      "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    currentUser!.greetingText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
                   const Gap(5),
                   const Text(
                     "Bienvenue dans votre dashboard",

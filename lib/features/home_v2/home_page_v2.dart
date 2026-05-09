@@ -167,7 +167,7 @@ class _HomePageV2State extends State<HomePageV2>
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Text(
-                                              "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
+                                              currentUser!.greetingText,
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22,
