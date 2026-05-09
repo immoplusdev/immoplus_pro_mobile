@@ -48,7 +48,7 @@ class _HomePageV2State extends State<HomePageV2>
   bool _isUnlocked = false;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
-      ValueNotifier(BookingFilterV2.all);
+      ValueNotifier(BookingFilterV2.attentePro);
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
 
