@@ -28,6 +28,9 @@ import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/data/enums/account_source.dart';
+import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/banner_card.dart';
 
 class HomePageV2 extends StatefulWidget {
   final String? paiementId;
@@ -70,6 +73,13 @@ class _HomePageV2State extends State<HomePageV2>
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
 
+    context
+        .read<BannersCubit>()
+        .fetchBanners(source: AccountSource.proApp.value);
+    context
+        .read<BannersCubit>()
+        .startPolling(source: AccountSource.proApp.value);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
         _showPaiementDialog();
@@ -93,6 +103,7 @@ class _HomePageV2State extends State<HomePageV2>
 
   @override
   void dispose() {
+    context.read<BannersCubit>().stopPolling();
     _tabController.dispose();
     _pageController.dispose();
     _bookingFilterNotifier.dispose();
@@ -228,6 +239,11 @@ class _HomePageV2State extends State<HomePageV2>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BannerCard(
+                        onDismiss: () {
+                          context.read<BannersCubit>().setDismissed(true);
+                        },
+                      ),
                       const Text(
                         "Tableau de bord",
                         style: TextStyle(

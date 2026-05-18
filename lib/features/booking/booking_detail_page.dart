@@ -26,6 +26,7 @@ import 'package:immoplus_pro/features/booking/widgets/planing_booking_card_detai
 import 'package:immoplus_pro/features/home_page/pages/booking_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:iconsax/iconsax.dart';
+
 class BookingDetailPage extends StatefulWidget {
   const BookingDetailPage({super.key, required this.id});
   final String id;
@@ -75,13 +76,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       visualDensity: const VisualDensity(vertical: -4),
                       tileColor: Colors.white,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(
+                            color: AppColors.customBlue.withOpacity(0.1)),
                       ),
                       leading: CircleAvatar(
                         backgroundImage: Utils.getImage(
                             id: state.reservationResponse.data.residence.images
-                                .firstOrNull ?? ""),
+                                    .firstOrNull ??
+                                ""),
                       ),
                       title: Text(
                           state.reservationResponse.data.residence.nom ??
@@ -99,38 +102,36 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             style: TextStyle(color: Colors.grey.shade600))
                       ])),
                       trailing: UnconstrainedBox(
-                        child: Builder(
-                          builder: (context) {
-                            final status = BookingUtils.getBookingStatus(
-                                state.reservationResponse.data
+                        child: Builder(builder: (context) {
+                          final status = BookingUtils.getBookingStatus(
+                              state.reservationResponse.data.datesReservation
+                                  .first.date!,
+                              state.reservationResponse.data.datesReservation
+                                  .last.date!);
+                          final statusColor =
+                              BookingUtils.getStatusColor(status);
+
+                          return CustomChip(
+                            icon: BookingUtils.getStatusIcon(status),
+                            iconSize: 14,
+                            iconColor: statusColor,
+                            backgroundColor: statusColor.withOpacity(0.1),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            borderRadius: BorderRadius.circular(10),
+                            label: BookingUtils.getStatusText(
+                                startDate: state.reservationResponse.data
                                     .datesReservation.first.date!,
-                                state.reservationResponse.data
-                                    .datesReservation.last.date!);
-                            final statusColor = BookingUtils.getStatusColor(status);
-                            
-                            return CustomChip(
-                              icon: BookingUtils.getStatusIcon(status),
-                              iconSize: 14,
-                              iconColor: statusColor,
-                              backgroundColor: statusColor.withOpacity(0.1),
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              borderRadius: BorderRadius.circular(10),
-                              label: BookingUtils.getStatusText(
-                                  startDate: state.reservationResponse.data
-                                      .datesReservation.first.date!,
-                                  endDate: state.reservationResponse.data
-                                      .datesReservation.last.date!),
-                              labelStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: statusColor,
-                                  ),
-                            );
-                          }
-                        ),
+                                endDate: state.reservationResponse.data
+                                    .datesReservation.last.date!),
+                            labelStyle:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: statusColor,
+                                    ),
+                          );
+                        }),
                       ),
                     ),
                   )),
@@ -142,7 +143,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                         tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(color: AppColors.customBlue.withOpacity(0.1)),
+                          side: BorderSide(
+                              color: AppColors.customBlue.withOpacity(0.1)),
                         ),
                         title: const Text('Identifiant de la réservation'),
                         subtitle:
@@ -161,13 +163,16 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                             });
                           },
                         ),
-                        titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey.shade600,
-                        ),
+                        titleTextStyle:
+                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Colors.grey.shade600,
+                                ),
                         subtitleTextStyle: Theme.of(context)
                             .textTheme
                             .titleSmall!
-                            .copyWith(color: AppColors.customBlue, fontWeight: FontWeight.bold),
+                            .copyWith(
+                                color: AppColors.customBlue,
+                                fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -192,7 +197,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                   )),
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
                       child: InkWell(
                         onTap: () async {
                           ContactUtils.showContact(id: widget.id);
@@ -203,7 +209,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.customBlue.withOpacity(0.08)),
+                            border: Border.all(
+                                color: AppColors.customBlue.withOpacity(0.08)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.02),
@@ -261,95 +268,103 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                      child: InkWell(
-                        onTap: () async {
-                          final phone = state
-                              .reservationResponse.data.clientPhoneNumber
-                              .split('-');
-                          Utils.makePhoneCall(phone.last);
-                        },
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.customBlue.withOpacity(0.08)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.02),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                  shape: BoxShape.circle,
+                  if (hasPaid(state.reservationResponse))
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 8),
+                        child: InkWell(
+                          onTap: () async {
+                            final phone = state
+                                .reservationResponse.data.clientPhoneNumber
+                                .split('-');
+                            Utils.makePhoneCall(phone.last);
+                          },
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  color:
+                                      AppColors.customBlue.withOpacity(0.08)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.02),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
                                 ),
-                                child: Icon(
-                                  Iconsax.user,
-                                  color: AppColors.primary.withOpacity(0.7),
-                                  size: 20,
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Iconsax.user,
+                                    color: AppColors.primary.withOpacity(0.7),
+                                    size: 20,
+                                  ),
                                 ),
-                              ),
-                              const Gap(16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "Joindre le client",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF1A1A1A),
+                                const Gap(16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Joindre le client",
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
                                       ),
-                                    ),
-                                    const Gap(4),
-                                    Text(
-                                      clientName.trim().isNotEmpty ? clientName : 'Client ImmoPlus',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.customBlue,
+                                      const Gap(4),
+                                      Text(
+                                        clientName.trim().isNotEmpty
+                                            ? clientName
+                                            : 'Client ImmoPlus',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.customBlue,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      state.reservationResponse.data.clientPhoneNumber,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
+                                      Text(
+                                        state.reservationResponse.data
+                                            .clientPhoneNumber,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.05),
-                                  borderRadius: BorderRadius.circular(10),
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary.withOpacity(0.05),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    Iconsax.call,
+                                    color: AppColors.primary,
+                                    size: 20,
+                                  ),
                                 ),
-                                child: Icon(
-                                  Iconsax.call,
-                                  color: AppColors.primary,
-                                  size: 20,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -415,10 +430,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           title: Text(title),
           subtitle: SelectableText(
             value,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .copyWith(color: AppColors.customBlue, fontSize: 18, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: AppColors.customBlue,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
           ),
           dense: true,
           onTap: onTap,
@@ -426,7 +441,10 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
             Iconsax.copy,
             color: AppColors.primary,
           ),
-          titleTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+          titleTextStyle: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: Colors.grey.shade600),
         ),
       ),
     );
