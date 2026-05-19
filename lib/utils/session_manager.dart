@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
+import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
@@ -93,6 +96,14 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
+    try {
+      final context = NavigationService.navigatorKey.currentContext;
+      if (context != null) {
+        context.read<BannersCubit>().stopPolling();
+      }
+    } catch (e) {
+      log('SessionManager: Error stopping banners polling on logout: $e');
+    }
     await clearSession();
     OneSignal.logout();
     AppRouter.router.goNamed(AuthenticationPage.name);

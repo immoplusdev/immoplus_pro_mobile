@@ -405,7 +405,8 @@ class _AuthProvider implements AuthProvider {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = sendEmailOtpBody;
+    final _data = <String, dynamic>{};
+    _data.addAll(sendEmailOtpBody.toJson());
     final _options = _setStreamType<VerifyEmailResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

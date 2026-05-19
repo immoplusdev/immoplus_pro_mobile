@@ -221,7 +221,9 @@ class _Step3EstateMediaPageState extends State<Step3EstateMediaPage> {
                       ? () => context.read<EstateCreationCubitV2>().submit()
                       : widget.onNext)
                   : null,
-              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              saveText: state.id != null
+                  ? "Enregistrer les modifications"
+                  : "Continuer",
               showNext: state.id != null,
             );
           },
@@ -229,5 +231,4 @@ class _Step3EstateMediaPageState extends State<Step3EstateMediaPage> {
       ],
     );
   }
-
 }

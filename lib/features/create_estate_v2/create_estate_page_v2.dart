@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/logic/estate_creation_cubit_v2.dart';
@@ -46,6 +45,7 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
   ];
 
   void _nextStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -58,6 +58,7 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
   }
 
   void _previousStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 300),

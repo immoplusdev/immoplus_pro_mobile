@@ -6,15 +6,16 @@ part of 'verify_email_otp.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$VerifyEmailOtpImpl _$$VerifyEmailOtpImplFromJson(Map<String, dynamic> json) =>
-    _$VerifyEmailOtpImpl(
-      email: json['email'] as String,
+VerifyEmailOtp _$VerifyEmailOtpFromJson(Map<String, dynamic> json) =>
+    VerifyEmailOtp(
+      email: json['email'] as String?,
+      phoneNumber: json['phoneNumber'] as String?,
       otp: json['otp'] as String,
     );
 
-Map<String, dynamic> _$$VerifyEmailOtpImplToJson(
-        _$VerifyEmailOtpImpl instance) =>
+Map<String, dynamic> _$VerifyEmailOtpToJson(VerifyEmailOtp instance) =>
     <String, dynamic>{
       'email': instance.email,
+      'phoneNumber': instance.phoneNumber,
       'otp': instance.otp,
     };

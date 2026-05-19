@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:immoplus_pro/constantes/app_colors.dart';
 
-class CreationDescriptionEditorV2 extends StatelessWidget {
+class CreationDescriptionEditorV2 extends StatefulWidget {
   final quill.QuillController controller;
   final String label;
   final double height;
@@ -15,12 +15,34 @@ class CreationDescriptionEditorV2 extends StatelessWidget {
   });
 
   @override
+  State<CreationDescriptionEditorV2> createState() =>
+      _CreationDescriptionEditorV2State();
+}
+
+class _CreationDescriptionEditorV2State
+    extends State<CreationDescriptionEditorV2> {
+  late final FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label.isNotEmpty) ...[
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+        if (widget.label.isNotEmpty) ...[
+          Text(widget.label,
+              style: const TextStyle(color: Colors.grey, fontSize: 13)),
           const SizedBox(height: 10),
         ],
         Container(
@@ -42,7 +64,7 @@ class CreationDescriptionEditorV2 extends StatelessWidget {
                     iconTheme: const IconThemeData(color: Colors.white),
                   ),
                   child: quill.QuillSimpleToolbar(
-                    controller: controller,
+                    controller: widget.controller,
                     config: quill.QuillSimpleToolbarConfig(
                       multiRowsDisplay: false,
                       color: Colors.transparent,
@@ -83,19 +105,28 @@ class CreationDescriptionEditorV2 extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                height: height,
-                padding: const EdgeInsets.all(12),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(14)),
-                ),
-                child: quill.QuillEditor.basic(
-                  controller: controller,
-                  config: const quill.QuillEditorConfig(
-                    showCursor: true,
-                    placeholder: "Entrez une description détaillée...",
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (!_focusNode.hasFocus) {
+                    _focusNode.requestFocus();
+                  }
+                },
+                child: Container(
+                  height: widget.height,
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(14)),
+                  ),
+                  child: quill.QuillEditor.basic(
+                    controller: widget.controller,
+                    focusNode: _focusNode,
+                    config: const quill.QuillEditorConfig(
+                      showCursor: true,
+                      placeholder: "Entrez une description détaillée...",
+                    ),
                   ),
                 ),
               ),

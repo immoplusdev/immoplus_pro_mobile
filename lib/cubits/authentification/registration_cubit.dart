@@ -23,11 +23,11 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit() : super(const RegistrationCubitState.initial());
 
-  Future<bool> userSendOTP({required String email}) async {
+  Future<bool> userSendOTP({String? email, String? phoneNumber}) async {
     emit(const RegistrationCubitState.loading());
     try {
       final response = await AuthRepository()
-          .userSendOTP(body: SendEmailOtpBody(email: email));
+          .userSendOTP(body: SendEmailOtpBody(email: email, phoneNumber: phoneNumber));
       emit(RegistrationCubitState.initial());
       if ([200, 201].contains(response.response.statusCode)) {
         return true;
@@ -46,11 +46,11 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   }
 
   Future<VerifyEmailResponse?> verifyOtp(
-      {required String email, required String otp}) async {
+      {String? email, String? phoneNumber, required String otp}) async {
     emit(const RegistrationCubitState.loading());
     try {
       final response = await AuthRepository()
-          .verifyOtp(body: VerifyEmailOtp(email: email, otp: otp));
+          .verifyOtp(body: VerifyEmailOtp(email: email, phoneNumber: phoneNumber, otp: otp));
       emit(RegistrationCubitState.initial());
       return response;
     } on DioException catch (dioError) {
@@ -107,8 +107,8 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   createParticulierAccount(
       {required ParticulierRegistrationBody particulierRegistrationBody,
       required FileUploaderController fileUploaderControllerPhotoIdentite,
-      required FileUploaderController
-          fileUploaderControllerPieceIdentite}) async {
+      required FileUploaderController fileUploaderControllerPieceIdentite,
+      required FileUploaderController fileUploaderControllerPieceIdentiteVerso}) async {
     emit(const RegistrationCubitState.loading());
     try {
       FileDataModel photoIdentite =
@@ -117,9 +117,13 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       FileDataModel pieceIdentite =
           await fileUploaderControllerPieceIdentite.upladFile();
       log(pieceIdentite.toString(), name: 'FIle Uploaded');
+      FileDataModel pieceIdentiteVerso =
+          await fileUploaderControllerPieceIdentiteVerso.upladFile();
+      log(pieceIdentiteVerso.toString(), name: 'FIle Uploaded');
 
       final body = particulierRegistrationBody.copyWith(
         pieceIdentiteId: pieceIdentite.data!.id,
+        pieceIdentiteVersoId: pieceIdentiteVerso.data!.id,
         photoIdentiteId: photoIdentite.data!.id,
       );
       inspect(body);

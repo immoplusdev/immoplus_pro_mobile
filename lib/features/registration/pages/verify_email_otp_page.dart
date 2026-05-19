@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
@@ -13,17 +11,18 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/widgets/custom_pinput.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 
 class VerifyEmailOtpPage extends StatefulWidget {
   const VerifyEmailOtpPage({
     super.key,
-    required this.email,
+    this.email,
+    this.phoneNumber,
     required this.onSuccess,
   });
 
   /// L'email à vérifier (déjà saisi à l'étape précédente)
-  final String email;
+  final String? email;
+  final String? phoneNumber;
 
   static const name = 'VERIFY_EMAIL_OTP';
 
@@ -59,7 +58,8 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
     setState(() => _isLoading = true);
     final cubit = context.read<RgistrationCubitCubit>();
     final resp = await cubit.verifyOtp(
-      email: widget.email.trim(),
+      email: widget.email?.trim(),
+      phoneNumber: widget.phoneNumber?.trim(),
       otp: _otpController.text.trim(),
     );
     if (!mounted) return;
@@ -67,6 +67,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
 
     if (resp is VerifyEmailResponse) {
       widget.onSuccess(DataRouterRegistration(
+        phoneNumber: resp.data.phoneNumber.toString(),
         email: resp.data.email.toString(),
         token: resp.data.token.toString(),
       ));
@@ -85,7 +86,10 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
     FocusScope.of(context).unfocus();
     setState(() => _isLoading = true);
     final cubit = context.read<RgistrationCubitCubit>();
-    final ok = await cubit.userSendOTP(email: widget.email.trim());
+    final ok = await cubit.userSendOTP(
+      email: widget.email?.trim(),
+      phoneNumber: widget.phoneNumber?.trim(),
+    );
     if (!mounted) return;
     setState(() => _isLoading = false);
 
@@ -93,7 +97,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
       SnackBar(
         content: Text(
           ok
-              ? 'Un nouveau code a été envoyé à ${widget.email}.'
+              ? 'Un nouveau code a été envoyé au ${widget.email ?? widget.phoneNumber}.'
               : 'Échec de l\'envoi du code. Réessayez.',
         ),
         backgroundColor: ok ? Colors.green : Colors.red,
@@ -123,7 +127,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Entrez le code reçu par email',
+                      'Entrez le code reçu',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -131,7 +135,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                     ),
                     const Gap(8),
                     Text(
-                      'Un code à 6 chiffres a été envoyé à ${widget.email}',
+                      'Un code à 6 chiffres a été envoyé à ${widget.email ?? widget.phoneNumber}',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color:
                             theme.textTheme.bodyMedium?.color?.withOpacity(0.8),

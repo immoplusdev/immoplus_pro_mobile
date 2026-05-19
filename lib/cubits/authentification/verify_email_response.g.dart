@@ -24,6 +24,7 @@ _$VerifyEmailDataImpl _$$VerifyEmailDataImplFromJson(
       success: json['success'] as bool? ?? false,
       token: json['token'] as String? ?? '',
       email: json['email'] as String? ?? '',
+      phoneNumber: json['phoneNumber'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$VerifyEmailDataImplToJson(
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$VerifyEmailDataImplToJson(
       'success': instance.success,
       'token': instance.token,
       'email': instance.email,
+      'phoneNumber': instance.phoneNumber,
     };
