@@ -52,7 +52,7 @@ class BannerItem extends StatelessWidget {
       children: [
         if (banner.icon != null) ...[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: 4.0),
             child: Icon(
               _getIconData(banner.icon!),
               color: Colors.white,
@@ -90,7 +90,6 @@ class BannerItem extends StatelessWidget {
                   ),
                 ],
               ),
-              const Gap(4),
               Text(
                 banner.subtitle ?? '',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -100,8 +99,8 @@ class BannerItem extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+              Spacer(),
               if (banner.ctaLabel != null) ...[
-                const Gap(7),
                 Row(
                   children: [
                     BannerButton(
@@ -110,7 +109,7 @@ class BannerItem extends StatelessWidget {
                       isPrimary: true,
                     ),
                     if (banner.cta2Label != null) ...[
-                      const Gap(12),
+                      const Gap(16),
                       BannerButton(
                         label: banner.cta2Label!,
                         onPressed: () => _handleAction(context, banner.cta2Url),
@@ -122,7 +121,7 @@ class BannerItem extends StatelessWidget {
               ],
             ],
           ),
-        ),
+        )
       ],
     );
   }

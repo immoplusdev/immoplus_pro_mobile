@@ -67,7 +67,7 @@ class _BannerCardState extends State<BannerCard> {
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               decoration: BoxDecoration(
                 color: _getBackgroundColor(apiBanners),
-                borderRadius: BorderRadius.all(Radius.circular(24)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -76,7 +76,7 @@ class _BannerCardState extends State<BannerCard> {
                     carouselController: _carouselController,
                     itemCount: apiBanners.length,
                     options: CarouselOptions(
-                      height: 120,
+                      height: 90,
                       viewportFraction: 1.0,
                       enableInfiniteScroll: false,
                       onPageChanged: (index, reason) {

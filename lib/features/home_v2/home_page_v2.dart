@@ -229,76 +229,82 @@ class _HomePageV2State extends State<HomePageV2>
 
               // Contenu du haut : Wallet + Tableau de bord
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: _Constants.paddingStandard,
-                    right: _Constants.paddingStandard,
-                    bottom: _Constants.paddingStandard,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BannerCard(
-                        onDismiss: () {
-                          context.read<BannersCubit>().setDismissed(true);
-                        },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BannerCard(
+                      onDismiss: () {
+                        context.read<BannersCubit>().setDismissed(true);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: _Constants.paddingStandard,
+                        right: _Constants.paddingStandard,
+                        bottom: _Constants.paddingStandard,
                       ),
-                      const Text(
-                        "Tableau de bord",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Gap(_Constants.gapLarge),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.buildings,
-                                width: 30,
-                              ),
+                          const Text(
+                            "Tableau de bord",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            label: "Bien immobilier",
-                            onTap: () => context.pushNamed(EstatesPageV2.name),
                           ),
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.house,
-                                width: 30,
+                          const Gap(_Constants.gapLarge),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.buildings,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Bien immobilier",
+                                onTap: () =>
+                                    context.pushNamed(EstatesPageV2.name),
                               ),
-                            ),
-                            label: "Mes résidences",
-                            onTap: () =>
-                                context.pushNamed(ResidencesPageV2.name),
-                          ),
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.lobby,
-                                width: 30,
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.house,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Mes résidences",
+                                onTap: () =>
+                                    context.pushNamed(ResidencesPageV2.name),
                               ),
-                            ),
-                            label: "Mes meubles",
-                            onTap: () =>
-                                context.pushNamed(FurnituresPageV2.name),
-                          ),
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.lobby,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Mes meubles",
+                                onTap: () =>
+                                    context.pushNamed(FurnituresPageV2.name),
+                              ),
 
-                          // _buildDashboardAction(
-                          //   iconWidget: Icon(Iconsax.play,
-                          //       color: AppColors.primary, size: 22),
-                          //   label: "Mon feed",
-                          //   onTap: () => context.push(MyFeedPage.routePath()),
-                          // ),
+                              // _buildDashboardAction(
+                              //   iconWidget: Icon(Iconsax.play,
+                              //       color: AppColors.primary, size: 22),
+                              //   label: "Mon feed",
+                              //   onTap: () => context.push(MyFeedPage.routePath()),
+                              // ),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
 
