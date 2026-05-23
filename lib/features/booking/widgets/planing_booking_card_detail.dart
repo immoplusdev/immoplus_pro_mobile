@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:gap/gap.dart';
 
@@ -54,9 +55,8 @@ class PlaningBookingCardDetail extends StatelessWidget {
                       ),
                       const Gap(2),
                       AutoSizeText(
-                        (reservationModel.datesReservation.isNotEmpty)
-                            ? formatDate.format(reservationModel.datesReservation.first.date!)
-                            : '--',
+                        formatDate.format(
+                            Utils.toDateTime(reservationModel.dateDebut)),
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 13,
@@ -77,7 +77,7 @@ class PlaningBookingCardDetail extends StatelessWidget {
               ],
             ),
           ),
-          
+
           Container(
             height: 40,
             width: 1,
@@ -118,9 +118,8 @@ class PlaningBookingCardDetail extends StatelessWidget {
                       ),
                       const Gap(2),
                       AutoSizeText(
-                        (reservationModel.datesReservation.isNotEmpty)
-                            ? formatDate.format(reservationModel.datesReservation.last.date!)
-                            : '--',
+                        formatDate
+                            .format(Utils.toDateTime(reservationModel.dateFin)),
                         maxLines: 1,
                         style: const TextStyle(
                           fontSize: 13,
