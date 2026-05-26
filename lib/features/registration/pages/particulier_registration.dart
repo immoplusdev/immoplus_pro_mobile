@@ -132,39 +132,50 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                           iconPlaceholder: FontAwesomeIcons.idBadge,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                SliverGap(10),
-
-                SliverToBoxAdapter(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                      const Gap(10),
                       Flexible(
                         flex: 1,
                         child: FileUploader(
-                          width: 150,
+                          width: double.infinity,
                           fileUploaderController:
                               fileUploaderControllerPieceIdentite,
                           title: "Pièce d'identité",
                           iconPlaceholder: FontAwesomeIcons.idCard,
                         ),
                       ),
-                      Flexible(
-                        flex: 1,
-                        child: FileUploader(
-                          width: 150,
-                          fileUploaderController:
-                              fileUploaderControllerPieceIdentiteVerso,
-                          title: "Pièce d'identité verso",
-                          iconPlaceholder: FontAwesomeIcons.idCard,
-                        ),
-                      ),
                     ],
                   ),
                 ),
+
+                // SliverGap(10),
+
+                // SliverToBoxAdapter(
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Flexible(
+                //         flex: 1,
+                //         child: FileUploader(
+                //           width: 150,
+                //           fileUploaderController:
+                //               fileUploaderControllerPieceIdentite,
+                //           title: "Pièce d'identité",
+                //           iconPlaceholder: FontAwesomeIcons.idCard,
+                //         ),
+                //       ),
+                //       Flexible(
+                //         flex: 1,
+                //         child: FileUploader(
+                //           width: 150,
+                //           fileUploaderController:
+                //               fileUploaderControllerPieceIdentiteVerso,
+                //           title: "Pièce d'identité verso",
+                //           iconPlaceholder: FontAwesomeIcons.idCard,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
 
                 const SliverGap(20),
 
@@ -355,17 +366,19 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                         toastPosition:
                                             EasyLoadingToastPosition.bottom,
                                       );
-                                    } else if (fileUploaderControllerPieceIdentiteVerso
-                                            .file ==
-                                        null) {
-                                      EasyLoading.instance.backgroundColor =
-                                          Colors.red.shade400;
-                                      EasyLoading.showToast(
-                                        "Entrer la photo verso de votre pièce d'identité",
-                                        toastPosition:
-                                            EasyLoadingToastPosition.bottom,
-                                      );
-                                    } else {
+                                    }
+                                    // else if (fileUploaderControllerPieceIdentiteVerso
+                                    //         .file ==
+                                    //     null) {
+                                    //   EasyLoading.instance.backgroundColor =
+                                    //       Colors.red.shade400;
+                                    //   EasyLoading.showToast(
+                                    //     "Entrer la photo verso de votre pièce d'identité",
+                                    //     toastPosition:
+                                    //         EasyLoadingToastPosition.bottom,
+                                    //   );
+                                    // }
+                                    else {
                                       String? photo = await uploadFile(
                                         file:
                                             fileUploaderControllerPhotoIdentite
@@ -376,11 +389,13 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             fileUploaderControllerPieceIdentite
                                                 .file!,
                                       );
-                                      String? pieceVerso = await uploadFile(
-                                        file:
-                                            fileUploaderControllerPieceIdentiteVerso
-                                                .file!,
-                                      );
+                                      // TODO : TO CLEAN
+                                      String? pieceVerso = null;
+                                      // String? pieceVerso = await uploadFile(
+                                      //   file:
+                                      //       fileUploaderControllerPieceIdentiteVerso
+                                      //           .file!,
+                                      // );
 
                                       final body = ParticulierRegistrationBody(
                                         //  avatar: avatar,

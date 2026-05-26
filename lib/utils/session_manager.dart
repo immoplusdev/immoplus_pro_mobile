@@ -96,6 +96,7 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
+    // 1. Stop polling before anything
     try {
       final context = NavigationService.navigatorKey.currentContext;
       if (context != null) {
@@ -104,8 +105,21 @@ class SessionManager {
     } catch (e) {
       log('SessionManager: Error stopping banners polling on logout: $e');
     }
+
+    // 2. Close all open dialogs/overlays so no deactivated widget tries to
+    //    look up its ancestor after the StatefulShellRoute is destroyed.
+    final navigator = NavigationService.navigatorKey.currentState;
+    if (navigator != null) {
+      while (navigator.canPop()) {
+        navigator.pop();
+      }
+    }
+
+    // 3. Clear local session & sign out of OneSignal
     await clearSession();
     OneSignal.logout();
+
+    // 4. Navigate to the authentication screen
     AppRouter.router.goNamed(AuthenticationPage.name);
   }
 

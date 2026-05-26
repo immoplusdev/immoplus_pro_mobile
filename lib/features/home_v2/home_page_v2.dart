@@ -55,12 +55,14 @@ class _HomePageV2State extends State<HomePageV2>
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
 
+  late BannersCubit _bannersCubit;
   int _totalReservations = 0;
   int _totalVisits = 0;
 
   @override
   void initState() {
     super.initState();
+    _bannersCubit = context.read<BannersCubit>();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
@@ -73,12 +75,8 @@ class _HomePageV2State extends State<HomePageV2>
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
 
-    context
-        .read<BannersCubit>()
-        .fetchBanners(source: AccountSource.proApp.value);
-    context
-        .read<BannersCubit>()
-        .startPolling(source: AccountSource.proApp.value);
+    _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
+    _bannersCubit.startPolling(source: AccountSource.proApp.value);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -103,7 +101,7 @@ class _HomePageV2State extends State<HomePageV2>
 
   @override
   void dispose() {
-    context.read<BannersCubit>().stopPolling();
+    _bannersCubit.stopPolling();
     _tabController.dispose();
     _pageController.dispose();
     _bookingFilterNotifier.dispose();

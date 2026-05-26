@@ -29,6 +29,7 @@ import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/choose_account_type_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
@@ -102,10 +103,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -388,10 +386,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorResponse = ApiErrorResponse.fromJson(errorData);

@@ -15,6 +15,7 @@ import 'package:immoplus_pro/features/create_estate/create_estate_page.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/widgets/bien_immobilier_list_card.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/residence/widgets/loading_logment_list_card.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -93,7 +94,7 @@ class _EstatesPageState extends State<EstatesPage> {
         leading: IconButton(
           icon: const Icon(FontAwesomeIcons.chevronLeft),
           onPressed: () {
-            context.goNamed(HomePage.name);
+            context.goNamed(HomePageV2.name);
           },
         ),
         title: const Text('Mes biens immobiliers'),

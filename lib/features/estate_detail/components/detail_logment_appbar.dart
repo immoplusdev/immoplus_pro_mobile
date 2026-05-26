@@ -31,7 +31,6 @@ class DetailEstateAppBar extends StatelessWidget {
           padding: EdgeInsets.zero,
           iconSize: 20,
           onPressed: () {
-            print(Constantes.tempPage);
             //context.goNamed(ResidencesPage.name);
             context.pop();
           },
@@ -42,8 +41,8 @@ class DetailEstateAppBar extends StatelessWidget {
           ),
           icon: Container(
               width: 30,
-              decoration:
-                  const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
               child: Center(
                   child: Icon(
                 CupertinoIcons.chevron_back,
@@ -77,8 +76,8 @@ class DetailEstateAppBar extends StatelessWidget {
               icon: Container(
                 key: _shareButtonKey,
                 width: 30,
-                decoration:
-                    const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white),
                 child: Center(
                   child: Icon(
                     CupertinoIcons.share,
@@ -133,8 +132,6 @@ class DetailEstateAppBar extends StatelessWidget {
           },
         ),
       ),
-
-
     );
   }
 }

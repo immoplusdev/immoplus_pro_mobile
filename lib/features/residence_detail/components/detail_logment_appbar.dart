@@ -32,7 +32,6 @@ class DetailLogmentAppBar extends StatelessWidget {
           padding: EdgeInsets.zero,
           iconSize: 20,
           onPressed: () {
-            print(Constantes.tempPage);
             // context.goNamed(ResidencesPage.name);
             context.pop();
           },

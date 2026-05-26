@@ -488,7 +488,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     onTap: () {
                       showCupertinoDialog(
                         context: context,
-                        builder: (BuildContext context) {
+                        builder: (BuildContext dialogContext) {
                           return CupertinoAlertDialog(
                             title: const Text('Déconnexion'),
                             content: const Text(
@@ -497,7 +497,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               CupertinoDialogAction(
                                 isDefaultAction: true,
                                 onPressed: () {
-                                  Navigator.of(context)
+                                  Navigator.of(dialogContext)
                                       .pop(); // Ferme la pop-up sans se déconnecter
                                 },
                                 child: const Text('Annuler'),
@@ -505,6 +505,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               CupertinoDialogAction(
                                 isDestructiveAction: true,
                                 onPressed: () async {
+                                  // SessionManager.logout() ferme tous les dialogs
+                                  // avant de naviguer — pas besoin de pop() ici.
                                   await SessionManager().logout();
                                 },
                                 child: const Text('Déconnexion'),
@@ -539,7 +541,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             create: (context) => DeleteAccountCubit(),
                             child: BlocConsumer<DeleteAccountCubit,
                                 DeleteAccountState>(
-                              listener: (context, state) {},
+                              listener: (context, state) {
+                                state.maybeWhen(
+                                  success: () async {
+                                    Navigator.of(dialogContext).pop();
+                                    await SessionManager().logout();
+                                  },
+                                  orElse: () {},
+                                );
+                              },
                               builder: (context, state) {
                                 return CupertinoAlertDialog(
                                   title: const Text('Suppression de compte'),

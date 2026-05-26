@@ -309,7 +309,7 @@ class _AccountPageV2State extends State<AccountPageV2> {
   void _showLogoutDialog() {
     showCupertinoDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return CupertinoAlertDialog(
           title: const Text('Déconnexion'),
           content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
@@ -317,13 +317,15 @@ class _AccountPageV2State extends State<AccountPageV2> {
             CupertinoDialogAction(
               isDefaultAction: true,
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
               },
               child: const Text('Annuler'),
             ),
             CupertinoDialogAction(
               isDestructiveAction: true,
               onPressed: () async {
+                // SessionManager.logout() ferme tous les dialogs ouverts
+                // via navigatorKey avant de naviguer — pas besoin de pop() ici.
                 await SessionManager().logout();
               },
               child: const Text('Déconnexion'),
@@ -341,7 +343,15 @@ class _AccountPageV2State extends State<AccountPageV2> {
         return BlocProvider(
           create: (context) => DeleteAccountCubit(),
           child: BlocConsumer<DeleteAccountCubit, DeleteAccountState>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              state.maybeWhen(
+                success: () async {
+                  Navigator.of(dialogContext).pop();
+                  await SessionManager().logout();
+                },
+                orElse: () {},
+              );
+            },
             builder: (context, state) {
               return CupertinoAlertDialog(
                 title: const Text('Suppression de compte'),
