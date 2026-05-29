@@ -20,6 +20,8 @@ import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
 import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
+import 'package:immoplus_pro/features/pin_code/views/change_pin_page.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_reset_page.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
@@ -131,15 +133,15 @@ class AppRouter {
           ),
         ],
       ),
-      GoRoute(
-        path: '/pin_code',
-        name: PinCodePage.name,
-        builder: (context, state) => PinCodePage(
-          onSuccess: () {
-            context.goNamed(HomePageV2.name);
-          },
-        ),
-      ),
+      // GoRoute(
+      //   path: '/pin_code',
+      //   name: PinCodePage.name,
+      //   builder: (context, state) => PinCodePage(
+      //     onSuccess: () {
+      //       context.goNamed(HomePageV2.name);
+      //     },
+      //   ),
+      // ),
       GoRoute(
         path: '/onboarding',
         name: OnboardingNewPage.name,
@@ -188,6 +190,16 @@ class AppRouter {
           return PinCodePageV2(onSuccess: onSuccess);
         },
         name: PinCodePageV2.name,
+      ),
+      GoRoute(
+        path: '/pin_reset',
+        name: PinResetPage.name,
+        builder: (context, state) => const PinResetPage(),
+      ),
+      GoRoute(
+        path: '/change_pin',
+        name: ChangePinPage.name,
+        builder: (context, state) => const ChangePinPage(),
       ),
       GoRoute(
         path: '/${AuthenticationPage.name}',

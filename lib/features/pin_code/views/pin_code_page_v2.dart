@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/features/payments/data/repositories/wallet_repository.dart';
 import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_reset_page.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
+import 'package:immoplus_pro/widgets/numeric_keypad.dart';
 import 'package:toastification/toastification.dart';
 
 class PinCodePageV2 extends StatefulWidget {
@@ -18,7 +23,8 @@ class PinCodePageV2 extends StatefulWidget {
   State<PinCodePageV2> createState() => _PinCodePageV2State();
 }
 
-class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProviderStateMixin {
+class _PinCodePageV2State extends State<PinCodePageV2>
+    with SingleTickerProviderStateMixin {
   String _pin = '';
   final int _pinLength = 4;
   late AnimationController _controller;
@@ -80,13 +86,20 @@ class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProvider
         builder: (context, state) {
           String title = 'Entrez votre mot de passe';
           String subtitle = 'Entrer un mot de passe de 4 chiffres';
-          
+
           state.maybeWhen(
-            createPin: () => title = 'Créer votre mot de passe pour accéder au coffre',
+            createPin: () =>
+                title = 'Créer votre mot de passe pour accéder au coffre',
             confirmPin: () => title = 'Confirmez votre mot de passe',
             orElse: () {
-               title = 'Entrez votre mot de passe pour accéder au coffre';
+              title = 'Entrez votre mot de passe pour accéder au coffre';
             },
+          );
+
+          final bool isCreateOrConfirm = state.maybeWhen(
+            createPin: () => true,
+            confirmPin: () => true,
+            orElse: () => false,
           );
 
           return Scaffold(
@@ -130,7 +143,10 @@ class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProvider
                     animation: _offsetAnimation,
                     builder: (context, child) {
                       return Transform.translate(
-                        offset: Offset(_offsetAnimation.value * (1 - (_controller.value * 2).floor() % 2 * 2), 0),
+                        offset: Offset(
+                            _offsetAnimation.value *
+                                (1 - (_controller.value * 2).floor() % 2 * 2),
+                            0),
                         child: child,
                       );
                     },
@@ -144,9 +160,12 @@ class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProvider
                           height: 14,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: isFilled ? AppColors.primary : Colors.transparent,
+                            color: isFilled
+                                ? AppColors.primary
+                                : Colors.transparent,
                             border: Border.all(
-                              color: isFilled ? AppColors.primary : Colors.black,
+                              color:
+                                  isFilled ? AppColors.primary : Colors.black,
                               width: 1.5,
                             ),
                           ),
@@ -155,21 +174,42 @@ class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProvider
                     ),
                   ),
                   const Spacer(),
+
                   // Numeric Keypad
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-                    child: Column(
-                      children: [
-                        _buildKeyRow(context, ['1', '2', '3']),
-                        const SizedBox(height: 15),
-                        _buildKeyRow(context, ['4', '5', '6']),
-                        const SizedBox(height: 15),
-                        _buildKeyRow(context, ['7', '8', '9']),
-                        const SizedBox(height: 15),
-                        _buildLastRow(context),
-                      ],
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 40),
+                    child: NumericKeypad(
+                      onKeyPressed: (value) => _onKeyPressed(context, value),
+                      onDeletePressed: _onDeletePressed,
                     ),
                   ),
+                  if (!isCreateOrConfirm) ...[
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          EasyLoadingHandler.showLoadingToast(
+                              text: "Envoi du code OTP...");
+                          await WalletRepository.requestPinReset();
+                          EasyLoadingHandler.hideLoadingToast();
+                          if (context.mounted) {
+                            context.pushNamed(PinResetPage.name);
+                          }
+                        } catch (e) {
+                          EasyLoadingHandler.hideLoadingToast();
+                        }
+                      },
+                      child: Text(
+                        "Code PIN oublié ?",
+                        style: GoogleFonts.sen(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ],
               ),
             ),
@@ -179,73 +219,12 @@ class _PinCodePageV2State extends State<PinCodePageV2> with SingleTickerProvider
     );
   }
 
-  Widget _buildKeyRow(BuildContext context, List<String> keys) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: keys.map((key) => _buildKey(context, key)).toList(),
-    );
-  }
-
-  Widget _buildLastRow(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        const SizedBox(width: 80), // Placeholder for biometrics if needed later
-        _buildKey(context, '0'),
-        _buildDeleteButton(context),
-      ],
-    );
-  }
-
-  Widget _buildKey(BuildContext context, String value) {
-    return InkWell(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        _onKeyPressed(context, value);
-      },
-      borderRadius: BorderRadius.circular(40),
-      child: Container(
-        width: 80,
-        height: 80,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.primary.withOpacity(0.05),
-        ),
-        child: Text(
-          value,
-          style: GoogleFonts.sen(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDeleteButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        if (_pin.isNotEmpty) {
-          setState(() {
-            _pin = _pin.substring(0, _pin.length - 1);
-          });
-        }
-      },
-      borderRadius: BorderRadius.circular(40),
-      child: Container(
-        width: 80,
-        height: 80,
-        alignment: Alignment.center,
-        child: const Icon(
-          Icons.backspace_outlined,
-          color: Colors.black,
-          size: 28,
-        ),
-      ),
-    );
+  void _onDeletePressed() {
+    if (_pin.isNotEmpty) {
+      setState(() {
+        _pin = _pin.substring(0, _pin.length - 1);
+      });
+    }
   }
 
   void _onKeyPressed(BuildContext context, String value) {
