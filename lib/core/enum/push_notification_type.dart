@@ -1,6 +1,7 @@
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
+import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page.dart';
@@ -34,7 +35,7 @@ enum PushNotificationType {
       case PushNotificationType.bienImmobilier:
         return id != null
             ? EstateDetailsPage.route(id: id)
-            : EstatesPage.route();
+            : EstatesPageV2.route();
 
       case PushNotificationType.newReservationWaiting:
         return PendingReservationsPage.route();

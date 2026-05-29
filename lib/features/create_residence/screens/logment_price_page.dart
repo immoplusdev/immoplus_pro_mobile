@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -13,7 +12,7 @@ import 'package:immoplus_pro/features/create_residence/utils/creation_residence_
 import 'package:immoplus_pro/features/create_residence/utils/creation_residence_navigation.dart';
 import 'package:immoplus_pro/features/create_residence/utils/enum_utils.dart';
 import 'package:immoplus_pro/features/create_residence/widgets/step_bottom_button.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class LogmentPricePage extends StatefulWidget {
@@ -134,67 +133,65 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
         ),
       ),
       bottomNavigationBar: StepBottomButton(
-              onNextText: ResidenceCreationModelBuilder().editing
-                  ? 'Modifier'
-                  : 'Terminer',
-              onNext: () async {
-                // TODO : ResidenceCreationModelBuilder().editing = false; condition not needed
-                if (_formKey.currentState!.validate()) {
-                  if (ResidenceCreationModelBuilder().editing) {
-                    try {
-                      CustomPopup.showLoagingToast(
-                          text: "Modification en cours");
-                      ResidenceCreationModelBuilder().prixReservation =
-                          _controller.numberValue.toInt();
-                      await SessionManager().getCurrentUser();
+        onNextText:
+            ResidenceCreationModelBuilder().editing ? 'Modifier' : 'Terminer',
+        onNext: () async {
+          // TODO : ResidenceCreationModelBuilder().editing = false; condition not needed
+          if (_formKey.currentState!.validate()) {
+            if (ResidenceCreationModelBuilder().editing) {
+              try {
+                EasyLoadingHandler.showLoadingToast(
+                    text: "Modification en cours");
+                ResidenceCreationModelBuilder().prixReservation =
+                    _controller.numberValue.toInt();
+                await SessionManager().getCurrentUser();
 
-                      await LogmentRepository.updateResidence(
-                              id: ResidenceCreationModelBuilder().id,
-                              fields: ResidenceCreationModelBuilder()
-                                  .build()
-                                  .toJson())
-                          .then(
-                        (value) {
-                          EasyLoading.dismiss();
-                          if (context.mounted) context.pop(true);
-                        },
-                      );
-                    } catch (e) {
-                      CustomPopup.showErrorToast(text: 'Modification échoué');
-                    }
-                  } else {
-                    try {
-                      EasyLoading.show(status: "Création en cours");
-                      ResidenceCreationModelBuilder().prixReservation =
-                          _controller.numberValue.toInt();
-                      await SessionManager().getCurrentUser();
-                      await LogmentRepository.createResidence(
-                              model: ResidenceCreationModelBuilder().build())
-                          .then(
-                        (value) {
-                          EasyLoading.dismiss();
-                          // CreationResidenceNavigation.goToPage(
-                          //     pageName: ResidencesPage.name);
-                          context.pop(true);
-                          // AppRouter.router.goNamed(ResidencesPage.name);
-                        },
-                      );
-                    } catch (e) {
-                      EasyLoading.dismiss();
-                      CustomPopup.showErrorToast(text: 'Création échoué');
-                    }
-                  }
-                }
-              },
+                await LogmentRepository.updateResidence(
+                        id: ResidenceCreationModelBuilder().id,
+                        fields:
+                            ResidenceCreationModelBuilder().build().toJson())
+                    .then(
+                  (value) {
+                    EasyLoadingHandler.hideLoadingToast();
+                    if (context.mounted) context.pop(true);
+                  },
+                );
+              } catch (e) {
+                EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+              }
+            } else {
+              try {
+                EasyLoadingHandler.showLoadingToast(text: "Création en cours");
+                ResidenceCreationModelBuilder().prixReservation =
+                    _controller.numberValue.toInt();
+                await SessionManager().getCurrentUser();
+                await LogmentRepository.createResidence(
+                        model: ResidenceCreationModelBuilder().build())
+                    .then(
+                  (value) {
+                    EasyLoadingHandler.hideLoadingToast();
+                    // CreationResidenceNavigation.goToPage(
+                    //     pageName: ResidencesPage.name);
+                    context.pop(true);
+                    // AppRouter.router.goNamed(ResidencesPage.name);
+                  },
+                );
+              } catch (e) {
+                EasyLoading.dismiss();
+                EasyLoadingHandler.showErrorToast(text: 'Création échoué');
+              }
+            }
+          }
+        },
 
-              //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
+        //CreateLogmentRouter.router.goNamed(PicturesLogmentPage.name);
 
-              onPrevious: () {
-                CreationResidenceNavigation.goToPage(
-                    pageName: DescriptionEditorPage.name);
-                //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
-              },
-            ),
+        onPrevious: () {
+          CreationResidenceNavigation.goToPage(
+              pageName: DescriptionEditorPage.name);
+          //CreateLogmentRouter.router.goNamed(DescriptionEditorPage.name);
+        },
+      ),
     );
   }
 }

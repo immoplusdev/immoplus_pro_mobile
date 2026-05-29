@@ -7,6 +7,7 @@ import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/data/models/payment/payment_itent_data.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/payment_module/bloc/payment_cubit.dart';
 import 'package:immoplus_pro/features/payment_module/utils/moov_payment_router.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
@@ -49,7 +50,7 @@ class _MoovOptValidatorPageState extends State<MoovOptValidatorPage> {
               CupertinoActionSheetAction(
                 isDestructiveAction: false,
                 onPressed: () {
-                  AppRouter.router.goNamed(HomePage.name);
+                  AppRouter.router.goNamed(HomePageV2.name);
                 },
                 child: const Text(
                   "Page d'accueil",

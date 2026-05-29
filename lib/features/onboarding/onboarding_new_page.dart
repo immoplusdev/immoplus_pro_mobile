@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
-import 'package:immoplus_pro/features/login_page/login_page.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-
-const _sizeButton = 60.0;
 
 class OnboardingNewPage extends StatefulWidget {
   const OnboardingNewPage({super.key});
@@ -17,37 +15,57 @@ class OnboardingNewPage extends StatefulWidget {
   _OnboardingNewPageState createState() => _OnboardingNewPageState();
 }
 
+class _Constants {
+  // Colors
+  static const Color titleColor = Color(0xFF001B3D);
+  static const Color backgroundColor = Colors.white;
+  static const Color dotInactiveColor =
+      Color(0xFFE0E0E0); // Colors.grey.shade300
+
+  // Typography
+  static const double titleFontSize = 42.0;
+  static const FontWeight titleFontWeight = FontWeight.w800;
+  static const double titleHeight = 1.1;
+  static const double buttonFontSize = 18.0;
+
+  // Spacing & Layout
+  static const double horizontalPadding = 24.0;
+  static const double buttonPadding = 40.0;
+  static const double dotBottomPosition = 40.0;
+  static const double dotHeight = 10.0;
+  static const double dotWidth = 35.0;
+  static const double dotMargin = 4.0;
+  static const double slideGapTop = 80.0;
+  static const double slideGapBottom = 100.0;
+  static const double gradientHeightLarge = 200.0;
+  static const double gradientHeightSmall = 150.0;
+  static const double buttonBorderRadius = 25.0;
+
+  // Animation
+  static const int animationDurationMs = 300;
+}
+
 class _OnboardingNewPageState extends State<OnboardingNewPage> {
   final sessionManager = getIt<SessionManager>();
 
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  List<OnBoardingItem> items = [
+  final List<OnBoardingItem> items = [
     OnBoardingItem(
-      title: "Bienvenue dans l'univers PRO",
-      content: "Publier - Communiquer Gérer - Encaisser",
-      image: "assets/img/onboarding/1.png",
+      title: "Gérez tout\nau même\nendroit",
+      image: "assets/img/onboarding/1_v2.png",
     ),
     OnBoardingItem(
-      title: "Ajoutez facilement vos biens",
-      content:
-          "Publiez vos propriétés avec photos, prix et détails en moins de 2 minutes.",
-      image: "assets/img/onboarding/4.png",
+      title: "Gagnez de\nl’argent en\ntoute sécurité",
+      image: "assets/img/onboarding/2_v2.png",
     ),
     OnBoardingItem(
-      title: "Gérez vos biens en toute liberté",
-      content: "Modifiez, organisez et contrôlez tout facilement.",
-      image: "assets/img/onboarding/3.png",
-    ),
-    OnBoardingItem(
-      title: "Encaissez dès à présent",
-      content: "Recevez vos paiements rapidement et en toute sécurité.",
-      image: "assets/img/onboarding/2.png",
+      title: "Publiez vos\nbiens\nfacilement",
+      image: "assets/img/onboarding/3_v2.png",
     ),
   ];
 
-  /// Navigation vers la page d'accueil après avoir marqué l'onboarding comme lu
   Future<void> _navigateLoginPage() async {
     await sessionManager.markOnboardingAsRead();
     if (mounted) {
@@ -57,11 +75,17 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final titleStyle = GoogleFonts.sen(
+      fontSize: _Constants.titleFontSize,
+      fontWeight: _Constants.titleFontWeight,
+      color: _Constants.titleColor,
+      height: _Constants.titleHeight,
+    );
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: _Constants.backgroundColor,
       body: Stack(
         children: [
-          // PageView
           PageView.builder(
             controller: _pageController,
             itemCount: items.length,
@@ -71,130 +95,208 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
               });
             },
             itemBuilder: (context, index) {
-              final item = items[index];
-              return _buildPage(
-                title: item.title,
-                content: item.content,
-                image: item.image,
-              );
+              return _buildPage(index, titleStyle);
             },
           ),
-          // Stepper (dots indicator)
+          // Pagination Dots
           Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(40),
+            bottom: _Constants.dotBottomPosition,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(items.length, (index) {
+                return AnimatedContainer(
+                  duration: const Duration(
+                      milliseconds: _Constants.animationDurationMs),
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: _Constants.dotMargin),
+                  height: _Constants.dotHeight,
+                  width: _Constants.dotWidth,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index
+                        ? AppColors.customBlue
+                        : _Constants.dotInactiveColor,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(items.length, (index) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(horizontal: 1),
-                            height: 8,
-                            width: 8,
-                            decoration: BoxDecoration(
-                              color: _currentPage == index
-                                  ? AppColors.customBlue
-                                  : Colors.grey.shade400,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                    Text(
-                      items[_currentPage].title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    const Gap(18),
-                    Text(
-                      items[_currentPage].content,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.black54,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const Gap(25),
-                    // Next Button
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (_currentPage < items.length - 1) {
-                              _pageController.nextPage(
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.easeInOut,
-                              );
-                            } else {
-                              await _navigateLoginPage();
-                            }
-                          },
-                          child: Container(
-                            width: _sizeButton,
-                            height: _sizeButton,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: AppColors.customBlue,
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )),
-                    Gap(MediaQuery.of(context).padding.bottom),
-                    // const Gap(10),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: CustomButtom(
-                    //     text: 'Passer',
-                    //     onClick: _navigateToHome,
-                    //     color: Colors.white,
-                    //     textColor: Colors.black,
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ))
+                );
+              }),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildPage(
-      {required String title, required String content, required String image}) {
-    return Image.asset(
-      image, // Chemin de l'image locale
-      width: 300,
-      height: 400,
-      fit: BoxFit.cover, // Ajuste l'image pour remplir le conteneur
+  Widget _buildPage(int index, TextStyle titleStyle) {
+    final item = items[index];
+
+    return Column(
+      children: [
+        if (index == 0) ...[
+          // Slide 1: Image top (faded), Title bottom
+          Expanded(
+            flex: 7,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    item.image,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: _Constants.gradientHeightLarge,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0),
+                          Colors.white.withOpacity(0.8),
+                          Colors.white,
+                        ],
+                        stops: const [0.0, 0.6, 1.0],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: _Constants.horizontalPadding),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                item.title,
+                style: titleStyle,
+              ),
+            ),
+          ),
+          const Spacer(flex: 2),
+        ] else if (index == 1) ...[
+          // Slide 2: Title top, Image middle (faded)
+          const Gap(_Constants.slideGapTop),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: _Constants.horizontalPadding),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                item.title,
+                style: titleStyle,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    item.image,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: _Constants.gradientHeightSmall,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0),
+                          Colors.white,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Gap(_Constants.slideGapBottom),
+        ] else ...[
+          // Slide 3: Title top, Image middle (faded), Button bottom
+          const Gap(_Constants.slideGapTop),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: _Constants.horizontalPadding),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                item.title,
+                style: titleStyle,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    item.image,
+                    fit: BoxFit.fitWidth,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: _Constants.gradientHeightSmall,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.white.withOpacity(0),
+                          Colors.white,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: _Constants.buttonPadding),
+            child: CustomButtom(
+              text: "Démarrer",
+              color: AppColors.customBlue,
+              borderRadius:
+                  BorderRadius.circular(_Constants.buttonBorderRadius),
+              fontSize: _Constants.buttonFontSize,
+              onClick: _navigateLoginPage,
+            ),
+          ),
+          const Gap(_Constants.slideGapBottom),
+        ],
+      ],
     );
   }
 }
 
 class OnBoardingItem {
   final String title;
-  final String content;
   final String image;
 
   OnBoardingItem({
     required this.title,
-    required this.content,
     required this.image,
   });
 }

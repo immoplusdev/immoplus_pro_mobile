@@ -33,9 +33,6 @@ class DeleteAccountCubit extends Cubit<DeleteAccountState> {
           title: "Compte supprimé",
           description: "Votre compte a été supprimé avec succès",
         );
-
-        // Déconnexion et redirection
-        await SessionManager().logout();
       } else {
         emit(const DeleteAccountState.error('Échec de la suppression'));
         ToastUtils.showError(

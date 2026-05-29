@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus_pro/core/services/image_upload_service.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_creation_model.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
@@ -178,12 +179,29 @@ class EstateCreationCubitV2 extends Cubit<EstateCreationStateV2> {
   }
 
   void addUploadingImages(List<File> files) {
-    final List<ImageUploadItem> newUploads = List.from(state.uploadingImages);
-    final List<ImageUploadItem> itemsToAdd = files
-        .map((file) => ImageUploadItem(file: file, status: UploadStatus.uploading))
-        .toList();
-    newUploads.addAll(itemsToAdd);
-    emit(state.copyWith(uploadingImages: newUploads));
+    for (final file in files) {
+      _uploadSingleImage(file);
+    }
+  }
+
+  Future<void> _uploadSingleImage(File file) async {
+    final item = ImageUploadItem(file: file, status: UploadStatus.uploading);
+
+    // Add to list immediately
+    final List<ImageUploadItem> currentUploads =
+        List.from(state.uploadingImages);
+    currentUploads.add(item);
+    emit(state.copyWith(uploadingImages: currentUploads));
+
+    // Start upload
+    final result = await ImageUploadService.uploadImage(file);
+
+    // Update the item status
+    updateUploadingImage(item.copyWith(
+      status: result.isSuccess ? UploadStatus.success : UploadStatus.failed,
+      uploadedId: result.imageId,
+      errorMessage: result.errorMessage,
+    ));
   }
 
   void updateUploadingImage(ImageUploadItem item) {

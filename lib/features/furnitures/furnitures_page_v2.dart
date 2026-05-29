@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_
 import 'package:immoplus_pro/features/home_page/home_page.dart';
 import 'package:immoplus_pro/features/furnitures/widgets/furniture_grid_card.dart';
 import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page_v2.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
@@ -103,7 +104,7 @@ class _FurnituresPageV2State extends State<FurnituresPageV2> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: () => context.goNamed(HomePageV2.name),
         ),
         actions: [
           // IconButton(

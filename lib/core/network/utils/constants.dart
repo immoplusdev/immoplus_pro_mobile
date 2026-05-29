@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 Future<String?> uploadFile({required File file}) async {
   try {
-    EasyLoadingHandler.showLoagingToast(text: "Envoie des images");
+    EasyLoadingHandler.showLoadingToast(text: "Envoie des images");
 
     FileDataModel response = await AuthRepository.uplaodFile(file: file);
     EasyLoading.dismiss();

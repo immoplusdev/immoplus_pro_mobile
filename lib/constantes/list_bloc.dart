@@ -5,6 +5,7 @@ import 'package:immoplus_pro/cubits/authentification/registration_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/reset_password_cubit.dart';
 import 'package:immoplus_pro/cubits/detail_product_cubit/carousel_cubit.dart';
 import 'package:immoplus_pro/cubits/refresh_cubit.dart';
+import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
 import 'package:immoplus_pro/features/booking/logic/booking_cubit.dart';
 import 'package:immoplus_pro/features/estate_detail/cubit/estate_cubit.dart';
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_cubit.dart';
@@ -15,6 +16,9 @@ import 'package:immoplus_pro/features/visits/logic/booking_cubit.dart';
 
 class BlocsManager {
   static List<BlocProvider> listBlocProviders = [
+    BlocProvider<BannersCubit>(
+      create: (context) => BannersCubit(),
+    ),
     BlocProvider<RefreshCubit>(
       create: (context) => RefreshCubit(),
     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
@@ -10,7 +9,7 @@ import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
-import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_grid_card.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -19,7 +18,38 @@ import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
 import 'package:iconsax/iconsax.dart';
 
-enum ResidenceFilter { all, available, occupied }
+enum ResidenceFilter {
+  all,
+  enAttentedeValidation,
+  rejete,
+  valide;
+
+  String get label {
+    switch (this) {
+      case ResidenceFilter.all:
+        return "Tous";
+      case ResidenceFilter.enAttentedeValidation:
+        return "En attente de validation";
+      case ResidenceFilter.rejete:
+        return "Rejeté";
+      case ResidenceFilter.valide:
+        return "Validé";
+    }
+  }
+
+  String get value {
+    switch (this) {
+      case ResidenceFilter.all:
+        return "all";
+      case ResidenceFilter.enAttentedeValidation:
+        return "en_attente_validation";
+      case ResidenceFilter.rejete:
+        return "rejete";
+      case ResidenceFilter.valide:
+        return "valide";
+    }
+  }
+}
 
 class ResidencesPageV2 extends StatefulWidget {
   const ResidencesPageV2({super.key});
@@ -50,17 +80,23 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final List<QueryFilter> filters = [];
-      if (_activeFilter == ResidenceFilter.available) {
+      if (_activeFilter == ResidenceFilter.enAttentedeValidation) {
         filters.add(QueryFilter(
-          field: 'residenceDisponible',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: true,
+          value: ResidenceFilter.enAttentedeValidation.value,
         ));
-      } else if (_activeFilter == ResidenceFilter.occupied) {
+      } else if (_activeFilter == ResidenceFilter.rejete) {
         filters.add(QueryFilter(
-          field: 'residenceDisponible',
+          field: 'statusValidation',
           operator: FilterOperator.eq,
-          value: false,
+          value: ResidenceFilter.rejete.value,
+        ));
+      } else if (_activeFilter == ResidenceFilter.valide) {
+        filters.add(QueryFilter(
+          field: 'statusValidation',
+          operator: FilterOperator.eq,
+          value: ResidenceFilter.valide.value,
         ));
       }
 
@@ -72,7 +108,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
       );
 
       setState(() {
-        _totalCount = _pagingController.itemList?.length ?? 0;
+        _totalCount = result.totalCount ?? 0;
       });
 
       final isLastPage = result.hasNext == false;
@@ -110,7 +146,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black, size: 20),
-          onPressed: () => context.goNamed(HomePage.name),
+          onPressed: () => context.goNamed(HomePageV2.name),
         ),
         actions: [
           IconButton(
@@ -172,21 +208,16 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildFilterChip("Tous", ResidenceFilter.all),
+                        _buildFilterChip(ResidenceFilter.all),
                         const Gap(12),
-                        _buildFilterChip(
-                            "Disponible", ResidenceFilter.available),
+                        _buildFilterChip(ResidenceFilter.valide),
                         const Gap(12),
-                        _buildFilterChip("Occupé", ResidenceFilter.occupied),
+                        _buildFilterChip(ResidenceFilter.enAttentedeValidation),
+                        const Gap(12),
+                        _buildFilterChip(ResidenceFilter.rejete),
                       ],
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.tune, color: Colors.black54),
-                  onPressed: () {
-                    // TODO: Filter modal
-                  },
                 ),
               ],
             ),
@@ -241,7 +272,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
     );
   }
 
-  Widget _buildFilterChip(String label, ResidenceFilter filter) {
+  Widget _buildFilterChip(ResidenceFilter filter) {
     final bool isSelected = _activeFilter == filter;
     return InkWell(
       onTap: () => _updateFilter(filter),
@@ -257,7 +288,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
           ),
         ),
         child: Text(
-          label,
+          filter.label,
           style: TextStyle(
             color: isSelected ? Colors.white : Colors.black54,
             fontWeight: FontWeight.w600,

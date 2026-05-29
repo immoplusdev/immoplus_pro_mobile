@@ -29,7 +29,8 @@ import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/choose_account_type_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
@@ -102,10 +103,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -123,7 +121,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
         curve: Curves.easeInOut,
       );
     } else {
-      CustomPopup.showErrorToast(
+      EasyLoadingHandler.showErrorToast(
           text: 'Envoie du code échoué veuillez ressayer');
       emit(const LoginCubitState.initial());
     }
@@ -196,7 +194,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await SessionManager().getCurrentUser();
 
       emit(const LoginCubitState.success());
-      NavigationService.navigatorKey.currentContext?.pop();
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
@@ -248,7 +245,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
         emit(const LoginCubitState.initial());
         return;
       }
-      CustomPopup.showErrorToast(
+      EasyLoadingHandler.showErrorToast(
           text: 'Erreur lors de la connexion avec Google');
       emit(const LoginCubitState.initial());
     }
@@ -280,12 +277,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
       } else if (result.status == LoginStatus.cancelled) {
         emit(const LoginCubitState.initial());
       } else {
-        CustomPopup.showErrorToast(
+        EasyLoadingHandler.showErrorToast(
             text: 'Erreur lors de la connexion avec Facebook');
         emit(const LoginCubitState.initial());
       }
     } catch (e) {
-      CustomPopup.showErrorToast(
+      EasyLoadingHandler.showErrorToast(
           text: 'Erreur lors de la connexion avec Facebook');
       emit(const LoginCubitState.initial());
     }
@@ -312,7 +309,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       );
 
       if (emailFromToken == null) {
-        CustomPopup.showErrorToast(
+        EasyLoadingHandler.showErrorToast(
             text: "Impossible d'obtenir l'adresse email de votre compte apple");
         emit(const LoginCubitState.initial());
         return;
@@ -330,12 +327,12 @@ class LoginCubit extends Cubit<LoginCubitState> {
         emit(const LoginCubitState.initial());
         return;
       }
-      CustomPopup.showErrorToast(
+      EasyLoadingHandler.showErrorToast(
           text: 'Erreur lors de la connexion avec Apple');
       emit(const LoginCubitState.initial());
     } catch (e, s) {
       log('Error Apple Sign-In: $e', stackTrace: s);
-      CustomPopup.showErrorToast(
+      EasyLoadingHandler.showErrorToast(
           text: 'Erreur lors de la connexion avec Apple');
       emit(const LoginCubitState.initial());
     }
@@ -389,10 +386,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
-      NavigationService.navigatorKey.currentContext!.goNamed(HomePage.name);
-      if (NavigationService.navigatorKey.currentContext!.canPop()) {
-        NavigationService.navigatorKey.currentContext!.pop();
-      }
+      NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } on DioException catch (e) {
       final errorData = e.response?.data;
       final errorResponse = ApiErrorResponse.fromJson(errorData);

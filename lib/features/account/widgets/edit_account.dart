@@ -19,7 +19,9 @@ import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
 import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
+import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:immoplus_pro/utils/status_code_handler.dart';
 
 class EditAccount extends StatefulWidget {
   const EditAccount({super.key});
@@ -87,35 +89,34 @@ class _EditAccountState extends State<EditAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Modifier mes informations'),
-          //backgroundColor: Colors.red,
-          //backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left,
-              size: 30,
-            ),
-            onPressed: () async {
-              context.pop();
-            },
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text('Modifier mes informations'),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.chevron_left,
+            size: 30,
           ),
-
-          centerTitle: true,
+          onPressed: () async {
+            context.pop();
+          },
         ),
-        body: SafeArea(
+        centerTitle: true,
+      ),
+      body: BlocListener<LoginCubit, LoginCubitState>(
+        listener: (context, state) {
+          if (state is LOGIN_SUCCESS) {
+            ToastUtils.success('Modification effectuée avec succès');
+          }
+        },
+        child: SafeArea(
           child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: const EdgeInsets.only(left: 25, right: 25),
             child: SizedBox(
               width: double.infinity,
-              //color: Theme.of(context).colorScheme.primary,
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -149,8 +150,6 @@ class _EditAccountState extends State<EditAccount> {
                           SessionManager().currentUser!.phoneNumber,
                       onValidPhoneNumber: (value) {
                         phoneNumber = value;
-                        // Le numéro valide est traité ici si nécessaire
-                        // print(phoneNumber);
                       },
                       onInputValidated: onInputValidated,
                     ),
@@ -173,48 +172,59 @@ class _EditAccountState extends State<EditAccount> {
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          height: 100,
-          padding: const EdgeInsets.all(10.0),
-          margin: EdgeInsets.only(
-              bottom:
-                  MediaQuery.of(context).viewInsets.bottom + kDefaultPadding),
-          child: BlocBuilder<LoginCubit, LoginCubitState>(
-            builder: (context, state) {
-              return CustomLoadingButtom(
-                isLoading: (state is LOGIN_LOADING),
-                onClick: ((state is LOGIN_LOADING))
-                    ? null
-                    : () async {
-                        String? avatar;
-                        inspect(fileUploaderController);
-                        if (fileUploaderController.file != null) {
-                          avatar = await uploadFile(
-                              file: fileUploaderController.file!);
-                        }
+      ),
+      bottomNavigationBar: Container(
+        height: 100,
+        padding: const EdgeInsets.all(10.0),
+        margin: EdgeInsets.only(
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom + kDefaultPadding),
+        child: BlocBuilder<LoginCubit, LoginCubitState>(
+          builder: (context, state) {
+            return CustomLoadingButtom(
+              isLoading: (state is LOGIN_LOADING),
+              onClick: ((state is LOGIN_LOADING))
+                  ? null
+                  : () async {
+                      final user = SessionManager().currentUser!;
+                      bool hasChanges =
+                          _formController.firstName!.text != user.firstName ||
+                              _formController.lastName!.text != user.lastName ||
+                              fileUploaderController.file != null;
 
-                        if (_formKey.currentState!.validate() &&
-                            isPhoneNumberValid) {
-                          FocusScope.of(context).unfocus();
+                      if (!hasChanges) {
+                        ToastUtils.info("Aucune modification n'a été faite");
+                        return;
+                      }
 
-                          final body = UpdateUserDto(
-                            firstName: _formController.firstName!.text,
-                            lastName: _formController.lastName!.text,
-                            email: _formController.email!.text,
-                            avatar:
-                                avatar ?? SessionManager().currentUser!.avatar,
-                            phoneNumber: phoneNumber,
-                          );
+                      String? avatar;
+                      inspect(fileUploaderController);
+                      if (fileUploaderController.file != null) {
+                        avatar = await uploadFile(
+                            file: fileUploaderController.file!);
+                      }
 
-                          context.read<LoginCubit>().updateUserData(
-                                body: body,
-                              );
-                        }
-                      },
-                text: "Modifier",
-              );
-            },
-          ),
+                      if (_formKey.currentState!.validate() &&
+                          isPhoneNumberValid) {
+                        FocusScope.of(context).unfocus();
+
+                        final body = UpdateUserDto(
+                          firstName: _formController.firstName!.text,
+                          lastName: _formController.lastName!.text,
+                          email: _formController.email!.text,
+                          avatar:
+                              avatar ?? SessionManager().currentUser!.avatar,
+                          phoneNumber: phoneNumber,
+                        );
+
+                        context.read<LoginCubit>().updateUserData(
+                              body: body,
+                            );
+                      }
+                    },
+              text: "Modifier",
+            );
+          },
         ),
       ),
     );

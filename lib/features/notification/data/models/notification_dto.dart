@@ -1,33 +1,107 @@
+import 'package:flutter/material.dart';
+
+// ── Notification type enum ──────────────────────────────────────────────────
+// Résolution basée sur "pushType" (plus précis que "type" qui vaut toujours "info")
+
+enum NotificationType {
+  alert('alert', Icons.notifications_active, Colors.orange),
+  proposal('proposal', Icons.home_work, Colors.blue),
+  visit('visit', Icons.calendar_month, Colors.purple),
+  payment('payment', Icons.account_balance_wallet, Colors.green),
+  message('message', Icons.chat_bubble, Colors.indigo),
+  reservation('reservation', Icons.calendar_today, Color(0xFF2744DE)),
+  system('system', Icons.info, Colors.grey);
+
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const NotificationType(this.value, this.icon, this.color);
+
+  Color get backgroundColor => color.withValues(alpha: 0.10);
+
+  /// Résolution depuis [pushType] d'abord, puis [type]
+  static NotificationType fromString(String? value) {
+    if (value == null) return NotificationType.system;
+    final lower = value.toLowerCase();
+    return NotificationType.values.firstWhere(
+      (e) => lower.contains(e.value),
+      orElse: () => NotificationType.system,
+    );
+  }
+}
+
+// ── DTO ─────────────────────────────────────────────────────────────────────
+
 class NotificationDto {
   final String id;
+
+  /// "info" | "warning" | "error" — valeur brute du champ "type"
   final String type;
-  final String title;
+
+  /// "reservation_accepted" | "new_reservation_waiting" | … — discriminant métier
+  final String? pushType;
+
+  /// Titre affiché (ex : "✅ Demande de réservation acceptée !")
+  final String? subject;
+
+  /// Corps du message
   final String message;
-  final String? entityId;
-  final bool isRead;
+
+  /// Nom de la collection liée (ex : "reservation_accepted")
+  final String? collection;
+
+  /// ID de l'entité liée
+  final String? item;
+
+  /// null = non lu, sinon date de lecture
+  final DateTime? readAt;
+
   final DateTime createdAt;
+  final DateTime updatedAt;
 
   NotificationDto({
     required this.id,
     required this.type,
-    required this.title,
+    this.pushType,
+    this.subject,
     required this.message,
-    this.entityId,
-    required this.isRead,
+    this.collection,
+    this.item,
+    this.readAt,
     required this.createdAt,
+    required this.updatedAt,
   });
 
+  // ── Computed ──────────────────────────────────────────────────────────────
+
+  /// Résout le type via pushType d'abord, puis collection, puis type
+  NotificationType get typeEnum =>
+      NotificationType.fromString(pushType ?? collection ?? type);
+
+  /// true si déjà lu (readAt non null)
+  bool get isRead => readAt != null;
+
+  /// Alias utilisé par les widgets
+  bool get readStatus => isRead;
+
+  // ── Parsing ───────────────────────────────────────────────────────────────
+
   factory NotificationDto.fromJson(Map<String, dynamic> json) {
+    DateTime? parseDate(dynamic v) =>
+        v == null ? null : DateTime.tryParse(v as String);
+
     return NotificationDto(
-      id: json['id'] as String,
-      type: json['type'] as String? ?? 'general',
-      title: json['title'] as String? ?? '',
+      id: json['id'] as String? ?? '',
+      type: json['type'] as String? ?? 'info',
+      pushType: json['pushType'] as String?,
+      subject: json['subject'] as String?,
       message: json['message'] as String? ?? '',
-      entityId: json['entityId'] as String?,
-      isRead: json['isRead'] as bool? ?? false,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'] as String)
-          : DateTime.now(),
+      collection: json['collection'] as String?,
+      item: json['item'] as String?,
+      readAt: parseDate(json['readAt']),
+      createdAt: parseDate(json['createdAt']) ?? DateTime.now(),
+      updatedAt: parseDate(json['updatedAt']) ?? DateTime.now(),
     );
   }
 
@@ -35,32 +109,79 @@ class NotificationDto {
     return NotificationDto(
       id: id,
       type: type,
-      title: title,
+      pushType: pushType,
+      subject: subject,
       message: message,
-      entityId: entityId,
-      isRead: isRead ?? this.isRead,
+      collection: collection,
+      item: item,
+      // marquer comme lu = fixer readAt à maintenant, sinon garder la valeur courante
+      readAt: isRead == true ? (readAt ?? DateTime.now()) : null,
       createdAt: createdAt,
+      updatedAt: updatedAt,
     );
   }
 }
 
+// ── Paginated response ───────────────────────────────────────────────────────
+// Structure exacte renvoyée par l'API :
+// { data, currentPage, totalPages, pageSize, totalCount, hasNext, hasPrevious }
+
 class NotificationResponse {
   final List<NotificationDto> data;
-  final int unreadCount;
+  final int currentPage;
+  final int totalPages;
+  final int pageSize;
+  final int totalCount;
+  final bool hasNext;
+  final bool hasPrevious;
 
-  NotificationResponse({
+  const NotificationResponse({
     required this.data,
-    required this.unreadCount,
+    required this.currentPage,
+    required this.totalPages,
+    required this.pageSize,
+    required this.totalCount,
+    required this.hasNext,
+    required this.hasPrevious,
   });
 
+  /// Nombre de notifications non lues (readAt == null)
+  int get unreadCount => data.where((n) => !n.isRead).length;
+
   factory NotificationResponse.fromJson(Map<String, dynamic> json) {
-    final list = (json['data'] as List<dynamic>?)
-            ?.map((e) => NotificationDto.fromJson(e as Map<String, dynamic>))
-            .toList() ??
-        [];
+    final rawList = json['data'] as List<dynamic>? ?? [];
+    final list = rawList
+        .map((e) => NotificationDto.fromJson(e as Map<String, dynamic>))
+        .toList();
+
     return NotificationResponse(
       data: list,
-      unreadCount: json['unreadCount'] as int? ?? 0,
+      currentPage: json['currentPage'] as int? ?? 1,
+      totalPages: json['totalPages'] as int? ?? 1,
+      pageSize: json['pageSize'] as int? ?? 20,
+      totalCount: json['totalCount'] as int? ?? list.length,
+      hasNext: json['hasNext'] as bool? ?? false,
+      hasPrevious: json['hasPrevious'] as bool? ?? false,
+    );
+  }
+
+  NotificationResponse copyWith({
+    List<NotificationDto>? data,
+    int? currentPage,
+    int? totalPages,
+    int? pageSize,
+    int? totalCount,
+    bool? hasNext,
+    bool? hasPrevious,
+  }) {
+    return NotificationResponse(
+      data: data ?? this.data,
+      currentPage: currentPage ?? this.currentPage,
+      totalPages: totalPages ?? this.totalPages,
+      pageSize: pageSize ?? this.pageSize,
+      totalCount: totalCount ?? this.totalCount,
+      hasNext: hasNext ?? this.hasNext,
+      hasPrevious: hasPrevious ?? this.hasPrevious,
     );
   }
 }

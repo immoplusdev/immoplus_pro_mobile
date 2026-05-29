@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
 
 import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/logic/residence_creation_cubit_v2.dart';
@@ -12,8 +11,7 @@ import 'pages/step2_amenities_page.dart';
 import 'pages/step3_media_page.dart';
 import 'pages/step4_rules_price_page.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 class CreateLodgmentPageV2 extends StatefulWidget {
   final ResidenceModel? initialResidence;
@@ -48,6 +46,7 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
   ];
 
   void _nextStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -60,6 +59,7 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
   }
 
   void _previousStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 300),
@@ -87,14 +87,14 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
             p.submissionSuccess != c.submissionSuccess,
         listener: (context, state) {
           if (state.isSubmitting) {
-            EasyLoading.show(
-                status: state.id != null
+            EasyLoadingHandler.showLoadingToast(
+                text: state.id != null
                     ? "Modification en cours..."
                     : "Création en cours...");
           } else {
-            EasyLoading.dismiss();
+            EasyLoadingHandler.hideLoadingToast();
             if (state.submissionSuccess == true) {
-              CustomPopup.showSuccesToast(
+              EasyLoadingHandler.showSuccessToast(
                 text: state.id != null
                     ? "Résidence modifiée avec succès"
                     : "Résidence créée avec succès",
@@ -105,7 +105,7 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
                 context.pop(true);
               }
             } else if (state.submissionSuccess == false) {
-              CustomPopup.showErrorToast(
+              EasyLoadingHandler.showErrorToast(
                 text: state.id != null
                     ? "Erreur lors de la modification"
                     : "Erreur lors de la création",

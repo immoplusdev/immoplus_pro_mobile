@@ -189,6 +189,7 @@ mixin _$VerifyEmailData {
   bool? get success => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
+  String? get phoneNumber => throw _privateConstructorUsedError;
 
   /// Serializes this VerifyEmailData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -206,7 +207,7 @@ abstract class $VerifyEmailDataCopyWith<$Res> {
           VerifyEmailData value, $Res Function(VerifyEmailData) then) =
       _$VerifyEmailDataCopyWithImpl<$Res, VerifyEmailData>;
   @useResult
-  $Res call({bool? success, String? token, String? email});
+  $Res call({bool? success, String? token, String? email, String? phoneNumber});
 }
 
 /// @nodoc
@@ -227,6 +228,7 @@ class _$VerifyEmailDataCopyWithImpl<$Res, $Val extends VerifyEmailData>
     Object? success = freezed,
     Object? token = freezed,
     Object? email = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_value.copyWith(
       success: freezed == success
@@ -241,6 +243,10 @@ class _$VerifyEmailDataCopyWithImpl<$Res, $Val extends VerifyEmailData>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      phoneNumber: freezed == phoneNumber
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -253,7 +259,7 @@ abstract class _$$VerifyEmailDataImplCopyWith<$Res>
       __$$VerifyEmailDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool? success, String? token, String? email});
+  $Res call({bool? success, String? token, String? email, String? phoneNumber});
 }
 
 /// @nodoc
@@ -272,6 +278,7 @@ class __$$VerifyEmailDataImplCopyWithImpl<$Res>
     Object? success = freezed,
     Object? token = freezed,
     Object? email = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_$VerifyEmailDataImpl(
       success: freezed == success
@@ -286,6 +293,10 @@ class __$$VerifyEmailDataImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
+      phoneNumber: freezed == phoneNumber
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -294,7 +305,10 @@ class __$$VerifyEmailDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$VerifyEmailDataImpl implements _VerifyEmailData {
   const _$VerifyEmailDataImpl(
-      {this.success = false, this.token = '', this.email = ''});
+      {this.success = false,
+      this.token = '',
+      this.email = '',
+      this.phoneNumber = ''});
 
   factory _$VerifyEmailDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$VerifyEmailDataImplFromJson(json);
@@ -308,10 +322,13 @@ class _$VerifyEmailDataImpl implements _VerifyEmailData {
   @override
   @JsonKey()
   final String? email;
+  @override
+  @JsonKey()
+  final String? phoneNumber;
 
   @override
   String toString() {
-    return 'VerifyEmailData(success: $success, token: $token, email: $email)';
+    return 'VerifyEmailData(success: $success, token: $token, email: $email, phoneNumber: $phoneNumber)';
   }
 
   @override
@@ -321,12 +338,15 @@ class _$VerifyEmailDataImpl implements _VerifyEmailData {
             other is _$VerifyEmailDataImpl &&
             (identical(other.success, success) || other.success == success) &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.email, email) || other.email == email));
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.phoneNumber, phoneNumber) ||
+                other.phoneNumber == phoneNumber));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, success, token, email);
+  int get hashCode =>
+      Object.hash(runtimeType, success, token, email, phoneNumber);
 
   /// Create a copy of VerifyEmailData
   /// with the given fields replaced by the non-null parameter values.
@@ -349,7 +369,8 @@ abstract class _VerifyEmailData implements VerifyEmailData {
   const factory _VerifyEmailData(
       {final bool? success,
       final String? token,
-      final String? email}) = _$VerifyEmailDataImpl;
+      final String? email,
+      final String? phoneNumber}) = _$VerifyEmailDataImpl;
 
   factory _VerifyEmailData.fromJson(Map<String, dynamic> json) =
       _$VerifyEmailDataImpl.fromJson;
@@ -360,6 +381,8 @@ abstract class _VerifyEmailData implements VerifyEmailData {
   String? get token;
   @override
   String? get email;
+  @override
+  String? get phoneNumber;
 
   /// Create a copy of VerifyEmailData
   /// with the given fields replaced by the non-null parameter values.

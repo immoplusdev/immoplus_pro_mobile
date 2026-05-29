@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/logic/estate_creation_cubit_v2.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 import 'pages/step1_general_info_page.dart';
 import 'pages/step2_amenities_page.dart';
@@ -47,6 +45,7 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
   ];
 
   void _nextStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -59,6 +58,7 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
   }
 
   void _previousStep() {
+    FocusScope.of(context).unfocus();
     if (_currentStep > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 300),
@@ -86,14 +86,14 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
             p.submissionSuccess != c.submissionSuccess,
         listener: (context, state) {
           if (state.isSubmitting) {
-            EasyLoading.show(
-                status: state.id != null
+            EasyLoadingHandler.showLoadingToast(
+                text: state.id != null
                     ? "Modification en cours..."
                     : "Création en cours...");
           } else {
-            EasyLoading.dismiss();
+            EasyLoadingHandler.hideLoadingToast();
             if (state.submissionSuccess == true) {
-              CustomPopup.showSuccesToast(
+              EasyLoadingHandler.showSuccessToast(
                 text: state.id != null
                     ? "Bien immobilier modifié avec succès"
                     : "Bien immobilier créé avec succès",
@@ -104,7 +104,7 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                 context.pop(true);
               }
             } else if (state.submissionSuccess == false) {
-              CustomPopup.showErrorToast(
+              EasyLoadingHandler.showErrorToast(
                 text: state.id != null
                     ? "Erreur lors de la modification"
                     : "Erreur lors de la création",

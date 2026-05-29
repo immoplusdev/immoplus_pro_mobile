@@ -8,6 +8,7 @@ import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
@@ -41,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
         DioClient().dio.options.headers['Authorization'] =
             'Bearer ${SessionManager().currentUser!.accessToken}';
         notificationService.suscribeCurrentUser();
-        AppRouter.router.goNamed(HomePage.name);
+        AppRouter.router.goNamed(HomePageV2.name);
       }
     } else {
       AppRouter.router.goNamed(OnboardingNewPage.name);

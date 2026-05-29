@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/configs/app_flavor.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: AppFlavor.envFileName);
   await configureDependencies();
+  await preload();
 
   final dir = await getApplicationDocumentsDirectory();
 
@@ -36,3 +38,12 @@ class App extends StatelessWidget {
     return MyApp();
   }
 }
+
+Future<void> preload() => GoogleFonts.pendingFonts([
+      GoogleFonts.sen(
+        fontSize: 42,
+        fontWeight: FontWeight.w800,
+        color: const Color(0xFF001B3D),
+        height: 1.1,
+      )
+    ]);

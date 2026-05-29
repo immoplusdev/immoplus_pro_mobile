@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:immoplus_pro/features/shared_widgets/custom_flutter_carousel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:shimmer/shimmer.dart';
 
 /// SliverAppBar réutilisable avec carousel d'images (liste d'URLs).
 ///
@@ -77,64 +75,12 @@ class SliverImageCarouselAppBar extends StatelessWidget {
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        background: imageUrls.isNotEmpty
-            ? FlutterCarousel(
-                items: imageUrls
-                    .map<Widget>(
-                      (url) => Container(
-                        foregroundDecoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.grey.shade700,
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            stops: const [0, 0.4],
-                          ),
-                        ),
-                        width: double.infinity,
-                        child: CachedNetworkImage(
-                          imageUrl: url,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            period: const Duration(milliseconds: 500),
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              color: Colors.white,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                options: FlutterCarouselOptions(
-                  height: carouselHeight,
-                  viewportFraction: 1.0,
-                  enableInfiniteScroll: imageUrls.length > 1,
-                  autoPlay: false,
-                  showIndicator: imageUrls.length > 1,
-                  indicatorMargin: 20,
-                  slideIndicator: CircularSlideIndicator(),
-                  floatingIndicator: true,
-                ),
-              )
-            : (emptyPlaceholder ??
-                Container(
-                  color: Colors.grey.shade200,
-                  child: Center(
-                    child: Icon(
-                      FontAwesomeIcons.image,
-                      size: 64,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                )),
+        background: CustomFlutterCarousel(
+          images: imageUrls,
+          height: carouselHeight,
+          showGradient: true,
+          showIndicator: imageUrls.length > 1,
+        ),
       ),
     );
   }

@@ -223,7 +223,9 @@ class _Step3MediaPageState extends State<Step3MediaPage> {
                       ? () => context.read<ResidenceCreationCubitV2>().submit()
                       : widget.onNext)
                   : null,
-              saveText: state.id != null ? "Enregistrer les modifications" : "Continuer",
+              saveText: state.id != null
+                  ? "Enregistrer les modifications"
+                  : "Continuer",
               showNext: state.id != null,
             );
           },

@@ -17,12 +17,12 @@ class HomeRouter {
           builder: (BuildContext context, GoRouterState state) =>
               const BookingPage(),
         ),
-        GoRoute(
-          path: '/visit',
-          name: VisitPage.name,
-          builder: (BuildContext context, GoRouterState state) =>
-              const VisitPage(),
-        ),
+        // GoRoute(
+        //   path: '/visit',
+        //   name: VisitPage.name,
+        //   builder: (BuildContext context, GoRouterState state) =>
+        //       const VisitPage(),
+        // ),
         GoRoute(
           path: '/earning',
           name: EarningPage.name,

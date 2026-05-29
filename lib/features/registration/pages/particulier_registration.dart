@@ -46,6 +46,8 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
       FileUploaderController();
   final FileUploaderController fileUploaderControllerPieceIdentite =
       FileUploaderController();
+  final FileUploaderController fileUploaderControllerPieceIdentiteVerso =
+      FileUploaderController();
 
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
@@ -63,7 +65,8 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
         text: widget.dataRouterRegistration.lastName ?? '',
       ),
       activity: TextEditingController(text: ''),
-      phoneNumber: TextEditingController(text: ''),
+      phoneNumber: TextEditingController(
+          text: widget.dataRouterRegistration.phoneNumber ?? ""),
       email: TextEditingController(text: widget.dataRouterRegistration.email),
       password: TextEditingController(text: ''),
     );
@@ -122,17 +125,18 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                       Flexible(
                         flex: 1,
                         child: FileUploader(
-                          width: 150,
+                          width: double.infinity,
                           fileUploaderController:
                               fileUploaderControllerPhotoIdentite,
                           title: "Photo d'identité",
                           iconPlaceholder: FontAwesomeIcons.idBadge,
                         ),
                       ),
+                      const Gap(10),
                       Flexible(
                         flex: 1,
                         child: FileUploader(
-                          width: 150,
+                          width: double.infinity,
                           fileUploaderController:
                               fileUploaderControllerPieceIdentite,
                           title: "Pièce d'identité",
@@ -143,7 +147,37 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                   ),
                 ),
 
-                const SliverGap(10),
+                // SliverGap(10),
+
+                // SliverToBoxAdapter(
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Flexible(
+                //         flex: 1,
+                //         child: FileUploader(
+                //           width: 150,
+                //           fileUploaderController:
+                //               fileUploaderControllerPieceIdentite,
+                //           title: "Pièce d'identité",
+                //           iconPlaceholder: FontAwesomeIcons.idCard,
+                //         ),
+                //       ),
+                //       Flexible(
+                //         flex: 1,
+                //         child: FileUploader(
+                //           width: 150,
+                //           fileUploaderController:
+                //               fileUploaderControllerPieceIdentiteVerso,
+                //           title: "Pièce d'identité verso",
+                //           iconPlaceholder: FontAwesomeIcons.idCard,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+                const SliverGap(20),
 
                 // Nom
                 SliverToBoxAdapter(
@@ -180,15 +214,16 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                   ),
                 ),
 
-                // Téléphone
+                // Téléphone (readonly)
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.phoneNumber,
+                    isEnabled: false,
                     textInputType: TextInputType.number,
                     labelText: 'Numéro de téléphone',
                     prefixIcon: const Icon(CupertinoIcons.phone),
-                    validator: (String? value) =>
-                        FormUtils.numberValidator(number: value),
+                    // validator: (String? value) =>
+                    //     FormUtils.numberValidator(number: value),
                     inputFormatters: [
                       MaskTextInputFormatter(
                         mask: '##########',
@@ -202,7 +237,6 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     focusNode: _emailFocus,
-                    isEnabled: false,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) =>
                         FocusScope.of(context).requestFocus(_passwordFocus),
@@ -332,7 +366,19 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                         toastPosition:
                                             EasyLoadingToastPosition.bottom,
                                       );
-                                    } else {
+                                    }
+                                    // else if (fileUploaderControllerPieceIdentiteVerso
+                                    //         .file ==
+                                    //     null) {
+                                    //   EasyLoading.instance.backgroundColor =
+                                    //       Colors.red.shade400;
+                                    //   EasyLoading.showToast(
+                                    //     "Entrer la photo verso de votre pièce d'identité",
+                                    //     toastPosition:
+                                    //         EasyLoadingToastPosition.bottom,
+                                    //   );
+                                    // }
+                                    else {
                                       String? photo = await uploadFile(
                                         file:
                                             fileUploaderControllerPhotoIdentite
@@ -343,10 +389,18 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             fileUploaderControllerPieceIdentite
                                                 .file!,
                                       );
+                                      // TODO : TO CLEAN
+                                      String? pieceVerso = null;
+                                      // String? pieceVerso = await uploadFile(
+                                      //   file:
+                                      //       fileUploaderControllerPieceIdentiteVerso
+                                      //           .file!,
+                                      // );
 
                                       final body = ParticulierRegistrationBody(
                                         //  avatar: avatar,
                                         pieceIdentiteId: piece,
+                                        pieceIdentiteVersoId: pieceVerso,
                                         photoIdentiteId: photo,
                                         firstName:
                                             _formController.firstName!.text,
@@ -354,7 +408,7 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                             _formController.lastName!.text,
                                         email: _formController.email!.text,
                                         phoneNumber:
-                                            "225${_formController.phoneNumber!.text.replaceAll(" ", "")}",
+                                            _formController.phoneNumber!.text,
                                         password:
                                             _formController.password!.text,
                                         activite:
@@ -374,6 +428,8 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
                                                 fileUploaderControllerPhotoIdentite,
                                             fileUploaderControllerPieceIdentite:
                                                 fileUploaderControllerPieceIdentite,
+                                            fileUploaderControllerPieceIdentiteVerso:
+                                                fileUploaderControllerPieceIdentiteVerso,
                                           );
                                     }
                                   }

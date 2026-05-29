@@ -19,6 +19,7 @@ class VerifyEmailData with _$VerifyEmailData {
     @Default(false) bool? success,
     @Default('') String? token,
     @Default('') String? email,
+    @Default('') String? phoneNumber,
   }) = _VerifyEmailData;
 
   factory VerifyEmailData.fromJson(Map<String, dynamic> json) =>

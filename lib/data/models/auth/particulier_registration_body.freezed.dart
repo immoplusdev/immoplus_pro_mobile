@@ -31,6 +31,7 @@ mixin _$ParticulierRegistrationBody {
   String? get activite => throw _privateConstructorUsedError;
   String? get photoIdentiteId => throw _privateConstructorUsedError;
   String? get pieceIdentiteId => throw _privateConstructorUsedError;
+  String? get pieceIdentiteVersoId => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   String? get provider => throw _privateConstructorUsedError;
 
@@ -62,6 +63,7 @@ abstract class $ParticulierRegistrationBodyCopyWith<$Res> {
       String? activite,
       String? photoIdentiteId,
       String? pieceIdentiteId,
+      String? pieceIdentiteVersoId,
       String? token,
       String? provider});
 }
@@ -91,6 +93,7 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? pieceIdentiteVersoId = freezed,
     Object? token = freezed,
     Object? provider = freezed,
   }) {
@@ -131,6 +134,10 @@ class _$ParticulierRegistrationBodyCopyWithImpl<$Res,
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
               as String?,
+      pieceIdentiteVersoId: freezed == pieceIdentiteVersoId
+          ? _value.pieceIdentiteVersoId
+          : pieceIdentiteVersoId // ignore: cast_nullable_to_non_nullable
+              as String?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -162,6 +169,7 @@ abstract class _$$ParticulierRegistrationBodyImplCopyWith<$Res>
       String? activite,
       String? photoIdentiteId,
       String? pieceIdentiteId,
+      String? pieceIdentiteVersoId,
       String? token,
       String? provider});
 }
@@ -190,6 +198,7 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? pieceIdentiteVersoId = freezed,
     Object? token = freezed,
     Object? provider = freezed,
   }) {
@@ -230,6 +239,10 @@ class __$$ParticulierRegistrationBodyImplCopyWithImpl<$Res>
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
               as String?,
+      pieceIdentiteVersoId: freezed == pieceIdentiteVersoId
+          ? _value.pieceIdentiteVersoId
+          : pieceIdentiteVersoId // ignore: cast_nullable_to_non_nullable
+              as String?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -256,6 +269,7 @@ class _$ParticulierRegistrationBodyImpl
       this.activite,
       this.photoIdentiteId,
       this.pieceIdentiteId,
+      this.pieceIdentiteVersoId,
       this.token,
       this.provider});
 
@@ -283,13 +297,15 @@ class _$ParticulierRegistrationBodyImpl
   @override
   final String? pieceIdentiteId;
   @override
+  final String? pieceIdentiteVersoId;
+  @override
   final String? token;
   @override
   final String? provider;
 
   @override
   String toString() {
-    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, token: $token, provider: $provider)';
+    return 'ParticulierRegistrationBody(avatar: $avatar, firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, password: $password, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, pieceIdentiteVersoId: $pieceIdentiteVersoId, token: $token, provider: $provider)';
   }
 
   @override
@@ -313,6 +329,8 @@ class _$ParticulierRegistrationBodyImpl
                 other.photoIdentiteId == photoIdentiteId) &&
             (identical(other.pieceIdentiteId, pieceIdentiteId) ||
                 other.pieceIdentiteId == pieceIdentiteId) &&
+            (identical(other.pieceIdentiteVersoId, pieceIdentiteVersoId) ||
+                other.pieceIdentiteVersoId == pieceIdentiteVersoId) &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.provider, provider) ||
                 other.provider == provider));
@@ -331,6 +349,7 @@ class _$ParticulierRegistrationBodyImpl
       activite,
       photoIdentiteId,
       pieceIdentiteId,
+      pieceIdentiteVersoId,
       token,
       provider);
 
@@ -363,6 +382,7 @@ abstract class _ParticulierRegistrationBody
       final String? activite,
       final String? photoIdentiteId,
       final String? pieceIdentiteId,
+      final String? pieceIdentiteVersoId,
       final String? token,
       final String? provider}) = _$ParticulierRegistrationBodyImpl;
 
@@ -387,6 +407,8 @@ abstract class _ParticulierRegistrationBody
   String? get photoIdentiteId;
   @override
   String? get pieceIdentiteId;
+  @override
+  String? get pieceIdentiteVersoId;
   @override
   String? get token;
   @override

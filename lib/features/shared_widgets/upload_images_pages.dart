@@ -9,7 +9,7 @@
 // import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 // import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 // import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
-// import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+// import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 // import 'package:immoplus_pro/features/place/widgets/image_logment_viewer.dart';
 
 // class UploadImagePage extends StatefulWidget {
@@ -125,7 +125,7 @@
 //             const EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 20),
 //         child: ElevatedButton.icon(
 //             onPressed: () async {
-//               CustomPopup.showLoagingToast(text: "Envoie des images");
+//               EasyLoadingHandler.showLoadingToast(text: "Envoie des images");
 //               try {
 //                 List<String> imagesSended = [];
 //                 for (var element in _images) {
@@ -141,7 +141,7 @@
 //                     }
 //                   }
 //                 }
-//                 EasyLoading.dismiss();
+//                 EasyLoadingHandler.hideLoadingToast();
 //                 context.pop<List<String>>(imagesSended);
 //               } catch (e) {
 //                 EasyLoading.dismiss();

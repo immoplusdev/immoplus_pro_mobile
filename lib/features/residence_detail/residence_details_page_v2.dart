@@ -1,19 +1,15 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
-import 'package:immoplus_pro/features/residence_detail/components/detail_divider.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_available_day.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_infos.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_rooms.dart';
-import 'package:immoplus_pro/features/residence_detail/components/detail_rules.dart';
 import 'package:immoplus_pro/features/residence_detail/components/inititial_detail_screen.dart';
 import 'package:immoplus_pro/features/residence_detail/cubit/logment_cubit.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
@@ -184,27 +180,27 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "À propos de ce logement",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const Gap(12),
-                        MarkdownBody(
-                          data: residence.description ?? '',
-                          styleSheet: MarkdownStyleSheet(
-                            p: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.black87,
-                              height: 1.5,
-                            ),
-                          ),
-                        ),
-                        const Gap(30),
-                        // const DetailDivider(),
-                        const Gap(30),
+                        // const Text(
+                        //   "À propos de ce logement",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.w800,
+                        //   ),
+                        // ),
+                        // const Gap(12),
+                        // MarkdownBody(
+                        //   data: residence.description ?? '',
+                        //   styleSheet: MarkdownStyleSheet(
+                        //     p: const TextStyle(
+                        //       fontSize: 15,
+                        //       color: Colors.black87,
+                        //       height: 1.5,
+                        //     ),
+                        //   ),
+                        // ),
+                        // const Gap(30),
+                        // // const DetailDivider(),
+                        // const Gap(30),
                         const Text(
                           "Disponibilité",
                           style: TextStyle(
@@ -238,29 +234,29 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
                           child:
                               const Text("Gérer les dates d'indisponibilité"),
                         ),
-                        const Gap(30),
-                        // const DetailDivider(),
-                        const Gap(30),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Règles de la maison",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        const Gap(16),
+                        const Gap(40),
+                        // // const DetailDivider(),
+                        // const Gap(30),
+                        // const Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Text(
+                        //     "Règles de la maison",
+                        //     style: TextStyle(
+                        //       fontSize: 18,
+                        //       fontWeight: FontWeight.w800,
+                        //     ),
+                        //   ),
+                        // ),
+                        // const Gap(16),
                       ],
                     ),
                   ),
                 ),
 
                 // RULES (Already a Sliver)
-                DetailLogmentRules(logmentModel: residence),
+                // DetailLogmentRules(logmentModel: residence),
 
-                const SliverToBoxAdapter(child: Gap(100)),
+                // const SliverToBoxAdapter(child: Gap(100)),
               ],
             ),
             bottomNavigationBar: DetailActionBottomBar(

@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
+import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
@@ -26,6 +28,9 @@ import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/data/enums/account_source.dart';
+import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/banner_card.dart';
 
 class HomePageV2 extends StatefulWidget {
   final String? paiementId;
@@ -46,16 +51,18 @@ class _HomePageV2State extends State<HomePageV2>
   bool _isUnlocked = false;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
-      ValueNotifier(BookingFilterV2.all);
+      ValueNotifier(BookingFilterV2.attentePro);
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
 
+  late BannersCubit _bannersCubit;
   int _totalReservations = 0;
   int _totalVisits = 0;
 
   @override
   void initState() {
     super.initState();
+    _bannersCubit = context.read<BannersCubit>();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
@@ -67,6 +74,9 @@ class _HomePageV2State extends State<HomePageV2>
     context.read<WalletCubit>().onGetWallet();
     final notificationService = getIt<NotificationService>();
     notificationService.setupNotificationListener();
+
+    _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
+    _bannersCubit.startPolling(source: AccountSource.proApp.value);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -91,6 +101,7 @@ class _HomePageV2State extends State<HomePageV2>
 
   @override
   void dispose() {
+    _bannersCubit.stopPolling();
     _tabController.dispose();
     _pageController.dispose();
     _bookingFilterNotifier.dispose();
@@ -125,10 +136,10 @@ class _HomePageV2State extends State<HomePageV2>
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(
-                                    _Constants.radiusMedium),
-                                bottomRight: Radius.circular(
-                                    _Constants.radiusMedium),
+                                bottomLeft:
+                                    Radius.circular(_Constants.radiusMedium),
+                                bottomRight:
+                                    Radius.circular(_Constants.radiusMedium),
                               ),
                             ),
                           ),
@@ -140,55 +151,61 @@ class _HomePageV2State extends State<HomePageV2>
                                 horizontal: _Constants.paddingStandard,
                                 vertical: _Constants.paddingMedium,
                               ),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: _Constants.avatarRadius,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage:
-                                        (currentUser?.avatar != null)
+                              child: BlocBuilder<LoginCubit, LoginCubitState>(
+                                builder: (context, state) {
+                                  currentUser = SessionManager().currentUser;
+                                  return Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: _Constants.avatarRadius,
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: (currentUser?.avatar !=
+                                                null)
                                             ? CachedNetworkImageProvider(
                                                 Utils.getImagePath(
                                                     id: currentUser!.avatar!))
                                             : const NetworkImage(
                                                     _Constants.defaultAvatarUrl)
                                                 as ImageProvider,
-                                  ),
-                                  const Gap(_Constants.gapMedium),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      ),
+                                      const Gap(_Constants.gapMedium),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              currentUser!.greetingText,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Text(
+                                              "Bienvenue dans votre dashboard",
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const Text(
-                                          "Bienvenue dans votre dashboard",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 14,
-                                          ),
+                                      ),
+                                      const Gap(_Constants.gapMedium),
+                                      IconButton(
+                                        onPressed: () => context
+                                            .push(NotificationPage.routePath()),
+                                        icon: const Icon(
+                                          Iconsax.notification,
+                                          color: Colors.white,
+                                          size: _Constants.iconSizeLarge,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () => context
-                                        .push(NotificationPage.routePath()),
-                                    icon: const Icon(
-                                      Iconsax.notification,
-                                      color: Colors.white,
-                                      size: _Constants.iconSizeLarge,
-                                    ),
-                                  )
-                                ],
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -210,70 +227,82 @@ class _HomePageV2State extends State<HomePageV2>
 
               // Contenu du haut : Wallet + Tableau de bord
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: _Constants.paddingStandard,
-                    right: _Constants.paddingStandard,
-                    bottom: _Constants.paddingStandard,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Tableau de bord",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BannerCard(
+                      onDismiss: () {
+                        context.read<BannersCubit>().setDismissed(true);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: _Constants.paddingStandard,
+                        right: _Constants.paddingStandard,
+                        bottom: _Constants.paddingStandard,
                       ),
-                      const Gap(_Constants.gapLarge),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.buildings,
-                                width: 30,
-                              ),
+                          const Text(
+                            "Tableau de bord",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            label: "Bien immobilier",
-                            onTap: () => context.pushNamed(EstatesPageV2.name),
                           ),
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.lobby,
-                                width: 30,
+                          const Gap(_Constants.gapLarge),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.buildings,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Bien immobilier",
+                                onTap: () =>
+                                    context.pushNamed(EstatesPageV2.name),
                               ),
-                            ),
-                            label: "Mes meubles",
-                            onTap: () =>
-                                context.pushNamed(FurnituresPageV2.name),
-                          ),
-                          _buildDashboardAction(
-                            iconWidget: Center(
-                              child: SvgPicture.asset(
-                                Assets.svgs.house,
-                                width: 30,
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.house,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Mes résidences",
+                                onTap: () =>
+                                    context.pushNamed(ResidencesPageV2.name),
                               ),
-                            ),
-                            label: "Mes résidences",
-                            onTap: () =>
-                                context.pushNamed(ResidencesPageV2.name),
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    Assets.svgs.lobby,
+                                    width: 30,
+                                  ),
+                                ),
+                                label: "Mes meubles",
+                                onTap: () =>
+                                    context.pushNamed(FurnituresPageV2.name),
+                              ),
+
+                              // _buildDashboardAction(
+                              //   iconWidget: Icon(Iconsax.play,
+                              //       color: AppColors.primary, size: 22),
+                              //   label: "Mon feed",
+                              //   onTap: () => context.push(MyFeedPage.routePath()),
+                              // ),
+                            ],
                           ),
-                          // _buildDashboardAction(
-                          //   iconWidget: Icon(Iconsax.play,
-                          //       color: AppColors.primary, size: 22),
-                          //   label: "Mon feed",
-                          //   onTap: () => context.push(MyFeedPage.routePath()),
-                          // ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
 
@@ -289,18 +318,14 @@ class _HomePageV2State extends State<HomePageV2>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-             
                           Container(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: _Constants.paddingStandard,
                                 vertical: 8),
                             decoration: BoxDecoration(
                               border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200, 
-                                  width: 2
-                                )
-                              ),
+                                  bottom: BorderSide(
+                                      color: Colors.grey.shade200, width: 2)),
                             ),
                             child: Row(
                               children: [
@@ -310,8 +335,10 @@ class _HomePageV2State extends State<HomePageV2>
                                     child: Transform.translate(
                                       offset: const Offset(0, 2),
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                         decoration: BoxDecoration(
                                           border: Border(
                                             bottom: BorderSide(
@@ -323,7 +350,8 @@ class _HomePageV2State extends State<HomePageV2>
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Réservations",
@@ -331,9 +359,10 @@ class _HomePageV2State extends State<HomePageV2>
                                                 color: _tabController.index == 0
                                                     ? AppColors.primary
                                                     : Colors.grey.shade600,
-                                                fontWeight: _tabController.index == 0
-                                                    ? FontWeight.bold
-                                                    : FontWeight.w600,
+                                                fontWeight:
+                                                    _tabController.index == 0
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -341,22 +370,32 @@ class _HomePageV2State extends State<HomePageV2>
                                             if (_totalReservations > 0)
                                               Container(
                                                 height: 17,
-                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                  color: _tabController.index == 0
+                                                  color: _tabController.index ==
+                                                          0
                                                       ? AppColors.primary
                                                       : Colors.grey.shade100,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: _tabController.index == 0
-                                                      ? null
-                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 0
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
                                                 ),
                                                 child: Text(
                                                   "$_totalReservations",
                                                   style: TextStyle(
                                                     fontSize: 10,
-                                                    color: _tabController.index == 0
+                                                    color: _tabController
+                                                                .index ==
+                                                            0
                                                         ? Colors.white
                                                         : Colors.grey.shade600,
                                                     fontWeight: FontWeight.bold,
@@ -375,8 +414,10 @@ class _HomePageV2State extends State<HomePageV2>
                                     child: Transform.translate(
                                       offset: const Offset(0, 2),
                                       child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
                                         decoration: BoxDecoration(
                                           border: Border(
                                             bottom: BorderSide(
@@ -388,7 +429,8 @@ class _HomePageV2State extends State<HomePageV2>
                                           ),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Visites",
@@ -396,9 +438,10 @@ class _HomePageV2State extends State<HomePageV2>
                                                 color: _tabController.index == 1
                                                     ? AppColors.primary
                                                     : Colors.grey.shade600,
-                                                fontWeight: _tabController.index == 1
-                                                    ? FontWeight.bold
-                                                    : FontWeight.w600,
+                                                fontWeight:
+                                                    _tabController.index == 1
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -406,22 +449,32 @@ class _HomePageV2State extends State<HomePageV2>
                                             if (_totalVisits > 0)
                                               Container(
                                                 height: 17,
-                                                padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
                                                 alignment: Alignment.center,
                                                 decoration: BoxDecoration(
-                                                  color: _tabController.index == 1
+                                                  color: _tabController.index ==
+                                                          1
                                                       ? AppColors.primary
                                                       : Colors.grey.shade100,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  border: _tabController.index == 1
-                                                      ? null
-                                                      : Border.all(color: Colors.grey.shade300, width: 0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 1
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
                                                 ),
                                                 child: Text(
                                                   "$_totalVisits",
                                                   style: TextStyle(
                                                     fontSize: 10,
-                                                    color: _tabController.index == 1
+                                                    color: _tabController
+                                                                .index ==
+                                                            1
                                                         ? Colors.white
                                                         : Colors.grey.shade600,
                                                     fontWeight: FontWeight.bold,
@@ -438,8 +491,6 @@ class _HomePageV2State extends State<HomePageV2>
                             ),
                           ),
 
-
-                          
                           // Filtres statiques
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,

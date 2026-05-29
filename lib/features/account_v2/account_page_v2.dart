@@ -3,25 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:immoplus_pro/common/enums.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/constantes/immo_icons.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
-import 'package:immoplus_pro/features/booking/booking_history_page.dart';
-import 'package:immoplus_pro/features/estates/estates_page.dart';
-import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
-import 'package:immoplus_pro/features/residence/residences_page.dart';
-import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
-import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -89,24 +80,14 @@ class _AccountPageV2State extends State<AccountPageV2> {
                             as ImageProvider,
                   ),
                   const Gap(15),
-                  if (currentUser!.isEntreprise)
-                    Text(
-                      "Entreprise : ${currentUser?.nomEntreprise}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  else
-                    Text(
-                      "Bonjour, ${currentUser?.firstName ?? 'Yao'} 👋",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    currentUser!.greetingText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
                   const Gap(5),
                   const Text(
                     "Bienvenue dans votre dashboard",
@@ -328,7 +309,7 @@ class _AccountPageV2State extends State<AccountPageV2> {
   void _showLogoutDialog() {
     showCupertinoDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return CupertinoAlertDialog(
           title: const Text('Déconnexion'),
           content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
@@ -336,13 +317,15 @@ class _AccountPageV2State extends State<AccountPageV2> {
             CupertinoDialogAction(
               isDefaultAction: true,
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(dialogContext).pop();
               },
               child: const Text('Annuler'),
             ),
             CupertinoDialogAction(
               isDestructiveAction: true,
               onPressed: () async {
+                // SessionManager.logout() ferme tous les dialogs ouverts
+                // via navigatorKey avant de naviguer — pas besoin de pop() ici.
                 await SessionManager().logout();
               },
               child: const Text('Déconnexion'),
@@ -360,7 +343,15 @@ class _AccountPageV2State extends State<AccountPageV2> {
         return BlocProvider(
           create: (context) => DeleteAccountCubit(),
           child: BlocConsumer<DeleteAccountCubit, DeleteAccountState>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              state.maybeWhen(
+                success: () async {
+                  Navigator.of(dialogContext).pop();
+                  await SessionManager().logout();
+                },
+                orElse: () {},
+              );
+            },
             builder: (context, state) {
               return CupertinoAlertDialog(
                 title: const Text('Suppression de compte'),

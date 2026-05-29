@@ -16,6 +16,7 @@ class ParticulierRegistrationBody with _$ParticulierRegistrationBody {
       String? activite,
       String? photoIdentiteId,
       String? pieceIdentiteId,
+      String? pieceIdentiteVersoId,
       String? token,
       String? provider}) = _ParticulierRegistrationBody;
 

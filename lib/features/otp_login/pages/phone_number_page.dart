@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/reset_password/pages/reset_password_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
@@ -74,14 +74,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
           curve: Curves.easeInOut,
         );
       } else {
-        CustomPopup.showErrorToast(
+        EasyLoadingHandler.showErrorToast(
           text: 'Envoi du code échoué, veuillez ressayer',
         );
       }
     } catch (e) {
       if (!mounted) return;
-      CustomPopup.toast(
-        color: Colors.red,
+      EasyLoadingHandler.toast(
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
       );
@@ -170,4 +169,3 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     );
   }
 }
-

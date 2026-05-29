@@ -1,6 +1,9 @@
 import 'dart:developer';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
+import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
@@ -93,8 +96,30 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
+    // 1. Stop polling before anything
+    try {
+      final context = NavigationService.navigatorKey.currentContext;
+      if (context != null) {
+        context.read<BannersCubit>().stopPolling();
+      }
+    } catch (e) {
+      log('SessionManager: Error stopping banners polling on logout: $e');
+    }
+
+    // 2. Close all open dialogs/overlays so no deactivated widget tries to
+    //    look up its ancestor after the StatefulShellRoute is destroyed.
+    final navigator = NavigationService.navigatorKey.currentState;
+    if (navigator != null) {
+      while (navigator.canPop()) {
+        navigator.pop();
+      }
+    }
+
+    // 3. Clear local session & sign out of OneSignal
     await clearSession();
     OneSignal.logout();
+
+    // 4. Navigate to the authentication screen
     AppRouter.router.goNamed(AuthenticationPage.name);
   }
 

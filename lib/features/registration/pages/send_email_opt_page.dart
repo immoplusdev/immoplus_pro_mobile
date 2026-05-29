@@ -11,9 +11,8 @@ import 'package:immoplus_pro/features/authentification/custom_page_immo.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
-import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
-import 'package:immoplus_pro/gen/assets.gen.dart';
-import 'package:immoplus_pro/utils/formular_utils.dart';
+import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
+import 'package:immoplus_pro/utils/phone_number_handler.dart';
 
 class SendEmailOptPage extends StatefulWidget {
   final Function(DataRouterRegistration dataRouterRegistration) onSuccess;
@@ -26,26 +25,28 @@ class SendEmailOptPage extends StatefulWidget {
 
 class _SendEmailOptPageState extends State<SendEmailOptPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  bool isPhoneNumberValid = false;
+  String phoneNumber = '';
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
+  void onInputValidated(bool isValid) {
+    setState(() {
+      isPhoneNumberValid = isValid;
+    });
   }
 
   Future<void> _submit(BuildContext context) async {
     FocusScope.of(context).unfocus();
-    if (!_formKey.currentState!.validate()) return;
+    if (!isPhoneNumberValid || phoneNumber.isEmpty) return;
+
+    final formattedPhone = PhoneNumberHandler.formatPhoneNumber(phoneNumber);
 
     final cubit = context.read<RgistrationCubitCubit>();
-    final success =
-        await cubit.userSendOTP(email: _emailController.text.trim());
+    final success = await cubit.userSendOTP(phoneNumber: formattedPhone);
     if (!mounted) return;
 
     if (success) {
       context.pushNamed(VerifyEmailOtpPage.name, extra: {
-        "email": _emailController.text.trim(),
+        "phoneNumber": formattedPhone,
         "onSuccess": widget.onSuccess
       });
     }
@@ -56,7 +57,7 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
     final theme = Theme.of(context);
 
     return CustomPageImmo(
-      title: "Vérification de l'email",
+      title: "Vérification",
       content: BlocBuilder<RgistrationCubitCubit, RegistrationCubitState>(
         builder: (context, state) {
           final isLoading = state is REGISTRATION_LOADING;
@@ -73,7 +74,7 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Saisissez votre adresse email",
+                        "Saisissez votre numéro de téléphone",
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -99,47 +100,29 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(
-                              child: Image.asset(
-                                Assets.img.email.path,
-                                width: 35,
+                              child: Icon(
+                                Icons.phone_iphone,
+                                size: 45,
+                                color: AppColors.primary,
                               ),
                             ),
                             Gap(14),
-                            Text("Adresse E-mail",
+                            Text("Numéro de téléphone",
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w600, fontSize: 15)),
                             Gap(13),
-                            // Champ email
-                            CustomTextField(
-                              labelText: "Adresse email",
-                              controller: _emailController,
-                              textInputType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.send,
-                              validator: (String? value) =>
-                                  FormUtils.emailValidator(email: value),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.deny(RegExp(r"\s")),
-                                LengthLimitingTextInputFormatter(254),
-                              ],
-                              onFieldSubmitted: (_) =>
-                                  isLoading ? null : _submit(context),
-                              prefixIcon: const Icon(Icons.email_outlined),
-                              fontSize: 16,
-                              fillColor: AppColors.white,
-                              sufixIcon:
-                                  ValueListenableBuilder<TextEditingValue>(
-                                valueListenable: _emailController,
-                                builder: (context, value, _) {
-                                  if (value.text.isEmpty) {
-                                    return const SizedBox();
-                                  }
-                                  return IconButton(
-                                    tooltip: "Effacer",
-                                    icon: const Icon(Icons.close),
-                                    onPressed: isLoading
-                                        ? null
-                                        : _emailController.clear,
-                                  );
+                            // Champ téléphone
+                            SizedBox(
+                              height: 80,
+                              child: InternationalPhoneInput(
+                                fillColor: Colors.white,
+                                suffixIcon: SizedBox(),
+                                onValidPhoneNumber: (value) {
+                                  phoneNumber = value;
+                                },
+                                onInputValidated: onInputValidated,
+                                validator: (t) {
+                                  return null;
                                 },
                               ),
                             ),
@@ -150,11 +133,15 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                               text: "Envoyer le code",
                               onClick: () => _submit(context),
                               isLoading: isLoading,
-                              clickable: true,
+                              clickable:
+                                  isPhoneNumberValid && phoneNumber.isNotEmpty,
+                              color: isPhoneNumberValid
+                                  ? AppColors.primary
+                                  : Colors.blueGrey.shade200,
                             ),
                             const Gap(24),
                             Text(
-                              "Votre email est uniquement utilisé pour cette vérification.",
+                              "Votre numéro est uniquement utilisé pour cette vérification.",
                               textAlign: TextAlign.center,
                             ),
                           ],

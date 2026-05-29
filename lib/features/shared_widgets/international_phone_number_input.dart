@@ -10,6 +10,8 @@ class InternationalPhoneInput extends StatefulWidget {
   final String? Function(String?)? validator;
   final void Function(bool)? onInputValidated;
   final bool isEnabled;
+  final Color? fillColor;
+  final Widget? suffixIcon;
 
   const InternationalPhoneInput({
     super.key,
@@ -19,6 +21,8 @@ class InternationalPhoneInput extends StatefulWidget {
     this.onInputValidated, // Default to Côte d’Ivoire
     this.initialPhoneNumber,
     this.isEnabled = true,
+    this.fillColor,
+    this.suffixIcon,
   });
 
   @override
@@ -51,13 +55,14 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   @override
   Widget build(BuildContext context) {
+    final fillColor = widget.fillColor ?? HexColor("#eff5fb");
     return Material(
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListTile(
-            tileColor: HexColor("#eff5fb"),
+            tileColor: fillColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -104,12 +109,13 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               inputDecoration: InputDecoration(
                 prefixIcon: const Text('|'),
                 hintStyle: Theme.of(context).textTheme.bodyMedium,
-                suffixIcon: const Icon(
-                  FontAwesomeIcons.whatsapp,
-                  size: 20,
-                  color: Colors.green,
-                ),
-                fillColor: HexColor("#eff5fb"),
+                suffixIcon: widget.suffixIcon ??
+                    const Icon(
+                      FontAwesomeIcons.whatsapp,
+                      size: 20,
+                      color: Colors.green,
+                    ),
+                fillColor: fillColor,
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 hintText: "Numéro de téléphone",

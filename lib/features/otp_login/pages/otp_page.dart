@@ -12,7 +12,7 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/login_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
-import 'package:immoplus_pro/features/home_page/utils/custom_popup.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
@@ -72,14 +72,13 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
       if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
         FocusScope.of(context).unfocus();
       } else {
-        CustomPopup.showErrorToast(
+        EasyLoadingHandler.showErrorToast(
           text: 'Envoi du code échoué, veuillez ressayer',
         );
       }
     } catch (e) {
       if (!mounted) return;
-      CustomPopup.toast(
-        color: Colors.red,
+      EasyLoadingHandler.toast(
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
       );
@@ -220,8 +219,7 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = _resendOtp,
+                  recognizer: TapGestureRecognizer()..onTap = _resendOtp,
                 ),
               ],
             ),
@@ -231,4 +229,3 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
     );
   }
 }
-

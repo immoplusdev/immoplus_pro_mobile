@@ -13,6 +13,7 @@ import 'package:immoplus_pro/features/create_furniture/utils/furniture_creation_
 import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page.dart';
 import 'package:immoplus_pro/features/furnitures/theme/furniture_theme.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
@@ -95,7 +96,7 @@ class _FurnituresPageState extends State<FurnituresPage> {
         leading: IconButton(
           icon: const Icon(FontAwesomeIcons.chevronLeft),
           onPressed: () {
-            context.goNamed(HomePage.name);
+            context.goNamed(HomePageV2.name);
           },
         ),
         title: const Text('Mes meubles'),

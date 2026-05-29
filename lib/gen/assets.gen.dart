@@ -15,11 +15,14 @@ class $AssetsAnimationsGen {
   /// File path: assets/animations/check.json
   String get check => 'assets/animations/check.json';
 
+  /// File path: assets/animations/immo-loading.json
+  String get immoLoading => 'assets/animations/immo-loading.json';
+
   /// File path: assets/animations/place-marker.json
   String get placeMarker => 'assets/animations/place-marker.json';
 
   /// List of all assets
-  List<String> get values => [check, placeMarker];
+  List<String> get values => [check, immoLoading, placeMarker];
 }
 
 class $AssetsGifGen {
@@ -95,25 +98,25 @@ class $AssetsIconGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    cash,
-    eco,
-    express,
-    icon,
-    icon3,
-    iconLarge,
-    iconRadius,
-    leading,
-    logoBlanc,
-    logoBleu,
-    marker,
-    marker1,
-    marker2,
-    moov,
-    mtn,
-    normal,
-    om,
-    wave,
-  ];
+        cash,
+        eco,
+        express,
+        icon,
+        icon3,
+        iconLarge,
+        iconRadius,
+        leading,
+        logoBlanc,
+        logoBleu,
+        marker,
+        marker1,
+        marker2,
+        moov,
+        mtn,
+        normal,
+        om,
+        wave,
+      ];
 }
 
 class $AssetsIconsGen {
@@ -184,28 +187,28 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    add,
-    basket,
-    bell,
-    compte,
-    delet,
-    empt,
-    empty,
-    failed,
-    find,
-    go,
-    history,
-    home,
-    location,
-    logoImmo,
-    map,
-    panier,
-    pending,
-    profil,
-    search,
-    substract,
-    success,
-  ];
+        add,
+        basket,
+        bell,
+        compte,
+        delet,
+        empt,
+        empty,
+        failed,
+        find,
+        go,
+        history,
+        home,
+        location,
+        logoImmo,
+        map,
+        panier,
+        pending,
+        profil,
+        search,
+        substract,
+        success,
+      ];
 }
 
 class $AssetsImgGen {
@@ -266,22 +269,22 @@ class $AssetsImgGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    email,
-    img,
-    immeubleDeBureaux,
-    logo,
-    logoPlain,
-    orderJpg,
-    orderPng,
-    panorama,
-    panorama2,
-    panoramaCropped,
-    serviceJpg,
-    servicePng,
-    utilisateur,
-    visit,
-    voidImage,
-  ];
+        email,
+        img,
+        immeubleDeBureaux,
+        logo,
+        logoPlain,
+        orderJpg,
+        orderPng,
+        panorama,
+        panorama2,
+        panoramaCropped,
+        serviceJpg,
+        servicePng,
+        utilisateur,
+        visit,
+        voidImage,
+      ];
 }
 
 class $AssetsLottiesGen {
@@ -335,22 +338,22 @@ class $AssetsLottiesGen {
 
   /// List of all assets
   List<String> get values => [
-    cheking,
-    deliveryProgress,
-    fail,
-    furnitureIsolatedEdited,
-    furniture,
-    furniture1,
-    furniture2,
-    furniture3,
-    furnituresS1,
-    house,
-    orderChecking,
-    resetPassword,
-    rocket,
-    success,
-    tXdlifYfFw1,
-  ];
+        cheking,
+        deliveryProgress,
+        fail,
+        furnitureIsolatedEdited,
+        furniture,
+        furniture1,
+        furniture2,
+        furniture3,
+        furnituresS1,
+        house,
+        orderChecking,
+        resetPassword,
+        rocket,
+        success,
+        tXdlifYfFw1,
+      ];
 }
 
 class $AssetsSvgsGen {
@@ -395,16 +398,16 @@ class $AssetsSvgsGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    buildings,
-    documentText,
-    dollard,
-    empty,
-    house,
-    lobby,
-    retraitDollars,
-    userEdit,
-    userSquare,
-  ];
+        buildings,
+        documentText,
+        dollard,
+        empty,
+        house,
+        lobby,
+        retraitDollars,
+        userEdit,
+        userSquare,
+      ];
 }
 
 class $AssetsImgOnboardingGen {
@@ -413,17 +416,29 @@ class $AssetsImgOnboardingGen {
   /// File path: assets/img/onboarding/1.png
   AssetGenImage get a1 => const AssetGenImage('assets/img/onboarding/1.png');
 
+  /// File path: assets/img/onboarding/1_v2.png
+  AssetGenImage get a1V2 =>
+      const AssetGenImage('assets/img/onboarding/1_v2.png');
+
   /// File path: assets/img/onboarding/2.png
   AssetGenImage get a2 => const AssetGenImage('assets/img/onboarding/2.png');
 
+  /// File path: assets/img/onboarding/2_v2.png
+  AssetGenImage get a2V2 =>
+      const AssetGenImage('assets/img/onboarding/2_v2.png');
+
   /// File path: assets/img/onboarding/3.png
   AssetGenImage get a3 => const AssetGenImage('assets/img/onboarding/3.png');
+
+  /// File path: assets/img/onboarding/3_v2.png
+  AssetGenImage get a3V2 =>
+      const AssetGenImage('assets/img/onboarding/3_v2.png');
 
   /// File path: assets/img/onboarding/4.png
   AssetGenImage get a4 => const AssetGenImage('assets/img/onboarding/4.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [a1, a2, a3, a4];
+  List<AssetGenImage> get values => [a1, a1V2, a2, a2V2, a3, a3V2, a4];
 }
 
 class $AssetsSvgsCreationIconGen {
@@ -449,13 +464,13 @@ class $AssetsSvgsCreationIconGen {
 
   /// List of all assets
   List<String> get values => [
-    calendar,
-    calendarClock,
-    calendarJours,
-    galleryImport,
-    tag,
-    videoAdd,
-  ];
+        calendar,
+        calendarClock,
+        calendarJours,
+        galleryImport,
+        tag,
+        videoAdd,
+      ];
 }
 
 class $AssetsSvgsIconsGen {
@@ -593,50 +608,50 @@ class $AssetsSvgsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-    bed,
-    buildingUserSolid,
-    bureau,
-    coeur,
-    coeur1,
-    coeur2,
-    compte,
-    cottage,
-    directionsCar,
-    dryCleaning,
-    faceId,
-    facebook,
-    fanSolid,
-    gmail,
-    google,
-    googleMaps,
-    historique,
-    home,
-    homeFILL,
-    kitchenSetSolid,
-    kitchen,
-    land,
-    localLaundry,
-    location,
-    loupe,
-    markers,
-    meubles,
-    microwave,
-    moving,
-    oven,
-    panier,
-    recent,
-    resi,
-    service,
-    smileCircleSvgrepoCom,
-    studio,
-    terrain,
-    tv,
-    villa,
-    visua,
-    volumeOff,
-    wifi,
-    wind,
-  ];
+        bed,
+        buildingUserSolid,
+        bureau,
+        coeur,
+        coeur1,
+        coeur2,
+        compte,
+        cottage,
+        directionsCar,
+        dryCleaning,
+        faceId,
+        facebook,
+        fanSolid,
+        gmail,
+        google,
+        googleMaps,
+        historique,
+        home,
+        homeFILL,
+        kitchenSetSolid,
+        kitchen,
+        land,
+        localLaundry,
+        location,
+        loupe,
+        markers,
+        meubles,
+        microwave,
+        moving,
+        oven,
+        panier,
+        recent,
+        resi,
+        service,
+        smileCircleSvgrepoCom,
+        studio,
+        terrain,
+        tv,
+        villa,
+        visua,
+        volumeOff,
+        wifi,
+        wind,
+      ];
 }
 
 class $AssetsSvgsUndrawGen {
@@ -671,23 +686,22 @@ class $AssetsSvgsUndrawGen {
 
   /// List of all assets
   List<String> get values => [
-    a1,
-    a2,
-    a3,
-    a4,
-    a5,
-    a6,
-    compteCopie,
-    etoile,
-    house,
-  ];
+        a1,
+        a2,
+        a3,
+        a4,
+        a5,
+        a6,
+        compteCopie,
+        etoile,
+        house,
+      ];
 }
 
 class Assets {
   const Assets._();
 
   static const String aEnv = '.env.dev';
-  // static const String aEnv = '.env.prod';
   static const $AssetsAnimationsGen animations = $AssetsAnimationsGen();
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const String googleMapStyle = 'assets/google_map_style.json';

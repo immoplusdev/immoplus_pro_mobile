@@ -349,11 +349,13 @@ class AppRouter {
         name: VerifyEmailOtpPage.name,
         builder: (BuildContext context, GoRouterState state) {
           final data = state.extra as Map<String, dynamic>;
-          final email = data['email'] as String;
+          final email = data['email'] as String?;
+          final phoneNumber = data['phoneNumber'] as String?;
           final callOnSuccess = data['onSuccess'] as Function(
               DataRouterRegistration dataRouterRegistration);
           return VerifyEmailOtpPage(
             email: email,
+            phoneNumber: phoneNumber,
             onSuccess: callOnSuccess,
           );
         },
