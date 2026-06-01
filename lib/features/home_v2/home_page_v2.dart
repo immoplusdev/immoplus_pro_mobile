@@ -567,7 +567,7 @@ class _HomePageV2State extends State<HomePageV2>
             label,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),
@@ -876,7 +876,7 @@ class _Constants {
 
   static const double stickyHeaderHeight = 125.0;
   static const double tabHeight = 48.0;
-  static const double actionCircleSize = 55.0;
+  static const double actionCircleSize = 50.0;
 
   // Padding & Spacing
   static const double paddingStandard = 20.0;

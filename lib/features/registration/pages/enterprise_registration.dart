@@ -53,8 +53,10 @@ class _EnterpriseRegistrationPageState
       enterpriseName: TextEditingController(text: ''),
       enterpriseType: TextEditingController(text: ''),
       numeroContribuable: TextEditingController(text: ''),
-      phoneNumber: TextEditingController(text: ''),
-      email: TextEditingController(text: widget.dataRouterRegistration?.email),
+      phoneNumber: TextEditingController(
+          text: widget.dataRouterRegistration?.phoneNumber ?? ""),
+      email: TextEditingController(
+          text: widget.dataRouterRegistration?.email ?? ""),
       password: TextEditingController(text: ''),
     );
   }
@@ -123,15 +125,16 @@ class _EnterpriseRegistrationPageState
                   ),
                 ),
 
-                // Téléphone
+                // Téléphone (readonly)
                 SliverToBoxAdapter(
                   child: CustomTextField(
+                    readOnly: true,
                     controller: _formController.phoneNumber,
                     textInputType: TextInputType.number,
                     labelText: 'Numéro de téléphone',
                     prefixIcon: const Icon(CupertinoIcons.phone),
-                    validator: (String? value) =>
-                        FormUtils.numberValidator(number: value),
+                    // validator: (String? value) =>
+                    //     FormUtils.numberValidator(number: value),
                     inputFormatters: [
                       MaskTextInputFormatter(
                         mask: '##########',
@@ -141,11 +144,10 @@ class _EnterpriseRegistrationPageState
                   ),
                 ),
 
-                // Email (readonly)
+                // Email
                 SliverToBoxAdapter(
                   child: CustomTextField(
                     controller: _formController.email,
-                    readOnly: true,
                     prefixIcon: const Icon(CupertinoIcons.mail),
                     labelText: 'Email',
                     textInputType: TextInputType.emailAddress,
@@ -267,7 +269,7 @@ class _EnterpriseRegistrationPageState
                                         email: _formController.email!.text,
                                         registreCommerceId: registre,
                                         phoneNumber:
-                                            "225${_formController.phoneNumber!.text.replaceAll(" ", "")}",
+                                            _formController.phoneNumber!.text,
                                         password:
                                             _formController.password!.text,
                                         nomEntreprise: _formController
