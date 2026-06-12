@@ -28,6 +28,7 @@ import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_
 import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
+import 'package:immoplus_pro/features/onboarding/onboarding_notification_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
@@ -144,6 +145,11 @@ class AppRouter {
         path: '/onboarding',
         name: OnboardingNewPage.name,
         builder: (context, state) => OnboardingNewPage(),
+      ),
+      GoRoute(
+        path: '/onboarding-notifications',
+        name: OnboardingNotificationPage.name,
+        builder: (context, state) => const OnboardingNotificationPage(),
       ),
       GoRoute(
         path: '/create_estate',

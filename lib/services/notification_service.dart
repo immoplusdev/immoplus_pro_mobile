@@ -29,8 +29,6 @@ class NotificationService {
     }
     OneSignal.initialize(
         dotenv.env['ONE_SIGNAL_KEY'] ?? '7eb65c1b-a1c3-4bd2-9a3c-955743582362');
-    // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal.Notifications.requestPermission(true);
   }
 
   void setupNotificationListener() {

@@ -9,6 +9,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
@@ -29,14 +31,34 @@ class AccountPageV2 extends StatefulWidget {
 class _AccountPageV2State extends State<AccountPageV2> {
   final sessionManager = SessionManager();
   UserModelSchema? currentUser;
+  bool _notificationsEnabled = false;
 
   @override
   void initState() {
     super.initState();
     currentUser = sessionManager.currentUser;
+    _notificationsEnabled = OneSignal.Notifications.permission &&
+        (OneSignal.User.pushSubscription.optedIn ?? false);
     if (mounted) {
       setState(() {});
     }
+  }
+
+  Future<void> _toggleNotifications(bool value) async {
+    if (value) {
+      final hasPermission = OneSignal.Notifications.permission;
+      if (!hasPermission) {
+        final granted = await OneSignal.Notifications.requestPermission(true);
+        if (!granted) {
+          await openAppSettings();
+          return;
+        }
+      }
+      await OneSignal.User.pushSubscription.optIn();
+    } else {
+      await OneSignal.User.pushSubscription.optOut();
+    }
+    if (mounted) setState(() => _notificationsEnabled = value);
   }
 
   @override
@@ -154,6 +176,16 @@ class _AccountPageV2State extends State<AccountPageV2> {
 
             const Gap(25),
 
+            // SECTION : Notifications
+            _buildSection(
+              title: "Notifications",
+              children: [
+                _buildNotificationToggle(),
+              ],
+            ),
+
+            const Gap(25),
+
             // SECTION 3 : Paramètres de compte
             _buildSection(
               title: "Paramètres de compte",
@@ -258,6 +290,43 @@ class _AccountPageV2State extends State<AccountPageV2> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildNotificationToggle() {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: _notificationsEnabled
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(
+          _notificationsEnabled
+              ? Icons.notifications_active_rounded
+              : Icons.notifications_off_rounded,
+          color: _notificationsEnabled ? AppColors.primary : Colors.grey,
+          size: 22,
+        ),
+      ),
+      title: const Text(
+        "Activer les notifications",
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.black87,
+        ),
+      ),
+      trailing: Switch.adaptive(
+        value: _notificationsEnabled,
+        onChanged: _toggleNotifications,
+        activeThumbColor: Colors.white,
+        activeTrackColor: AppColors.primary,
+      ),
     );
   }
 

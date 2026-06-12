@@ -14,7 +14,10 @@ import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
+import 'package:immoplus_pro/services/notification_actif_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
@@ -77,6 +80,7 @@ class _HomePageV2State extends State<HomePageV2>
 
     _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
+    _checkNotifActif();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -84,6 +88,33 @@ class _HomePageV2State extends State<HomePageV2>
       }
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
+    });
+  }
+
+  void _checkNotifActif() {
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (!mounted) return;
+      final shouldShow = await NotificationActifService.shouldShow();
+      if (!mounted || !shouldShow) return;
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withValues(alpha: 0.6),
+        isScrollControlled: true,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (sheetCtx) => NotificationActifSheet(
+          onAccept: () async {
+            Navigator.of(sheetCtx).pop();
+            await NotificationActifService.setStatus(NotificationActifService.accepted);
+            await OneSignal.Notifications.requestPermission(true);
+          },
+          onMaybeLater: () async {
+            Navigator.of(sheetCtx).pop();
+            await NotificationActifService.setStatus(NotificationActifService.maybeLater);
+          },
+        ),
+      );
     });
   }
 
