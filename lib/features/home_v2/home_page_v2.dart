@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:app_settings/app_settings.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +21,7 @@ import 'package:immoplus_pro/features/notification/widgets/notification_actif_sh
 import 'package:immoplus_pro/services/notification_actif_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
@@ -107,7 +111,7 @@ class _HomePageV2State extends State<HomePageV2>
           onAccept: () async {
             Navigator.of(sheetCtx).pop();
             await NotificationActifService.setStatus(NotificationActifService.accepted);
-            await OneSignal.Notifications.requestPermission(true);
+            await _requestNotificationPermission();
           },
           onMaybeLater: () async {
             Navigator.of(sheetCtx).pop();
@@ -116,6 +120,21 @@ class _HomePageV2State extends State<HomePageV2>
         ),
       );
     });
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    var status = await Permission.notification.status;
+    
+    if (status.isDenied) {
+      status = await Permission.notification.request();
+    }
+
+    if (status.isPermanentlyDenied) {
+      // Redirige vers les paramètres de notification si déjà refusé
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+    } else if (status.isGranted) {
+      await OneSignal.User.pushSubscription.optIn();
+    }
   }
 
   void _showPaiementDialog() {

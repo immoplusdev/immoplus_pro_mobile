@@ -28,23 +28,39 @@ class MainNavigationV2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 10,
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primary,
-        unselectedItemColor: Colors.grey,
-        currentIndex: navigationShell.currentIndex,
-        onTap: _onTap,
-        selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-        unselectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
-        items: const [
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade300,
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          iconSize: 22,
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: Colors.grey,
+          currentIndex: navigationShell.currentIndex,
+          onTap: _onTap,
+          selectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
+          unselectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.normal, fontSize: 11),
+          items: const [
           BottomNavigationBarItem(
             icon: Icon(Iconsax.trend_up),
             activeIcon: Icon(Iconsax.trend_up),
             label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Iconsax.calendar_1),
+            activeIcon: Icon(Iconsax.calendar_1),
+            label: 'Calendrier',
           ),
           BottomNavigationBarItem(
             icon: Icon(Iconsax.add_square),
@@ -62,6 +78,7 @@ class MainNavigationV2 extends StatelessWidget {
             label: 'Compte',
           ),
         ],
+      ),
       ),
     );
   }

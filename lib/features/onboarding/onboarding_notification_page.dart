@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,7 @@ import 'package:immoplus_pro/features/authentification/authentification_page.dar
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OnboardingNotificationPage extends StatelessWidget {
   const OnboardingNotificationPage({super.key});
@@ -15,7 +18,20 @@ class OnboardingNotificationPage extends StatelessWidget {
   static const String name = 'ONBOARDING_NOTIFICATION';
 
   Future<void> _activateAndContinue(BuildContext context) async {
-    await OneSignal.Notifications.requestPermission(true);
+   
+    var status = await Permission.notification.status;
+
+    if (status.isDenied) {
+      status = await Permission.notification.request();
+    }
+
+    if (status.isPermanentlyDenied) {
+
+      await openAppSettings();
+    } else if (status.isGranted) {
+      await OneSignal.User.pushSubscription.optIn();
+    }
+    
     if (context.mounted) await _markAndNavigate(context);
   }
 

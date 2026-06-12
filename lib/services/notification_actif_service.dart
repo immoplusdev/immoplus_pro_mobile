@@ -1,3 +1,4 @@
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,14 +22,11 @@ class NotificationActifService {
   /// Retourne true si le bottom sheet doit être affiché.
   /// Vérifie d'abord la permission OS, puis le statut stocké.
   static Future<bool> shouldShow() async {
-    final osStatus = await Permission.notification.status;
+    // Utiliser OneSignal pour une vérification fiable
+    final hasPermission = OneSignal.Notifications.permission;
 
-    if (osStatus.isGranted) {
+    if (hasPermission) {
       await setStatus(accepted);
-      return false;
-    }
-
-    if (osStatus.isPermanentlyDenied) {
       return false;
     }
 

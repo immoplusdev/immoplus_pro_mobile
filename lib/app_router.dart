@@ -15,6 +15,7 @@ import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 // V2 Imports
 import 'package:immoplus_pro/features/main_navigation_v2/main_navigation_v2.dart';
+import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
 import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
@@ -102,6 +103,15 @@ class AppRouter {
                 builder: (context, state) => HomePageV2(
                   paiementId: state.extra as String?,
                 ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: CalendarPageV2.routePath,
+                name: CalendarPageV2.name,
+                builder: (context, state) => const CalendarPageV2(),
               ),
             ],
           ),
@@ -507,7 +517,6 @@ class AppRouter {
     ],
   );
 }
-
 
 // class ExtraVerifyEmailPage {
 //   final Function(DataRouterRegistration dataRouterRegistration) onSuccess;

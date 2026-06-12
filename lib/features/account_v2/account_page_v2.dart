@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:app_settings/app_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
@@ -28,7 +31,8 @@ class AccountPageV2 extends StatefulWidget {
   State<AccountPageV2> createState() => _AccountPageV2State();
 }
 
-class _AccountPageV2State extends State<AccountPageV2> {
+class _AccountPageV2State extends State<AccountPageV2>
+    with WidgetsBindingObserver {
   final sessionManager = SessionManager();
   UserModelSchema? currentUser;
   bool _notificationsEnabled = false;
@@ -36,30 +40,54 @@ class _AccountPageV2State extends State<AccountPageV2> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     currentUser = sessionManager.currentUser;
-    _notificationsEnabled = OneSignal.Notifications.permission &&
-        (OneSignal.User.pushSubscription.optedIn ?? false);
-    if (mounted) {
-      setState(() {});
+    _refreshNotificationStatus();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshNotificationStatus();
     }
   }
 
-  Future<void> _toggleNotifications(bool value) async {
-    if (value) {
-      final hasPermission = OneSignal.Notifications.permission;
-      if (!hasPermission) {
-        final granted = await OneSignal.Notifications.requestPermission(true);
-        if (!granted) {
-          await openAppSettings();
-          return;
-        }
-      }
+  Future<void> _refreshNotificationStatus() async {
+    if (!mounted) return;
+    
+    // On vérifie le statut réel dans le système du téléphone
+    final osGranted = OneSignal.Notifications.permission;
+    
+    // On force l'abonnement ou le désabonnement pour s'aligner avec l'OS
+    if (osGranted) {
       await OneSignal.User.pushSubscription.optIn();
     } else {
       await OneSignal.User.pushSubscription.optOut();
     }
-    if (mounted) setState(() => _notificationsEnabled = value);
+    
+    if (!mounted) return;
+    
+    // Le toggle reflète toujours 100% la réalité du téléphone
+    setState(() {
+      _notificationsEnabled = osGranted;
+    });
   }
+
+  Future<void> _toggleNotifications(bool value) async {
+    // vers les paramètres spécifiques des notifications du système pour que 
+    // l'utilisateur gère l'activation ou la désactivation.
+    // Au retour dans l'application, didChangeAppLifecycleState mettra à jour
+    // le toggle (bouton bleu ou gris) en lisant le statut réel de l'OS.
+    await AppSettings.openAppSettings(type: AppSettingsType.notification);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -299,18 +327,14 @@ class _AccountPageV2State extends State<AccountPageV2> {
       leading: Container(
         width: 40,
         height: 40,
-        decoration: BoxDecoration(
-          color: _notificationsEnabled
-              ? AppColors.primary.withValues(alpha: 0.1)
-              : Colors.grey.shade100,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(
-          _notificationsEnabled
-              ? Icons.notifications_active_rounded
-              : Icons.notifications_off_rounded,
-          color: _notificationsEnabled ? AppColors.primary : Colors.grey,
-          size: 22,
+        child: SvgPicture.asset(
+          'assets/icons/notification-bing.svg',
+          width: 14,
+          height: 14,
+          colorFilter: ColorFilter.mode(
+            _notificationsEnabled ? AppColors.primary : Colors.grey,
+            BlendMode.srcIn,
+          ),
         ),
       ),
       title: const Text(
