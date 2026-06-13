@@ -27,6 +27,7 @@ import 'package:immoplus_pro/features/furnitures/furnitures_page_v2.dart';
 import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
+import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/data/enums/account_source.dart';
 import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
@@ -290,13 +291,19 @@ class _HomePageV2State extends State<HomePageV2>
                                 onTap: () =>
                                     context.pushNamed(FurnituresPageV2.name),
                               ),
-
-                              // _buildDashboardAction(
-                              //   iconWidget: Icon(Iconsax.play,
-                              //       color: AppColors.primary, size: 22),
-                              //   label: "Mon feed",
-                              //   onTap: () => context.push(MyFeedPage.routePath()),
-                              // ),
+                              if (_isUnlocked)
+                                // Transaction
+                                _buildDashboardAction(
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      "assets/svgs/send-sqaure-2.svg",
+                                      width: 30,
+                                    ),
+                                  ),
+                                  label: "Transaction",
+                                  onTap: () =>
+                                      context.pushNamed(PaymentsPageV2.name),
+                                ),
                             ],
                           ),
                         ],
@@ -560,7 +567,7 @@ class _HomePageV2State extends State<HomePageV2>
             label,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),
@@ -708,7 +715,7 @@ class _HomePageV2State extends State<HomePageV2>
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: () => context.pushNamed(PaymentsPageV2.name),
+                      onTap: () => context.pushNamed(WithdrawFormScreenV2.name),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 25, vertical: 5),
@@ -720,7 +727,7 @@ class _HomePageV2State extends State<HomePageV2>
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SvgPicture.asset("assets/svgs/retrait_dollars.svg"),
+                            SvgPicture.asset(Assets.svgs.retraitDollars),
                             Gap(_Constants.gapSmall),
                             Text(
                               "Retrait",
@@ -869,7 +876,7 @@ class _Constants {
 
   static const double stickyHeaderHeight = 125.0;
   static const double tabHeight = 48.0;
-  static const double actionCircleSize = 55.0;
+  static const double actionCircleSize = 50.0;
 
   // Padding & Spacing
   static const double paddingStandard = 20.0;

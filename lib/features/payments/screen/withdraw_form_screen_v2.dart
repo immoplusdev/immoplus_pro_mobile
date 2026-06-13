@@ -1,20 +1,20 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/payment/operator_model.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_utils.dart';
-import 'package:immoplus_pro/features/payments/components/operator_selector.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_dto.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
-import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
+import 'package:immoplus_pro/features/payments/screen/withdrawal_success_page.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
-import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:toastification/toastification.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class WithdrawFormScreenV2 extends StatefulWidget {
@@ -27,188 +27,450 @@ class WithdrawFormScreenV2 extends StatefulWidget {
 }
 
 class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
-  OperatorModel? selectedOperator;
-  late TextEditingController amountController;
-  late TextEditingController phoneNumberController;
   final _formKey = GlobalKey<FormState>();
+  OperatorModel? selectedOperator;
+
+  late TextEditingController _phoneController;
+  late TextEditingController _amountController;
+
+  bool _isLoading = false;
+
+  final _phoneFormatter = MaskTextInputFormatter(
+    mask: '## ## ## ## ##',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
 
   @override
   void initState() {
     super.initState();
-    amountController = TextEditingController();
-    phoneNumberController = TextEditingController();
+    _phoneController = TextEditingController();
+    _amountController = TextEditingController();
+
+    // Default to first operator if available
+    if (OrderPaymentController.retraitOperatorsItems.isNotEmpty) {
+      selectedOperator = OrderPaymentController.retraitOperatorsItems.first;
+    }
   }
 
   @override
   void dispose() {
-    amountController.dispose();
-    phoneNumberController.dispose();
+    _phoneController.dispose();
+    _amountController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submitRequest() async {
+    if (selectedOperator == null) {
+      toastification.show(
+        type: ToastificationType.warning,
+        context: context,
+        title: const Text("Opérateur requis"),
+        description: const Text("Veuillez sélectionner un opérateur."),
+        autoCloseDuration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
+    final rawPhone = _phoneController.text.replaceAll(' ', '');
+    if (rawPhone.length != 10) {
+      toastification.show(
+        type: ToastificationType.warning,
+        context: context,
+        title: const Text("Numéro invalide"),
+        description:
+            const Text("Le numéro de téléphone doit comporter 10 chiffres."),
+        autoCloseDuration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
+    final validationErr = PaymentUtils.numberValidator(
+      number: rawPhone,
+      operatorName: selectedOperator!.value,
+    );
+
+    if (validationErr != null) {
+      toastification.show(
+        type: ToastificationType.error,
+        context: context,
+        title: const Text("Format de numéro incorrect"),
+        description: Text(validationErr),
+        autoCloseDuration: const Duration(seconds: 4),
+      );
+      return;
+    }
+
+    final rawAmount = _amountController.text.replaceAll('.', '');
+    final parsedAmount = int.tryParse(rawAmount) ?? 0;
+    if (parsedAmount <= 0) {
+      toastification.show(
+        type: ToastificationType.warning,
+        context: context,
+        title: const Text("Montant invalide"),
+        description:
+            const Text("Veuillez saisir un montant supérieur à 0 XOF."),
+        autoCloseDuration: const Duration(seconds: 3),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    bool isSuccess = false;
+    try {
+      EasyLoadingHandler.showLoadingToast(text: "Envoi de la demande...");
+
+      final data = await context.read<WalletCubit>().onCreateWithdrawalRequest(
+            withdrawalRequestDto: WithdrawalRequestDto(
+              currency: 'XOF',
+              amount: parsedAmount,
+              operator: selectedOperator!.value,
+              phoneNumber: rawPhone,
+              status: 'PENDING',
+            ),
+          );
+
+      EasyLoadingHandler.hideLoadingToast();
+      if (data != null) {
+        isSuccess = true;
+      }
+    } catch (e) {
+      EasyLoadingHandler.hideLoadingToast();
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        // Rafraîchir le portefeuille pour actualiser le solde disponible et le solde en cours
+        // dans le bloc finally pour s'assurer que c'est fait en cas de succès comme d'échec.
+        await context.read<WalletCubit>().onGetWallet();
+
+        if (isSuccess && mounted) {
+          // Rediriger vers la page de succès en toute sécurité
+          context.pushReplacementNamed(
+            WithdrawalSuccessPage.name,
+          );
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WalletCubit, RequestState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.scafold,
-          appBar: AppBar(
-            backgroundColor: AppColors.scafold,
-            elevation: 0,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => context.pop(),
-            ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, size: 32, color: Colors.black),
+          onPressed: () => context.pop(),
+        ),
+        title: Text(
+          "Nouveau retrait",
+          style: GoogleFonts.sen(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
-          body: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                slivers: [
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: Text(
-                      'Demande de retrait de fonds',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(color: AppColors.primary),
-                    ),
-                  ),
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: AutoSizeText(
-                      'Veuillez renseigner les informations pour effectuer votre demande de retrait.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                  const SliverGap(30),
-                  SliverToBoxAdapter(
-                    child: OperatorSelector(
-                      operators: OrderPaymentController.retraitOperatorsItems,
-                      selectedOperator: selectedOperator,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedOperator = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SliverGap(10),
-                  SliverToBoxAdapter(
-                    child: CustomTextField(
-                      isEnabled: state is! REQUEST_LOADING,
-                      fillColor: Colors.white,
-                      textInputType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      labelText: 'Montant à retirer',
-                      prefixIcon: const Icon(
-                        FontAwesomeIcons.moneyBills,
-                        size: 17,
-                      ),
-                      controller: amountController,
-                      validator: (value) {
-                        if ((value ?? '').trim().isEmpty) {
-                          return 'Veuillez entrer un montant';
-                        }
-                        final montant =
-                            double.tryParse((value?.trim() ?? ''));
-                        if (montant == null) {
-                          return 'Veuillez entrer un montant valide';
-                        }
-                        if (montant == 0) {
-                          return 'Le montant doit être supérieur à 0';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: CustomTextField(
-                      isEnabled: state is! REQUEST_LOADING,
-                      fillColor: Colors.white,
-                      autofocus: true,
-                      controller: phoneNumberController,
-                      textInputType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      labelText: 'Numéro de telephone valide',
-                      prefixIcon: const Icon(CupertinoIcons.phone),
-                      validator: (String? value) {
-                        if (selectedOperator?.value == null) {
-                          return 'Veuillez choisir un opérateur';
-                        }
-                        return PaymentUtils.numberValidator(
-                          number: value!.replaceAll(' ', ''),
-                          operatorName: selectedOperator?.value ?? '',
-                        );
-                      },
-                      inputFormatters: [
-                        MaskTextInputFormatter(
-                          mask: '## ## ## ## ##',
-                          filter: {'#': RegExp(r'[0-9]')},
+        ),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Selectioner un opérateur :",
+                          style: GoogleFonts.sen(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
+                        const Gap(12),
+
+                        // Horizontal operator selector row
+                        _buildOperatorSelectorRow(),
+
+                        const Gap(24),
+
+                        Text(
+                          "Numero de téléphone valide :",
+                          style: GoogleFonts.sen(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Gap(8),
+
+                        // Telephone Custom Input Box (Standard TextFormField styled)
+                        _buildPhoneInputField(),
+
+                        const Gap(24),
+
+                        Text(
+                          "Montant à retirer :",
+                          style: GoogleFonts.sen(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const Gap(8),
+
+                        // Amount Custom Input Box (Standard TextFormField styled)
+                        _buildAmountInputField(),
+
+                        const Gap(40),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+                // Action Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          AppColors.primary ?? const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      elevation: 0,
+                    ),
+                    onPressed: _isLoading ? null : _submitRequest,
+                    child: _isLoading
+                        ? const CupertinoActivityIndicator(color: Colors.white)
+                        : Text(
+                            "Faire le retrait",
+                            style: GoogleFonts.sen(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                  ),
+                ),
+              ],
             ),
           ),
-          bottomNavigationBar: Container(
-            height: 70,
-            padding: const EdgeInsets.symmetric(horizontal: 20)
-                .copyWith(bottom: 20),
-            margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOperatorSelectorRow() {
+    return Row(
+      spacing: 10,
+      children: OrderPaymentController.retraitOperatorsItems
+          .asMap()
+          .entries
+          .map((entry) {
+        final operator = entry.value;
+        final isSelected = selectedOperator == operator;
+
+        return Expanded(
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                selectedOperator = operator;
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 66,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isSelected ? (AppColors.primary) : Colors.transparent,
+                  width: isSelected ? 2.0 : 0.0,
+                ),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(operator.logo),
+                  fit: BoxFit.cover,
                 ),
               ),
-              onPressed: state is REQUEST_LOADING
-                  ? null
-                  : () async {
-                      final amount =
-                          int.tryParse(amountController.text) ?? 0;
-                      if (_formKey.currentState?.validate() == true) {
-                        if (selectedOperator == null ||
-                            phoneNumberController.text.trim().isEmpty ||
-                            amount == 0) {
-                          ToastUtils.showError(
-                            title: 'Oops, Impossible de continuer',
-                            description:
-                                'Verifier que tous les champs sont remplis',
-                          );
-                          return;
-                        }
-                        await context
-                            .read<WalletCubit>()
-                            .onCreateWithdrawalRequest(
-                              withdrawalRequestDto: WithdrawalRequestDto(
-                                currency: 'XOF',
-                                amount: amount,
-                                operator: selectedOperator!.value,
-                                phoneNumber: phoneNumberController.text
-                                    .replaceAll(' ', '')
-                                    .trim(),
-                                status: 'PENDING',
-                              ),
-                            );
-                      }
-                    },
-              child: state is REQUEST_LOADING
-                  ? const CircularProgressIndicator()
-                  : const Text('Faire le retrait'),
             ),
           ),
         );
-      },
+      }).toList(),
     );
+  }
+
+  Widget _buildPhoneInputField() {
+    return TextFormField(
+      controller: _phoneController,
+      keyboardType: TextInputType.phone,
+      style: GoogleFonts.sen(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
+      inputFormatters: [_phoneFormatter],
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        prefixIcon: const Icon(
+          CupertinoIcons.phone,
+          color: Color(0xFF2563EB),
+          size: 20,
+        ),
+        hintText: "07 00 00 00 00",
+        hintStyle: GoogleFonts.sen(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey.shade400,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: AppColors.primary ?? const Color(0xFF2563EB),
+            width: 1.5,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 1.0,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAmountInputField() {
+    return TextFormField(
+      controller: _amountController,
+      keyboardType: TextInputType.number,
+      style: GoogleFonts.sen(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Colors.black,
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        ThousandsSeparatorInputFormatter(),
+      ],
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey.shade100,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintText: "50.000",
+        hintStyle: GoogleFonts.sen(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Colors.grey.shade400,
+        ),
+        suffixIcon: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "fcfa",
+                style: GoogleFonts.sen(
+                  fontSize: 14,
+                  color: Colors.grey.shade500,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: AppColors.primary ?? const Color(0xFF2563EB),
+            width: 1.5,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 1.0,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: Colors.red,
+            width: 1.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ThousandsSeparatorInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    String cleanString = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (cleanString.isEmpty) {
+      return newValue.copyWith(
+        text: '',
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    }
+
+    int? parsed = int.tryParse(cleanString);
+    if (parsed == null) return oldValue;
+
+    final String formatted = _formatNumberWithDots(parsed);
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  String _formatNumberWithDots(int value) {
+    String str = value.toString();
+    StringBuffer buffer = StringBuffer();
+    int len = str.length;
+    for (int i = 0; i < len; i++) {
+      buffer.write(str[i]);
+      int remaining = len - i - 1;
+      if (remaining > 0 && remaining % 3 == 0) {
+        buffer.write('.');
+      }
+    }
+    return buffer.toString();
   }
 }

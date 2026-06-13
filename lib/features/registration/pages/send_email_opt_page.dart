@@ -12,6 +12,7 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/features/registration/pages/verify_email_otp_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 
 class SendEmailOptPage extends StatefulWidget {
@@ -34,19 +35,36 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
     });
   }
 
-  Future<void> _submit(BuildContext context) async {
+  Future<void> _sendOtpCode() async {
+    if (!isPhoneNumberValid || phoneNumber.isEmpty) return;
+    await AppDialog.show(
+      title: 'Envoyer le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _doSendOtp(useWhatsapp: true),
+      onSecond: () => _doSendOtp(useWhatsapp: false),
+    );
+  }
+
+  Future<void> _doSendOtp({required bool useWhatsapp}) async {
     FocusScope.of(context).unfocus();
     if (!isPhoneNumberValid || phoneNumber.isEmpty) return;
 
     final formattedPhone = PhoneNumberHandler.formatPhoneNumber(phoneNumber);
 
     final cubit = context.read<RgistrationCubitCubit>();
-    final success = await cubit.userSendOTP(phoneNumber: formattedPhone);
+    final success = await cubit.userSendOTP(
+      phoneNumber: formattedPhone,
+      is_whatssap: useWhatsapp,
+    );
     if (!mounted) return;
 
     if (success) {
       context.pushNamed(VerifyEmailOtpPage.name, extra: {
         "phoneNumber": formattedPhone,
+        "isWhatsapp": useWhatsapp,
         "onSuccess": widget.onSuccess
       });
     }
@@ -131,7 +149,7 @@ class _SendEmailOptPageState extends State<SendEmailOptPage> {
                             // Bouton
                             CustomLoadingButtom(
                               text: "Envoyer le code",
-                              onClick: () => _submit(context),
+                              onClick: _sendOtpCode,
                               isLoading: isLoading,
                               clickable:
                                   isPhoneNumberValid && phoneNumber.isNotEmpty,

@@ -20,8 +20,11 @@ import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
 import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
+import 'package:immoplus_pro/features/pin_code/views/change_pin_page.dart';
+import 'package:immoplus_pro/features/pin_code/views/pin_reset_page.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
+import 'package:immoplus_pro/features/payments/screen/withdrawal_success_page.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
@@ -131,15 +134,15 @@ class AppRouter {
           ),
         ],
       ),
-      GoRoute(
-        path: '/pin_code',
-        name: PinCodePage.name,
-        builder: (context, state) => PinCodePage(
-          onSuccess: () {
-            context.goNamed(HomePageV2.name);
-          },
-        ),
-      ),
+      // GoRoute(
+      //   path: '/pin_code',
+      //   name: PinCodePage.name,
+      //   builder: (context, state) => PinCodePage(
+      //     onSuccess: () {
+      //       context.goNamed(HomePageV2.name);
+      //     },
+      //   ),
+      // ),
       GoRoute(
         path: '/onboarding',
         name: OnboardingNewPage.name,
@@ -166,11 +169,11 @@ class AppRouter {
           return const CreateEstatePageV2();
         },
       ),
-      GoRoute(
-        path: '/payments',
-        builder: (context, state) => const PaymentsPage(),
-        name: PaymentsPage.name,
-      ),
+      // GoRoute(
+      //   path: '/payments',
+      //   builder: (context, state) => const PaymentsPage(),
+      //   name: PaymentsPage.name,
+      // ),
       GoRoute(
         path: '/payments_v2',
         builder: (context, state) => const PaymentsPageV2(),
@@ -182,12 +185,27 @@ class AppRouter {
         builder: (context, state) => const WithdrawFormScreenV2(),
       ),
       GoRoute(
+        path: '/withdrawal_success',
+        name: WithdrawalSuccessPage.name,
+        builder: (context, state) => const WithdrawalSuccessPage(),
+      ),
+      GoRoute(
         path: '/pin_code_v2',
         builder: (context, state) {
           final onSuccess = state.extra as VoidCallback;
           return PinCodePageV2(onSuccess: onSuccess);
         },
         name: PinCodePageV2.name,
+      ),
+      GoRoute(
+        path: '/pin_reset',
+        name: PinResetPage.name,
+        builder: (context, state) => const PinResetPage(),
+      ),
+      GoRoute(
+        path: '/change_pin',
+        name: ChangePinPage.name,
+        builder: (context, state) => const ChangePinPage(),
       ),
       GoRoute(
         path: '/${AuthenticationPage.name}',
@@ -351,11 +369,13 @@ class AppRouter {
           final data = state.extra as Map<String, dynamic>;
           final email = data['email'] as String?;
           final phoneNumber = data['phoneNumber'] as String?;
+          final isWhatsapp = data['isWhatsapp'] as bool?;
           final callOnSuccess = data['onSuccess'] as Function(
               DataRouterRegistration dataRouterRegistration);
           return VerifyEmailOtpPage(
             email: email,
             phoneNumber: phoneNumber,
+            isWhatsapp: isWhatsapp,
             onSuccess: callOnSuccess,
           );
         },
