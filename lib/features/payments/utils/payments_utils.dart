@@ -1,9 +1,12 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/features/payments/data/models/transaction_model.dart';
 import 'package:immoplus_pro/features/payments/utils/enums.dart';
+
+final colorGreen50 = Color(0xffD1FAE5);
 
 Widget getIconStatus({required String status}) {
   // PaymentStatus
@@ -37,7 +40,7 @@ Widget getIconStatus({required String status}) {
   }
   // WalletPaymentType
   else if (status == WalletPaymentType.CREDIT.name) {
-    return const Icon(Icons.arrow_downward, color: Colors.green);
+    return SvgPicture.asset("assets/svgs/money-recive.svg");
   } else if (status == WalletPaymentType.DEBIT.name) {
     return const Icon(Icons.arrow_upward, color: Colors.red);
   } else if (status == WalletPaymentType.BLOCK.name) {
@@ -54,7 +57,7 @@ Color getColorStatus({required String status}) {
   // PaymentStatus
   if (status == PaymentStatus.successful.name ||
       status == PaymentStatus.paye.name) {
-    return Colors.green.shade100;
+    return colorGreen50;
   } else if (status == PaymentStatus.pending.name ||
       status == PaymentStatus.waiting_for_validation.name) {
     return Colors.grey.shade100;
@@ -75,7 +78,7 @@ Color getColorStatus({required String status}) {
   } else if (status == WalletWithdrawalStatus.REJECTED.name) {
     return Colors.red.shade100;
   } else if (status == WalletWithdrawalStatus.COMPLETED.name) {
-    return Colors.green.shade100;
+    return colorGreen50;
   } else if (status == WalletWithdrawalStatus.FAILED.name) {
     return Colors.red.shade100;
   }

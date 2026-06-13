@@ -1,16 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
-import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/features/payments/data/models/wallet_response_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_dto.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_model.dart';
-import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_response.dart';
-import 'package:immoplus_pro/features/payments/data/providers/wallet_provider.dart';
 import 'package:immoplus_pro/features/payments/data/repositories/wallet_repository.dart';
-import 'package:immoplus_pro/services/navigation_service.dart';
 
 class WalletCubit extends Cubit<RequestState> {
   WalletCubit() : super(const RequestState.initial());
@@ -38,7 +33,7 @@ class WalletCubit extends Cubit<RequestState> {
     }
   }
 
-  Future onCreateWithdrawalRequest(
+  Future<WithdrawalRequestModel?> onCreateWithdrawalRequest(
       {required WithdrawalRequestDto withdrawalRequestDto}) async {
     try {
       emit(const RequestState.loading());
@@ -46,13 +41,12 @@ class WalletCubit extends Cubit<RequestState> {
           await WalletRepository.createWithdrawalRequest(
         withdrawalRequestDto,
       );
-      // emit(RequestState.withdrawalRequest(data: data));
-      print("POP");
-      NavigationService.navigatorKey.currentContext!.pop(data);
-      // emit(const RequestState.initial());
+      emit(const RequestState.initial());
+      return data;
     } catch (e) {
       inspect(e);
       emit(const RequestState.initial());
+      return null;
     }
   }
 

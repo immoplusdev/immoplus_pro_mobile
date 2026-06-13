@@ -55,4 +55,16 @@ abstract class WalletProvider {
   /// Vérifier si l'utilisateur a déjà défini un PIN
   @GET('/wallet/has-pin')
   Future<HasPinResponseModel> hasPin();
+
+  /// Modifier le code PIN existant (PIN connu)
+  @POST('/wallet/change-pin')
+  Future<void> changePin(@Body() Map<String, dynamic> body);
+
+  /// Demander la réinitialisation du code PIN (Étape 1 : Envoi OTP par SMS)
+  @POST('/wallet/request-pin-reset')
+  Future<dynamic> requestPinReset();
+
+  /// Réinitialiser le code PIN avec OTP (Étape 2)
+  @POST('/wallet/reset-pin')
+  Future<void> resetPin(@Body() Map<String, dynamic> body);
 }

@@ -11,18 +11,21 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/widgets/custom_pinput.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 
 class VerifyEmailOtpPage extends StatefulWidget {
   const VerifyEmailOtpPage({
     super.key,
     this.email,
     this.phoneNumber,
+    this.isWhatsapp,
     required this.onSuccess,
   });
 
   /// L'email à vérifier (déjà saisi à l'étape précédente)
   final String? email;
   final String? phoneNumber;
+  final bool? isWhatsapp;
 
   static const name = 'VERIFY_EMAIL_OTP';
 
@@ -36,6 +39,13 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
   final _formKey = GlobalKey<FormState>();
   final _otpController = TextEditingController();
   bool _isLoading = false;
+  bool? _isWhatsapp;
+
+  @override
+  void initState() {
+    super.initState();
+    _isWhatsapp = widget.isWhatsapp;
+  }
 
   @override
   void dispose() {
@@ -82,22 +92,52 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
     }
   }
 
-  Future<void> _resend(BuildContext context) async {
+  Future<void> _resend() async {
+    if (widget.email != null) {
+      await _doResend(useWhatsapp: null);
+      return;
+    }
+
+    await AppDialog.show(
+      title: 'Envoyer le code par',
+      description:
+          'Choisissez comment vous souhaitez recevoir votre code de vérification.',
+      primaryButtonText: 'WhatsApp',
+      secondButtonText: 'SMS',
+      onPrimary: () => _doResend(useWhatsapp: true),
+      onSecond: () => _doResend(useWhatsapp: false),
+    );
+  }
+
+  Future<void> _doResend({required bool? useWhatsapp}) async {
     FocusScope.of(context).unfocus();
     setState(() => _isLoading = true);
     final cubit = context.read<RgistrationCubitCubit>();
     final ok = await cubit.userSendOTP(
       email: widget.email?.trim(),
       phoneNumber: widget.phoneNumber?.trim(),
+      is_whatssap: useWhatsapp,
     );
     if (!mounted) return;
     setState(() => _isLoading = false);
+
+    if (ok && useWhatsapp != null) {
+      setState(() {
+        _isWhatsapp = useWhatsapp;
+      });
+    }
+
+    final destination = useWhatsapp == true
+        ? 'WhatsApp'
+        : useWhatsapp == false
+            ? 'SMS'
+            : (widget.email ?? widget.phoneNumber);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           ok
-              ? 'Un nouveau code a été envoyé au ${widget.email ?? widget.phoneNumber}.'
+              ? 'Un nouveau code a été envoyé par $destination.'
               : 'Échec de l\'envoi du code. Réessayez.',
         ),
         backgroundColor: ok ? Colors.green : Colors.red,
@@ -135,7 +175,11 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                     ),
                     const Gap(8),
                     Text(
-                      'Un code à 6 chiffres a été envoyé à ${widget.email ?? widget.phoneNumber}',
+                      _isWhatsapp == true
+                          ? 'Un code à 6 chiffres a été envoyé par WhatsApp au ${widget.phoneNumber}'
+                          : _isWhatsapp == false
+                              ? 'Un code à 6 chiffres a été envoyé par SMS au ${widget.phoneNumber}'
+                              : 'Un code à 6 chiffres a été envoyé à ${widget.email ?? widget.phoneNumber}',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color:
                             theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
@@ -213,8 +257,7 @@ class _VerifyEmailOtpPageState extends State<VerifyEmailOtpPage> {
                           // Bouton renvoyer
                           Center(
                             child: TextButton(
-                              onPressed:
-                                  _isLoading ? null : () => _resend(context),
+                              onPressed: _isLoading ? null : _resend,
                               child: const Text('Renvoyer le code'),
                             ),
                           ),

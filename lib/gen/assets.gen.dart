@@ -387,6 +387,9 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/retrait_dollars.svg
   String get retraitDollars => 'assets/svgs/retrait_dollars.svg';
 
+  /// File path: assets/svgs/send-sqaure-2.svg
+  String get sendSqaure2 => 'assets/svgs/send-sqaure-2.svg';
+
   /// Directory path: assets/svgs/undraw
   $AssetsSvgsUndrawGen get undraw => const $AssetsSvgsUndrawGen();
 
@@ -405,6 +408,7 @@ class $AssetsSvgsGen {
         house,
         lobby,
         retraitDollars,
+        sendSqaure2,
         userEdit,
         userSquare,
       ];

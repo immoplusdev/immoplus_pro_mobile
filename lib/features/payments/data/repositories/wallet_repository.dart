@@ -120,4 +120,46 @@ class WalletRepository {
       throw Exception('Failed to load users: $error');
     }
   }
+
+  static Future<void> changePin(String oldPin, String newPin) async {
+    try {
+      await WalletProvider(DioClient().dio).changePin({
+        "oldPin": oldPin,
+        "newPin": newPin,
+      });
+    } on DioException catch (dioError) {
+      log('DioError changePin: ${dioError.message}');
+      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors du changement de PIN');
+    } catch (error) {
+      log('Error changePin: $error');
+      throw Exception('Erreur inconnue lors du changement de PIN');
+    }
+  }
+
+  static Future<void> requestPinReset() async {
+    try {
+      await WalletProvider(DioClient().dio).requestPinReset();
+    } on DioException catch (dioError) {
+      log('DioError requestPinReset: ${dioError.message}');
+      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors de la demande de réinitialisation');
+    } catch (error) {
+      log('Error requestPinReset: $error');
+      throw Exception('Erreur inconnue lors de la demande de réinitialisation');
+    }
+  }
+
+  static Future<void> resetPin(String otp, String newPin) async {
+    try {
+      await WalletProvider(DioClient().dio).resetPin({
+        "otp": otp,
+        "newPin": newPin,
+      });
+    } on DioException catch (dioError) {
+      log('DioError resetPin: ${dioError.message}');
+      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors de la validation du code PIN');
+    } catch (error) {
+      log('Error resetPin: $error');
+      throw Exception('Erreur inconnue lors de la validation du code PIN');
+    }
+  }
 }

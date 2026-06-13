@@ -24,11 +24,12 @@ import 'package:immoplus_pro/features/home_page/home_page.dart';
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit() : super(const RegistrationCubitState.initial());
 
-  Future<bool> userSendOTP({String? email, String? phoneNumber}) async {
+  Future<bool> userSendOTP({String? email, String? phoneNumber, bool? is_whatssap}) async {
     emit(const RegistrationCubitState.loading());
     try {
       final response = await AuthRepository().userSendOTP(
-          body: SendEmailOtpBody(email: email, phoneNumber: phoneNumber));
+          body: SendEmailOtpBody(
+              email: email, phoneNumber: phoneNumber, is_whatssap: is_whatssap));
       emit(RegistrationCubitState.initial());
       if ([200, 201].contains(response.response.statusCode)) {
         return true;
