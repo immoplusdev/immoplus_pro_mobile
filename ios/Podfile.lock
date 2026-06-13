@@ -1,4 +1,6 @@
 PODS:
+  - app_settings (6.1.2):
+    - Flutter
   - AppAuth (2.0.0):
     - AppAuth/Core (= 2.0.0)
     - AppAuth/ExternalUserAgent (= 2.0.0)
@@ -222,6 +224,9 @@ PODS:
     - SDWebImage/Core (~> 5.17)
   - share_plus (0.0.1):
     - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - sign_in_with_apple (0.0.1):
     - Flutter
   - sms_autofill (0.0.1):
@@ -243,6 +248,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -273,6 +279,7 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - quill_native_bridge_ios (from `.symlinks/plugins/quill_native_bridge_ios/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sms_autofill (from `.symlinks/plugins/sms_autofill/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
@@ -313,6 +320,8 @@ SPEC REPOS:
     - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
+  app_settings:
+    :path: ".symlinks/plugins/app_settings/ios"
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
   connectivity_plus:
@@ -371,6 +380,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/quill_native_bridge_ios/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sms_autofill:
@@ -389,6 +400,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
+  app_settings: 0341ec6daa4f0c50f5a421bf0ad7c36084db6e90
   AppAuth: 1c1a8afa7e12f2ec3a294d9882dfa5ab7d3cb063
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   audio_session: f08db0697111ac84ba46191b55488c0563bb29c6
@@ -439,12 +451,13 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
-  PhoneNumberKit: ced55861269312a5e3bc2ef82a58d6255b1c976a
+  PhoneNumberKit: 9ff0c5ae9fe4770193b68a3d3e6c938fe976788c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   quill_native_bridge_ios: f47af4b14e7757968486641656c5d23250cee521
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
   SDWebImageWebPCoder: 0e06e365080397465cc73a7a9b472d8a3bd0f377
   share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
+  shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
   sms_autofill: b36b2147535657fea83d7f3898d7831de70bd8e4
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0

@@ -75,29 +75,29 @@ class _PaymentsPageV2State extends State<PaymentsPageV2> {
         ),
 
         // Fully rounded capsule blue button matching the mockup
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            await context.pushNamed(WithdrawFormScreenV2.name);
-            pagingControllerWidrawalList.refresh();
-            if (mounted) {
-              context.read<WalletCubit>().onGetWallet();
-            }
-          },
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(26),
-          ),
-          icon: SvgPicture.asset(Assets.svgs.retraitDollars),
-          label: Text(
-            "Retrait",
-            style: GoogleFonts.sen(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-        ),
+        // floatingActionButton: FloatingActionButton.extended(
+        //   onPressed: () async {
+        //     await context.pushNamed(WithdrawFormScreenV2.name);
+        //     pagingControllerWidrawalList.refresh();
+        //     if (mounted) {
+        //       context.read<WalletCubit>().onGetWallet();
+        //     }
+        //   },
+        //   backgroundColor: AppColors.primary,
+        //   foregroundColor: Colors.white,
+        //   elevation: 4,
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(26),
+        //   ),
+        //   icon: SvgPicture.asset(Assets.svgs.retraitDollars),
+        //   label: Text(
+        //     "Retrait",
+        //     style: GoogleFonts.sen(
+        //       fontWeight: FontWeight.bold,
+        //       fontSize: 16,
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }

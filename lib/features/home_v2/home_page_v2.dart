@@ -111,12 +111,14 @@ class _HomePageV2State extends State<HomePageV2>
         builder: (sheetCtx) => NotificationActifSheet(
           onAccept: () async {
             Navigator.of(sheetCtx).pop();
-            await NotificationActifService.setStatus(NotificationActifService.accepted);
+            await NotificationActifService.setStatus(
+                NotificationActifService.accepted);
             await _requestNotificationPermission();
           },
           onMaybeLater: () async {
             Navigator.of(sheetCtx).pop();
-            await NotificationActifService.setStatus(NotificationActifService.maybeLater);
+            await NotificationActifService.setStatus(
+                NotificationActifService.maybeLater);
           },
         ),
       );
@@ -125,7 +127,7 @@ class _HomePageV2State extends State<HomePageV2>
 
   Future<void> _requestNotificationPermission() async {
     var status = await Permission.notification.status;
-    
+
     if (status.isDenied) {
       status = await Permission.notification.request();
     }
@@ -341,19 +343,19 @@ class _HomePageV2State extends State<HomePageV2>
                                 onTap: () =>
                                     context.pushNamed(FurnituresPageV2.name),
                               ),
-                              if (_isUnlocked)
-                                // Transaction
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      "assets/svgs/send-sqaure-2.svg",
-                                      width: 30,
-                                    ),
+                              // if (_isUnlocked)
+                              // Transaction
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    "assets/svgs/send-sqaure-2.svg",
+                                    width: 30,
                                   ),
-                                  label: "Transaction",
-                                  onTap: () =>
-                                      context.pushNamed(PaymentsPageV2.name),
                                 ),
+                                label: "Transaction",
+                                onTap: () =>
+                                    context.pushNamed(PaymentsPageV2.name),
+                              ),
                             ],
                           ),
                         ],
