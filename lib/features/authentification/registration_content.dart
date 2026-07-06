@@ -2,9 +2,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/core/network/utils/constants.dart';
 import 'package:immoplus_pro/features/registration/widgets/main_registration_button.dart';
-import 'package:immoplus_pro/gen/assets.gen.dart';
 
 class RegistrationContent extends StatelessWidget {
   final VoidCallback? entrepriseOnTap;
@@ -48,7 +48,7 @@ class RegistrationContent extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: MainRegistrationButton(
-                  assetPath: Assets.img.immeubleDeBureaux.path,
+                  icon: Iconsax.buildings,
                   title: "Entreprise",
                   onTap: entrepriseOnTap,
                 ),
@@ -57,7 +57,7 @@ class RegistrationContent extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: MainRegistrationButton(
-                  assetPath: Assets.img.utilisateur.path,
+                  icon: Iconsax.user,
                   title: "Indépendant",
                   onTap: particulierOnTap,
                 ),

@@ -19,6 +19,7 @@ class CustomPinput extends StatelessWidget {
     this.focusedBorderColor,
     this.errorBorderColor,
     this.backgroundColor,
+    this.autofocus = false,
   });
 
   final TextEditingController controller;
@@ -35,6 +36,7 @@ class CustomPinput extends StatelessWidget {
   final Color? focusedBorderColor;
   final Color? errorBorderColor;
   final Color? backgroundColor;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +91,7 @@ class CustomPinput extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           enabled: enabled,
+          autofocus: autofocus,
           keyboardType: TextInputType.number,
           inputFormatters: [
             FilteringTextInputFormatter.digitsOnly,

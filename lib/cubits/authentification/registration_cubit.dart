@@ -12,7 +12,6 @@ import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart'
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/verify_email_otp.dart';
-import 'package:immoplus_pro/data/models/files/file_data_model.dart';
 import 'package:immoplus_pro/data/repositories/auth_repository.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
@@ -72,10 +71,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       required FileUploaderController fileUploaderController}) async {
     emit(const RegistrationCubitState.loading());
     try {
-      FileDataModel file = await fileUploaderController.upladFile();
-      log(file.toString(), name: 'FIle Uploaded');
+      // Réutilise l'upload déjà démarré en arrière-plan dès la sélection du
+      // fichier (étape 2) au lieu d'en relancer un nouveau ici.
+      final registreCommerceId = await fileUploaderController.ensureUploaded();
+      log('registreCommerceId: $registreCommerceId', name: 'FIle Uploaded');
       final body = enterpriseRegistrationBody.copyWith(
-          registreCommerceId: file.data!.id.toString());
+          registreCommerceId: registreCommerceId);
       AccountCreationResponse response =
           await AuthRepository.registrationEnterprise(body: body);
 
@@ -115,20 +116,25 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           fileUploaderControllerPieceIdentiteVerso}) async {
     emit(const RegistrationCubitState.loading());
     try {
-      FileDataModel photoIdentite =
-          await fileUploaderControllerPhotoIdentite.upladFile();
-      log(photoIdentite.toString(), name: 'FIle Uploaded');
-      FileDataModel pieceIdentite =
-          await fileUploaderControllerPieceIdentite.upladFile();
-      log(pieceIdentite.toString(), name: 'FIle Uploaded');
-      // FileDataModel pieceIdentiteVerso =
-      //     await fileUploaderControllerPieceIdentiteVerso.upladFile();
-      // log(pieceIdentiteVerso.toString(), name: 'FIle Uploaded');
+      // Réutilise les uploads déjà démarrés en arrière-plan dès la sélection
+      // des fichiers (étapes 1 et 2) : ici on ne fait qu'attendre leur fin,
+      // sans relancer un upload complet.
+      final ids = await Future.wait([
+        fileUploaderControllerPhotoIdentite.ensureUploaded(),
+        fileUploaderControllerPieceIdentite.ensureUploaded(),
+        fileUploaderControllerPieceIdentiteVerso.ensureUploaded(),
+      ]);
+      final photoIdentiteId = ids[0];
+      final pieceIdentiteId = ids[1];
+      final pieceIdentiteVersoId = ids[2];
+      log('photoIdentiteId: $photoIdentiteId', name: 'FIle Uploaded');
+      log('pieceIdentiteId: $pieceIdentiteId', name: 'FIle Uploaded');
+      log('pieceIdentiteVersoId: $pieceIdentiteVersoId', name: 'FIle Uploaded');
 
       final body = particulierRegistrationBody.copyWith(
-        pieceIdentiteId: pieceIdentite.data!.id,
-        // pieceIdentiteVersoId: pieceIdentiteVerso.data!.id,
-        photoIdentiteId: photoIdentite.data!.id,
+        pieceIdentiteId: pieceIdentiteId,
+        pieceIdentiteVersoId: pieceIdentiteVersoId,
+        photoIdentiteId: photoIdentiteId,
       );
       inspect(body);
       AccountCreationResponse response =
