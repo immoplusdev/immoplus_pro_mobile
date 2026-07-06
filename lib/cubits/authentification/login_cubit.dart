@@ -133,7 +133,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     }
   }
 
-  onSendOtpData({required LoginOtpBody body}) async {
+  Future<bool> onSendOtpData({required LoginOtpBody body}) async {
     emit(const LOGIN_LOADING());
     try {
       AccountCreationResponse response =
@@ -168,8 +168,10 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
+      return true;
     } catch (e) {
       emit(const LoginCubitState.initial());
+      return false;
     }
   }
 
