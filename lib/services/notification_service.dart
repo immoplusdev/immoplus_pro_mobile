@@ -13,6 +13,7 @@ import 'package:immoplus_pro/utils/session_manager.dart';
 
 import 'package:injectable/injectable.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 
 @lazySingleton
 class NotificationService {
@@ -36,6 +37,11 @@ class NotificationService {
     OneSignal.Notifications.addForegroundWillDisplayListener((event) {
       final data = event.notification.additionalData;
 
+      getIt<AnalyticsService>().logPushNotificationReceived(
+        idNotification: event.notification.notificationId,
+        typeNotification: data?['type'] as String? ?? 'unknown',
+      );
+
       if (data != null) {
         final typeString = data['type'] as String?;
         final type = PushNotificationType.fromString(typeString);
@@ -57,6 +63,12 @@ class NotificationService {
     /// Notification cliquée
     OneSignal.Notifications.addClickListener((event) {
       final data = event.notification.additionalData;
+
+      getIt<AnalyticsService>().logPushNotificationTapped(
+        idNotification: event.notification.notificationId,
+        typeNotification: data?['type'] as String? ?? 'unknown',
+      );
+
       if (data != null) {
         final typeString = data['type'] as String?;
         final id = data['id'] as String?;

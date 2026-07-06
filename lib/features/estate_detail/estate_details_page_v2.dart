@@ -16,6 +16,8 @@ import 'package:immoplus_pro/features/residence_detail/components/inititial_deta
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'components/detail_logment_appbar.dart';
 import 'components/detail_logment_infos.dart';
 
@@ -65,6 +67,11 @@ class _EstateDetailsPageV2State extends State<EstateDetailsPageV2> {
   }
 
   Future<void> _onToggleAvailability(BienImmobilierModel bien) async {
+    final newStatus = !bien.bienImmobilierDisponible;
+    getIt<AnalyticsService>().logPropertyAvailabilityToggled(
+      idBien: bien.id,
+      isAvailable: newStatus,
+    );
     if (bien.bienImmobilierDisponible) {
       await AppDialog.confirm(
         context: context,

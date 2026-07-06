@@ -17,6 +17,8 @@ import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controlle
 import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 class EnterpriseRegistrationPage extends StatefulWidget {
   final DataRouterRegistration? dataRouterRegistration;
@@ -47,6 +49,7 @@ class _EnterpriseRegistrationPageState
   void initState() {
     super.initState();
     _focusNode.unfocus();
+    getIt<AnalyticsService>().logKycStarted();
 
     _formController = FormController(
       productId: 0,

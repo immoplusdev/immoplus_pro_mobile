@@ -16,6 +16,7 @@ import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart'
     as _i581;
 import 'package:immoplus_pro/features/pin_code/views/services/biometry_service.dart'
     as _i521;
+import 'package:immoplus_pro/services/analytics_service.dart' as _i1047;
 import 'package:immoplus_pro/services/deep_link_services.dart' as _i178;
 import 'package:immoplus_pro/services/notification_service.dart' as _i873;
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart'
@@ -48,6 +49,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i215.RemoteConfigService());
     gh.lazySingleton<_i873.NotificationService>(
         () => _i873.NotificationService());
+    gh.lazySingleton<_i1047.AnalyticsService>(
+        () => _i1047.FirebaseAnalyticsService());
     gh.factory<_i581.PinCodeCubit>(() => _i581.PinCodeCubit(
           gh<_i177.PinCodeRepository>(),
           gh<_i521.BiometryService>(),

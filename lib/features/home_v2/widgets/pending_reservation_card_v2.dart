@@ -10,6 +10,8 @@ import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 class PendingReservationCardV2 extends StatelessWidget {
   final ReservationModel reservationModel;
@@ -296,6 +298,10 @@ class PendingReservationCardV2 extends StatelessWidget {
   }
 
   void _showDetail(BuildContext context) {
+    getIt<AnalyticsService>().logBookingCardTapped(
+      idReservation: reservationModel.id,
+      status: reservationModel.statusReservation ?? 'unknown',
+    );
     showModalBottomSheet(
       backgroundColor: Colors.white,
       showDragHandle: true,

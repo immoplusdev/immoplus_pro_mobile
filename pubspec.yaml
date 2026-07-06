@@ -101,6 +101,7 @@ dependencies:
   google_maps_custom_marker: ^1.0.3
   google_places_flutter: ^2.0.9
   firebase_core: ^4.3.0 
+  firebase_analytics: any
   onesignal_flutter: ^5.3.4
   jumping_dot: ^0.0.7
   delta_to_html: ^0.2.2
@@ -111,7 +112,7 @@ dependencies:
   flutter_image_compress: ^2.4.0
   pinput: ^5.0.1
   reorderables: ^0.6.0
-  local_auth: ^3.0.0
+  local_auth: ^2.3.0
   flutter_secure_storage: ^9.2.4
   markdown: ^7.3.0
   new_version_plus: ^1.0.1
@@ -120,10 +121,10 @@ dependencies:
   package_info_plus: ^9.0.0
   google_sign_in: ^7.2.0
   flutter_facebook_auth: ^7.1.5
-  flex_color_picker: ^3.7.2
+  flex_color_picker: ^3.6.0
   multi_dropdown: ^3.1.0
   sign_in_with_apple: ^7.0.1
-  syncfusion_flutter_signaturepad: ^32.2.9
+  syncfusion_flutter_signaturepad: ^26.1.37
   iconsax: ^0.0.8
   fl_chart: ^0.69.0
   showcaseview: ^5.0.2
@@ -145,6 +146,10 @@ dev_dependencies:
 flutter_gen:
   output: lib/gen/
   line_length: 80
+  assets:
+    exclude:
+      - .env.dev
+      - .env.prod
 
 
 flutter_launcher_icons:

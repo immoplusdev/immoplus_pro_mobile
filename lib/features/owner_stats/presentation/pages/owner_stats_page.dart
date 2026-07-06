@@ -16,12 +16,25 @@ import 'package:immoplus_pro/features/owner_stats/presentation/widgets/stats_col
 import 'package:immoplus_pro/features/owner_stats/presentation/widgets/top_properties_list.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
-class OwnerStatsPage extends StatelessWidget {
+class OwnerStatsPage extends StatefulWidget {
   const OwnerStatsPage({super.key});
 
   static String name = 'OWNER_STATS';
   static String routePath() => '/owner_stats';
+
+  @override
+  State<OwnerStatsPage> createState() => _OwnerStatsPageState();
+}
+
+class _OwnerStatsPageState extends State<OwnerStatsPage> {
+  @override
+  void initState() {
+    super.initState();
+    getIt<AnalyticsService>().logStatsPageViewed(period: 'month');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +128,14 @@ class _OwnerStatsView extends StatelessWidget {
           // Period pills
           PeriodPills(
             selected: cubit.currentPeriod,
-            onChanged: (period) => cubit.loadStats(period: period),
+            onChanged: (period) {
+              final oldPeriod = cubit.currentPeriod;
+              getIt<AnalyticsService>().logStatsPeriodChanged(
+                oldPeriod: oldPeriod,
+                newPeriod: period,
+              );
+              cubit.loadStats(period: period);
+            },
           ),
           const SizedBox(height: 18),
 

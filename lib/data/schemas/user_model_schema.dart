@@ -24,6 +24,8 @@ class UserModelSchema {
   String? pieceIdentite;
   String? avatar;
   String? role;
+  bool? identityVerified;
+  String? createdAt;
 
   /// return true if user is an  professional Company
   bool get isEntreprise => roleName == Roles.pro_entreprise.name;

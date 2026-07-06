@@ -6,6 +6,9 @@ import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.da
 import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/logic/estate_creation_cubit_v2.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 
 import 'pages/step1_general_info_page.dart';
 import 'pages/step2_amenities_page.dart';
@@ -34,6 +37,8 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
     _cubit = EstateCreationCubitV2();
     if (widget.initialEstate != null) {
       _cubit.initWithEstate(widget.initialEstate!);
+    } else {
+      getIt<AnalyticsService>().logPropertyCreationStarted();
     }
   }
 
@@ -46,13 +51,36 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
 
   void _nextStep() {
     FocusScope.of(context).unfocus();
+    final isCreation = widget.initialEstate == null;
     if (_currentStep < 3) {
+      if (isCreation) {
+        if (_currentStep == 0) {
+          getIt<AnalyticsService>().logPropertyInfoSubmitted(
+            typeBien: _cubit.state.typeBienImmobilier,
+            commune: _cubit.state.commune,
+            nbPieces: _cubit.state.pieces.fold(0, (sum, item) => sum + item.nombre),
+            surface: 0.0,
+          );
+        } else if (_currentStep == 2) {
+          getIt<AnalyticsService>().logPropertyMediaUploaded(
+            nbPhotos: _cubit.state.images.length,
+            hasVideo: _cubit.state.video != null,
+          );
+        }
+      }
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
       setState(() => _currentStep++);
     } else {
+      if (isCreation) {
+        getIt<AnalyticsService>().logPropertyCreationSubmitted(
+          typeBien: _cubit.state.typeBienImmobilier,
+          prix: _cubit.state.prix.toDouble(),
+          commune: _cubit.state.commune,
+        );
+      }
       _cubit.submit();
     }
   }
@@ -66,6 +94,11 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
       );
       setState(() => _currentStep--);
     } else {
+      if (widget.initialEstate == null) {
+        getIt<AnalyticsService>().logPropertyCreationAbandoned(
+          step: _stepTitles[_currentStep],
+        );
+      }
       context.pop();
     }
   }
@@ -98,6 +131,18 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                     ? "Bien immobilier modifié avec succès"
                     : "Bien immobilier créé avec succès",
               );
+              if (widget.initialEstate == null) {
+                getIt<AnalyticsService>().logPropertyCreationSuccess(
+                  idBien: state.id ?? '',
+                  typeBien: state.typeBienImmobilier,
+                  prix: state.prix.toDouble(),
+                );
+                BienImmobilierRepository.getBiensImmobiliers(page: 1, perPage: 1).then((col) {
+                  getIt<AnalyticsService>().updatePropertyCountProperty(col.totalCount ?? 0);
+                }).catchError((e) {
+                  debugPrint('GA4 error updating property count: $e');
+                });
+              }
               if (widget.listingRoute != null) {
                 context.replaceNamed(widget.listingRoute!);
               } else {
@@ -124,6 +169,11 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                 if (_currentStep > 0) {
                   _previousStep();
                 } else {
+                  if (widget.initialEstate == null) {
+                    getIt<AnalyticsService>().logPropertyCreationAbandoned(
+                      step: _stepTitles[_currentStep],
+                    );
+                  }
                   context.pop();
                 }
               },

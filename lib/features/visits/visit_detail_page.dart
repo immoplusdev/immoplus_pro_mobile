@@ -18,8 +18,11 @@ import 'package:immoplus_pro/features/visits/logic/visit_manager.dart';
 import 'package:immoplus_pro/features/visits/logic/visit_request_state.dart';
 import 'package:immoplus_pro/features/visits/widgets/estate_info.dart';
 import 'package:immoplus_pro/utils/contact_utils.dart';
-import 'package:immoplus_pro/utils/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 
 ///////
 
@@ -36,6 +39,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   void initState() {
     super.initState();
     context.read<VisitCubit>().getVisit(id: widget.id);
+    getIt<AnalyticsService>().logVisitRequestReceived(idVisite: widget.id);
   }
 
   /// verifier si la demande de visite contient des dates
@@ -201,8 +205,12 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
                                   BienImmobilierRepository.programmerVisit(
                                           state.demandeVisitResponse.data.id,
                                           value)
-                                      .then((value) {
-                                    if (value != null) {
+                                      .then((val) {
+                                    if (val != null) {
+                                      getIt<AnalyticsService>().logVisitScheduled(
+                                        idVisite: state.demandeVisitResponse.data.id,
+                                        dateVisite: val.datesDemandeVisite.firstOrNull?.date?.toString() ?? value.toString(),
+                                      );
                                       EasyLoading.dismiss();
                                       context
                                           .read<VisitCubit>()

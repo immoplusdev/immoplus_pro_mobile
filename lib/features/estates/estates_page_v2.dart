@@ -17,6 +17,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:immoplus_pro/core/models/query_filter.dart';
 import 'package:immoplus_pro/common/widgets/empty_state_v2.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 
 enum EstateFilter {
   all,
@@ -115,6 +116,11 @@ class _EstatesPageV2State extends State<EstatesPageV2> {
       setState(() {
         _totalCount = result.totalCount ?? 0;
       });
+
+      if (pageKey == 1) {
+        getIt<AnalyticsService>().logPropertyListViewed(totalProperties: result.totalCount ?? 0);
+        getIt<AnalyticsService>().updatePropertyCountProperty(result.totalCount ?? 0);
+      }
 
       final isLastPage = result.hasNext == false;
       if (isLastPage) {

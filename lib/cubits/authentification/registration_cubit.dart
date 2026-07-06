@@ -20,6 +20,10 @@ import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controlle
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/features/home_page/home_page.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus_pro/data/models/auth/user_model.dart';
 
 class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
   RgistrationCubitCubit() : super(const RegistrationCubitState.initial());
@@ -94,8 +98,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..role = response.data.user.role.name
           ..activite = response.data.user.additionalData.activite
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
+          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
+          ..identityVerified = response.data.user.identityVerified
+          ..createdAt = response.data.user.createdAt,
       );
+      _identifyAndLogSignUp(response.data.user, "email");
+      getIt<AnalyticsService>().logKycSubmitted();
       EasyLoading.instance.backgroundColor = Colors.green.shade400;
       EasyLoading.showInfo("vous êtes inscript", dismissOnTap: true);
       emit(const RegistrationCubitState.initial());
@@ -154,14 +162,44 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..photoIdentite = response.data.user.additionalData.photoIdentiteId
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
+          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
+          ..identityVerified = response.data.user.identityVerified
+          ..createdAt = response.data.user.createdAt,
       );
+      _identifyAndLogSignUp(response.data.user, "email");
+      getIt<AnalyticsService>().logKycSubmitted();
       emit(const RegistrationCubitState.initial());
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+    }
+  }
+
+  Future<void> _identifyAndLogSignUp(UserModel user, String method) async {
+    try {
+      int totalPropertiesCount = 0;
+      try {
+        final collection = await BienImmobilierRepository.getBiensImmobiliers(page: 1, perPage: 1);
+        totalPropertiesCount = collection.totalCount ?? 0;
+      } catch (e) {
+        log('GA4 identify error fetching properties: $e', name: 'ANALYTICS');
+      }
+
+      await getIt<AnalyticsService>().identifyUser(
+        userId: user.id ?? '',
+        totalProperties: totalPropertiesCount,
+        kycStatus: (user.identityVerified == true) ? 'validated' : 'not_validated',
+        isProValidated: user.role.name != 'customer',
+        accountStatus: user.status ?? 'activated',
+        accountType: user.role.name ?? '',
+        registrationDate: user.createdAt ?? '',
+      );
+
+      await getIt<AnalyticsService>().logSignUp(method: method);
+    } catch (e) {
+      log('GA4 error identify and log sign up: $e', name: 'ANALYTICS');
     }
   }
 }

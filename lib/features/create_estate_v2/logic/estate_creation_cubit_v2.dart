@@ -308,11 +308,11 @@ class EstateCreationCubitV2 extends Cubit<EstateCreationStateV2> {
           id: state.id!,
           fields: model.toJson(),
         );
+        emit(state.copyWith(isSubmitting: false, submissionSuccess: true));
       } else {
-        await BienImmobilierRepository.createBienImmobilier(model: model);
+        final result = await BienImmobilierRepository.createBienImmobilier(model: model);
+        emit(state.copyWith(id: result.data?.id, isSubmitting: false, submissionSuccess: true));
       }
-
-      emit(state.copyWith(isSubmitting: false, submissionSuccess: true));
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, submissionSuccess: false));
     }

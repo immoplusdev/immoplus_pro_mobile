@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:immoplus_pro/app_router.dart';
+// import 'package:immoplus_pro/app_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 @lazySingleton
 class DeepLinkServices {
@@ -16,12 +18,29 @@ class DeepLinkServices {
     //   // Use the uri and warn the user, if it is not correct
     //   log('DEEPLINK');
     //   inspect(uri);
+    //   _logDeepLink(uri);
     //   AppRouter.router.pushReplacement(uri!.path);
     // }, onError: (err) {
     //   // Handle exception by warning the user their action did not succeed
     // });
 
     // NOTE: Don't forget to call _sub.cancel() in dispose()
+  }
+
+  // ignore: unused_element
+  void _logDeepLink(Uri? uri) {
+    if (uri == null) return;
+    try {
+      final params = uri.queryParameters;
+      getIt<AnalyticsService>().logDeepLinkOpened(
+        url: uri.toString(),
+        source: params['utm_source'],
+        medium: params['utm_medium'],
+        campaign: params['utm_campaign'],
+      );
+    } catch (e) {
+      log('GA4 error logging deep link: $e', name: 'ANALYTICS');
+    }
   }
 
   stop() {

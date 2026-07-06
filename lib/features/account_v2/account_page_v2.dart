@@ -348,7 +348,7 @@ class _AccountPageV2State extends State<AccountPageV2>
       trailing: Switch.adaptive(
         value: _notificationsEnabled,
         onChanged: _toggleNotifications,
-        activeThumbColor: Colors.white,
+        activeColor: Colors.white,
         activeTrackColor: AppColors.primary,
       ),
     );
