@@ -35,9 +35,9 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
+import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
-import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/data/models/auth/user_model.dart';
@@ -64,10 +64,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
   _checkRole(String? role) {
     if (role == Roles.customer.name) {
-      ToastUtils.showError(
-          title: "Accès interdit",
-          description:
-              "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");
+      ApiErrorDialog.showForCode(ApiErrorCode.forbidden);
 
       throw Exception(
           "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");

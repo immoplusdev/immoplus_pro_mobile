@@ -20,6 +20,16 @@ enum ApiErrorCode {
 
   socialAccountNotFound('SOCIAL_ACCOUNT_NOT_FOUND'),
 
+  // Utilisateur introuvable (ex: OTP envoyé à un numéro non enregistré)
+  userNotFound('USER_NOT_FOUND'),
+
+  // Numéro de téléphone déjà utilisé par un autre compte (inscription)
+  phoneNumberAlreadyTaken('PHONE_NUMBER_ALREADY_TAKEN'),
+
+  // Type de compte non autorisé sur cette application (ex: compte client
+  // ImmoPlus utilisé sur ImmoPlus Pro)
+  forbidden('FORBIDDEN'),
+
   // Erreur inconnue
   unknown('UNKNOWN');
 
@@ -57,6 +67,19 @@ enum ApiErrorCode {
   bool get requiresLogout {
     switch (this) {
       case ApiErrorCode.invalidRefreshToken:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// Vérifie si l'erreur est affichée via un dialog dédié (ApiErrorDialog)
+  /// plutôt qu'un simple toast d'erreur.
+  bool get hasDedicatedDialog {
+    switch (this) {
+      case ApiErrorCode.userNotFound:
+      case ApiErrorCode.phoneNumberAlreadyTaken:
+      case ApiErrorCode.forbidden:
         return true;
       default:
         return false;

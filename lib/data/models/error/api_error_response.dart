@@ -31,8 +31,22 @@ class ApiErrorResponse {
     return 'ApiErrorResponse(statusCode: $statusCode, message: $message, code: $code)';
   }
 
-  /// Convertit le code string en enum
-  ApiErrorCode get errorCode => ApiErrorCode.fromString(code);
+  /// Convertit le code string en enum. Certains endpoints n'envoient pas
+  /// encore de `code` dédié pour toutes leurs erreurs : on retombe alors sur
+  /// le texte exact du message pour les cas connus, afin que le dialog
+  /// associé s'affiche quand même.
+  ApiErrorCode get errorCode {
+    final fromCode = ApiErrorCode.fromString(code);
+    if (fromCode != ApiErrorCode.unknown) return fromCode;
+    switch (message) {
+      case 'Utilisateur introuvable':
+        return ApiErrorCode.userNotFound;
+      case 'Le numéro de téléphone est déjà utilisé par un autre utilisateur':
+        return ApiErrorCode.phoneNumberAlreadyTaken;
+      default:
+        return fromCode;
+    }
+  }
 
   /// Vérifie si l'erreur est liée à l'authentification
   bool get isAuthError => errorCode.isAuthRelated;

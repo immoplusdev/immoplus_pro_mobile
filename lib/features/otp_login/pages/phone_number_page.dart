@@ -14,6 +14,7 @@ import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart'
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
+import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
@@ -82,6 +83,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       }
     } catch (e) {
       if (!mounted) return;
+      // Certaines erreurs (ex: USER_NOT_FOUND) affichent déjà leur propre
+      // dialog via ErrorInterceptor : pas besoin d'un toast en plus.
+      if (ApiErrorDialog.codeFrom(e)?.hasDedicatedDialog == true) return;
       EasyLoadingHandler.toast(
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
@@ -134,6 +138,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       );
     } catch (e) {
       if (!mounted) return;
+      if (ApiErrorDialog.codeFrom(e)?.hasDedicatedDialog == true) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Échec de l'envoi du code. Réessayez."),
