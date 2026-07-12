@@ -9,6 +9,7 @@ import 'package:immoplus_pro/core/services/auth_service.dart';
 import 'package:immoplus_pro/data/enums/api_error_code.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 
@@ -25,14 +26,22 @@ class ErrorInterceptor extends Interceptor {
     // Parser la réponse d'erreur
     final apiErrorResponse = _parseErrorResponse(err.response);
 
+
     // Gestion spéciale du token expiré
     if (apiErrorResponse?.errorCode == ApiErrorCode.jwtTokenExpired) {
       final handled = await _handleTokenExpired(err, handler);
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
 
-    // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
-    if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
+    // Certaines erreurs ont un dialog dédié (avec CTA de navigation) plutôt
+    // qu'un simple toast.
+    if (apiErrorResponse?.errorCode.hasDedicatedDialog == true) {
+      ApiErrorDialog.showForCode(
+        apiErrorResponse!.errorCode,
+        message: apiErrorResponse.message,
+      );
+    } else if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
+      // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
       _showErrorToast(apiErrorResponse, err.response);
     }
 

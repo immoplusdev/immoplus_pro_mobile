@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:app_settings/app_settings.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +17,11 @@ import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
+import 'package:immoplus_pro/services/notification_actif_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
 import 'package:immoplus_pro/widgets/config_env.dart';
@@ -78,6 +85,7 @@ class _HomePageV2State extends State<HomePageV2>
 
     _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
+    _checkNotifActif();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -86,6 +94,50 @@ class _HomePageV2State extends State<HomePageV2>
       await UpdateService()
           .checkForUpdate(context, forceUpdate: _remoteConfig.forceUpgradeApp);
     });
+  }
+
+  void _checkNotifActif() {
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (!mounted) return;
+      final shouldShow = await NotificationActifService.shouldShow();
+      if (!mounted || !shouldShow) return;
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withValues(alpha: 0.6),
+        isScrollControlled: true,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (sheetCtx) => NotificationActifSheet(
+          onAccept: () async {
+            Navigator.of(sheetCtx).pop();
+            await NotificationActifService.setStatus(
+                NotificationActifService.accepted);
+            await _requestNotificationPermission();
+          },
+          onMaybeLater: () async {
+            Navigator.of(sheetCtx).pop();
+            await NotificationActifService.setStatus(
+                NotificationActifService.maybeLater);
+          },
+        ),
+      );
+    });
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    var status = await Permission.notification.status;
+
+    if (status.isDenied) {
+      status = await Permission.notification.request();
+    }
+
+    if (status.isPermanentlyDenied) {
+      // Redirige vers les paramètres de notification si déjà refusé
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+    } else if (status.isGranted) {
+      await OneSignal.User.pushSubscription.optIn();
+    }
   }
 
   void _showPaiementDialog() {
@@ -291,19 +343,19 @@ class _HomePageV2State extends State<HomePageV2>
                                 onTap: () =>
                                     context.pushNamed(FurnituresPageV2.name),
                               ),
-                              if (_isUnlocked)
-                                // Transaction
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      "assets/svgs/send-sqaure-2.svg",
-                                      width: 30,
-                                    ),
+                              // if (_isUnlocked)
+                              // Transaction
+                              _buildDashboardAction(
+                                iconWidget: Center(
+                                  child: SvgPicture.asset(
+                                    "assets/svgs/send-sqaure-2.svg",
+                                    width: 30,
                                   ),
-                                  label: "Transaction",
-                                  onTap: () =>
-                                      context.pushNamed(PaymentsPageV2.name),
                                 ),
+                                label: "Transaction",
+                                onTap: () =>
+                                    context.pushNamed(PaymentsPageV2.name),
+                              ),
                             ],
                           ),
                         ],

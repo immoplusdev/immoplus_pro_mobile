@@ -63,7 +63,7 @@
 	<true/>
 	<!-- Deeplink fix redirect -->
 	<key>FlutterDeepLinkingEnabled</key>
-    <false/>
+    <true/>
 	<!-- FACEBOOK&GOOGLE CONFIG START HERE -->
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -78,15 +78,6 @@
 			</array>
 		</dict>
 		
-		<!-- HTTPS Deeplink -->
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>https</string>
-			</array>
-		</dict>
 	</array>
 
 	<key>FacebookAppID</key>

@@ -12,7 +12,6 @@ import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
-import 'package:immoplus_pro/services/permission_services.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -31,8 +30,6 @@ class _SplashScreenState extends State<SplashScreen> {
     final notificationService = getIt<NotificationService>();
 
     if (hasSeenOnboarding) {
-      PermissionServices.requestNotificationPermissions();
-
       await SessionManager().getCurrentUser();
 
       if (SessionManager().currentUser == null) {

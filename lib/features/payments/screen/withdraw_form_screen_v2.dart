@@ -16,6 +16,9 @@ import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:toastification/toastification.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/app_states/request_state.dart';
 
 class WithdrawFormScreenV2 extends StatefulWidget {
   static const String name = 'withdraw_form_v2';
@@ -50,6 +53,16 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
     if (OrderPaymentController.retraitOperatorsItems.isNotEmpty) {
       selectedOperator = OrderPaymentController.retraitOperatorsItems.first;
     }
+
+    // Log withdrawal form opened event
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final walletState = context.read<WalletCubit>().state;
+      double balance = 0.0;
+      if (walletState is WALLET) {
+        balance = walletState.data.availableBalance.toDouble();
+      }
+      getIt<AnalyticsService>().logWithdrawalFormOpened(soldeDisponible: balance);
+    });
   }
 
   @override
@@ -132,6 +145,10 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
       EasyLoadingHandler.hideLoadingToast();
       if (data != null) {
         isSuccess = true;
+        getIt<AnalyticsService>().logWithdrawalSubmitted(
+          montantRetrait: parsedAmount.toDouble(),
+          paymentMethod: selectedOperator?.value ?? 'unknown',
+        );
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();

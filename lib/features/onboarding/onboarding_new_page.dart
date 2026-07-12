@@ -5,8 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
+import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
+import 'package:immoplus_pro/services/notification_actif_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class OnboardingNewPage extends StatefulWidget {
   const OnboardingNewPage({super.key});
@@ -47,7 +50,6 @@ class _Constants {
 
 class _OnboardingNewPageState extends State<OnboardingNewPage> {
   final sessionManager = getIt<SessionManager>();
-
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
@@ -71,6 +73,30 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
     if (mounted) {
       context.goNamed(AuthenticationPage.name);
     }
+  }
+
+  void _showNotificationModal() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (sheetCtx) => NotificationActifSheet(
+        onAccept: () async {
+          Navigator.of(sheetCtx).pop();
+          await NotificationActifService.setStatus(NotificationActifService.accepted);
+          await OneSignal.Notifications.requestPermission(true);
+          await _navigateLoginPage();
+        },
+        onMaybeLater: () async {
+          Navigator.of(sheetCtx).pop();
+          await NotificationActifService.setStatus(NotificationActifService.maybeLater);
+          await _navigateLoginPage();
+        },
+      ),
+    );
   }
 
   @override
@@ -281,7 +307,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
               borderRadius:
                   BorderRadius.circular(_Constants.buttonBorderRadius),
               fontSize: _Constants.buttonFontSize,
-              onClick: _navigateLoginPage,
+              onClick: _showNotificationModal,
             ),
           ),
           const Gap(_Constants.slideGapBottom),
@@ -300,3 +326,4 @@ class OnBoardingItem {
     required this.image,
   });
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class InternationalPhoneInput extends StatefulWidget {
@@ -12,6 +13,10 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool isEnabled;
   final Color? fillColor;
   final Widget? suffixIcon;
+  final bool showBorder;
+  final bool showErrorImmediately;
+  final bool forceShowError;
+  final bool autofocus;
 
   const InternationalPhoneInput({
     super.key,
@@ -23,6 +28,10 @@ class InternationalPhoneInput extends StatefulWidget {
     this.isEnabled = true,
     this.fillColor,
     this.suffixIcon,
+    this.showBorder = false,
+    this.showErrorImmediately = true,
+    this.forceShowError = false,
+    this.autofocus = false,
   });
 
   @override
@@ -65,6 +74,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             tileColor: fillColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
+              side: widget.showBorder
+                  ? BorderSide(
+                      color: AppColors.primary.withOpacity(0.25),
+                      width: 1.5,
+                    )
+                  : BorderSide.none,
             ),
             title: InternationalPhoneNumberInput(
               onInputChanged: (PhoneNumber number) {
@@ -84,6 +99,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               validator: widget.validator,
               ignoreBlank: false,
               isEnabled: widget.isEnabled,
+              autoFocus: widget.autofocus,
               autoValidateMode: AutovalidateMode.disabled,
               initialValue: _initialPhoneNumber, // Use static initial value
               textFieldController: _controller,
@@ -126,7 +142,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           ValueListenableBuilder<bool?>(
             valueListenable: _isValidNotifier,
             builder: (context, isValid, child) {
-              if ((isValid == null) || (isValid == true)) {
+              final shouldShow = widget.showErrorImmediately
+                  ? isValid == false
+                  : widget.forceShowError && isValid == false;
+              if (!shouldShow) {
                 return const SizedBox.shrink();
               }
               return const Text(

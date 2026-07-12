@@ -129,9 +129,7 @@ class AuthRepository {
       inspect(response);
       return response;
     } on DioException catch (dioError) {
-      // Gérer les exceptions Dio ici
-      log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      rethrow;
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici
@@ -149,7 +147,7 @@ class AuthRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      rethrow;
     } catch (error) {
       inspect(error);
       log('Error: $error');
@@ -166,7 +164,7 @@ class AuthRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      rethrow;
     } catch (error) {
       inspect(error);
       // Gérer d'autres types d'exceptions ici

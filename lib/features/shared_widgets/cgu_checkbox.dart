@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
-import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
+// import 'package:go_router/go_router.dart';
+// import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
+// import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 
 class CguCheckbox extends StatelessWidget {
   final ValueNotifier<bool> cguNotifier;
@@ -28,16 +28,14 @@ class CguCheckbox extends StatelessWidget {
                       Theme.of(context).colorScheme.primary)
                   : WidgetStateProperty.all(Colors.white),
               onChanged: (val) {
-                if (!value) {
-                  _openContractPage(context);
-                } else {
-                  cguNotifier.value = false;
-                }
+                cguNotifier.value = val ?? false;
               },
             ),
             const Text("j'approuve les"),
             TextButton(
-              onPressed: () => _openContractPage(context),
+              onPressed: () {
+                cguNotifier.value = !value;
+              },
               child: Text(
                 'Termes & conditions',
                 style: TextStyle(
@@ -51,17 +49,17 @@ class CguCheckbox extends StatelessWidget {
     );
   }
 
-  void _openContractPage(BuildContext context) {
-    context.pushNamed(
-      ContractPage.routeName,
-      extra: {
-        'isSigned': false,
-        'mode': ContractMode.sign,
-        'onSigned': () {
-          cguNotifier.value = true;
-          context.pop();
-        },
-      },
-    );
-  }
+  // void _openContractPage(BuildContext context) {
+  //   context.pushNamed(
+  //     ContractPage.routeName,
+  //     extra: {
+  //       'isSigned': false,
+  //       'mode': ContractMode.sign,
+  //       'onSigned': () {
+  //         cguNotifier.value = true;
+  //         context.pop();
+  //       },
+  //     },
+  //   );
+  // }
 }

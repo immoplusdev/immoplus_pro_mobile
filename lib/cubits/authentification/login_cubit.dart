@@ -35,9 +35,12 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
+import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
-import 'package:immoplus_pro/utils/toast_utils.dart';
+import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/data/models/auth/user_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginUser {
@@ -61,10 +64,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
 
   _checkRole(String? role) {
     if (role == Roles.customer.name) {
-      ToastUtils.showError(
-          title: "Accès interdit",
-          description:
-              "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");
+      ApiErrorDialog.showForCode(ApiErrorCode.forbidden);
 
       throw Exception(
           "Vous devez disposer d'un compte professionnel ImmoPlus pour vous connecter à l'application.");
@@ -94,10 +94,13 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..photoIdentite = response.data.user.additionalData.photoIdentiteId
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
+          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
+          ..identityVerified = response.data.user.identityVerified
+          ..createdAt = response.data.user.createdAt,
       );
       //OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
+      _identifyAndLogLogin(response.data.user, "email");
       DioClient.token = response.data.accessToken;
       DioClient().dio.options.headers['Authorization'] =
           'Bearer ${SessionManager().currentUser!.accessToken}';
@@ -127,7 +130,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
     }
   }
 
-  onSendOtpData({required LoginOtpBody body}) async {
+  Future<bool> onSendOtpData({required LoginOtpBody body}) async {
     emit(const LOGIN_LOADING());
     try {
       AccountCreationResponse response =
@@ -150,17 +153,22 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..photoIdentite = response.data.user.additionalData.photoIdentiteId
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
+          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
+          ..identityVerified = response.data.user.identityVerified
+          ..createdAt = response.data.user.createdAt,
       );
       // OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
+      _identifyAndLogLogin(response.data.user, "otp");
       DioClient.token = response.data.accessToken;
       DioClient().dio.options.headers['Authorization'] =
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
+      return true;
     } catch (e) {
       emit(const LoginCubitState.initial());
+      return false;
     }
   }
 
@@ -376,12 +384,15 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..nomEntreprise = response.data.user.additionalData.nomEntreprise
           ..photoIdentite = response.data.user.additionalData.photoIdentiteId
           ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise,
+          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
+          ..identityVerified = response.data.user.identityVerified
+          ..createdAt = response.data.user.createdAt,
       );
 
       final sessionManager = SessionManager();
 
       await sessionManager.getCurrentUser();
+      _identifyAndLogLogin(response.data.user, body.provider ?? "social");
       DioClient().dio.options.headers['Authorization'] =
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
@@ -416,5 +427,31 @@ class LoginCubit extends Cubit<LoginCubitState> {
           lastName: socialLoginUser?.lastName,
           provider: socialLoginUser?.provider,
         ));
+  }
+
+  Future<void> _identifyAndLogLogin(UserModel user, String method) async {
+    try {
+      int totalPropertiesCount = 0;
+      try {
+        final collection = await BienImmobilierRepository.getBiensImmobiliers(page: 1, perPage: 1);
+        totalPropertiesCount = collection.totalCount ?? 0;
+      } catch (e) {
+        log('GA4 identify error fetching properties: $e', name: 'ANALYTICS');
+      }
+
+      await getIt<AnalyticsService>().identifyUser(
+        userId: user.id ?? '',
+        totalProperties: totalPropertiesCount,
+        kycStatus: (user.identityVerified == true) ? 'validated' : 'not_validated',
+        isProValidated: user.role.name != Roles.customer.name,
+        accountStatus: user.status ?? 'activated',
+        accountType: user.role.name ?? '',
+        registrationDate: user.createdAt ?? '',
+      );
+
+      await getIt<AnalyticsService>().logLogin(method: method);
+    } catch (e) {
+      log('GA4 error identify and log login: $e', name: 'ANALYTICS');
+    }
   }
 }

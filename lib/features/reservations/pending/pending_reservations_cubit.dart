@@ -8,6 +8,7 @@ import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 
 enum PendingReservationFilter {
   enAttenteReponse('En attente de réponse'),
@@ -85,6 +86,7 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     emit(const RequestState.loading());
     try {
       await LogmentRepository.accepterReservation(reservationId);
+      getIt<AnalyticsService>().logBookingAccepted(idReservation: reservationId);
       pagingController.refresh();
       getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());
@@ -97,6 +99,7 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     emit(const RequestState.loading());
     try {
       await LogmentRepository.refuserReservation(reservationId, notes: notes);
+      getIt<AnalyticsService>().logBookingRefused(idReservation: reservationId);
       pagingController.refresh();
       emit(const RequestState.success());
     } catch (e) {

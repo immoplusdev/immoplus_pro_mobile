@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:app_settings/app_settings.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
@@ -26,18 +31,63 @@ class AccountPageV2 extends StatefulWidget {
   State<AccountPageV2> createState() => _AccountPageV2State();
 }
 
-class _AccountPageV2State extends State<AccountPageV2> {
+class _AccountPageV2State extends State<AccountPageV2>
+    with WidgetsBindingObserver {
   final sessionManager = SessionManager();
   UserModelSchema? currentUser;
+  bool _notificationsEnabled = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     currentUser = sessionManager.currentUser;
-    if (mounted) {
-      setState(() {});
+    _refreshNotificationStatus();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshNotificationStatus();
     }
   }
+
+  Future<void> _refreshNotificationStatus() async {
+    if (!mounted) return;
+    
+    // On vérifie le statut réel dans le système du téléphone
+    final osGranted = OneSignal.Notifications.permission;
+    
+    // On force l'abonnement ou le désabonnement pour s'aligner avec l'OS
+    if (osGranted) {
+      await OneSignal.User.pushSubscription.optIn();
+    } else {
+      await OneSignal.User.pushSubscription.optOut();
+    }
+    
+    if (!mounted) return;
+    
+    // Le toggle reflète toujours 100% la réalité du téléphone
+    setState(() {
+      _notificationsEnabled = osGranted;
+    });
+  }
+
+  Future<void> _toggleNotifications(bool value) async {
+    // vers les paramètres spécifiques des notifications du système pour que 
+    // l'utilisateur gère l'activation ou la désactivation.
+    // Au retour dans l'application, didChangeAppLifecycleState mettra à jour
+    // le toggle (bouton bleu ou gris) en lisant le statut réel de l'OS.
+    await AppSettings.openAppSettings(type: AppSettingsType.notification);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +204,16 @@ class _AccountPageV2State extends State<AccountPageV2> {
 
             const Gap(25),
 
+            // SECTION : Notifications
+            _buildSection(
+              title: "Notifications",
+              children: [
+                _buildNotificationToggle(),
+              ],
+            ),
+
+            const Gap(25),
+
             // SECTION 3 : Paramètres de compte
             _buildSection(
               title: "Paramètres de compte",
@@ -258,6 +318,39 @@ class _AccountPageV2State extends State<AccountPageV2> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildNotificationToggle() {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+      leading: Container(
+        width: 40,
+        height: 40,
+        child: SvgPicture.asset(
+          'assets/icons/notification-bing.svg',
+          width: 14,
+          height: 14,
+          colorFilter: ColorFilter.mode(
+            _notificationsEnabled ? AppColors.primary : Colors.grey,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
+      title: const Text(
+        "Activer les notifications",
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.black87,
+        ),
+      ),
+      trailing: Switch.adaptive(
+        value: _notificationsEnabled,
+        onChanged: _toggleNotifications,
+        activeColor: Colors.white,
+        activeTrackColor: AppColors.primary,
+      ),
     );
   }
 
