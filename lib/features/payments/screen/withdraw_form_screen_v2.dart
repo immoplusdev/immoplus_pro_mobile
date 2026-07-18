@@ -129,6 +129,10 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
 
     setState(() => _isLoading = true);
     bool isSuccess = false;
+    getIt<AnalyticsService>().logWithdrawalSubmitted(
+      montantRetrait: parsedAmount.toDouble(),
+      paymentMethod: selectedOperator?.value ?? 'unknown',
+    );
     try {
       EasyLoadingHandler.showLoadingToast(text: "Envoi de la demande...");
 
@@ -145,13 +149,42 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
       EasyLoadingHandler.hideLoadingToast();
       if (data != null) {
         isSuccess = true;
-        getIt<AnalyticsService>().logWithdrawalSubmitted(
+        getIt<AnalyticsService>().logWithdrawalSuccess(
           montantRetrait: parsedAmount.toDouble(),
           paymentMethod: selectedOperator?.value ?? 'unknown',
         );
+      } else {
+        getIt<AnalyticsService>().logWithdrawalFailed(
+          montantRetrait: parsedAmount.toDouble(),
+          paymentMethod: selectedOperator?.value,
+        );
+        if (mounted) {
+          toastification.show(
+            type: ToastificationType.error,
+            context: context,
+            title: const Text("Échec de la demande"),
+            description: const Text(
+                "La demande de retrait a échoué. Veuillez réessayer."),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        }
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
+      getIt<AnalyticsService>().logWithdrawalFailed(
+        montantRetrait: parsedAmount.toDouble(),
+        paymentMethod: selectedOperator?.value,
+      );
+      if (mounted) {
+        toastification.show(
+          type: ToastificationType.error,
+          context: context,
+          title: const Text("Échec de la demande"),
+          description: const Text(
+              "La demande de retrait a échoué. Veuillez réessayer."),
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);

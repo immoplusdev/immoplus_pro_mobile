@@ -52,6 +52,10 @@ abstract class AnalyticsService {
     required String step,
     String? reason,
   });
+  Future<void> logPropertyCreationFailed({
+    required String typeBien,
+    String? errorCode,
+  });
 
   // 4. Gestion des annonces
   Future<void> logPropertyListViewed({required int totalProperties});
@@ -83,6 +87,25 @@ abstract class AnalyticsService {
   });
   Future<void> logPayoutCardSetupStarted();
   Future<void> logPayoutCardRegistered();
+  Future<void> logWithdrawalSuccess({
+    required double montantRetrait,
+    required String paymentMethod,
+  });
+  Future<void> logWithdrawalFailed({
+    required double montantRetrait,
+    String? paymentMethod,
+  });
+
+  // 7bis. Paiement réservation (mobile money)
+  Future<void> logPaymentCompleted({
+    required String operator,
+    double? amount,
+  });
+  Future<void> logPaymentFailed({
+    required String operator,
+    double? amount,
+    String? step,
+  });
 
   // 8. Tableaux de bord
   Future<void> logStatsPageViewed({required String period});
@@ -304,6 +327,16 @@ class FirebaseAnalyticsService implements AnalyticsService {
         if (reason != null) 'reason': reason,
       });
 
+  @override
+  Future<void> logPropertyCreationFailed({
+    required String typeBien,
+    String? errorCode,
+  }) =>
+      _logEvent('property_creation_failed', {
+        'type_bien': typeBien,
+        if (errorCode != null) 'error_code': errorCode,
+      });
+
   // 4. Gestion des annonces
   @override
   Future<void> logPropertyListViewed({required int totalProperties}) =>
@@ -375,6 +408,49 @@ class FirebaseAnalyticsService implements AnalyticsService {
   @override
   Future<void> logPayoutCardRegistered() =>
       _logEvent('payout_card_registered');
+
+  @override
+  Future<void> logWithdrawalSuccess({
+    required double montantRetrait,
+    required String paymentMethod,
+  }) =>
+      _logEvent('withdrawal_success', {
+        'montant_retrait': montantRetrait,
+        'payment_method': paymentMethod,
+      });
+
+  @override
+  Future<void> logWithdrawalFailed({
+    required double montantRetrait,
+    String? paymentMethod,
+  }) =>
+      _logEvent('withdrawal_failed', {
+        'montant_retrait': montantRetrait,
+        if (paymentMethod != null) 'payment_method': paymentMethod,
+      });
+
+  // 7bis. Paiement réservation (mobile money)
+  @override
+  Future<void> logPaymentCompleted({
+    required String operator,
+    double? amount,
+  }) =>
+      _logEvent('payment_completed', {
+        'operator': operator,
+        if (amount != null) 'amount': amount,
+      });
+
+  @override
+  Future<void> logPaymentFailed({
+    required String operator,
+    double? amount,
+    String? step,
+  }) =>
+      _logEvent('payment_failed', {
+        'operator': operator,
+        if (amount != null) 'amount': amount,
+        if (step != null) 'step': step,
+      });
 
   // 8. Tableaux de bord
   @override

@@ -12,6 +12,8 @@ import 'pages/step3_media_page.dart';
 import 'pages/step4_rules_price_page.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 class CreateLodgmentPageV2 extends StatefulWidget {
   final ResidenceModel? initialResidence;
@@ -35,6 +37,8 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
     _cubit = ResidenceCreationCubitV2();
     if (widget.initialResidence != null) {
       _cubit.initWithResidence(widget.initialResidence!);
+    } else {
+      getIt<AnalyticsService>().logPropertyCreationStarted();
     }
   }
 
@@ -47,13 +51,36 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
 
   void _nextStep() {
     FocusScope.of(context).unfocus();
+    final isCreation = widget.initialResidence == null;
     if (_currentStep < 3) {
+      if (isCreation) {
+        if (_currentStep == 0) {
+          getIt<AnalyticsService>().logPropertyInfoSubmitted(
+            typeBien: _cubit.state.typeResidence,
+            commune: _cubit.state.commune,
+            nbPieces: _cubit.state.pieces.fold(0, (sum, item) => sum + item.nombre),
+            surface: 0.0,
+          );
+        } else if (_currentStep == 2) {
+          getIt<AnalyticsService>().logPropertyMediaUploaded(
+            nbPhotos: _cubit.state.images.length,
+            hasVideo: _cubit.state.video != null,
+          );
+        }
+      }
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
       setState(() => _currentStep++);
     } else {
+      if (isCreation) {
+        getIt<AnalyticsService>().logPropertyCreationSubmitted(
+          typeBien: _cubit.state.typeResidence,
+          prix: _cubit.state.prixReservation.toDouble(),
+          commune: _cubit.state.commune,
+        );
+      }
       _cubit.submit();
     }
   }
@@ -67,6 +94,11 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
       );
       setState(() => _currentStep--);
     } else {
+      if (widget.initialResidence == null) {
+        getIt<AnalyticsService>().logPropertyCreationAbandoned(
+          step: _stepTitles[_currentStep],
+        );
+      }
       context.pop();
     }
   }
@@ -99,6 +131,13 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
                     ? "Résidence modifiée avec succès"
                     : "Résidence créée avec succès",
               );
+              if (widget.initialResidence == null) {
+                getIt<AnalyticsService>().logPropertyCreationSuccess(
+                  idBien: state.id ?? '',
+                  typeBien: state.typeResidence,
+                  prix: state.prixReservation.toDouble(),
+                );
+              }
               if (widget.listingRoute != null) {
                 context.replaceNamed(widget.listingRoute!);
               } else {
@@ -110,6 +149,11 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
                     ? "Erreur lors de la modification"
                     : "Erreur lors de la création",
               );
+              if (widget.initialResidence == null) {
+                getIt<AnalyticsService>().logPropertyCreationFailed(
+                  typeBien: state.typeResidence,
+                );
+              }
             }
           }
         },
@@ -125,6 +169,11 @@ class _CreateLodgmentPageV2State extends State<CreateLodgmentPageV2> {
                 if (_currentStep > 0) {
                   _previousStep();
                 } else {
+                  if (widget.initialResidence == null) {
+                    getIt<AnalyticsService>().logPropertyCreationAbandoned(
+                      step: _stepTitles[_currentStep],
+                    );
+                  }
                   context.pop();
                 }
               },

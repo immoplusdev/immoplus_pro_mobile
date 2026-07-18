@@ -10,6 +10,8 @@ import 'package:immoplus_pro/features/creations_v2/widgets/creation_stepper_v2.d
 import 'package:immoplus_pro/features/shared_widgets/loading_page.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 class CreateFurniturePageV2 extends StatefulWidget {
   final FurnitureModel? initialFurniture;
@@ -40,6 +42,9 @@ class _CreateFurniturePageV2State extends State<CreateFurniturePageV2> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    if (widget.initialFurniture == null) {
+      getIt<AnalyticsService>().logPropertyCreationStarted();
+    }
   }
 
   @override
@@ -82,6 +87,13 @@ class _CreateFurniturePageV2State extends State<CreateFurniturePageV2> {
                   ? "Meuble mis à jour"
                   : "Meuble créé avec succès",
             );
+            if (widget.initialFurniture == null) {
+              getIt<AnalyticsService>().logPropertyCreationSuccess(
+                idBien: state.furniture?.id ?? '',
+                typeBien: state.furniture?.category ?? '',
+                prix: state.furniture?.prix.toDouble() ?? 0.0,
+              );
+            }
             if (widget.listingRoute != null) {
               context.replaceNamed(widget.listingRoute!);
             } else {
@@ -90,6 +102,11 @@ class _CreateFurniturePageV2State extends State<CreateFurniturePageV2> {
           }
           if (state.error != null) {
             ToastUtils.showError(title: "Erreur", description: state.error);
+            if (widget.initialFurniture == null) {
+              getIt<AnalyticsService>().logPropertyCreationFailed(
+                typeBien: state.furniture?.category ?? '',
+              );
+            }
           }
         },
         buildWhen: (p, c) =>
@@ -170,14 +187,41 @@ class _CreateFurniturePageV2State extends State<CreateFurniturePageV2> {
                     children: [
                       Step1FurnitureGeneralPage(
                         onNext: () {
+                          if (widget.initialFurniture == null) {
+                            getIt<AnalyticsService>().logPropertyInfoSubmitted(
+                              typeBien: state.furniture?.category ?? '',
+                              commune: state.furniture?.commune ?? '',
+                              nbPieces: 0,
+                              surface: 0.0,
+                            );
+                            getIt<AnalyticsService>().logPropertyMediaUploaded(
+                              nbPhotos: state.images.length,
+                              hasVideo: state.furniture?.video != null,
+                            );
+                          }
                           context.read<FurnitureCreationCubitV2>().nextStep();
                           _nextPage();
                         },
-                        onPrevious: () => context.pop(),
+                        onPrevious: () {
+                          if (widget.initialFurniture == null) {
+                            getIt<AnalyticsService>().logPropertyCreationAbandoned(
+                              step: _stepTitles[_currentStep],
+                            );
+                          }
+                          context.pop();
+                        },
                       ),
                       Step2FurnitureDetailsPage(
-                        onNext: () =>
-                            context.read<FurnitureCreationCubitV2>().submit(),
+                        onNext: () {
+                          if (widget.initialFurniture == null) {
+                            getIt<AnalyticsService>().logPropertyCreationSubmitted(
+                              typeBien: state.furniture?.category ?? '',
+                              prix: state.furniture?.prix.toDouble() ?? 0.0,
+                              commune: state.furniture?.commune ?? '',
+                            );
+                          }
+                          context.read<FurnitureCreationCubitV2>().submit();
+                        },
                         onPrevious: () {
                           context
                               .read<FurnitureCreationCubitV2>()
