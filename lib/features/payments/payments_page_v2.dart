@@ -20,6 +20,7 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 class PaymentsPageV2 extends StatefulWidget {
   const PaymentsPageV2({super.key});
   static String name = 'PaymentsPageV2';
+  static const String routePath = '/payments_v2';
 
   @override
   State<PaymentsPageV2> createState() => _PaymentsPageV2State();

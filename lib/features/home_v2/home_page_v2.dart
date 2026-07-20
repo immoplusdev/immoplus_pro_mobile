@@ -44,6 +44,7 @@ class HomePageV2 extends StatefulWidget {
   final String? paiementId;
   const HomePageV2({super.key, this.paiementId});
   static String name = 'HOME_PAGE';
+  static const String routePath = '/home';
 
   @override
   State<HomePageV2> createState() => _HomePageV2State();

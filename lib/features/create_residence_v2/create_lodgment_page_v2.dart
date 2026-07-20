@@ -19,6 +19,7 @@ class CreateLodgmentPageV2 extends StatefulWidget {
   const CreateLodgmentPageV2({super.key, this.initialResidence, this.listingRoute});
 
   static const name = 'CREATE_LODGMENT_PAGE_V2';
+  static const String routePath = '/create_lodgment_v2';
 
   @override
   State<CreateLodgmentPageV2> createState() => _CreateLodgmentPageV2State();

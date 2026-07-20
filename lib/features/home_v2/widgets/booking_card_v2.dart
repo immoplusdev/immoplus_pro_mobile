@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/reservations/rating_status.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/create_rating_page.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -241,6 +243,11 @@ class BookingCardV2 extends StatelessWidget {
   }
 
   void _showDetail(BuildContext context) {
+    if (reservationModel.ratingStatusEnum == RatingStatus.pending) {
+      RatingBottomSheet.show(context, reservation: reservationModel);
+      return;
+    }
+
     showModalBottomSheet(
       backgroundColor: Colors.white,
       showDragHandle: true,

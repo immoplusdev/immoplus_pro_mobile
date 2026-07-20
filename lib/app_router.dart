@@ -37,6 +37,8 @@ import 'package:immoplus_pro/features/payment_module/operators_selector_page.dar
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/create_rating_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
 import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
@@ -533,6 +535,21 @@ class AppRouter {
         path: NotificationPage.routePath(),
         name: NotificationPage.name,
         builder: (context, state) => const NotificationPage(),
+      ),
+
+      // ── Ratings ──
+      GoRoute(
+        path: CreateRatingPage.routePath(),
+        name: CreateRatingPage.name,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return CreateRatingPage(reservationId: id);
+        },
+      ),
+      GoRoute(
+        path: RatingsHistoryPage.routePath(),
+        name: RatingsHistoryPage.name,
+        builder: (context, state) => const RatingsHistoryPage(),
       ),
     ],
   );

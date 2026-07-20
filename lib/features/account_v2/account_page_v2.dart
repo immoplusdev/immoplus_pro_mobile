@@ -18,6 +18,7 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -214,6 +215,21 @@ class _AccountPageV2State extends State<AccountPageV2>
 
             const Gap(25),
 
+            // SECTION : Avis et Évaluations
+            _buildSection(
+              title: "Avis & Évaluations",
+              children: [
+                _buildActionItem(
+                  iconData: Iconsax.star,
+                  title: "Historique des évaluations",
+                  onTap: () => context.push(RatingsHistoryPage.routePath()),
+                  isLast: true,
+                ),
+              ],
+            ),
+
+            const Gap(25),
+
             // SECTION 3 : Paramètres de compte
             _buildSection(
               title: "Paramètres de compte",
@@ -355,7 +371,8 @@ class _AccountPageV2State extends State<AccountPageV2>
   }
 
   Widget _buildActionItem({
-    required String icon,
+    String? icon,
+    IconData? iconData,
     required String title,
     required VoidCallback onTap,
     bool isLast = false,
@@ -366,11 +383,13 @@ class _AccountPageV2State extends State<AccountPageV2>
           onTap: onTap,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-          leading: Container(
+          leading: SizedBox(
             width: 40,
             height: 40,
             child: Center(
-              child: SvgPicture.asset(icon),
+              child: iconData != null
+                  ? Icon(iconData, color: AppColors.primary, size: 22)
+                  : SvgPicture.asset(icon!),
             ),
           ),
           title: Text(
