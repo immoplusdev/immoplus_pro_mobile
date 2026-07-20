@@ -27,6 +27,7 @@ class AccountPageV2 extends StatefulWidget {
   const AccountPageV2({super.key});
 
   static String name = 'ACCOUNT_PAGE_V2';
+  static const String routePath = '/account_v2';
 
   @override
   State<AccountPageV2> createState() => _AccountPageV2State();

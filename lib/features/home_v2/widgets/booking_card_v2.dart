@@ -18,6 +18,9 @@ class BookingCardV2 extends StatelessWidget {
     required this.reservationModel,
   });
 
+  bool get isRatingPending =>
+      reservationModel.ratingStatusEnum == RatingStatus.pending;
+
   @override
   Widget build(BuildContext context) {
     final DateFormat formatDate = DateFormat('d MMMM yyyy');
@@ -43,207 +46,249 @@ class BookingCardV2 extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: GestureDetector(
         onTap: () => _showDetail(context),
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.customBlue.withOpacity(0.1),
-              width: 1,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.customBlue.withOpacity(0.1),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. Image
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: imageUrl != null && imageUrl.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: Utils.getImagePath(id: imageUrl),
-                            width: 55,
-                            height: 55,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey.shade50,
-                              child: Icon(Iconsax.image,
-                                  color: Colors.grey.shade300, size: 24),
-                            ),
-                          )
-                        : Container(
-                            width: 55,
-                            height: 55,
-                            color: Colors.grey.shade50,
-                            child: Icon(Iconsax.image,
-                                color: Colors.grey.shade300, size: 24),
-                          ),
-                  ),
-                  const Gap(14),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Image
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: imageUrl != null && imageUrl.isNotEmpty
+                            ? CachedNetworkImage(
+                                imageUrl: Utils.getImagePath(id: imageUrl),
+                                width: 55,
+                                height: 55,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                  color: Colors.grey.shade50,
+                                  child: Icon(Iconsax.image,
+                                      color: Colors.grey.shade300, size: 24),
+                                ),
+                              )
+                            : Container(
+                                width: 55,
+                                height: 55,
+                                color: Colors.grey.shade50,
+                                child: Icon(Iconsax.image,
+                                    color: Colors.grey.shade300, size: 24),
+                              ),
+                      ),
+                      const Gap(14),
 
-                  // 2. Info Column
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Title + Badges Inline
-                        Row(
+                      // 2. Info Column
+                      Expanded(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                propertyName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
+                            // Title + Badges Inline
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    propertyName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const Gap(8),
-                            // Duration Badge
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              // decoration: BoxDecoration(
-                              //   color: AppColors.customBlue.withOpacity(0.08),
-                              //   borderRadius: BorderRadius.circular(20),
-                              // ),
-                              child: Text(
-                                "$duration jr${duration > 1 ? 's' : ''}",
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.customBlue,
+                                const Gap(8),
+                                // Duration Badge
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  // decoration: BoxDecoration(
+                                  //   color: AppColors.customBlue.withOpacity(0.08),
+                                  //   borderRadius: BorderRadius.circular(20),
+                                  // ),
+                                  child: Text(
+                                    "$duration jr${duration > 1 ? 's' : ''}",
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.customBlue,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const Gap(4),
-                            // Status Badge
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(
-                                color: isPaid
-                                    ? const Color(0xFF1CA53F).withOpacity(0.1)
-                                    : const Color(0xFFFFF7E6),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                isPaid
-                                    ? "Payée : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}"
-                                    : "À payer : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}",
-                                style: TextStyle(
-                                  fontSize: 8,
-                                  color: isPaid
-                                      ? const Color(0xFF1CA53F)
-                                      : Colors.orange.shade800,
-                                  fontWeight: FontWeight.bold,
+                                const Gap(4),
+                                // Status Badge
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: isPaid
+                                        ? const Color(0xFF1CA53F)
+                                            .withOpacity(0.1)
+                                        : const Color(0xFFFFF7E6),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    isPaid
+                                        ? "Payée : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}"
+                                        : "À payer : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}",
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: isPaid
+                                          ? const Color(0xFF1CA53F)
+                                          : Colors.orange.shade800,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
+                            const Gap(6),
+
+                            // Address Section
+                            Row(
+                              children: [
+                                Icon(Iconsax.location,
+                                    size: 14, color: AppColors.primary),
+                                const Gap(4),
+                                Expanded(
+                                  child: Text(
+                                    address.isNotEmpty
+                                        ? address
+                                        : 'Pas d\'adresse',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(10),
+
+                            // Dates Row (Start -> End)
+                            Row(
+                              children: [
+                                Icon(Iconsax.calendar_1,
+                                    size: 14, color: AppColors.primary),
+                                const Gap(4),
+                                Text(
+                                  formatDate.format(startDate),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: AppColors.customBlue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Gap(4),
+                                Icon(Iconsax.arrow_right_3,
+                                    size: 14, color: Colors.grey.shade400),
+                                const Gap(4),
+                                Text(
+                                  formatDate.format(endDate),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: AppColors.customBlue,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // const Gap(6),
+
+                            // Times Row (CheckIn -> CheckOut)
+                            // Row(
+                            //   children: [
+                            //     Icon(Iconsax.clock, size: 14, color: AppColors.primary),
+                            //     const Gap(4),
+                            //     Text(
+                            //       checkInTime,
+                            //       style: TextStyle(
+                            //         fontSize: 11,
+                            //         color: Colors.grey.shade600,
+                            //         fontWeight: FontWeight.w600,
+                            //       ),
+                            //     ),
+                            //     const Gap(4),
+                            //     Icon(Iconsax.arrow_right_3, size: 14, color: Colors.grey.shade400),
+                            //     const Gap(4),
+                            //     Text(
+                            //       checkOutTime,
+                            //       style: TextStyle(
+                            //         fontSize: 11,
+                            //         color: Colors.grey.shade600,
+                            //         fontWeight: FontWeight.w600,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
-                        const Gap(6),
-
-                        // Address Section
-                        Row(
-                          children: [
-                            Icon(Iconsax.location,
-                                size: 14, color: AppColors.primary),
-                            const Gap(4),
-                            Expanded(
-                              child: Text(
-                                address.isNotEmpty ? address : 'Pas d\'adresse',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade600,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(10),
-
-                        // Dates Row (Start -> End)
-                        Row(
-                          children: [
-                            Icon(Iconsax.calendar_1,
-                                size: 14, color: AppColors.primary),
-                            const Gap(4),
-                            Text(
-                              formatDate.format(startDate),
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: AppColors.customBlue,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Gap(4),
-                            Icon(Iconsax.arrow_right_3,
-                                size: 14, color: Colors.grey.shade400),
-                            const Gap(4),
-                            Text(
-                              formatDate.format(endDate),
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: AppColors.customBlue,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        // const Gap(6),
-
-                        // Times Row (CheckIn -> CheckOut)
-                        // Row(
-                        //   children: [
-                        //     Icon(Iconsax.clock, size: 14, color: AppColors.primary),
-                        //     const Gap(4),
-                        //     Text(
-                        //       checkInTime,
-                        //       style: TextStyle(
-                        //         fontSize: 11,
-                        //         color: Colors.grey.shade600,
-                        //         fontWeight: FontWeight.w600,
-                        //       ),
-                        //     ),
-                        //     const Gap(4),
-                        //     Icon(Iconsax.arrow_right_3, size: 14, color: Colors.grey.shade400),
-                        //     const Gap(4),
-                        //     Text(
-                        //       checkOutTime,
-                        //       style: TextStyle(
-                        //         fontSize: 11,
-                        //         color: Colors.grey.shade600,
-                        //         fontWeight: FontWeight.w600,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            if (isRatingPending)
+              Positioned(
+                bottom: 12,
+                right: 12,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF9800), // Orange/Gold for rating
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFF9800).withValues(alpha: 0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Iconsax.star1, size: 12, color: Colors.white),
+                      Gap(4),
+                      Text(
+                        'À évaluer',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
 
   void _showDetail(BuildContext context) {
-    if (reservationModel.ratingStatusEnum == RatingStatus.pending) {
+    if (isRatingPending) {
       RatingBottomSheet.show(context, reservation: reservationModel);
       return;
     }

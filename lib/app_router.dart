@@ -103,7 +103,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/home',
+                path: HomePageV2.routePath,
                 name: HomePageV2.name,
                 builder: (context, state) => HomePageV2(
                   paiementId: state.extra as String?,
@@ -123,7 +123,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/creations_v2',
+                path: CreationsPageV2.routePath,
                 builder: (context, state) => const CreationsPageV2(),
               ),
             ],
@@ -131,7 +131,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/statistics_v2',
+                path: OwnerStatsPage.routePath(),
                 builder: (context, state) => const OwnerStatsPage(),
               ),
             ],
@@ -139,7 +139,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/account_v2',
+                path: AccountPageV2.routePath,
                 name: AccountPageV2.name,
                 builder: (context, state) => const AccountPageV2(),
               ),

@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:immoplus_pro/data/models/rating/guest_behavior.dart';
+import 'package:immoplus_pro/data/models/rating/host_rating_request_dto.dart';
+import 'package:immoplus_pro/data/models/rating/property_condition.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/ratings/logic/ratings_cubit.dart';
 import 'package:immoplus_pro/features/ratings/logic/ratings_state.dart';
@@ -65,8 +68,8 @@ class RatingBottomSheet extends StatefulWidget {
 
 class _RatingBottomSheetState extends State<RatingBottomSheet> {
   int _rating = 0;
-  String? _behaviorTag;
-  String? _stateTag;
+  GuestBehavior? _behaviorTag;
+  PropertyCondition? _stateTag;
   bool? _recommendClient = true;
   final TextEditingController _feedbackController = TextEditingController();
 
@@ -82,14 +85,16 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       return;
     }
 
-    context.read<RatingsCubit>().submitRating(
-          reservationId: widget.reservation.id,
-          clientRating: _rating,
-          clientFeedback: _feedbackController.text.trim(),
-          guestBehavior: _behaviorTag,
-          propertyCondition: _stateTag,
-          wouldRecommend: _recommendClient ?? true,
-        );
+    final dto = HostRatingRequestDto(
+      reservationId: widget.reservation.id,
+      clientRating: _rating,
+      clientFeedback: _feedbackController.text.trim(),
+      guestBehavior: _behaviorTag,
+      propertyCondition: _stateTag,
+      wouldRecommend: _recommendClient ?? true,
+    );
+
+    context.read<RatingsCubit>().submitRating(dto);
   }
 
   Widget _buildPillButton({
@@ -107,8 +112,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             color: isSelected ? const Color(0xFF2548E5) : Colors.white,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color:
-                  isSelected ? const Color(0xFF2548E5) : Colors.grey.shade300,
+              color: isSelected ? const Color(0xFF2548E5) : Colors.grey.shade300,
             ),
           ),
           child: Text(
@@ -307,35 +311,45 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               ),
               const Gap(12),
               Row(
-                children: [
-                  _buildPillButton(
-                    label: 'Respectueux',
-                    isSelected: _behaviorTag == 'Respectueux',
-                    onTap: () => setState(() {
-                      _behaviorTag =
-                          _behaviorTag == 'Respectueux' ? null : 'Respectueux';
-                    }),
-                  ),
-                  const Gap(8),
-                  _buildPillButton(
-                    label: 'Acceptable',
-                    isSelected: _behaviorTag == 'Acceptable',
-                    onTap: () => setState(() {
-                      _behaviorTag =
-                          _behaviorTag == 'Acceptable' ? null : 'Acceptable';
-                    }),
-                  ),
-                  const Gap(8),
-                  _buildPillButton(
-                    label: 'Problématique',
-                    isSelected: _behaviorTag == 'Problématique',
-                    onTap: () => setState(() {
-                      _behaviorTag = _behaviorTag == 'Problématique'
-                          ? null
-                          : 'Problématique';
-                    }),
-                  ),
-                ],
+                children: GuestBehavior.values.map((behavior) {
+                  final isSelected = _behaviorTag == behavior;
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _behaviorTag = isSelected ? null : behavior;
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? const Color(0xFF2548E5)
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: isSelected
+                                  ? const Color(0xFF2548E5)
+                                  : Colors.grey.shade300,
+                            ),
+                          ),
+                          child: Text(
+                            behavior.label,
+                            style: GoogleFonts.dmSans(
+                              fontSize: 13,
+                              color: isSelected ? Colors.white : Colors.black87,
+                              fontWeight:
+                                  isSelected ? FontWeight.w600 : FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
               const Gap(24),
 
@@ -351,43 +365,17 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               const Gap(12),
               Row(
                 children: [
-                  _buildPillButton(
-                    label: 'Excellente',
-                    isSelected: _stateTag == 'Excellente',
-                    onTap: () => setState(() {
-                      _stateTag =
-                          _stateTag == 'Excellente' ? null : 'Excellente';
-                    }),
-                  ),
+                  _buildConditionPill(PropertyCondition.excellent),
                   const Gap(8),
-                  _buildPillButton(
-                    label: 'Bonne',
-                    isSelected: _stateTag == 'Bonne',
-                    onTap: () => setState(() {
-                      _stateTag = _stateTag == 'Bonne' ? null : 'Bonne';
-                    }),
-                  ),
+                  _buildConditionPill(PropertyCondition.good),
                 ],
               ),
               const Gap(10),
               Row(
                 children: [
-                  _buildPillButton(
-                    label: 'À nettoyer',
-                    isSelected: _stateTag == 'À nettoyer',
-                    onTap: () => setState(() {
-                      _stateTag =
-                          _stateTag == 'À nettoyer' ? null : 'À nettoyer';
-                    }),
-                  ),
+                  _buildConditionPill(PropertyCondition.toClean),
                   const Gap(8),
-                  _buildPillButton(
-                    label: 'Dégradée',
-                    isSelected: _stateTag == 'Dégradée',
-                    onTap: () => setState(() {
-                      _stateTag = _stateTag == 'Dégradée' ? null : 'Dégradée';
-                    }),
-                  ),
+                  _buildConditionPill(PropertyCondition.degraded),
                 ],
               ),
               const Gap(24),
@@ -450,8 +438,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   fillColor: const Color(0xFFFAFAFA),
                   filled: true,
                   hintText: 'Découvrez votre expérience...',
-                  hintStyle: GoogleFonts.dmSans(
-                      color: Colors.grey.shade400, fontSize: 14),
+                  hintStyle:
+                      GoogleFonts.dmSans(color: Colors.grey.shade400, fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(color: Colors.grey.shade200),
@@ -466,8 +454,8 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   ),
                   contentPadding: const EdgeInsets.all(16),
                   counterText: '${_feedbackController.text.length} / 500',
-                  counterStyle: GoogleFonts.dmSans(
-                      color: Colors.grey.shade500, fontSize: 12),
+                  counterStyle:
+                      GoogleFonts.dmSans(color: Colors.grey.shade500, fontSize: 12),
                 ),
               ),
               const Gap(24),
@@ -492,6 +480,38 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
               ),
               Gap(MediaQuery.of(context).viewPadding.bottom),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildConditionPill(PropertyCondition condition) {
+    final isSelected = _stateTag == condition;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _stateTag = isSelected ? null : condition;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFF2548E5) : Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: isSelected ? const Color(0xFF2548E5) : Colors.grey.shade300,
+            ),
+          ),
+          child: Text(
+            condition.label,
+            style: GoogleFonts.dmSans(
+              fontSize: 13,
+              color: isSelected ? Colors.white : Colors.black87,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            ),
           ),
         ),
       ),

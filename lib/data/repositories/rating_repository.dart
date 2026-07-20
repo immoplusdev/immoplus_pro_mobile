@@ -2,15 +2,16 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
+import 'package:immoplus_pro/data/models/rating/host_rating_request_dto.dart';
 import 'package:immoplus_pro/data/models/rating/rating_model.dart';
 import 'package:immoplus_pro/data/providers/rating_provider.dart';
 
 class RatingRepository {
   static Future<RatingModel> submitRating({
-    required Map<String, dynamic> data,
+    required HostRatingRequestDto dto,
   }) async {
     try {
-      final response = await RatingProvider(DioClient().dio).submitRating(data);
+      final response = await RatingProvider(DioClient().dio).submitRating(dto);
       inspect(response);
       return response;
     } on DioException catch (dioError) {

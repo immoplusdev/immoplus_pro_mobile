@@ -15,6 +15,8 @@ import '../residence/residences_page_v2.dart';
 class CreationsPageV2 extends StatelessWidget {
   const CreationsPageV2({super.key});
 
+  static const String routePath = '/creations_v2';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
