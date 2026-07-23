@@ -39,6 +39,9 @@ import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/data/enums/account_source.dart';
 import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
 import 'package:immoplus_pro/features/home_v2/widgets/banner_card.dart';
+import 'package:immoplus_pro/features/reservations/pending/qr_scanner_page.dart';
+import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 class HomePageV2 extends StatefulWidget {
   final String? paiementId;
@@ -151,6 +154,19 @@ class _HomePageV2State extends State<HomePageV2>
         context.pop();
       },
     );
+  }
+
+  Future<void> _scanAndValidatePresence() async {
+    final qrToken = await QrScannerPage.scan(context);
+    if (qrToken != null && qrToken.isNotEmpty) {
+      EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
+      try {
+        await LogmentRepository.validerPresence(qrToken: qrToken);
+        EasyLoadingHandler.showSuccessToast(text: "Présence validée !");
+      } catch (e) {
+        EasyLoadingHandler.showErrorToast(text: "Validation échouée");
+      }
+    }
   }
 
   @override
@@ -308,56 +324,72 @@ class _HomePageV2State extends State<HomePageV2>
                             ),
                           ),
                           const Gap(_Constants.gapLarge),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildDashboardAction(
-                                iconWidget: Center(
-                                  child: SvgPicture.asset(
-                                    Assets.svgs.buildings,
-                                    width: 30,
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              children: [
+                                _buildDashboardAction(
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      Assets.svgs.buildings,
+                                      width: 30,
+                                    ),
                                   ),
+                                  label: "Bien immobilier",
+                                  onTap: () =>
+                                      context.pushNamed(EstatesPageV2.name),
                                 ),
-                                label: "Bien immobilier",
-                                onTap: () =>
-                                    context.pushNamed(EstatesPageV2.name),
-                              ),
-                              _buildDashboardAction(
-                                iconWidget: Center(
-                                  child: SvgPicture.asset(
-                                    Assets.svgs.house,
-                                    width: 30,
+                                const Gap(24),
+                                _buildDashboardAction(
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      Assets.svgs.house,
+                                      width: 30,
+                                    ),
                                   ),
+                                  label: "Mes résidences",
+                                  onTap: () =>
+                                      context.pushNamed(ResidencesPageV2.name),
                                 ),
-                                label: "Mes résidences",
-                                onTap: () =>
-                                    context.pushNamed(ResidencesPageV2.name),
-                              ),
-                              _buildDashboardAction(
-                                iconWidget: Center(
-                                  child: SvgPicture.asset(
-                                    Assets.svgs.lobby,
-                                    width: 30,
+                                const Gap(24),
+                                _buildDashboardAction(
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      Assets.svgs.lobby,
+                                      width: 30,
+                                    ),
                                   ),
+                                  label: "Mes meubles",
+                                  onTap: () =>
+                                      context.pushNamed(FurnituresPageV2.name),
                                 ),
-                                label: "Mes meubles",
-                                onTap: () =>
-                                    context.pushNamed(FurnituresPageV2.name),
-                              ),
-                              // if (_isUnlocked)
-                              // Transaction
-                              _buildDashboardAction(
-                                iconWidget: Center(
-                                  child: SvgPicture.asset(
-                                    "assets/svgs/send-sqaure-2.svg",
-                                    width: 30,
+                                const Gap(24),
+                                _buildDashboardAction(
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      "assets/svgs/send-sqaure-2.svg",
+                                      width: 30,
+                                    ),
                                   ),
+                                  label: "Transaction",
+                                  onTap: () =>
+                                      context.pushNamed(PaymentsPageV2.name),
                                 ),
-                                label: "Transaction",
-                                onTap: () =>
-                                    context.pushNamed(PaymentsPageV2.name),
-                              ),
-                            ],
+                                const Gap(24),
+                                _buildDashboardAction(
+                                  iconWidget: const Center(
+                                    child: Icon(
+                                      Iconsax.scan,
+                                      size: 30,
+                                      color: _Constants.primaryAccent,
+                                    ),
+                                  ),
+                                  label: "Scanner QR",
+                                  onTap: _scanAndValidatePresence,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

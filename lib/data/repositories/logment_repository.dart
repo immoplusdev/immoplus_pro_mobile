@@ -333,4 +333,20 @@ class LogmentRepository {
       throw Exception('Failed to update unavailability dates: $error');
     }
   }
+
+  static Future<dynamic> validerPresence({
+    required String qrToken,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .validerPresence({"qrToken": qrToken});
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to validate presence: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to validate presence: $error');
+    }
+  }
 }

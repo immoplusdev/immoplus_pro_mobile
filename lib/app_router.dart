@@ -64,6 +64,7 @@ import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 
 // ── Pending reservations ──
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
+import 'package:immoplus_pro/features/reservations/pending/qr_scanner_page.dart';
 
 // ── Contact change ──
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -206,6 +207,11 @@ class AppRouter {
         path: '/withdrawal_success',
         name: WithdrawalSuccessPage.name,
         builder: (context, state) => const WithdrawalSuccessPage(),
+      ),
+      GoRoute(
+        path: QrScannerPage.routePath,
+        name: QrScannerPage.name,
+        builder: (context, state) => const QrScannerPage(),
       ),
       GoRoute(
         path: '/pin_code_v2',

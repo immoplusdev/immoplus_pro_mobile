@@ -58,4 +58,7 @@ abstract class ReservationProvider {
     @Path('id') String id, {
     @Field() String? notes,
   });
+
+  @POST("/reservations/action/valider-presence")
+  Future<dynamic> validerPresence(@Body() Map<String, dynamic> body);
 }
