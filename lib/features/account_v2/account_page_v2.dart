@@ -222,7 +222,7 @@ class _AccountPageV2State extends State<AccountPageV2>
               title: "Avis & Évaluations",
               children: [
                 _buildActionItem(
-                  iconData: Iconsax.star,
+                  icon: Assets.svgs.icons.star,
                   title: "Historique des évaluations",
                   onTap: () => context.push(RatingsHistoryPage.routePath()),
                   isLast: true,

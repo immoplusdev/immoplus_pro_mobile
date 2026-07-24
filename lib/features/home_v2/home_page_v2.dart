@@ -30,7 +30,7 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
-import 'package:immoplus_pro/features/furnitures/furnitures_page_v2.dart';
+// import 'package:immoplus_pro/features/furnitures/furnitures_page_v2.dart';
 import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
@@ -348,22 +348,22 @@ class _HomePageV2State extends State<HomePageV2>
                                       width: 30,
                                     ),
                                   ),
-                                  label: "Mes résidences",
+                                  label: "Résidences",
                                   onTap: () =>
                                       context.pushNamed(ResidencesPageV2.name),
                                 ),
-                                const Gap(24),
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      Assets.svgs.lobby,
-                                      width: 30,
-                                    ),
-                                  ),
-                                  label: "Mes meubles",
-                                  onTap: () =>
-                                      context.pushNamed(FurnituresPageV2.name),
-                                ),
+                                // const Gap(24),
+                                // _buildDashboardAction(
+                                //   iconWidget: Center(
+                                //     child: SvgPicture.asset(
+                                //       Assets.svgs.lobby,
+                                //       width: 30,
+                                //     ),
+                                //   ),
+                                //   label: "Mes meubles",
+                                //   onTap: () =>
+                                //       context.pushNamed(FurnituresPageV2.name),
+                                // ),
                                 const Gap(24),
                                 _buildDashboardAction(
                                   iconWidget: Center(
@@ -372,20 +372,19 @@ class _HomePageV2State extends State<HomePageV2>
                                       width: 30,
                                     ),
                                   ),
-                                  label: "Transaction",
+                                  label: "Transactions",
                                   onTap: () =>
                                       context.pushNamed(PaymentsPageV2.name),
                                 ),
                                 const Gap(24),
                                 _buildDashboardAction(
-                                  iconWidget: const Center(
-                                    child: Icon(
-                                      Iconsax.scan,
-                                      size: 30,
-                                      color: _Constants.primaryAccent,
+                                  iconWidget: Center(
+                                    child: SvgPicture.asset(
+                                      Assets.svgs.scan,
+                                      width: 30,
                                     ),
                                   ),
-                                  label: "Scanner QR",
+                                  label: "Scanner",
                                   onTap: _scanAndValidatePresence,
                                 ),
                               ],
