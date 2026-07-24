@@ -25,6 +25,8 @@ abstract class AnalyticsService {
   // 2. KYC
   Future<void> logKycStarted();
   Future<void> logKycSubmitted();
+  Future<void> logKycDocumentsEditStarted();
+  Future<void> logKycDocumentsEditSubmitted();
 
   // 3. Funnel de création de bien
   Future<void> logPropertyCreationStarted({String? codeBien, String? typeBien});
@@ -260,6 +262,14 @@ class FirebaseAnalyticsService implements AnalyticsService {
 
   @override
   Future<void> logKycSubmitted() => _logEvent('kyc_submitted');
+
+  @override
+  Future<void> logKycDocumentsEditStarted() =>
+      _logEvent('kyc_documents_edit_started');
+
+  @override
+  Future<void> logKycDocumentsEditSubmitted() =>
+      _logEvent('kyc_documents_edit_submitted');
 
   // 3. Funnel de création de bien
   @override

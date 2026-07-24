@@ -59,7 +59,7 @@ class _HomePageV2State extends State<HomePageV2>
   bool _isUnlocked = false;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
-      ValueNotifier(BookingFilterV2.attentePro);
+      ValueNotifier(BookingFilterV2.nouvelle);
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
 
@@ -632,22 +632,16 @@ class _HomePageV2State extends State<HomePageV2>
   List<Widget> _buildCurrentFilters() {
     if (_tabController.index == 0) {
       return [
-        // _buildFilterChip(
-        //     "Tous",
-        //     _bookingFilterNotifier.value == BookingFilterV2.all,
-        //     () => setState(
-        //         () => _bookingFilterNotifier.value = BookingFilterV2.all)),
         _buildFilterChip(
-          "En attente de réponse",
-          _bookingFilterNotifier.value == BookingFilterV2.attentePro,
+            "Tous",
+            _bookingFilterNotifier.value == BookingFilterV2.all,
+            () => setState(
+                () => _bookingFilterNotifier.value = BookingFilterV2.all)),
+        _buildFilterChip(
+          "Nouvelle réservation",
+          _bookingFilterNotifier.value == BookingFilterV2.nouvelle,
           () => setState(
-              () => _bookingFilterNotifier.value = BookingFilterV2.attentePro),
-        ),
-        _buildFilterChip(
-          "En attente paiement",
-          _bookingFilterNotifier.value == BookingFilterV2.attentePaiement,
-          () => setState(() =>
-              _bookingFilterNotifier.value = BookingFilterV2.attentePaiement),
+              () => _bookingFilterNotifier.value = BookingFilterV2.nouvelle),
         ),
         _buildFilterChip(
             "Payées",

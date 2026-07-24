@@ -12,6 +12,8 @@ import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart
 import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_dto.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/contact_change_models.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
@@ -62,6 +64,10 @@ abstract class AuthProvider {
   @PATCH('/users/{id}')
   Future<UpdateUserResponseModel> updateUser(
       @Path() String id, @Body() UpdateUserDto updateUserDto);
+
+  @PATCH('/users/action/additional-data/{user}')
+  Future<UpdateAdditionalDataResponseModel> updateAdditionalData(
+      @Path('user') String user, @Body() UpdateAdditionalDataDto body);
 
   @POST('/auth/send-email-otp')
   Future<HttpResponse> sendEmailOtp(@Body() SendEmailOtpBody sendEmailOtpBody);

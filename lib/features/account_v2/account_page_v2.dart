@@ -16,6 +16,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/features/account/widgets/edit_identity_documents.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
@@ -226,6 +227,11 @@ class _AccountPageV2State extends State<AccountPageV2>
                     currentUser = sessionManager.currentUser;
                     if (mounted) setState(() {});
                   },
+                ),
+                _buildActionItem(
+                  icon: Assets.svgs.icons.securitySafe,
+                  title: "Modifier mes documents",
+                  onTap: () => context.pushNamed(EditIdentityDocuments.name),
                 ),
                 _buildActionItem(
                   icon: Assets.svgs.userSquare,
