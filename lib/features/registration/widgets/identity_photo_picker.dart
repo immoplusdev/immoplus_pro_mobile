@@ -13,7 +13,6 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Sélecteur de photo d'identité (selfie) : carré à bordure pointillée,
-/// label au-dessus, texte d'instruction dans la zone, aide en dessous.
 class IdentityPhotoPicker extends StatefulWidget {
   const IdentityPhotoPicker({
     super.key,
@@ -34,8 +33,6 @@ class IdentityPhotoPicker extends StatefulWidget {
   final IconData icon;
 
   /// Id d'un fichier déjà uploadé à afficher tant qu'aucun nouveau fichier
-  /// n'a été sélectionné localement — utile pour préremplir une photo
-  /// déjà existante lors d'une édition (non utilisé à l'inscription).
   final String? placeholderImageId;
 
   @override

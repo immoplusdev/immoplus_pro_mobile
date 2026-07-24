@@ -13,7 +13,6 @@ import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 /// Carte pleine largeur à bordure pointillée pour l'upload d'un document
-/// (icône, titre et sous-titre centrés à l'intérieur).
 class DocumentUploadCard extends StatefulWidget {
   const DocumentUploadCard({
     super.key,
@@ -32,8 +31,6 @@ class DocumentUploadCard extends StatefulWidget {
   final double height;
 
   /// Id d'un fichier déjà uploadé à afficher tant qu'aucun nouveau fichier
-  /// n'a été sélectionné localement — utile pour préremplir un document
-  /// déjà existant lors d'une édition (non utilisé à l'inscription).
   final String? placeholderImageId;
 
   @override

@@ -68,9 +68,6 @@ class AuthService {
 
       // Sauvegarder en session
       await SessionManager().saveUser(updatedUser);
-
-      // Le socket réservations doit être rouvert avec le nouveau token :
-      // le handshake n'est vérifié qu'à la connexion, pas en continu.
       getIt<ReservationSocketService>().connect();
 
       log('Token refresh réussi', name: 'AUTH_SERVICE');

@@ -59,23 +59,12 @@ class _BookingPageV2State extends State<BookingPageV2> {
   }
 
   /// Réagit au canal temps réel des réservations (voir ReservationSocketService).
-  /// Le payload socket ne contient que l'id et le nouveau statut — la liste
-  /// affichée (`_pagingController.itemList`) n'est mutée que si l'onglet
-  /// concerné est actuellement visible ; sinon rien à faire, le prochain
-  /// switch d'onglet fera un fetch REST à jour comme aujourd'hui.
   void _onReservationStatusUpdated(ReservationStatusUpdatedEvent event) {
     switch (event.status) {
       case StatusReservation.enAttenteReponseProprietaire:
-        // Le propriétaire reçoit aussi l'event quand il vient lui-même
-        // d'accepter (transition interne à "Nouvelle réservation") : dans ce
-        // cas l'item est déjà dans la liste, _insertIfCurrentFilter le
-        // détecte via l'id et ne fait rien.
         _insertIfCurrentFilter(BookingFilterV2.nouvelle, event.reservationId);
         break;
       case StatusReservation.clientAnnuleReservation:
-        // Concerne un item "Nouvelle réservation" quel que soit son statut
-        // interne (attente réponse OU attente paiement, les deux sont
-        // fusionnés dans ce même onglet).
         _removeIfCurrentFilter(
           const {BookingFilterV2.nouvelle},
           event.reservationId,
@@ -249,11 +238,6 @@ class _BookingPageV2State extends State<BookingPageV2> {
                           "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
                     ),
                     itemBuilder: (context, item, index) {
-                      // Dans "Nouvelle réservation", seuls les items encore
-                      // en attente de réponse du propriétaire ont une action
-                      // à faire (Accepter/Refuser) ; ceux déjà acceptés,
-                      // en attente du paiement du client, n'ont rien à
-                      // afficher de plus qu'une card standard.
                       final needsOwnerResponse = item.statusEnum ==
                           StatusReservation.enAttenteReponseProprietaire;
                       if (widget.filterNotifier.value ==

@@ -108,8 +108,6 @@ class SessionManager {
       log('SessionManager: Error stopping banners polling on logout: $e');
     }
 
-    // 2. Close all open dialogs/overlays so no deactivated widget tries to
-    //    look up its ancestor after the StatefulShellRoute is destroyed.
     final navigator = NavigationService.navigatorKey.currentState;
     if (navigator != null) {
       while (navigator.canPop()) {
