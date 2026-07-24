@@ -399,6 +399,9 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/retrait_dollars.svg
   String get retraitDollars => 'assets/svgs/retrait_dollars.svg';
 
+  /// File path: assets/svgs/scan.svg
+  String get scan => 'assets/svgs/scan.svg';
+
   /// File path: assets/svgs/send-sqaure-2.svg
   String get sendSqaure2 => 'assets/svgs/send-sqaure-2.svg';
 
@@ -421,6 +424,7 @@ class $AssetsSvgsGen {
     lobby,
     moneyRecive,
     retraitDollars,
+    scan,
     sendSqaure2,
     userEdit,
     userSquare,
@@ -592,12 +596,18 @@ class $AssetsSvgsIconsGen {
   /// File path: assets/svgs/icons/resi.svg
   String get resi => 'assets/svgs/icons/resi.svg';
 
+  /// File path: assets/svgs/icons/security_safe.svg
+  String get securitySafe => 'assets/svgs/icons/security_safe.svg';
+
   /// File path: assets/svgs/icons/service.svg
   String get service => 'assets/svgs/icons/service.svg';
 
   /// File path: assets/svgs/icons/smile-circle-svgrepo-com.svg
   String get smileCircleSvgrepoCom =>
       'assets/svgs/icons/smile-circle-svgrepo-com.svg';
+
+  /// File path: assets/svgs/icons/star.svg
+  String get star => 'assets/svgs/icons/star.svg';
 
   /// File path: assets/svgs/icons/studio.svg
   String get studio => 'assets/svgs/icons/studio.svg';
@@ -658,8 +668,10 @@ class $AssetsSvgsIconsGen {
     panier,
     recent,
     resi,
+    securitySafe,
     service,
     smileCircleSvgrepoCom,
+    star,
     studio,
     terrain,
     tv,

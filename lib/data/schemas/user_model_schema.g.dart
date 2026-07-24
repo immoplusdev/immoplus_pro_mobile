@@ -77,43 +77,68 @@ const UserModelSchemaSchema = CollectionSchema(
       name: r'lastName',
       type: IsarType.string,
     ),
-    r'nomEntreprise': PropertySchema(
+    r'lieuNaissance': PropertySchema(
       id: 12,
+      name: r'lieuNaissance',
+      type: IsarType.string,
+    ),
+    r'nomEntreprise': PropertySchema(
+      id: 13,
       name: r'nomEntreprise',
       type: IsarType.string,
     ),
+    r'numeroContribuable': PropertySchema(
+      id: 14,
+      name: r'numeroContribuable',
+      type: IsarType.string,
+    ),
     r'phoneNumber': PropertySchema(
-      id: 13,
+      id: 15,
       name: r'phoneNumber',
       type: IsarType.string,
     ),
     r'photoIdentite': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'photoIdentite',
       type: IsarType.string,
     ),
     r'pieceIdentite': PropertySchema(
-      id: 15,
+      id: 17,
       name: r'pieceIdentite',
       type: IsarType.string,
     ),
+    r'pieceIdentiteVerso': PropertySchema(
+      id: 18,
+      name: r'pieceIdentiteVerso',
+      type: IsarType.string,
+    ),
     r'refreshToken': PropertySchema(
-      id: 16,
+      id: 19,
       name: r'refreshToken',
       type: IsarType.string,
     ),
+    r'registreCommerce': PropertySchema(
+      id: 20,
+      name: r'registreCommerce',
+      type: IsarType.string,
+    ),
     r'role': PropertySchema(
-      id: 17,
+      id: 21,
       name: r'role',
       type: IsarType.string,
     ),
     r'roleName': PropertySchema(
-      id: 18,
+      id: 22,
       name: r'roleName',
       type: IsarType.string,
     ),
+    r'typeEntreprise': PropertySchema(
+      id: 23,
+      name: r'typeEntreprise',
+      type: IsarType.string,
+    ),
     r'userId': PropertySchema(
-      id: 19,
+      id: 24,
       name: r'userId',
       type: IsarType.string,
     )
@@ -216,7 +241,19 @@ int _userModelSchemaEstimateSize(
     }
   }
   {
+    final value = object.lieuNaissance;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.nomEntreprise;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.numeroContribuable;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -240,7 +277,19 @@ int _userModelSchemaEstimateSize(
     }
   }
   {
+    final value = object.pieceIdentiteVerso;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.refreshToken;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.registreCommerce;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -253,6 +302,12 @@ int _userModelSchemaEstimateSize(
   }
   {
     final value = object.roleName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.typeEntreprise;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -284,14 +339,19 @@ void _userModelSchemaSerialize(
   writer.writeBool(offsets[9], object.identityVerified);
   writer.writeBool(offsets[10], object.isEntreprise);
   writer.writeString(offsets[11], object.lastName);
-  writer.writeString(offsets[12], object.nomEntreprise);
-  writer.writeString(offsets[13], object.phoneNumber);
-  writer.writeString(offsets[14], object.photoIdentite);
-  writer.writeString(offsets[15], object.pieceIdentite);
-  writer.writeString(offsets[16], object.refreshToken);
-  writer.writeString(offsets[17], object.role);
-  writer.writeString(offsets[18], object.roleName);
-  writer.writeString(offsets[19], object.userId);
+  writer.writeString(offsets[12], object.lieuNaissance);
+  writer.writeString(offsets[13], object.nomEntreprise);
+  writer.writeString(offsets[14], object.numeroContribuable);
+  writer.writeString(offsets[15], object.phoneNumber);
+  writer.writeString(offsets[16], object.photoIdentite);
+  writer.writeString(offsets[17], object.pieceIdentite);
+  writer.writeString(offsets[18], object.pieceIdentiteVerso);
+  writer.writeString(offsets[19], object.refreshToken);
+  writer.writeString(offsets[20], object.registreCommerce);
+  writer.writeString(offsets[21], object.role);
+  writer.writeString(offsets[22], object.roleName);
+  writer.writeString(offsets[23], object.typeEntreprise);
+  writer.writeString(offsets[24], object.userId);
 }
 
 UserModelSchema _userModelSchemaDeserialize(
@@ -311,14 +371,19 @@ UserModelSchema _userModelSchemaDeserialize(
   object.id = id;
   object.identityVerified = reader.readBoolOrNull(offsets[9]);
   object.lastName = reader.readStringOrNull(offsets[11]);
-  object.nomEntreprise = reader.readStringOrNull(offsets[12]);
-  object.phoneNumber = reader.readStringOrNull(offsets[13]);
-  object.photoIdentite = reader.readStringOrNull(offsets[14]);
-  object.pieceIdentite = reader.readStringOrNull(offsets[15]);
-  object.refreshToken = reader.readStringOrNull(offsets[16]);
-  object.role = reader.readStringOrNull(offsets[17]);
-  object.roleName = reader.readStringOrNull(offsets[18]);
-  object.userId = reader.readStringOrNull(offsets[19]);
+  object.lieuNaissance = reader.readStringOrNull(offsets[12]);
+  object.nomEntreprise = reader.readStringOrNull(offsets[13]);
+  object.numeroContribuable = reader.readStringOrNull(offsets[14]);
+  object.phoneNumber = reader.readStringOrNull(offsets[15]);
+  object.photoIdentite = reader.readStringOrNull(offsets[16]);
+  object.pieceIdentite = reader.readStringOrNull(offsets[17]);
+  object.pieceIdentiteVerso = reader.readStringOrNull(offsets[18]);
+  object.refreshToken = reader.readStringOrNull(offsets[19]);
+  object.registreCommerce = reader.readStringOrNull(offsets[20]);
+  object.role = reader.readStringOrNull(offsets[21]);
+  object.roleName = reader.readStringOrNull(offsets[22]);
+  object.typeEntreprise = reader.readStringOrNull(offsets[23]);
+  object.userId = reader.readStringOrNull(offsets[24]);
   return object;
 }
 
@@ -368,6 +433,16 @@ P _userModelSchemaDeserializeProp<P>(
     case 18:
       return (reader.readStringOrNull(offset)) as P;
     case 19:
+      return (reader.readStringOrNull(offset)) as P;
+    case 20:
+      return (reader.readStringOrNull(offset)) as P;
+    case 21:
+      return (reader.readStringOrNull(offset)) as P;
+    case 22:
+      return (reader.readStringOrNull(offset)) as P;
+    case 23:
+      return (reader.readStringOrNull(offset)) as P;
+    case 24:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2310,6 +2385,160 @@ extension UserModelSchemaQueryFilter
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lieuNaissance',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lieuNaissance',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lieuNaissance',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'lieuNaissance',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'lieuNaissance',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lieuNaissance',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      lieuNaissanceIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'lieuNaissance',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
       nomEntrepriseIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2458,6 +2687,160 @@ extension UserModelSchemaQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'nomEntreprise',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'numeroContribuable',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'numeroContribuable',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'numeroContribuable',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'numeroContribuable',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'numeroContribuable',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'numeroContribuable',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      numeroContribuableIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'numeroContribuable',
         value: '',
       ));
     });
@@ -2926,6 +3309,160 @@ extension UserModelSchemaQueryFilter
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'pieceIdentiteVerso',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'pieceIdentiteVerso',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'pieceIdentiteVerso',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'pieceIdentiteVerso',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'pieceIdentiteVerso',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pieceIdentiteVerso',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      pieceIdentiteVersoIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'pieceIdentiteVerso',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
       refreshTokenIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3074,6 +3611,160 @@ extension UserModelSchemaQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'refreshToken',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'registreCommerce',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'registreCommerce',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'registreCommerce',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'registreCommerce',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'registreCommerce',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'registreCommerce',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      registreCommerceIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'registreCommerce',
         value: '',
       ));
     });
@@ -3382,6 +4073,160 @@ extension UserModelSchemaQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'roleName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'typeEntreprise',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'typeEntreprise',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'typeEntreprise',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'typeEntreprise',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'typeEntreprise',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'typeEntreprise',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterFilterCondition>
+      typeEntrepriseIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'typeEntreprise',
         value: '',
       ));
     });
@@ -3717,6 +4562,20 @@ extension UserModelSchemaQuerySortBy
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByLieuNaissance() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lieuNaissance', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByLieuNaissanceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lieuNaissance', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       sortByNomEntreprise() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nomEntreprise', Sort.asc);
@@ -3727,6 +4586,20 @@ extension UserModelSchemaQuerySortBy
       sortByNomEntrepriseDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nomEntreprise', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByNumeroContribuable() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroContribuable', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByNumeroContribuableDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroContribuable', Sort.desc);
     });
   }
 
@@ -3773,6 +4646,20 @@ extension UserModelSchemaQuerySortBy
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByPieceIdentiteVerso() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieceIdentiteVerso', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByPieceIdentiteVersoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieceIdentiteVerso', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       sortByRefreshToken() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.asc);
@@ -3783,6 +4670,20 @@ extension UserModelSchemaQuerySortBy
       sortByRefreshTokenDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByRegistreCommerce() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registreCommerce', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByRegistreCommerceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registreCommerce', Sort.desc);
     });
   }
 
@@ -3810,6 +4711,20 @@ extension UserModelSchemaQuerySortBy
       sortByRoleNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'roleName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByTypeEntreprise() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeEntreprise', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      sortByTypeEntrepriseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeEntreprise', Sort.desc);
     });
   }
 
@@ -4008,6 +4923,20 @@ extension UserModelSchemaQuerySortThenBy
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByLieuNaissance() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lieuNaissance', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByLieuNaissanceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lieuNaissance', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       thenByNomEntreprise() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nomEntreprise', Sort.asc);
@@ -4018,6 +4947,20 @@ extension UserModelSchemaQuerySortThenBy
       thenByNomEntrepriseDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'nomEntreprise', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByNumeroContribuable() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroContribuable', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByNumeroContribuableDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'numeroContribuable', Sort.desc);
     });
   }
 
@@ -4064,6 +5007,20 @@ extension UserModelSchemaQuerySortThenBy
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByPieceIdentiteVerso() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieceIdentiteVerso', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByPieceIdentiteVersoDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pieceIdentiteVerso', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
       thenByRefreshToken() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.asc);
@@ -4074,6 +5031,20 @@ extension UserModelSchemaQuerySortThenBy
       thenByRefreshTokenDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'refreshToken', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByRegistreCommerce() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registreCommerce', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByRegistreCommerceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'registreCommerce', Sort.desc);
     });
   }
 
@@ -4101,6 +5072,20 @@ extension UserModelSchemaQuerySortThenBy
       thenByRoleNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'roleName', Sort.desc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByTypeEntreprise() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeEntreprise', Sort.asc);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QAfterSortBy>
+      thenByTypeEntrepriseDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'typeEntreprise', Sort.desc);
     });
   }
 
@@ -4206,9 +5191,25 @@ extension UserModelSchemaQueryWhereDistinct
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
+      distinctByLieuNaissance({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lieuNaissance',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
       distinctByNomEntreprise({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'nomEntreprise',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
+      distinctByNumeroContribuable({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'numeroContribuable',
           caseSensitive: caseSensitive);
     });
   }
@@ -4237,9 +5238,25 @@ extension UserModelSchemaQueryWhereDistinct
   }
 
   QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
+      distinctByPieceIdentiteVerso({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'pieceIdentiteVerso',
+          caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
       distinctByRefreshToken({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'refreshToken', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
+      distinctByRegistreCommerce({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'registreCommerce',
+          caseSensitive: caseSensitive);
     });
   }
 
@@ -4254,6 +5271,14 @@ extension UserModelSchemaQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'roleName', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<UserModelSchema, UserModelSchema, QDistinct>
+      distinctByTypeEntreprise({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'typeEntreprise',
+          caseSensitive: caseSensitive);
     });
   }
 
@@ -4351,9 +5376,23 @@ extension UserModelSchemaQueryProperty
   }
 
   QueryBuilder<UserModelSchema, String?, QQueryOperations>
+      lieuNaissanceProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lieuNaissance');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations>
       nomEntrepriseProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'nomEntreprise');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations>
+      numeroContribuableProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'numeroContribuable');
     });
   }
 
@@ -4379,9 +5418,23 @@ extension UserModelSchemaQueryProperty
   }
 
   QueryBuilder<UserModelSchema, String?, QQueryOperations>
+      pieceIdentiteVersoProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'pieceIdentiteVerso');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations>
       refreshTokenProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'refreshToken');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations>
+      registreCommerceProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'registreCommerce');
     });
   }
 
@@ -4394,6 +5447,13 @@ extension UserModelSchemaQueryProperty
   QueryBuilder<UserModelSchema, String?, QQueryOperations> roleNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'roleName');
+    });
+  }
+
+  QueryBuilder<UserModelSchema, String?, QQueryOperations>
+      typeEntrepriseProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'typeEntreprise');
     });
   }
 

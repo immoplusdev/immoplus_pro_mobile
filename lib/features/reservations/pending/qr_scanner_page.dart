@@ -125,6 +125,9 @@ class _QrScannerPageState extends State<QrScannerPage>
                   case CameraFacing.back:
                     return const Icon(Icons.camera_rear,
                         color: Colors.white, size: 20);
+                  default:
+                    return const Icon(Icons.camera_alt,
+                        color: Colors.white, size: 20);
                 }
               },
             ),

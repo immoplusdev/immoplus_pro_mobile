@@ -25,7 +25,6 @@ import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
-
 class EditIdentityDocuments extends StatefulWidget {
   const EditIdentityDocuments({super.key});
   static String name = 'EDIT_IDENTITY_DOCUMENTS';
@@ -121,8 +120,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
     final hasTextChange = isEntreprise
         ? (_nomEntrepriseController.text != _initialNomEntreprise ||
             _emailEntrepriseController.text != _initialEmailEntreprise ||
-            _numeroContribuableController.text !=
-                _initialNumeroContribuable ||
+            _numeroContribuableController.text != _initialNumeroContribuable ||
             _typeEntrepriseController.text != _initialTypeEntreprise)
         : (_lieuNaissanceController.text != _initialLieuNaissance ||
             _activiteController.text != _initialActivite);
@@ -148,10 +146,9 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
             _numeroContribuableController.text != _initialNumeroContribuable
                 ? _numeroContribuableController.text
                 : null,
-        typeEntreprise:
-            _typeEntrepriseController.text != _initialTypeEntreprise
-                ? _typeEntrepriseController.text
-                : null,
+        typeEntreprise: _typeEntrepriseController.text != _initialTypeEntreprise
+            ? _typeEntrepriseController.text
+            : null,
         registreCommerce: _registreCommerceController.file != null
             ? await _registreCommerceController.ensureUploaded()
             : null,
@@ -190,53 +187,55 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
         : _buildParticulierFields(user);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Modifier mes documents'),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left, size: 30),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: BlocListener<LoginCubit, LoginCubitState>(
-        listener: (context, state) {
-          if (state is LOGIN_SUCCESS) {
-            ToastUtils.success('Documents mis à jour avec succès');
-          }
-        },
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            children: [
-              if (isReadOnly) ...[
-                _buildVerifiedBanner(),
-                const Gap(20),
-              ],
-              ...fields,
-              const Gap(20),
-            ],
+        appBar: AppBar(
+          title: const Text('Modifier mes documents'),
+          elevation: 0,
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left, size: 30),
+            onPressed: () => context.pop(),
           ),
         ),
-      ),
-      bottomNavigationBar: isReadOnly
-          ? null
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: BlocBuilder<LoginCubit, LoginCubitState>(
-                  builder: (context, state) {
-                    return CustomLoadingButtom(
-                      isLoading: state is LOGIN_LOADING,
-                      onClick: state is LOGIN_LOADING ? null : _submit,
-                      text: "Enregistrer",
-                    );
-                  },
-                ),
-              ),
+        body: BlocListener<LoginCubit, LoginCubitState>(
+          listener: (context, state) {
+            if (state is LOGIN_SUCCESS) {
+              ToastUtils.success('Documents mis à jour avec succès');
+            }
+          },
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              children: [
+                if (isReadOnly) ...[
+                  _buildVerifiedBanner(),
+                  const Gap(20),
+                ],
+                ...fields,
+                const Gap(20),
+              ],
             ),
-    );
+          ),
+        ),
+        bottomNavigationBar: Container(
+          height: 120,
+          child: isReadOnly
+              ? null
+              : SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: BlocBuilder<LoginCubit, LoginCubitState>(
+                      builder: (context, state) {
+                        return CustomLoadingButtom(
+                          isLoading: state is LOGIN_LOADING,
+                          onClick: state is LOGIN_LOADING ? null : _submit,
+                          text: "Enregistrer",
+                        );
+                      },
+                    ),
+                  ),
+                ),
+        ));
   }
 
   Widget _buildVerifiedBanner() {
@@ -249,7 +248,8 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SvgPicture.asset(Assets.svgs.icons.securitySafe, width: 24, height: 24),
+          SvgPicture.asset(Assets.svgs.icons.securitySafe,
+              width: 24, height: 24),
           const Gap(12),
           Expanded(
             child: Text(
@@ -293,8 +293,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
                     period: const Duration(milliseconds: 500),
                     child: Container(color: Colors.white),
                   ),
-                  errorWidget: (context, url, error) =>
-                      const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 )
               : Center(
                   child: Icon(Icons.image_not_supported,
@@ -333,8 +332,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
             label: "Pièce d'identité (recto)", fileId: user.pieceIdentite),
         const Gap(20),
         _buildReadOnlyFile(
-            label: "Pièce d'identité (verso)",
-            fileId: user.pieceIdentiteVerso),
+            label: "Pièce d'identité (verso)", fileId: user.pieceIdentiteVerso),
       ] else ...[
         Center(
           child: IdentityPhotoPicker(
