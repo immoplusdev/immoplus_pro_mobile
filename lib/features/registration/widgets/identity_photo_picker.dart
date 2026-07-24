@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -8,9 +9,10 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/registration/widgets/pick_image_source_sheet.dart';
 import 'package:immoplus_pro/features/registration/widgets/upload_status_badge.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
+import 'package:immoplus_pro/utils/utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Sélecteur de photo d'identité (selfie) : carré à bordure pointillée,
-/// label au-dessus, texte d'instruction dans la zone, aide en dessous.
 class IdentityPhotoPicker extends StatefulWidget {
   const IdentityPhotoPicker({
     super.key,
@@ -20,6 +22,7 @@ class IdentityPhotoPicker extends StatefulWidget {
     this.helperText,
     this.size = 160,
     this.icon = Iconsax.gallery_add,
+    this.placeholderImageId,
   });
 
   final FileUploaderController controller;
@@ -28,6 +31,9 @@ class IdentityPhotoPicker extends StatefulWidget {
   final String? helperText;
   final double size;
   final IconData icon;
+
+  /// Id d'un fichier déjà uploadé à afficher tant qu'aucun nouveau fichier
+  final String? placeholderImageId;
 
   @override
   State<IdentityPhotoPicker> createState() => _IdentityPhotoPickerState();
@@ -105,31 +111,53 @@ class _IdentityPhotoPickerState extends State<IdentityPhotoPicker> {
                     ),
                     child: hasFile
                         ? null
-                        : Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    widget.icon,
-                                    color: AppColors.primary,
-                                    size: 32,
-                                  ),
-                                  const Gap(8),
-                                  Text(
-                                    widget.placeholderText,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
+                        : (widget.placeholderImageId != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(14),
+                                child: CachedNetworkImage(
+                                  imageUrl: Utils.getImagePath(
+                                      id: widget.placeholderImageId!),
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade300,
+                                    highlightColor: Colors.grey.shade400,
+                                    period: const Duration(milliseconds: 500),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                              )
+                            : Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        widget.icon,
+                                        color: AppColors.primary,
+                                        size: 32,
+                                      ),
+                                      const Gap(8),
+                                      Text(
+                                        widget.placeholderText,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
                   ),
                 ),
               ),

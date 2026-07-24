@@ -9,6 +9,8 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -106,8 +108,6 @@ class SessionManager {
       log('SessionManager: Error stopping banners polling on logout: $e');
     }
 
-    // 2. Close all open dialogs/overlays so no deactivated widget tries to
-    //    look up its ancestor after the StatefulShellRoute is destroyed.
     final navigator = NavigationService.navigatorKey.currentState;
     if (navigator != null) {
       while (navigator.canPop()) {
@@ -118,6 +118,7 @@ class SessionManager {
     // 3. Clear local session & sign out of OneSignal
     await clearSession();
     OneSignal.logout();
+    getIt<ReservationSocketService>().disconnect();
 
     // 4. Navigate to the authentication screen
     AppRouter.router.goNamed(AuthenticationPage.name);

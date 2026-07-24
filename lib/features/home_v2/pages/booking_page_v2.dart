@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
+import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/features/home_v2/widgets/booking_card_v2.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
@@ -24,7 +29,7 @@ import 'package:immoplus_pro/features/reservations/pending/pending_reservations_
 import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 
-enum BookingFilterV2 { all, pending, paid, attentePro, attentePaiement }
+enum BookingFilterV2 { all, pending, paid, nouvelle }
 
 class BookingPageV2 extends StatefulWidget {
   final ValueNotifier<BookingFilterV2> filterNotifier;
@@ -39,6 +44,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
   final PendingReservationsCubit _pendingCubit = PendingReservationsCubit();
+  StreamSubscription<ReservationStatusUpdatedEvent>? _socketSubscription;
 
   @override
   void initState() {
@@ -47,6 +53,56 @@ class _BookingPageV2State extends State<BookingPageV2> {
       _fetchPage(pageKey);
     });
     widget.filterNotifier.addListener(_onFilterChanged);
+    _socketSubscription = getIt<ReservationSocketService>()
+        .onStatusUpdated
+        .listen(_onReservationStatusUpdated);
+  }
+
+  /// Réagit au canal temps réel des réservations (voir ReservationSocketService).
+  void _onReservationStatusUpdated(ReservationStatusUpdatedEvent event) {
+    switch (event.status) {
+      case StatusReservation.enAttenteReponseProprietaire:
+        _insertIfCurrentFilter(BookingFilterV2.nouvelle, event.reservationId);
+        break;
+      case StatusReservation.clientAnnuleReservation:
+        _removeIfCurrentFilter(
+          const {BookingFilterV2.nouvelle},
+          event.reservationId,
+        );
+        break;
+      case StatusReservation.valide:
+        _removeIfCurrentFilter(
+          const {BookingFilterV2.nouvelle},
+          event.reservationId,
+        );
+        _insertIfCurrentFilter(BookingFilterV2.paid, event.reservationId);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _removeIfCurrentFilter(Set<BookingFilterV2> filters, String reservationId) {
+    if (!filters.contains(widget.filterNotifier.value)) return;
+    final current = _pagingController.itemList;
+    if (current == null) return;
+    _pagingController.itemList =
+        current.where((r) => r.id != reservationId).toList();
+  }
+
+  Future<void> _insertIfCurrentFilter(
+      BookingFilterV2 filter, String reservationId) async {
+    if (widget.filterNotifier.value != filter) return;
+    final current = _pagingController.itemList;
+    if (current == null) return;
+    if (current.any((r) => r.id == reservationId)) return;
+    try {
+      final response = await LogmentRepository.getReservation(id: reservationId);
+      if (!mounted || widget.filterNotifier.value != filter) return;
+      _pagingController.itemList = [response.data, ...?_pagingController.itemList];
+    } catch (_) {
+      // Pas grave : le prochain refresh/switch d'onglet récupérera l'item.
+    }
   }
 
   void _onFilterChanged() {
@@ -58,28 +114,34 @@ class _BookingPageV2State extends State<BookingPageV2> {
       final ownerId = SessionManager().currentUser!.userId.toString();
       ReservationsCollection result;
 
-      if (widget.filterNotifier.value == BookingFilterV2.attentePro) {
-        result = await LogmentRepository.getReservationsEnAttenteReponse(
-          ownerId: ownerId,
-          page: pageKey,
-          perPage: 10,
-          orderBy: OrderByField.createdAt.value,
-          orderDir: OrderDir.desc.value,
-        );
-      } else if (widget.filterNotifier.value ==
-          BookingFilterV2.attentePaiement) {
-        result = await LogmentRepository.getReservationsOwner(
-          id: ownerId,
+      if (widget.filterNotifier.value == BookingFilterV2.nouvelle) {
+        // "Nouvelle réservation" fusionne les statuts "en attente de
+        // réponse propriétaire" et "en attente de paiement client" en une
+        // seule liste, via le endpoint générique avec un opérateur `in`.
+        result = await LogmentRepository.getAllReservationsOwner(
           page: pageKey,
           perPage: 10,
           orderBy: OrderByField.createdAt.value,
           orderDir: OrderDir.desc.value,
           where: {
             '_where': [
-              '{"_field": "statusFacture", "_op": "eq", "_val": "non_paye"}',
-              '{"_field": "statusReservation", "_op": "eq", "_val": "${StatusReservation.enAttentePaiementClient.backendValue}"}',
+              jsonEncode({
+                '_field': 'statusReservation',
+                '_op': 'in',
+                '_val': [
+                  StatusReservation.enAttenteReponseProprietaire.backendValue,
+                  StatusReservation.enAttentePaiementClient.backendValue,
+                ],
+              }),
             ],
           },
+        );
+      } else if (widget.filterNotifier.value == BookingFilterV2.all) {
+        result = await LogmentRepository.getAllReservationsOwner(
+          page: pageKey,
+          perPage: 10,
+          orderBy: OrderByField.createdAt.value,
+          orderDir: OrderDir.desc.value,
         );
       } else {
         final List<QueryFilter> filters = [];
@@ -126,6 +188,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
   @override
   void dispose() {
     widget.filterNotifier.removeListener(_onFilterChanged);
+    _socketSubscription?.cancel();
     _pagingController.dispose();
     _pendingCubit.close();
     super.dispose();
@@ -175,8 +238,11 @@ class _BookingPageV2State extends State<BookingPageV2> {
                           "Vous n'avez aucune réservation pour le moment. Toutes les réservations en cours s'afficheront ici.",
                     ),
                     itemBuilder: (context, item, index) {
+                      final needsOwnerResponse = item.statusEnum ==
+                          StatusReservation.enAttenteReponseProprietaire;
                       if (widget.filterNotifier.value ==
-                          BookingFilterV2.attentePro) {
+                              BookingFilterV2.nouvelle &&
+                          needsOwnerResponse) {
                         return PendingReservationCardV2(reservationModel: item);
                       }
                       return BookingCardV2(

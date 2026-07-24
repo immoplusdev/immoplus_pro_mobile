@@ -4,9 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:immoplus_pro/data/models/auth/refresh_token_body.dart';
 import 'package:immoplus_pro/data/models/auth/refresh_token_response.dart';
 
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/request_path.dart';
+import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
 class AuthService {
@@ -54,11 +56,19 @@ class AuthService {
         ..emailEntreprise = currentUser.emailEntreprise
         ..photoIdentite = currentUser.photoIdentite
         ..pieceIdentite = currentUser.pieceIdentite
+        ..pieceIdentiteVerso = currentUser.pieceIdentiteVerso
+        ..lieuNaissance = currentUser.lieuNaissance
+        ..registreCommerce = currentUser.registreCommerce
+        ..numeroContribuable = currentUser.numeroContribuable
+        ..typeEntreprise = currentUser.typeEntreprise
         ..avatar = currentUser.avatar
-        ..role = currentUser.role;
+        ..role = currentUser.role
+        ..identityVerified = currentUser.identityVerified
+        ..createdAt = currentUser.createdAt;
 
       // Sauvegarder en session
       await SessionManager().saveUser(updatedUser);
+      getIt<ReservationSocketService>().connect();
 
       log('Token refresh réussi', name: 'AUTH_SERVICE');
       return true;

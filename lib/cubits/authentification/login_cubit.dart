@@ -22,6 +22,8 @@ import 'package:immoplus_pro/data/models/auth/account_creation_response.dart';
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/data/models/auth/login_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_dto.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_dto.dart';
 import 'package:immoplus_pro/data/models/auth/update_user_response_model.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
@@ -35,6 +37,7 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
+import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
@@ -106,6 +109,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${SessionManager().currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
+      getIt<ReservationSocketService>().connect();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       emit(const LoginCubitState.initial());
@@ -205,6 +209,54 @@ class LoginCubit extends Cubit<LoginCubitState> {
     } catch (e) {
       emit(const LoginCubitState.initial());
     }
+  }
+
+  Future<void> updateAdditionalData(
+      {required UpdateAdditionalDataDto body}) async {
+    emit(const LOGIN_LOADING());
+    try {
+      final response = await AuthRepository.updateAdditionalData(
+          userId: SessionManager().currentUser!.userId!, body: body);
+      await SessionManager().saveUser(_mergeAdditionalData(response.data));
+      await SessionManager().getCurrentUser();
+      emit(const LoginCubitState.success());
+    } catch (e) {
+      emit(const LoginCubitState.initial());
+    }
+  }
+
+  /// Reconstruit l'utilisateur local en ne remplaçant que les champs
+  /// additionnels renvoyés par le serveur (`data.x ?? current.x`), en
+  /// recopiant explicitement tous les autres champs existants — pour ne pas
+  /// perdre `identityVerified`/`createdAt` comme le fait `updateUserData`.
+  UserModelSchema _mergeAdditionalData(UpdateAdditionalDataResult data) {
+    final current = SessionManager().currentUser!;
+    return UserModelSchema()
+      ..id = 1
+      ..userId = current.userId
+      ..firstName = current.firstName
+      ..lastName = current.lastName
+      ..phoneNumber = current.phoneNumber
+      ..email = current.email
+      ..accessToken = current.accessToken
+      ..refreshToken = current.refreshToken
+      ..roleName = current.roleName
+      ..avatar = current.avatar
+      ..role = current.role
+      ..identityVerified = current.identityVerified
+      ..createdAt = current.createdAt
+      ..activite = data.activite ?? current.activite
+      ..nomEntreprise = data.nomEntreprise ?? current.nomEntreprise
+      ..emailEntreprise = data.emailEntreprise ?? current.emailEntreprise
+      ..photoIdentite = data.photoIdentite ?? current.photoIdentite
+      ..pieceIdentite = data.pieceIdentite ?? current.pieceIdentite
+      ..pieceIdentiteVerso =
+          data.pieceIdentiteVerso ?? current.pieceIdentiteVerso
+      ..lieuNaissance = data.lieuNaissance ?? current.lieuNaissance
+      ..registreCommerce = data.registreCommerce ?? current.registreCommerce
+      ..numeroContribuable =
+          data.numeroContribuable ?? current.numeroContribuable
+      ..typeEntreprise = data.typeEntreprise ?? current.typeEntreprise;
   }
 
   Future<void> signInWithGoogle() async {
@@ -397,6 +449,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
           'Bearer ${sessionManager.currentUser!.accessToken}';
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
+      getIt<ReservationSocketService>().connect();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } on DioException catch (e) {
       final errorData = e.response?.data;

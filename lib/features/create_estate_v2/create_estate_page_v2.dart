@@ -155,6 +155,11 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                     ? "Erreur lors de la modification"
                     : "Erreur lors de la création",
               );
+              if (widget.initialEstate == null) {
+                getIt<AnalyticsService>().logPropertyCreationFailed(
+                  typeBien: state.typeBienImmobilier,
+                );
+              }
             }
           }
         },

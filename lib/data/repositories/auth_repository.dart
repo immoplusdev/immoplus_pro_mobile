@@ -12,6 +12,8 @@ import 'package:immoplus_pro/data/models/auth/enterprise_registration_body.dart'
 import 'package:immoplus_pro/data/models/auth/login_body_model.dart';
 import 'package:immoplus_pro/data/models/auth/login_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/particulier_registration_body.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_dto.dart';
+import 'package:immoplus_pro/data/models/auth/update_additional_data_response_model.dart';
 import 'package:immoplus_pro/data/models/auth/reset_password_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_email_otp_body.dart';
 import 'package:immoplus_pro/data/models/auth/send_opt_model.dart';
@@ -84,6 +86,25 @@ class AuthRepository {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
       throw Exception('Failed to load users: $error');
+    }
+  }
+
+  static Future<UpdateAdditionalDataResponseModel> updateAdditionalData(
+      {required String userId, required UpdateAdditionalDataDto body}) async {
+    try {
+      final response = await AuthProvider(DioClient().dio)
+          .updateAdditionalData(userId, body);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to update additional data: ${dioError.message}');
+    } on RequestResponseExeption catch (requestResponseExeption) {
+      EasyLoading.showError(requestResponseExeption.toString());
+      throw Exception('Failed : ${requestResponseExeption.toString()}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to update additional data: $error');
     }
   }
 

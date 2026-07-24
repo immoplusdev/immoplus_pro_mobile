@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/features/account/widgets/edit_identity_documents.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/authentification/choose_account_type_page.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
@@ -321,6 +322,11 @@ class AppRouter {
         path: '/editAccount',
         name: EditAccount.name,
         builder: (context, state) => const EditAccount(),
+      ),
+      GoRoute(
+        path: '/editIdentityDocuments',
+        name: EditIdentityDocuments.name,
+        builder: (context, state) => const EditIdentityDocuments(),
       ),
       GoRoute(
         path: '/splash',
