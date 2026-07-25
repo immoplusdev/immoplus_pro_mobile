@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 
@@ -18,7 +19,15 @@ import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
+import 'package:immoplus_pro/features/reservations/pending/qr_scan_deposit_sheet.dart';
+import 'package:immoplus_pro/features/reservations/pending/withdrawal_recap_sheet.dart';
 import 'package:immoplus_pro/services/notification_actif_service.dart';
+import 'package:dio/dio.dart';
+import 'package:immoplus_pro/data/models/error/api_error_response.dart';
+import 'package:immoplus_pro/services/qr_scan_announcement_service.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -40,6 +49,7 @@ import 'package:immoplus_pro/data/enums/account_source.dart';
 import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
 import 'package:immoplus_pro/features/home_v2/widgets/banner_card.dart';
 import 'package:immoplus_pro/features/reservations/pending/qr_scanner_page.dart';
+import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
@@ -61,6 +71,9 @@ class _HomePageV2State extends State<HomePageV2>
 
   UserModelSchema? currentUser;
   bool _isUnlocked = false;
+
+  final GlobalKey _scannerTutorialKey = GlobalKey();
+  BuildContext? _showcaseContext;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
       ValueNotifier(BookingFilterV2.nouvelle);
@@ -104,28 +117,71 @@ class _HomePageV2State extends State<HomePageV2>
     Future.delayed(const Duration(seconds: 3), () async {
       if (!mounted) return;
       final shouldShow = await NotificationActifService.shouldShow();
-      if (!mounted || !shouldShow) return;
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        barrierColor: Colors.black.withValues(alpha: 0.6),
-        isScrollControlled: true,
-        isDismissible: false,
-        enableDrag: false,
-        builder: (sheetCtx) => NotificationActifSheet(
-          onAccept: () async {
-            Navigator.of(sheetCtx).pop();
-            await NotificationActifService.setStatus(
-                NotificationActifService.accepted);
-            await _requestNotificationPermission();
-          },
-          onMaybeLater: () async {
-            Navigator.of(sheetCtx).pop();
-            await NotificationActifService.setStatus(
-                NotificationActifService.maybeLater);
-          },
-        ),
-      );
+      if (mounted && shouldShow) {
+        await showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          barrierColor: Colors.black.withValues(alpha: 0.6),
+          isScrollControlled: true,
+          isDismissible: false,
+          enableDrag: false,
+          builder: (sheetCtx) => NotificationActifSheet(
+            onAccept: () async {
+              Navigator.of(sheetCtx).pop();
+              await NotificationActifService.setStatus(
+                  NotificationActifService.accepted);
+              await _requestNotificationPermission();
+            },
+            onMaybeLater: () async {
+              Navigator.of(sheetCtx).pop();
+              await NotificationActifService.setStatus(
+                  NotificationActifService.maybeLater);
+            },
+          ),
+        );
+      }
+      // Enchaîné après le sheet notifications (accepté/fermé) pour ne
+      // jamais superposer deux bottom sheets.
+      await _checkQrScanAnnouncement();
+    });
+  }
+
+  Future<void> _checkQrScanAnnouncement() async {
+    if (!mounted) return;
+    final shouldShow = await QrScanAnnouncementService.shouldShow();
+    if (!mounted || !shouldShow) return;
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (sheetCtx) => QrScanDepositSheet(
+        onAccept: () async {
+          Navigator.of(sheetCtx).pop();
+          await QrScanAnnouncementService.markSeen();
+        },
+      ),
+    );
+    // Enchaîné après les sheets pour ne jamais superposer un tooltip
+    // showcase par-dessus un bottom sheet encore visible.
+    await _checkAndShowScannerTutorial();
+  }
+
+  /// Showcase (tooltip) pointant sur le bouton "Scanner" du dashboard,
+  /// affiché une seule fois — mirror du tutoriel du calendrier
+  /// (lib/features/calendar/calendar_page_v2.dart).
+  Future<void> _checkAndShowScannerTutorial() async {
+    if (!mounted || _showcaseContext == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    final hasSeen = prefs.getBool('scanner_tutorial_seen_v1') ?? false;
+    if (hasSeen) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _showcaseContext == null) return;
+      ShowCaseWidget.of(_showcaseContext!)
+          .startShowCase([_scannerTutorialKey]);
+      prefs.setBool('scanner_tutorial_seen_v1', true);
     });
   }
 
@@ -162,10 +218,148 @@ class _HomePageV2State extends State<HomePageV2>
       EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
       try {
         await LogmentRepository.validerPresence(qrToken: qrToken);
-        EasyLoadingHandler.showSuccessToast(text: "Présence validée !");
+        EasyLoadingHandler.hideLoadingToast();
+        if (!mounted) return;
+        final recapShown = await _showWithdrawalRecap(qrToken);
+        if (!recapShown) {
+          EasyLoadingHandler.showSuccessToast(text: "Présence validée !");
+        }
       } catch (e) {
-        EasyLoadingHandler.showErrorToast(text: "Validation échouée");
+        EasyLoadingHandler.hideLoadingToast();
+        await _showQrScanErrorDialog(e);
       }
+    }
+  }
+
+  /// Décode la claim `rid` (id de réservation) du QR token sans vérifier sa
+  /// signature — la validation vient d'être faite côté backend par
+  /// [LogmentRepository.validerPresence]. Même technique que
+  /// [LoginCubit._extractEmailFromToken] pour l'identity token Apple.
+  String? _extractReservationIdFromQrToken(String qrToken) {
+    try {
+      final parts = qrToken.split('.');
+      if (parts.length != 3) return null;
+      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final Map<String, dynamic> claims = jsonDecode(payload);
+      return claims['rid'] as String?;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Retourne `true` si le récap a bien été affiché (permet à l'appelant de
+  /// retomber sur un simple toast si l'id n'a pas pu être décodé ou que la
+  /// réservation n'a pas pu être chargée).
+  Future<bool> _showWithdrawalRecap(String qrToken) async {
+    final reservationId = _extractReservationIdFromQrToken(qrToken);
+    if (reservationId == null) return false;
+
+    final ReservationModel reservation;
+    try {
+      final response = await LogmentRepository.getReservation(id: reservationId);
+      reservation = response.data;
+    } catch (_) {
+      return false;
+    }
+
+    if (!mounted) return false;
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (sheetCtx) => WithdrawalRecapSheet(
+        propertyName: reservation.residence.nom,
+        montantTotal: reservation.montantTotalReservation,
+        montantCommission: reservation.montantCommission,
+        onContinue: () {
+          Navigator.of(sheetCtx).pop();
+          _continueToWithdrawal();
+        },
+        onMaybeLater: () => Navigator.of(sheetCtx).pop(),
+      ),
+    );
+    return true;
+  }
+
+  /// S'assure que le coffre (code PIN) est déverrouillé avant d'ouvrir la
+  /// demande de retrait — sinon fait passer par [PinCodePageV2] d'abord.
+  void _continueToWithdrawal() {
+    if (_isUnlocked) {
+      context.pushNamed(WithdrawFormScreenV2.name);
+      return;
+    }
+    context.pushNamed(
+      PinCodePageV2.name,
+      extra: () {
+        setState(() => _isUnlocked = true);
+        context.pop();
+        context.pushNamed(WithdrawFormScreenV2.name);
+      },
+    );
+  }
+
+  /// Messages métier renvoyés par POST /reservations/action/valider-presence
+  /// (voir ErrorInterceptor._silentRequestPaths : cet endpoint est exclu du
+  /// toast/dialog générique, on gère tout ici avec le dialog personnalisé).
+  static const _qrScanErrorContent = <String, (String title, String description)>{
+    'Le QR code a expiré. Veuillez générer un nouveau QR code.': (
+      'QR code expiré',
+      'Le QR code a expiré. Demandez au client de générer un nouveau QR code puis réessayez.',
+    ),
+    'QR code invalide.': (
+      'QR code invalide',
+      "Ce QR code n'est pas reconnu. Vérifiez qu'il s'agit bien du QR code de réservation du client.",
+    ),
+    'Accès interdit': (
+      'Accès refusé',
+      "Vous n'êtes pas autorisé à valider cette réservation.",
+    ),
+    "La réservation n'est pas encore payée.": (
+      'Réservation non payée',
+      "La réservation n'est pas encore payée. La présence ne peut pas être validée tant que le paiement n'est pas effectué.",
+    ),
+    'La présence du client a déjà été validée pour cette réservation.': (
+      'Présence déjà validée',
+      'La présence du client a déjà été validée pour cette réservation.',
+    ),
+    'Ce QR code a déjà été utilisé.': (
+      'QR code déjà utilisé',
+      'Ce QR code a déjà été utilisé et ne peut plus servir à valider une présence.',
+    ),
+  };
+
+  Future<void> _showQrScanErrorDialog(Object error) async {
+    final message = _extractErrorMessage(error);
+
+    // Le backend a renvoyé un message : on l'affiche toujours dans le dialog
+    // personnalisé (titre précis si on le reconnaît, sinon titre générique
+    // mais le vrai message du backend) — jamais le toast générique tant
+    // qu'on a de quoi informer le pro sur la vraie raison de l'échec.
+    if (message != null) {
+      final content = _qrScanErrorContent[message];
+      if (!mounted) return;
+      await AppDialog.show(
+        title: content?.$1 ?? "Échec de la validation",
+        description: content?.$2 ?? message,
+        primaryButtonText: 'Fermer',
+      );
+      return;
+    }
+
+    EasyLoadingHandler.showErrorToast(text: "Validation échouée");
+  }
+
+  String? _extractErrorMessage(Object error) {
+    if (error is! DioException) return null;
+    final data = error.response?.data;
+    if (data is! Map<String, dynamic>) return null;
+    try {
+      return ApiErrorResponse.fromJson(data).message;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -182,7 +376,17 @@ class _HomePageV2State extends State<HomePageV2>
   @override
   Widget build(BuildContext context) {
     return EnvironmentsBadge(
-      child: Scaffold(
+      child: ShowCaseWidget(
+        builder: (showcaseCtx) {
+          _showcaseContext = showcaseCtx;
+          return _buildScaffold(context);
+        },
+      ),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
+    return Scaffold(
         backgroundColor: Colors.white,
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -377,15 +581,28 @@ class _HomePageV2State extends State<HomePageV2>
                                       context.pushNamed(PaymentsPageV2.name),
                                 ),
                                 const Gap(24),
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      Assets.svgs.scan,
-                                      width: 30,
-                                    ),
+                                Showcase(
+                                  key: _scannerTutorialKey,
+                                  description:
+                                      "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
+                                  tooltipBackgroundColor: Colors.white,
+                                  textColor: Colors.black87,
+                                  descTextStyle: const TextStyle(
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  label: "Scanner",
-                                  onTap: _scanAndValidatePresence,
+                                  targetBorderRadius:
+                                      BorderRadius.circular(8),
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        Assets.svgs.scan,
+                                        width: 30,
+                                      ),
+                                    ),
+                                    label: "Scanner",
+                                    onTap: _scanAndValidatePresence,
+                                  ),
                                 ),
                               ],
                             ),
@@ -625,8 +842,7 @@ class _HomePageV2State extends State<HomePageV2>
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildDashboardAction(

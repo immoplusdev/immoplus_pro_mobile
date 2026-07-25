@@ -240,9 +240,12 @@ class _BookingPageV2State extends State<BookingPageV2> {
                     itemBuilder: (context, item, index) {
                       final needsOwnerResponse = item.statusEnum ==
                           StatusReservation.enAttenteReponseProprietaire;
-                      if (widget.filterNotifier.value ==
-                              BookingFilterV2.nouvelle &&
-                          needsOwnerResponse) {
+                      final showsActionCard = needsOwnerResponse &&
+                          (widget.filterNotifier.value ==
+                                  BookingFilterV2.nouvelle ||
+                              widget.filterNotifier.value ==
+                                  BookingFilterV2.all);
+                      if (showsActionCard) {
                         return PendingReservationCardV2(reservationModel: item);
                       }
                       return BookingCardV2(

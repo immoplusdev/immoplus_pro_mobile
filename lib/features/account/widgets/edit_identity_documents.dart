@@ -14,7 +14,6 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/data/models/auth/update_additional_data_dto.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/registration/widgets/document_upload_card.dart';
-import 'package:immoplus_pro/features/registration/widgets/identity_photo_picker.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_text_field.dart';
 import 'package:immoplus_pro/modules/files_uploader.dart/file_uploader_controller.dart';
@@ -40,9 +39,6 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
   late final bool isReadOnly;
 
   // Pro particulier
-  late final TextEditingController _lieuNaissanceController;
-  late final TextEditingController _activiteController;
-  final _photoIdentiteController = FileUploaderController();
   final _pieceIdentiteController = FileUploaderController();
   final _pieceIdentiteVersoController = FileUploaderController();
 
@@ -55,8 +51,6 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
 
   // Valeurs initiales : on ne renvoie au serveur que ce qui a réellement
   // changé (le backend préserve la valeur existante des champs omis).
-  late final String _initialLieuNaissance;
-  late final String _initialActivite;
   late final String _initialNomEntreprise;
   late final String _initialEmailEntreprise;
   late final String _initialNumeroContribuable;
@@ -69,16 +63,11 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
     isEntreprise = user.isEntreprise;
     isReadOnly = user.identityVerified == true;
 
-    _initialLieuNaissance = user.lieuNaissance ?? '';
-    _initialActivite = user.activite ?? '';
     _initialNomEntreprise = user.nomEntreprise ?? '';
     _initialEmailEntreprise = user.emailEntreprise ?? '';
     _initialNumeroContribuable = user.numeroContribuable ?? '';
     _initialTypeEntreprise = user.typeEntreprise ?? '';
 
-    _lieuNaissanceController =
-        TextEditingController(text: _initialLieuNaissance);
-    _activiteController = TextEditingController(text: _initialActivite);
     _nomEntrepriseController =
         TextEditingController(text: _initialNomEntreprise);
     _emailEntrepriseController =
@@ -95,13 +84,10 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
 
   @override
   void dispose() {
-    _lieuNaissanceController.dispose();
-    _activiteController.dispose();
     _nomEntrepriseController.dispose();
     _emailEntrepriseController.dispose();
     _numeroContribuableController.dispose();
     _typeEntrepriseController.dispose();
-    _photoIdentiteController.dispose();
     _pieceIdentiteController.dispose();
     _pieceIdentiteVersoController.dispose();
     _registreCommerceController.dispose();
@@ -113,17 +99,15 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
 
     final hasFileChange = isEntreprise
         ? _registreCommerceController.file != null
-        : (_photoIdentiteController.file != null ||
-            _pieceIdentiteController.file != null ||
+        : (_pieceIdentiteController.file != null ||
             _pieceIdentiteVersoController.file != null);
 
-    final hasTextChange = isEntreprise
-        ? (_nomEntrepriseController.text != _initialNomEntreprise ||
+    final hasTextChange = isEntreprise &&
+        (_nomEntrepriseController.text != _initialNomEntreprise ||
             _emailEntrepriseController.text != _initialEmailEntreprise ||
-            _numeroContribuableController.text != _initialNumeroContribuable ||
-            _typeEntrepriseController.text != _initialTypeEntreprise)
-        : (_lieuNaissanceController.text != _initialLieuNaissance ||
-            _activiteController.text != _initialActivite);
+            _numeroContribuableController.text !=
+                _initialNumeroContribuable ||
+            _typeEntrepriseController.text != _initialTypeEntreprise);
 
     if (!hasFileChange && !hasTextChange) {
       ToastUtils.info("Aucune modification n'a été faite");
@@ -155,15 +139,6 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
       );
     } else {
       body = UpdateAdditionalDataDto(
-        lieuNaissance: _lieuNaissanceController.text != _initialLieuNaissance
-            ? _lieuNaissanceController.text
-            : null,
-        activite: _activiteController.text != _initialActivite
-            ? _activiteController.text
-            : null,
-        photoIdentite: _photoIdentiteController.file != null
-            ? await _photoIdentiteController.ensureUploaded()
-            : null,
         pieceIdentite: _pieceIdentiteController.file != null
             ? await _pieceIdentiteController.ensureUploaded()
             : null,
@@ -217,11 +192,11 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
             ),
           ),
         ),
-        bottomNavigationBar: Container(
-          height: 120,
-          child: isReadOnly
-              ? null
-              : SafeArea(
+        bottomNavigationBar: isReadOnly
+            ? null
+            : Container(
+                height: 120,
+                child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: BlocBuilder<LoginCubit, LoginCubitState>(
@@ -235,7 +210,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
                     ),
                   ),
                 ),
-        ));
+              ));
   }
 
   Widget _buildVerifiedBanner() {
@@ -306,44 +281,13 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
 
   List<Widget> _buildParticulierFields(UserModelSchema user) {
     return [
-      CustomTextField(
-        controller: _lieuNaissanceController,
-        labelText: 'Lieu de naissance',
-        isEnabled: !isReadOnly,
-        prefixIcon: const Icon(CupertinoIcons.location),
-        validator: (value) =>
-            isReadOnly ? null : FormUtils.fieldValidator(value: value),
-      ),
-      const Gap(16),
-      CustomTextField(
-        controller: _activiteController,
-        labelText: 'Activité',
-        isEnabled: !isReadOnly,
-        prefixIcon: const Icon(CupertinoIcons.briefcase),
-        validator: (value) =>
-            isReadOnly ? null : FormUtils.fieldValidator(value: value),
-      ),
-      const Gap(24),
       if (isReadOnly) ...[
-        _buildReadOnlyFile(
-            label: "Photo d'identité (selfie)", fileId: user.photoIdentite),
-        const Gap(20),
         _buildReadOnlyFile(
             label: "Pièce d'identité (recto)", fileId: user.pieceIdentite),
         const Gap(20),
         _buildReadOnlyFile(
             label: "Pièce d'identité (verso)", fileId: user.pieceIdentiteVerso),
       ] else ...[
-        Center(
-          child: IdentityPhotoPicker(
-            controller: _photoIdentiteController,
-            label: "Photo d'identité (selfie)",
-            placeholderText: "Ajouter une photo d'identité",
-            helperText: "Assurez-vous que votre visage est bien éclairé.",
-            placeholderImageId: user.photoIdentite,
-          ),
-        ),
-        const Gap(24),
         DocumentUploadCard(
           controller: _pieceIdentiteController,
           label: "Pièce d'identité (recto)",

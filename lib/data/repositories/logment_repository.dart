@@ -362,12 +362,9 @@ class LogmentRepository {
       final response = await ReservationProvider(DioClient().dio)
           .validerPresence({"qrToken": qrToken});
       return response;
-    } on DioException catch (dioError) {
-      log('DioError: ${dioError.message}');
-      throw Exception('Failed to validate presence: ${dioError.message}');
     } catch (error) {
-      log('Error: $error');
-      throw Exception('Failed to validate presence: $error');
+      log('Error: $error', name: 'validerPresence');
+      rethrow;
     }
   }
 }

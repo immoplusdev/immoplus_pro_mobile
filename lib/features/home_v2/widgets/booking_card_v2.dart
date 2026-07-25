@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/rating_status.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
+import 'package:immoplus_pro/data/models/reservations/status_reservation.dart';
 import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
 import 'package:immoplus_pro/features/ratings/pages/create_rating_page.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -38,6 +39,10 @@ class BookingCardV2 extends StatelessWidget {
 
     // Status logic
     final isPaid = reservationModel.statusFacture.toLowerCase() == 'paye';
+    final statusEnum = reservationModel.statusEnum;
+    final isAwaitingPayment =
+        statusEnum == StatusReservation.enAttentePaiementClient ||
+            statusEnum == StatusReservation.enAttenteReponseProprietaire;
 
     // Duration
     final duration = reservationModel.datesReservation.length;
@@ -138,18 +143,25 @@ class BookingCardV2 extends StatelessWidget {
                                     color: isPaid
                                         ? const Color(0xFF1CA53F)
                                             .withOpacity(0.1)
-                                        : const Color(0xFFFFF7E6),
+                                        : isAwaitingPayment
+                                            ? const Color(0xFFFFF7E6)
+                                            : Colors.grey.shade200,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
                                     isPaid
                                         ? "Payée : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}"
-                                        : "À payer : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}",
+                                        : isAwaitingPayment
+                                            ? "À payer : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}"
+                                            : (statusEnum?.label ??
+                                                'Non payée'),
                                     style: TextStyle(
                                       fontSize: 8,
                                       color: isPaid
                                           ? const Color(0xFF1CA53F)
-                                          : Colors.orange.shade800,
+                                          : isAwaitingPayment
+                                              ? Colors.orange.shade800
+                                              : Colors.grey.shade700,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

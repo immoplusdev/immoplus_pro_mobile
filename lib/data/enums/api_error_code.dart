@@ -74,12 +74,13 @@ enum ApiErrorCode {
   }
 
   /// Vérifie si l'erreur est affichée via un dialog dédié (ApiErrorDialog)
-  /// plutôt qu'un simple toast d'erreur.
+  /// [ApiErrorCode.forbidden] est volontairement exclu : ce code est
+  /// renvoyé par le backend pour n'importe quel refus d'autorisation métier
+
   bool get hasDedicatedDialog {
     switch (this) {
       case ApiErrorCode.userNotFound:
       case ApiErrorCode.phoneNumberAlreadyTaken:
-      case ApiErrorCode.forbidden:
         return true;
       default:
         return false;

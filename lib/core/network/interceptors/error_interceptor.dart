@@ -18,6 +18,13 @@ const _silentErrorCodes = {
   ApiErrorCode.socialAccountNotFound,
 };
 
+/// Endpoints dont les erreurs sont gérées entièrement par l'écran appelant
+/// (dialog dédié au contexte), pour éviter un doublon avec le toast/dialog
+/// générique ci-dessous.
+const _silentRequestPaths = {
+  '/reservations/action/valider-presence',
+};
+
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -33,16 +40,21 @@ class ErrorInterceptor extends Interceptor {
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
 
-    // Certaines erreurs ont un dialog dédié (avec CTA de navigation) plutôt
-    // qu'un simple toast.
-    if (apiErrorResponse?.errorCode.hasDedicatedDialog == true) {
-      ApiErrorDialog.showForCode(
-        apiErrorResponse!.errorCode,
-        message: apiErrorResponse.message,
-      );
-    } else if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
-      // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
-      _showErrorToast(apiErrorResponse, err.response);
+    final isSilentRequest =
+        _silentRequestPaths.any((path) => err.requestOptions.path.contains(path));
+
+    if (!isSilentRequest) {
+      // Certaines erreurs ont un dialog dédié (avec CTA de navigation) plutôt
+      // qu'un simple toast.
+      if (apiErrorResponse?.errorCode.hasDedicatedDialog == true) {
+        ApiErrorDialog.showForCode(
+          apiErrorResponse!.errorCode,
+          message: apiErrorResponse.message,
+        );
+      } else if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
+        // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
+        _showErrorToast(apiErrorResponse, err.response);
+      }
     }
 
     // Gérer la déconnexion si nécessaire
