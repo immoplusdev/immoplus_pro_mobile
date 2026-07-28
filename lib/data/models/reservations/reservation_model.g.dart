@@ -25,6 +25,7 @@ _$ReservationModelImpl _$$ReservationModelImplFromJson(
           (json['montantTotalReservation'] as num?)?.toDouble() ?? 0,
       montantReservationSansCommission:
           (json['montantReservationSansCommission'] as num?)?.toDouble() ?? 0,
+      montantCommission: (json['montantCommission'] as num?)?.toDouble() ?? 0,
       montantPaye: (json['montantPaye'] as num?)?.toInt() ?? 0,
       codeReservation: json['codeReservation'] as String? ?? '',
       notes: json['notes'] as String? ?? '',
@@ -60,6 +61,7 @@ Map<String, dynamic> _$$ReservationModelImplToJson(
       'montantTotalReservation': instance.montantTotalReservation,
       'montantReservationSansCommission':
           instance.montantReservationSansCommission,
+      'montantCommission': instance.montantCommission,
       'montantPaye': instance.montantPaye,
       'codeReservation': instance.codeReservation,
       'notes': instance.notes,
