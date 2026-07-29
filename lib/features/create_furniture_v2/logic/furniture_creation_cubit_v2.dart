@@ -242,6 +242,7 @@ class FurnitureCreationCubitV2 extends Cubit<FurnitureCreationStateV2> {
           id: state.furniture!.id,
           fields: fields,
         );
+        emit(state.copyWith(isLoading: false, isSuccess: true));
       } else {
         final creationModel = FurnitureCreationModel(
           titre: state.furniture!.titre,
@@ -260,11 +261,15 @@ class FurnitureCreationCubitV2 extends Cubit<FurnitureCreationStateV2> {
           etat: state.furniture!.etat,
           metadata: state.furniture!.metadata,
         );
-        await FurnitureRepository.createFurniture(
+        final result = await FurnitureRepository.createFurniture(
           model: creationModel,
         );
+        emit(state.copyWith(
+          furniture: state.furniture!.copyWith(id: result.data?.id ?? ''),
+          isLoading: false,
+          isSuccess: true,
+        ));
       }
-      emit(state.copyWith(isLoading: false, isSuccess: true));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }

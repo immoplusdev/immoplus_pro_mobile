@@ -61,6 +61,27 @@ class LogmentRepository {
     }
   }
 
+  static Future<ReservationsCollection> getAllReservationsOwner({
+    required int page,
+    required int perPage,
+    String? orderBy,
+    String? orderDir,
+    Map<String, dynamic>? where,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .getAllReservationsOwner(where, page, perPage, orderBy, orderDir);
+      inspect(response);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to load users: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to load users: $error');
+    }
+  }
+
   static Future<WithdrawBookingHistoryDto> getWithdrawReservations({
     required String userId,
   }) async {
@@ -331,6 +352,19 @@ class LogmentRepository {
     } catch (error) {
       log('Error: $error');
       throw Exception('Failed to update unavailability dates: $error');
+    }
+  }
+
+  static Future<dynamic> validerPresence({
+    required String qrToken,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .validerPresence({"qrToken": qrToken});
+      return response;
+    } catch (error) {
+      log('Error: $error', name: 'validerPresence');
+      rethrow;
     }
   }
 }

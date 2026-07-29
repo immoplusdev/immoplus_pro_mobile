@@ -26,7 +26,7 @@ class WithdrawalSuccessPage extends StatelessWidget {
               _buildSuccessIcon(),
               const Gap(40),
               Text(
-                'Votre demande a été envoyée avec succès',
+                'Votre demande de retrait a été envoyée avec succès',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.sen(
                   fontSize: 24,
@@ -37,7 +37,7 @@ class WithdrawalSuccessPage extends StatelessWidget {
               ),
               const Gap(16),
               Text(
-                'Nous vous proposerons des biens correspondant à vos critères dans les plus brefs délais.',
+                'Votre demande de retrait a bien été prise en compte et sera traitée dans les plus brefs délais.',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.sen(
                   fontSize: 14,

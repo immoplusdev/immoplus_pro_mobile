@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/payment/crate_payement_request_dto.dart';
 import 'package:immoplus_pro/data/models/payment/payment_authenticate_body.dart';
 import 'package:immoplus_pro/data/models/payment/payment_itent_data.dart';
 import 'package:immoplus_pro/data/repositories/payment_repository.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:retrofit/dio.dart';
 
@@ -62,6 +64,10 @@ class PaymentServices {
           paymentIntentModel.response.statusCode! < 300) {
         onSuccess();
       } else {
+        getIt<AnalyticsService>().logPaymentFailed(
+          operator: OrderPaymentController.selectedOperator.value,
+          step: 'processing',
+        );
         onFailed();
       }
       // if (paymentIntentModel.data.amount == 0 ||
@@ -73,6 +79,10 @@ class PaymentServices {
       //  // onSuccess(paymentIntentModel.data);
       // }
     } catch (e) {
+      getIt<AnalyticsService>().logPaymentFailed(
+        operator: OrderPaymentController.selectedOperator.value,
+        step: 'processing',
+      );
       onFailed();
     }
   }
@@ -99,10 +109,17 @@ class PaymentServices {
       log("SUCCESS");
 
       EasyLoading.dismiss();
+      getIt<AnalyticsService>().logPaymentCompleted(
+        operator: OrderPaymentController.selectedOperator.value,
+      );
       onSuccess();
     } catch (e) {
       EasyLoading.showToast(
         "La tentative d'authentification a échoué. Assurez-vous que le code OTP est correct.",
+      );
+      getIt<AnalyticsService>().logPaymentFailed(
+        operator: OrderPaymentController.selectedOperator.value,
+        step: 'otp',
       );
       onFailed();
     }

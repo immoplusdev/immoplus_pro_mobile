@@ -23,7 +23,7 @@ class OwnerStatsPage extends StatefulWidget {
   const OwnerStatsPage({super.key});
 
   static String name = 'OWNER_STATS';
-  static String routePath() => '/owner_stats';
+  static String routePath() => '/statistics_v2';
 
   @override
   State<OwnerStatsPage> createState() => _OwnerStatsPageState();

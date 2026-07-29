@@ -19,6 +19,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/utils/utils.dart';
 
 class WithdrawFormScreenV2 extends StatefulWidget {
   static const String name = 'withdraw_form_v2';
@@ -129,6 +130,10 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
 
     setState(() => _isLoading = true);
     bool isSuccess = false;
+    getIt<AnalyticsService>().logWithdrawalSubmitted(
+      montantRetrait: parsedAmount.toDouble(),
+      paymentMethod: selectedOperator?.value ?? 'unknown',
+    );
     try {
       EasyLoadingHandler.showLoadingToast(text: "Envoi de la demande...");
 
@@ -145,13 +150,42 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
       EasyLoadingHandler.hideLoadingToast();
       if (data != null) {
         isSuccess = true;
-        getIt<AnalyticsService>().logWithdrawalSubmitted(
+        getIt<AnalyticsService>().logWithdrawalSuccess(
           montantRetrait: parsedAmount.toDouble(),
           paymentMethod: selectedOperator?.value ?? 'unknown',
         );
+      } else {
+        getIt<AnalyticsService>().logWithdrawalFailed(
+          montantRetrait: parsedAmount.toDouble(),
+          paymentMethod: selectedOperator?.value,
+        );
+        if (mounted) {
+          toastification.show(
+            type: ToastificationType.error,
+            context: context,
+            title: const Text("Échec de la demande"),
+            description: const Text(
+                "La demande de retrait a échoué. Veuillez réessayer."),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        }
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
+      getIt<AnalyticsService>().logWithdrawalFailed(
+        montantRetrait: parsedAmount.toDouble(),
+        paymentMethod: selectedOperator?.value,
+      );
+      if (mounted) {
+        toastification.show(
+          type: ToastificationType.error,
+          context: context,
+          title: const Text("Échec de la demande"),
+          description: const Text(
+              "La demande de retrait a échoué. Veuillez réessayer."),
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -245,6 +279,8 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
 
                         // Amount Custom Input Box (Standard TextFormField styled)
                         _buildAmountInputField(),
+                        const Gap(8),
+                        _buildAvailableBalanceHint(),
 
                         const Gap(40),
                       ],
@@ -446,6 +482,23 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildAvailableBalanceHint() {
+    return BlocBuilder<WalletCubit, RequestState>(
+      builder: (context, state) {
+        if (state is! WALLET) return const SizedBox.shrink();
+        final balance = state.data.availableBalance.toDouble();
+        return Text(
+          "NB : votre solde disponible est de ${Utils.formatCurrency(balance)}, vous pouvez retirer ce montant.",
+          style: GoogleFonts.sen(
+            fontSize: 12,
+            color: Colors.grey.shade500,
+            fontStyle: FontStyle.italic,
+          ),
+        );
+      },
     );
   }
 }

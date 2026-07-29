@@ -360,11 +360,15 @@ class ResidenceCreationCubitV2 extends Cubit<ResidenceCreationStateV2> {
           id: state.id!,
           fields: model.toJson(),
         );
+        emit(state.copyWith(isSubmitting: false, submissionSuccess: true));
       } else {
-        await LogmentRepository.createResidence(model: model);
+        final result = await LogmentRepository.createResidence(model: model);
+        emit(state.copyWith(
+          id: result.data.id,
+          isSubmitting: false,
+          submissionSuccess: true,
+        ));
       }
-
-      emit(state.copyWith(isSubmitting: false, submissionSuccess: true));
     } catch (e) {
       emit(state.copyWith(isSubmitting: false, submissionSuccess: false));
     }

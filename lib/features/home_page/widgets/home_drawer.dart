@@ -188,7 +188,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     },
                     horizontalTitleGap: 0,
                     leading: ImmoIcon(ImmoIcons.resi, color: AppColors.primary),
-                    title: const Text('Mes résidences'),
+                    title: const Text('Résidences'),
                     trailing: Icon(
                       FontAwesomeIcons.circleChevronRight,
                       size: 15,

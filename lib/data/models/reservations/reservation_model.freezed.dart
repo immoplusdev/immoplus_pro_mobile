@@ -24,6 +24,7 @@ mixin _$ReservationModel {
   String get dateDebut => throw _privateConstructorUsedError;
   String get dateFin => throw _privateConstructorUsedError;
   String get statusReservation => throw _privateConstructorUsedError;
+  String get ratingStatus => throw _privateConstructorUsedError;
   List<DatesReservationModel> get datesReservation =>
       throw _privateConstructorUsedError;
   String get statusFacture => throw _privateConstructorUsedError;
@@ -31,6 +32,7 @@ mixin _$ReservationModel {
   double get montantTotalReservation => throw _privateConstructorUsedError;
   double get montantReservationSansCommission =>
       throw _privateConstructorUsedError;
+  double get montantCommission => throw _privateConstructorUsedError;
   int get montantPaye => throw _privateConstructorUsedError;
   String get codeReservation => throw _privateConstructorUsedError;
   String get notes => throw _privateConstructorUsedError;
@@ -64,11 +66,13 @@ abstract class $ReservationModelCopyWith<$Res> {
       String dateDebut,
       String dateFin,
       String statusReservation,
+      String ratingStatus,
       List<DatesReservationModel> datesReservation,
       String statusFacture,
       bool retraitProEffectue,
       double montantTotalReservation,
       double montantReservationSansCommission,
+      double montantCommission,
       int montantPaye,
       String codeReservation,
       String notes,
@@ -105,11 +109,13 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
     Object? dateDebut = null,
     Object? dateFin = null,
     Object? statusReservation = null,
+    Object? ratingStatus = null,
     Object? datesReservation = null,
     Object? statusFacture = null,
     Object? retraitProEffectue = null,
     Object? montantTotalReservation = null,
     Object? montantReservationSansCommission = null,
+    Object? montantCommission = null,
     Object? montantPaye = null,
     Object? codeReservation = null,
     Object? notes = null,
@@ -139,6 +145,10 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
           ? _value.statusReservation
           : statusReservation // ignore: cast_nullable_to_non_nullable
               as String,
+      ratingStatus: null == ratingStatus
+          ? _value.ratingStatus
+          : ratingStatus // ignore: cast_nullable_to_non_nullable
+              as String,
       datesReservation: null == datesReservation
           ? _value.datesReservation
           : datesReservation // ignore: cast_nullable_to_non_nullable
@@ -158,6 +168,10 @@ class _$ReservationModelCopyWithImpl<$Res, $Val extends ReservationModel>
       montantReservationSansCommission: null == montantReservationSansCommission
           ? _value.montantReservationSansCommission
           : montantReservationSansCommission // ignore: cast_nullable_to_non_nullable
+              as double,
+      montantCommission: null == montantCommission
+          ? _value.montantCommission
+          : montantCommission // ignore: cast_nullable_to_non_nullable
               as double,
       montantPaye: null == montantPaye
           ? _value.montantPaye
@@ -250,11 +264,13 @@ abstract class _$$ReservationModelImplCopyWith<$Res>
       String dateDebut,
       String dateFin,
       String statusReservation,
+      String ratingStatus,
       List<DatesReservationModel> datesReservation,
       String statusFacture,
       bool retraitProEffectue,
       double montantTotalReservation,
       double montantReservationSansCommission,
+      double montantCommission,
       int montantPaye,
       String codeReservation,
       String notes,
@@ -292,11 +308,13 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
     Object? dateDebut = null,
     Object? dateFin = null,
     Object? statusReservation = null,
+    Object? ratingStatus = null,
     Object? datesReservation = null,
     Object? statusFacture = null,
     Object? retraitProEffectue = null,
     Object? montantTotalReservation = null,
     Object? montantReservationSansCommission = null,
+    Object? montantCommission = null,
     Object? montantPaye = null,
     Object? codeReservation = null,
     Object? notes = null,
@@ -326,6 +344,10 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
           ? _value.statusReservation
           : statusReservation // ignore: cast_nullable_to_non_nullable
               as String,
+      ratingStatus: null == ratingStatus
+          ? _value.ratingStatus
+          : ratingStatus // ignore: cast_nullable_to_non_nullable
+              as String,
       datesReservation: null == datesReservation
           ? _value._datesReservation
           : datesReservation // ignore: cast_nullable_to_non_nullable
@@ -345,6 +367,10 @@ class __$$ReservationModelImplCopyWithImpl<$Res>
       montantReservationSansCommission: null == montantReservationSansCommission
           ? _value.montantReservationSansCommission
           : montantReservationSansCommission // ignore: cast_nullable_to_non_nullable
+              as double,
+      montantCommission: null == montantCommission
+          ? _value.montantCommission
+          : montantCommission // ignore: cast_nullable_to_non_nullable
               as double,
       montantPaye: null == montantPaye
           ? _value.montantPaye
@@ -402,11 +428,13 @@ class _$ReservationModelImpl implements _ReservationModel {
       this.dateDebut = '',
       this.dateFin = '',
       this.statusReservation = '',
+      this.ratingStatus = '',
       final List<DatesReservationModel> datesReservation = const [],
       this.statusFacture = '',
       this.retraitProEffectue = false,
       this.montantTotalReservation = 0,
       this.montantReservationSansCommission = 0,
+      this.montantCommission = 0,
       this.montantPaye = 0,
       this.codeReservation = '',
       this.notes = '',
@@ -435,6 +463,9 @@ class _$ReservationModelImpl implements _ReservationModel {
   @override
   @JsonKey()
   final String statusReservation;
+  @override
+  @JsonKey()
+  final String ratingStatus;
   final List<DatesReservationModel> _datesReservation;
   @override
   @JsonKey()
@@ -457,6 +488,9 @@ class _$ReservationModelImpl implements _ReservationModel {
   @override
   @JsonKey()
   final double montantReservationSansCommission;
+  @override
+  @JsonKey()
+  final double montantCommission;
   @override
   @JsonKey()
   final int montantPaye;
@@ -493,7 +527,7 @@ class _$ReservationModelImpl implements _ReservationModel {
 
   @override
   String toString() {
-    return 'ReservationModel(id: $id, dateDebut: $dateDebut, dateFin: $dateFin, statusReservation: $statusReservation, datesReservation: $datesReservation, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, residence: $residence, client: $client, proprietaire: $proprietaire)';
+    return 'ReservationModel(id: $id, dateDebut: $dateDebut, dateFin: $dateFin, statusReservation: $statusReservation, ratingStatus: $ratingStatus, datesReservation: $datesReservation, statusFacture: $statusFacture, retraitProEffectue: $retraitProEffectue, montantTotalReservation: $montantTotalReservation, montantReservationSansCommission: $montantReservationSansCommission, montantCommission: $montantCommission, montantPaye: $montantPaye, codeReservation: $codeReservation, notes: $notes, clientPhoneNumber: $clientPhoneNumber, createdAt: $createdAt, updatedAt: $updatedAt, delaisProprietaireReponse: $delaisProprietaireReponse, delaisPaiementClient: $delaisPaiementClient, residence: $residence, client: $client, proprietaire: $proprietaire)';
   }
 
   @override
@@ -507,6 +541,8 @@ class _$ReservationModelImpl implements _ReservationModel {
             (identical(other.dateFin, dateFin) || other.dateFin == dateFin) &&
             (identical(other.statusReservation, statusReservation) ||
                 other.statusReservation == statusReservation) &&
+            (identical(other.ratingStatus, ratingStatus) ||
+                other.ratingStatus == ratingStatus) &&
             const DeepCollectionEquality()
                 .equals(other._datesReservation, _datesReservation) &&
             (identical(other.statusFacture, statusFacture) ||
@@ -520,6 +556,8 @@ class _$ReservationModelImpl implements _ReservationModel {
                     montantReservationSansCommission) ||
                 other.montantReservationSansCommission ==
                     montantReservationSansCommission) &&
+            (identical(other.montantCommission, montantCommission) ||
+                other.montantCommission == montantCommission) &&
             (identical(other.montantPaye, montantPaye) ||
                 other.montantPaye == montantPaye) &&
             (identical(other.codeReservation, codeReservation) ||
@@ -551,11 +589,13 @@ class _$ReservationModelImpl implements _ReservationModel {
         dateDebut,
         dateFin,
         statusReservation,
+        ratingStatus,
         const DeepCollectionEquality().hash(_datesReservation),
         statusFacture,
         retraitProEffectue,
         montantTotalReservation,
         montantReservationSansCommission,
+        montantCommission,
         montantPaye,
         codeReservation,
         notes,
@@ -592,11 +632,13 @@ abstract class _ReservationModel implements ReservationModel {
       final String dateDebut,
       final String dateFin,
       final String statusReservation,
+      final String ratingStatus,
       final List<DatesReservationModel> datesReservation,
       final String statusFacture,
       final bool retraitProEffectue,
       final double montantTotalReservation,
       final double montantReservationSansCommission,
+      final double montantCommission,
       final int montantPaye,
       final String codeReservation,
       final String notes,
@@ -621,6 +663,8 @@ abstract class _ReservationModel implements ReservationModel {
   @override
   String get statusReservation;
   @override
+  String get ratingStatus;
+  @override
   List<DatesReservationModel> get datesReservation;
   @override
   String get statusFacture;
@@ -630,6 +674,8 @@ abstract class _ReservationModel implements ReservationModel {
   double get montantTotalReservation;
   @override
   double get montantReservationSansCommission;
+  @override
+  double get montantCommission;
   @override
   int get montantPaye;
   @override

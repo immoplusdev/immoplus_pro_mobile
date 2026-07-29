@@ -21,6 +21,7 @@ class CreateEstatePageV2 extends StatefulWidget {
   const CreateEstatePageV2({super.key, this.initialEstate, this.listingRoute});
 
   static const name = 'CREATE_ESTATE_PAGE_V2';
+  static const String routePath = '/create_estate_v2';
 
   @override
   State<CreateEstatePageV2> createState() => _CreateEstatePageV2State();
@@ -154,6 +155,11 @@ class _CreateEstatePageV2State extends State<CreateEstatePageV2> {
                     ? "Erreur lors de la modification"
                     : "Erreur lors de la création",
               );
+              if (widget.initialEstate == null) {
+                getIt<AnalyticsService>().logPropertyCreationFailed(
+                  typeBien: state.typeBienImmobilier,
+                );
+              }
             }
           }
         },

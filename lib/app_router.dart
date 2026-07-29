@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
+import 'package:immoplus_pro/features/account/widgets/edit_identity_documents.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/authentification/choose_account_type_page.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
@@ -37,6 +38,8 @@ import 'package:immoplus_pro/features/payment_module/operators_selector_page.dar
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/create_rating_page.dart';
+import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
 import 'package:immoplus_pro/features/place/place_page.dart';
 import 'package:immoplus_pro/features/profil/update_password_page.dart';
 import 'package:immoplus_pro/features/registration/models/data_router_registration.dart';
@@ -62,6 +65,7 @@ import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 
 // ── Pending reservations ──
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
+import 'package:immoplus_pro/features/reservations/pending/qr_scanner_page.dart';
 
 // ── Contact change ──
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +105,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/home',
+                path: HomePageV2.routePath,
                 name: HomePageV2.name,
                 builder: (context, state) => HomePageV2(
                   paiementId: state.extra as String?,
@@ -121,7 +125,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/creations_v2',
+                path: CreationsPageV2.routePath,
                 builder: (context, state) => const CreationsPageV2(),
               ),
             ],
@@ -129,7 +133,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/statistics_v2',
+                path: OwnerStatsPage.routePath(),
                 builder: (context, state) => const OwnerStatsPage(),
               ),
             ],
@@ -137,7 +141,7 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/account_v2',
+                path: AccountPageV2.routePath,
                 name: AccountPageV2.name,
                 builder: (context, state) => const AccountPageV2(),
               ),
@@ -204,6 +208,11 @@ class AppRouter {
         path: '/withdrawal_success',
         name: WithdrawalSuccessPage.name,
         builder: (context, state) => const WithdrawalSuccessPage(),
+      ),
+      GoRoute(
+        path: QrScannerPage.routePath,
+        name: QrScannerPage.name,
+        builder: (context, state) => const QrScannerPage(),
       ),
       GoRoute(
         path: '/pin_code_v2',
@@ -313,6 +322,11 @@ class AppRouter {
         path: '/editAccount',
         name: EditAccount.name,
         builder: (context, state) => const EditAccount(),
+      ),
+      GoRoute(
+        path: '/editIdentityDocuments',
+        name: EditIdentityDocuments.name,
+        builder: (context, state) => const EditIdentityDocuments(),
       ),
       GoRoute(
         path: '/splash',
@@ -533,6 +547,21 @@ class AppRouter {
         path: NotificationPage.routePath(),
         name: NotificationPage.name,
         builder: (context, state) => const NotificationPage(),
+      ),
+
+      // ── Ratings ──
+      GoRoute(
+        path: CreateRatingPage.routePath(),
+        name: CreateRatingPage.name,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return CreateRatingPage(reservationId: id);
+        },
+      ),
+      GoRoute(
+        path: RatingsHistoryPage.routePath(),
+        name: RatingsHistoryPage.name,
+        builder: (context, state) => const RatingsHistoryPage(),
       ),
     ],
   );

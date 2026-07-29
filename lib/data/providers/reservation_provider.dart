@@ -37,6 +37,14 @@ abstract class ReservationProvider {
       @Query("_order_by") String? orderBy,
       @Query("_order_dir") String? orderDir);
 
+  @GET("/reservations/data/all/owner")
+  Future<ReservationsCollection> getAllReservationsOwner(
+      @Queries() Map<String, dynamic>? where,
+      @Query("_page") int page,
+      @Query("_per_page") int perPage,
+      @Query("_order_by") String? orderBy,
+      @Query("_order_dir") String? orderDir);
+
   @POST("/reservations/action/annuler/{id}")
   Future<ReservationResponse> annulerBookings(@Path() String id);
 
@@ -58,4 +66,7 @@ abstract class ReservationProvider {
     @Path('id') String id, {
     @Field() String? notes,
   });
+
+  @POST("/reservations/action/valider-presence")
+  Future<dynamic> validerPresence(@Body() Map<String, dynamic> body);
 }

@@ -1,0 +1,19 @@
+{
+  "Simulator Target Bundle": "com.immoplus.pro.ci",
+  "aps": {
+    "alert": {
+      "title": "Nouveau séjour à évaluer",
+      "body": "Un client vient de terminer son séjour, n'hésitez pas à le noter !"
+    },
+    "sound": "default",
+    "badge": 1
+  },
+  "custom": {
+    "i": "d413346e-b3f9-42b7-8ccb-a91ab2edee0s",
+    "a": {
+      "type": "rating_request",
+      "reservationId": "89447399-3219-44a2-9bc5-c666eb8de103",
+      "actor": "host"
+    }
+  }
+}

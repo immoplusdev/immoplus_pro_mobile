@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:immoplus_pro/data/models/reservations/rating_status.dart';
 import 'package:immoplus_pro/data/models/reservations/status_reservation.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'client_model.dart';
@@ -14,11 +15,13 @@ class ReservationModel with _$ReservationModel {
     @Default('') String dateDebut,
     @Default('') String dateFin,
     @Default('') String statusReservation,
+    @Default('') String ratingStatus,
     @Default([]) List<DatesReservationModel> datesReservation,
     @Default('') String statusFacture,
     @Default(false) bool retraitProEffectue,
     @Default(0) double montantTotalReservation,
     @Default(0) double montantReservationSansCommission,
+    @Default(0) double montantCommission,
     @Default(0) int montantPaye,
     @Default('') String codeReservation,
     @Default('') String notes,
@@ -39,4 +42,7 @@ class ReservationModel with _$ReservationModel {
 extension ReservationModelX on ReservationModel {
   StatusReservation? get statusEnum =>
       StatusReservation.fromString(statusReservation);
+
+  RatingStatus get ratingStatusEnum =>
+      RatingStatus.fromString(ratingStatus);
 }

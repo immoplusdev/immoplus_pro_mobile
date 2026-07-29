@@ -71,7 +71,9 @@ class NotificationService {
 
       if (data != null) {
         final typeString = data['type'] as String?;
-        final id = data['id'] as String?;
+        final id = data['id'] as String? ??
+            data['referenceId'] as String? ??
+            data['reservationId'] as String?;
 
         final type = PushNotificationType.fromString(typeString);
         final sessionManager = getIt<SessionManager>();
@@ -82,12 +84,13 @@ class NotificationService {
         }
 
         if (type != null) {
-          final route = type.getRoute(id);
+          final code = data['code'] as String?;
+          final route = type.getRoute(id, code: code);
 
           if (route != null) {
             log('🔔 Navigation: ${AppRouter.router.currentLocation} → $route',
                 name: 'NOTIFICATION');
-            AppRouter.router.pushIfDifferent(route);
+            AppRouter.router.navigateNotificationRoute(route);
           } else {
             log('⚠️ Pas de route pour type: $typeString', name: 'NOTIFICATION');
           }

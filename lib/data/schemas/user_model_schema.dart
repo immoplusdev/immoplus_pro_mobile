@@ -22,6 +22,11 @@ class UserModelSchema {
   String? emailEntreprise;
   String? photoIdentite;
   String? pieceIdentite;
+  String? pieceIdentiteVerso;
+  String? lieuNaissance;
+  String? registreCommerce;
+  String? numeroContribuable;
+  String? typeEntreprise;
   String? avatar;
   String? role;
   bool? identityVerified;

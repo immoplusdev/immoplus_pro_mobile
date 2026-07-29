@@ -1,5 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
+import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
+import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
+import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
+import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 
 extension GoRouterExtension on GoRouter {
   /// Obtenir la route actuelle
@@ -11,6 +16,30 @@ extension GoRouterExtension on GoRouter {
   void pushIfDifferent(String route) {
     if (!route.startsWith(currentLocation)) {
       push(route);
+    }
+  }
+
+  /// Go seulement si différent (met à jour les branches du StatefulShellRoute)
+  void goIfDifferent(String route) {
+    if (currentLocation != route) {
+      go(route);
+    }
+  }
+
+  /// Navigate en utilisant `go` pour les ShellRoutes et `push` pour les autres pages
+  void navigateNotificationRoute(String route) {
+    final shellRoutes = [
+      HomePageV2.routePath,
+      CalendarPageV2.routePath,
+      CreationsPageV2.routePath,
+      OwnerStatsPage.routePath(),
+      AccountPageV2.routePath,
+    ];
+
+    if (shellRoutes.contains(route)) {
+      goIfDifferent(route);
+    } else {
+      pushIfDifferent(route);
     }
   }
 
