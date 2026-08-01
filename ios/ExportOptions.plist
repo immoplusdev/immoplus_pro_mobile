@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    
+    <key>teamID</key>
+    <string>Y2KLD8527S</string> 
+    
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.immoplus.pro.ci</key>
+
+        <string>ImmoPlus Pro AppStore Profile</string> 
+
+        <key>com.immopluspro.ci.OneSignalNotificationServiceExtension</key>
+        <string>ImmoPlus Pro OneSignal Extension Profile</string>
+    </dict>
+    
+    <key>signingStyle</key>
+    <string>manual</string>
+    
+    <key>manageAppVersionAndBuildNumber</key>
+    <true/>
+    
+    <key>stripSwiftSymbols</key>
+    <true/>
+    
+    <key>uploadBitcode</key>
+    <false/>
+</dict>
+</plist>
