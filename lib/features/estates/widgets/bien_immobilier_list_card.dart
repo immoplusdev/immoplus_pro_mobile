@@ -118,7 +118,7 @@ class BienImmoblierListCard extends StatelessWidget {
                                   sharePositionOrigin: origin,
                                 );
                               },
-                              child: FaIcon(
+                              child: Icon(
                                 key: _shareButtonKey,
                                 CupertinoIcons.share,
                                 color: AppColors.primary,
