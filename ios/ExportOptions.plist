@@ -14,7 +14,7 @@
 
         <string>ImmoPlus Pro AppStore Profile</string> 
 
-        <key>com.immopluspro.ci.OneSignalNotificationServiceExtension</key>
+        <key>com.immoplus.pro.ci.OneSignalNotificationServiceExtension</key>
         <string>ImmoPlus Pro OneSignal Extension Profile</string>
     </dict>
     
