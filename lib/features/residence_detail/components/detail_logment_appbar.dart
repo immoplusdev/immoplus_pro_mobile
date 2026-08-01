@@ -87,8 +87,7 @@ class DetailLogmentAppBar extends StatelessWidget {
                 decoration: const BoxDecoration(
                     shape: BoxShape.circle, color: Colors.white),
                 child: Center(
-                  child: FaIcon(
-                    FontAwesomeIcons.shareNodes,
+                  child: FaIcon(FontAwesomeIcons.shareNodes,
                     color: AppColors.primary,
                   ),
                 ),

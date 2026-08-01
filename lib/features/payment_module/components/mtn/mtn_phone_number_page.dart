@@ -77,8 +77,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
-                FontAwesomeIcons.moneyBill,
+              leading: const FaIcon(FontAwesomeIcons.moneyBill,
                 color: Colors.green,
               ),
               title:
@@ -129,8 +128,7 @@ class _MtnNumberPageState extends State<MtnNumberPage> {
                         context: NavigationService.navigatorKey.currentContext!,
                         content:
                             "Votre demande de retrait a été enregistrée avec succès. Votre versement sera effectué dans les plus brefs délais sur votre moyen de paiement",
-                        icon: const Icon(
-                          FontAwesomeIcons.moneyBills,
+                        icon: const FaIcon(FontAwesomeIcons.moneyBills,
                           color: Colors.green,
                         ),
                         rollback: () {

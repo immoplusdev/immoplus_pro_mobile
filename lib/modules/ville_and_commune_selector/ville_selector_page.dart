@@ -97,14 +97,14 @@ class _VilleSelectorPageState extends State<VilleSelectorPage> {
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: const Icon(FontAwesomeIcons.treeCity),
+                  leading: const FaIcon(FontAwesomeIcons.treeCity),
                   tileColor: AppColors.scafold,
                   title: Text(item.name),
                   titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   onTap: () {
                     context.pop<VilleModel>(item);
                   },
-                  trailing: const Icon(FontAwesomeIcons.circleArrowRight),
+                  trailing: const FaIcon(FontAwesomeIcons.circleArrowRight),
                 ),
               ),
             ),

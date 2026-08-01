@@ -19,8 +19,7 @@ class EmptyImagePicker extends StatelessWidget {
         child: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              FontAwesomeIcons.photoFilm,
+            FaIcon(FontAwesomeIcons.photoFilm,
               size: 100,
               color: Colors.grey,
             ),

@@ -45,8 +45,7 @@ class _EarningPageState extends State<EarningPage> {
                       .copyWith(color: Colors.green.shade500),
                   titleTextStyle: Theme.of(context).textTheme.bodyMedium,
                   trailing: IconButton(
-                    icon: const Icon(
-                      FontAwesomeIcons.eye,
+                    icon: const FaIcon(FontAwesomeIcons.eye,
                     ),
                     onPressed: () {},
                   ),
@@ -71,8 +70,7 @@ class _EarningPageState extends State<EarningPage> {
                       .copyWith(color: Colors.green.shade500),
                   titleTextStyle: Theme.of(context).textTheme.bodySmall,
                   trailing: IconButton(
-                    icon: const Icon(
-                      FontAwesomeIcons.eye,
+                    icon: const FaIcon(FontAwesomeIcons.eye,
                     ),
                     onPressed: () {},
                   ),
@@ -106,8 +104,7 @@ class _EarningPageState extends State<EarningPage> {
                       .bodySmall!
                       .copyWith(color: Colors.red.shade200),
                   trailing: IconButton(
-                    icon: const Icon(
-                      FontAwesomeIcons.eyeSlash,
+                    icon: const FaIcon(FontAwesomeIcons.eyeSlash,
                     ),
                     onPressed: () {},
                   ),

@@ -92,7 +92,7 @@ class _EstatesPageState extends State<EstatesPage> {
       appBar: AppBar(
         backgroundColor: AppColors.whiteBackground,
         leading: IconButton(
-          icon: const Icon(FontAwesomeIcons.chevronLeft),
+          icon: const FaIcon(FontAwesomeIcons.chevronLeft),
           onPressed: () {
             context.goNamed(HomePageV2.name);
           },
@@ -199,8 +199,7 @@ class _EstatesPageState extends State<EstatesPage> {
           ? FloatingActionButton.extended(
               onPressed: _tapCreateEstate,
               backgroundColor: AppColors.primary,
-              icon: const Icon(
-                FontAwesomeIcons.plus,
+              icon: const FaIcon(FontAwesomeIcons.plus,
                 color: Colors.white,
               ),
               label: const Text('Ajouter un bien immobilier'),

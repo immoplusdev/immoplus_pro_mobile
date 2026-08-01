@@ -49,8 +49,7 @@ class LogmentBottomBar extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.filePen,
+                        leading: FaIcon(FontAwesomeIcons.filePen,
                           color: AppColors.primary,
                         ),
                         tileColor: Colors.white,
@@ -59,8 +58,7 @@ class LogmentBottomBar extends StatelessWidget {
                             .textTheme
                             .titleSmall!
                             .copyWith(color: AppColors.primary),
-                        trailing: Icon(
-                          FontAwesomeIcons.circleArrowRight,
+                        trailing: FaIcon(FontAwesomeIcons.circleArrowRight,
                           color: AppColors.primary,
                         ),
                         onTap: () {
@@ -104,8 +102,7 @@ class LogmentBottomBar extends StatelessWidget {
                             });
                             context.pop();
                           },
-                          leading: const Icon(
-                            FontAwesomeIcons.doorOpen,
+                          leading: const FaIcon(FontAwesomeIcons.doorOpen,
                             color: Colors.green,
                           ),
                           tileColor: Colors.white,
@@ -114,8 +111,7 @@ class LogmentBottomBar extends StatelessWidget {
                               .textTheme
                               .titleSmall!
                               .copyWith(color: Colors.green),
-                          trailing: const Icon(
-                            FontAwesomeIcons.circleArrowRight,
+                          trailing: const FaIcon(FontAwesomeIcons.circleArrowRight,
                             color: Colors.green,
                           ),
                         ),
@@ -135,8 +131,7 @@ class LogmentBottomBar extends StatelessWidget {
                                 });
                             context.pop();
                           },
-                          leading: const Icon(
-                            FontAwesomeIcons.doorClosed,
+                          leading: const FaIcon(FontAwesomeIcons.doorClosed,
                             color: Colors.red,
                           ),
                           tileColor: Colors.white,
@@ -145,16 +140,14 @@ class LogmentBottomBar extends StatelessWidget {
                               .textTheme
                               .titleSmall!
                               .copyWith(color: Colors.red),
-                          trailing: const Icon(
-                            FontAwesomeIcons.circleArrowRight,
+                          trailing: const FaIcon(FontAwesomeIcons.circleArrowRight,
                             color: Colors.red,
                           ),
                         ),
                       ),
                       const Gap(3),
                       ListTile(
-                        leading: const Icon(
-                          FontAwesomeIcons.trash,
+                        leading: const FaIcon(FontAwesomeIcons.trash,
                           color: Colors.red,
                         ),
                         tileColor: Colors.transparent,
@@ -163,8 +156,7 @@ class LogmentBottomBar extends StatelessWidget {
                             .textTheme
                             .titleSmall!
                             .copyWith(color: Colors.red),
-                        trailing: const Icon(
-                          FontAwesomeIcons.circleArrowRight,
+                        trailing: const FaIcon(FontAwesomeIcons.circleArrowRight,
                           color: Colors.red,
                         ),
                         onTap: () async {

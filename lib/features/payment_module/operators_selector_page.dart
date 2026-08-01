@@ -52,8 +52,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                     .titleLarge!
                     .copyWith(fontWeight: FontWeight.w600),
                 subtitle: const Text('Montant à vous reverser'),
-                trailing: const Icon(
-                  FontAwesomeIcons.moneyBill,
+                trailing: const FaIcon(FontAwesomeIcons.moneyBill,
                   color: Colors.green,
                 ),
               ),
@@ -125,8 +124,7 @@ class _OperatorsSelectorPageState extends State<OperatorsSelectorPage> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Icon(
-                                FontAwesomeIcons.moneyBill,
+                              const FaIcon(FontAwesomeIcons.moneyBill,
                                 size: 50,
                                 color: Colors.grey,
                               ),

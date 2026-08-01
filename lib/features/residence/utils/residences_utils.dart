@@ -14,11 +14,11 @@ class ResidencesUtils {
 
   static IconData getValidationStatusIcon(String status) {
     if (status == 'valide') {
-      return FontAwesomeIcons.circleCheck;
+      return FontAwesomeIcons.circleCheck.data;
     } else if (status == 'rejete') {
-      return FontAwesomeIcons.xmark;
+      return FontAwesomeIcons.xmark.data;
     }
-    return FontAwesomeIcons.clock;
+    return FontAwesomeIcons.clock.data;
   }
 
   static Color getValidationStatusColor(String status) {

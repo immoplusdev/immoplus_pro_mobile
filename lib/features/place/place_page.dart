@@ -18,7 +18,7 @@ class _PlacePageState extends State<PlacePage> {
           // Ajoutez ici le code à exécuter lorsque le bouton est appuyé
         },
         label: Text('Ajouter'), // Texte du bouton
-        icon: Icon(FontAwesomeIcons.add), // Icône optionnelle du bouton
+        icon: FaIcon(FontAwesomeIcons.add), // Icône optionnelle du bouton
         backgroundColor: AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0), // Forme ovale du bouton

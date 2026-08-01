@@ -67,7 +67,7 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
             sliver: SliverToBoxAdapter(
               child: CustomTextField(
                 controller: _controller,
-                prefixIcon: const Icon(FontAwesomeIcons.building),
+                prefixIcon: const FaIcon(FontAwesomeIcons.building),
                 labelText: "Nom du bien immobilier",
                 validator: (String? value) =>
                     FormUtils.fieldValidator(value: value),
@@ -103,8 +103,7 @@ class _EstateWellcommePageState extends State<EstateWellcommePage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 backgroundColor: AppColors.primary,
-                avatar: const Icon(
-                  FontAwesomeIcons.doorOpen,
+                avatar: const FaIcon(FontAwesomeIcons.doorOpen,
                   color: Colors.white,
                   size: 16,
                 ),

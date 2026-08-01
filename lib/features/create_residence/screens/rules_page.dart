@@ -58,8 +58,7 @@ class _RulesPageState extends State<RulesPage> {
                   ResidenceCreationModelBuilder().heureDepart = p0;
                 });
               },
-              icon: const Icon(
-                FontAwesomeIcons.doorOpen,
+              icon: const FaIcon(FontAwesomeIcons.doorOpen,
                 color: Colors.black,
               ),
               subtitle: 'Heure à partir de laquelle le client peut venir',
@@ -73,8 +72,7 @@ class _RulesPageState extends State<RulesPage> {
                   : ResidenceCreationModelBuilder().heureDepart,
               onUpdate: null,
               disabled: true,
-              icon: const Icon(
-                FontAwesomeIcons.doorClosed,
+              icon: const FaIcon(FontAwesomeIcons.doorClosed,
                 color: Colors.black,
               ),
               subtitle: 'Heure avant laquelle le client doit partir',

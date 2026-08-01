@@ -196,8 +196,7 @@ class _WithdrawalRequestListState extends State<WithdrawalRequestList> {
                                   ),
                                 )
                               : null,
-                          child: Icon(
-                            FontAwesomeIcons.coins,
+                          child: FaIcon(FontAwesomeIcons.coins,
                             color: Colors.white,
                             size: 20,
                           ),

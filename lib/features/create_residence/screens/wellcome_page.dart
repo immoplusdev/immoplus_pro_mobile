@@ -69,7 +69,7 @@ class _WellcommePageState extends State<WellcommePage> {
               sliver: SliverToBoxAdapter(
                 child: CustomTextField(
                   controller: _controller,
-                  prefixIcon: const Icon(FontAwesomeIcons.building),
+                  prefixIcon: const FaIcon(FontAwesomeIcons.building),
                   labelText: "Nom de la résidence",
                   onChanged: (name) {
                     if (name.trim().isNotEmpty) {
@@ -107,8 +107,7 @@ class _WellcommePageState extends State<WellcommePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   backgroundColor: AppColors.primary,
-                  avatar: const Icon(
-                    FontAwesomeIcons.doorOpen,
+                  avatar: const FaIcon(FontAwesomeIcons.doorOpen,
                     color: Colors.white,
                     size: 16,
                   ),

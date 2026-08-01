@@ -1,4 +1,4 @@
-part of country_phone_number;
+part of 'country_phone_number.dart';
 
 class CountryPhonrNumberPopup extends StatefulWidget {
   const CountryPhonrNumberPopup({super.key});

@@ -189,8 +189,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     horizontalTitleGap: 0,
                     leading: ImmoIcon(ImmoIcons.resi, color: AppColors.primary),
                     title: const Text('Résidences'),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -214,14 +213,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(EstatesPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.treeCity,
+                    leading: FaIcon(FontAwesomeIcons.treeCity,
                       color: AppColors.primary,
                       size: 20,
                     ),
                     title: const Text('Biens immobiliers'),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -246,14 +243,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         context.pushNamed(FurnituresPage.name);
                       },
                       horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.couch,
+                      leading: FaIcon(FontAwesomeIcons.couch,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Mes meubles'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),
@@ -285,8 +280,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Réservations en attente',
                       maxLines: 1,
                     ),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -301,8 +295,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(BookingHistoryPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.suitcaseRolling,
+                    leading: FaIcon(FontAwesomeIcons.suitcaseRolling,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -310,8 +303,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Historique des réservations',
                       maxLines: 1,
                     ),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -336,8 +328,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(VisitHistoryPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.route,
+                    leading: FaIcon(FontAwesomeIcons.route,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -345,8 +336,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Historique des visites',
                       maxLines: 1,
                     ),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -374,8 +364,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       }
                     },
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.userPen,
+                    leading: FaIcon(FontAwesomeIcons.userPen,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -393,14 +382,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ListTile(
                     tileColor: Colors.white,
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.userShield,
+                    leading: FaIcon(FontAwesomeIcons.userShield,
                       color: AppColors.primary,
                       size: 20,
                     ),
                     title: const Text('Changer mes identifiants de connexion'),
-                    trailing: Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -424,8 +411,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                     horizontalTitleGap: 0,
-                    leading: Icon(
-                      FontAwesomeIcons.fileContract,
+                    leading: FaIcon(FontAwesomeIcons.fileContract,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -474,8 +460,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   const Gap(20),
                   ListTile(
                     horizontalTitleGap: 0,
-                    leading: const Icon(
-                      FontAwesomeIcons.arrowRightFromBracket,
+                    leading: const FaIcon(FontAwesomeIcons.arrowRightFromBracket,
                       color: Colors.redAccent,
                       size: 20,
                     ),
@@ -521,7 +506,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   /// Delete account button
                   ListTile(
                     horizontalTitleGap: 0,
-                    leading: const Icon(
+                    leading: const FaIcon(
                       FontAwesomeIcons
                           .trashCan, // Icon plus appropriée pour la suppression
                       color: Colors.redAccent,

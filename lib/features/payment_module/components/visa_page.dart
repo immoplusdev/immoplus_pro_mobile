@@ -68,7 +68,7 @@ class _VisaPageState extends State<VisaPage> {
                   textInputAction: TextInputAction.next,
                   labelText: '#### #### #### ####',
                   obscureText: true,
-                  sufixIcon: const Icon(FontAwesomeIcons.ccVisa),
+                  sufixIcon: const FaIcon(FontAwesomeIcons.ccVisa),
                   // validator: (String? value) =>
                   //     PaymentUtils.numberValidator(
                   //         number: value!.replaceAll(' ', ''),

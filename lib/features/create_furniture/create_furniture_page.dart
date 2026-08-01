@@ -274,7 +274,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
     'Caractéristiques',
   ];
 
-  static const List<IconData> _stepIcons = [
+  static const List<FaIconData> _stepIcons = [
     FontAwesomeIcons.couch,
     FontAwesomeIcons.alignLeft,
     FontAwesomeIcons.coins,
@@ -310,7 +310,7 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
             steps: List.generate(_stepTitles.length, (index) {
               return EasyStep(
                 customStep: Center(
-                  child: Icon(
+                  child: FaIcon(
                     _stepIcons[index],
                     size: 12,
                     color:

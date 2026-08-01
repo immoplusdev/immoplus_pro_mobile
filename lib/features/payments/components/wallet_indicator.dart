@@ -84,12 +84,12 @@ class WalletIndicator extends StatelessWidget {
                             onPressed: () {
                               context.read<WalletCubit>().onGetWallet();
                             },
-                            icon: const Icon(FontAwesomeIcons.eye))
+                            icon: const FaIcon(FontAwesomeIcons.eye))
                         : IconButton(
                             onPressed: () {
                               context.read<WalletCubit>().onSetInitialize();
                             },
-                            icon: const Icon(FontAwesomeIcons.eyeSlash),
+                            icon: const FaIcon(FontAwesomeIcons.eyeSlash),
                           ),
                   ],
                 ),

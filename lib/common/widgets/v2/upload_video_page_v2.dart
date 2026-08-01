@@ -136,7 +136,7 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(FontAwesomeIcons.video,
+                            FaIcon(FontAwesomeIcons.video,
                                 size: 80, color: Colors.grey.shade400),
                             const Gap(20),
                             Text(
@@ -192,7 +192,7 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
                               height: 20,
                               child: CircularProgressIndicator(
                                   strokeWidth: 2, color: Colors.white))
-                          : const Icon(FontAwesomeIcons.cloudArrowUp),
+                          : const FaIcon(FontAwesomeIcons.cloudArrowUp),
                       label: const Text("Confirmer et Envoyer"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,

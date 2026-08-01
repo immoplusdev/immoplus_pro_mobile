@@ -46,14 +46,12 @@ class ChangeCredentialsPage extends StatelessWidget {
                           topRight: Radius.circular(16),
                         ),
                       ),
-                      leading: Icon(
-                        FontAwesomeIcons.userShield,
+                      leading: FaIcon(FontAwesomeIcons.userShield,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Modifier mon mot de passe'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),
@@ -63,14 +61,12 @@ class ChangeCredentialsPage extends StatelessWidget {
                     ListTile(
                       tileColor: Colors.white,
                       horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.phone,
+                      leading: FaIcon(FontAwesomeIcons.phone,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Changer mon numéro de téléphone'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),
@@ -83,14 +79,12 @@ class ChangeCredentialsPage extends StatelessWidget {
                     ListTile(
                       tileColor: Colors.white,
                       horizontalTitleGap: 0,
-                      leading: Icon(
-                        FontAwesomeIcons.envelope,
+                      leading: FaIcon(FontAwesomeIcons.envelope,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Changer mon email'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),
@@ -109,14 +103,12 @@ class ChangeCredentialsPage extends StatelessWidget {
                           bottomRight: Radius.circular(16),
                         ),
                       ),
-                      leading: Icon(
-                        FontAwesomeIcons.key,
+                      leading: FaIcon(FontAwesomeIcons.key,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Modifier mon code PIN'),
-                      trailing: Icon(
-                        FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),

@@ -89,7 +89,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
       backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(FontAwesomeIcons.chevronLeft),
+          icon: const FaIcon(FontAwesomeIcons.chevronLeft),
           onPressed: () {
             context.goNamed(HomePageV2.name);
           },
@@ -217,8 +217,7 @@ class _ResidencesPageState extends State<ResidencesPage> {
           ? FloatingActionButton.extended(
               onPressed: _tapCreateResidence,
               backgroundColor: AppColors.primary,
-              icon: const Icon(
-                FontAwesomeIcons.plus,
+              icon: const FaIcon(FontAwesomeIcons.plus,
                 color: Colors.white,
               ),
               label: const Text('Ajouter une résidence'),

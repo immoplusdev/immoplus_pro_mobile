@@ -94,7 +94,7 @@ class _FurnituresPageState extends State<FurnituresPage> {
       appBar: AppBar(
         backgroundColor: AppColors.whiteBackground,
         leading: IconButton(
-          icon: const Icon(FontAwesomeIcons.chevronLeft),
+          icon: const FaIcon(FontAwesomeIcons.chevronLeft),
           onPressed: () {
             context.goNamed(HomePageV2.name);
           },
@@ -190,8 +190,7 @@ class _FurnituresPageState extends State<FurnituresPage> {
           ? FloatingActionButton.extended(
               onPressed: _tapCreateFurniture,
               backgroundColor: AppColors.primary,
-              icon: const Icon(
-                FontAwesomeIcons.plus,
+              icon: const FaIcon(FontAwesomeIcons.plus,
                 color: Colors.white,
               ),
               label: const Text(
@@ -308,8 +307,7 @@ class _FurnitureListCard extends StatelessWidget {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              FontAwesomeIcons.eye,
+                            FaIcon(FontAwesomeIcons.eye,
                               size: 12,
                               color: Colors.grey.shade400,
                             ),
@@ -353,8 +351,7 @@ class _FurnitureListCard extends StatelessWidget {
       return Container(
         color: Colors.grey.shade200,
         child: Center(
-          child: Icon(
-            FontAwesomeIcons.couch,
+          child: FaIcon(FontAwesomeIcons.couch,
             color: Colors.grey.shade400,
             size: 28,
           ),

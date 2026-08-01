@@ -89,8 +89,7 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
               child: ListTile(
                 leading: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    child: Icon(
-                      FontAwesomeIcons.locationDot,
+                    child: FaIcon(FontAwesomeIcons.locationDot,
                       color: AppColors.primary,
                     )),
                 tileColor: ResidenceCreationModelBuilder().adresse.isNotEmpty

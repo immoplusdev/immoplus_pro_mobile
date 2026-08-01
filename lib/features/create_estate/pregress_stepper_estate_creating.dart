@@ -29,14 +29,14 @@ class PregressStepperEstateCreating extends SliverPersistentHeaderDelegate {
   ];
 
   final List<IconData> stepIcons = [
-    FontAwesomeIcons.font,
-    FontAwesomeIcons.building,
+    FontAwesomeIcons.font.data,
+    FontAwesomeIcons.building.data,
     Icons.chair,
-    FontAwesomeIcons.locationDot,
-    FontAwesomeIcons.camera,
-    FontAwesomeIcons.video,
-    FontAwesomeIcons.alignLeft,
-    FontAwesomeIcons.moneyBills,
+    FontAwesomeIcons.locationDot.data,
+    FontAwesomeIcons.camera.data,
+    FontAwesomeIcons.video.data,
+    FontAwesomeIcons.alignLeft.data,
+    FontAwesomeIcons.moneyBills.data,
   ];
 
   void navigateToStep(int step) {

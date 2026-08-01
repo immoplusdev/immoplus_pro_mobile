@@ -110,8 +110,7 @@ class LoadingLogmentListCard extends StatelessWidget {
                         children: [
                           Chip(
                             backgroundColor: Colors.green.shade200,
-                            avatar: const Icon(
-                              FontAwesomeIcons.doorOpen,
+                            avatar: const FaIcon(FontAwesomeIcons.doorOpen,
                               size: 18,
                             ),
                             label: const Text('Ouvert'),
@@ -119,8 +118,7 @@ class LoadingLogmentListCard extends StatelessWidget {
                           const Gap(10),
                           Chip(
                             backgroundColor: Colors.red.shade200,
-                            avatar: const Icon(
-                              FontAwesomeIcons.doorClosed,
+                            avatar: const FaIcon(FontAwesomeIcons.doorClosed,
                               size: 18,
                             ),
                             label: const Text('Fermer'),

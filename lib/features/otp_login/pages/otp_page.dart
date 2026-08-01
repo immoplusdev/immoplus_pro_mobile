@@ -123,7 +123,7 @@ class _OTPPageState extends State<OTPPage> with CodeAutoFill {
                     curve: Curves.easeInOut,
                   );
                 },
-                icon: const Icon(FontAwesomeIcons.circleChevronLeft),
+                icon: const FaIcon(FontAwesomeIcons.circleChevronLeft),
               ),
               const Gap(30),
               const Text(

@@ -1,4 +1,4 @@
-part of country_phone_number;
+part of 'country_phone_number.dart';
 
 class CountryPhoneNumberInput extends StatefulWidget {
   const CountryPhoneNumberInput({super.key, required this.controller});
@@ -18,7 +18,7 @@ class _CountryPhoneNumberInputState extends State<CountryPhoneNumberInput> {
       textInputAction: TextInputAction.done,
       labelText: 'Numéro de téléphone',
       controller: widget.controller,
-      sufixIcon: const Icon(FontAwesomeIcons.whatsapp),
+      sufixIcon: const FaIcon(FontAwesomeIcons.whatsapp),
       prefixIcon: const CountryCodePicker(
         onChanged: print,
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')

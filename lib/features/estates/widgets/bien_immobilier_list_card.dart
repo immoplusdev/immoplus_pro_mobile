@@ -175,7 +175,7 @@ class BienImmoblierListCard extends StatelessWidget {
                             ),
                             CustomChip(
                               backgroundColor: Colors.green.shade100,
-                              icon: FontAwesomeIcons.eye,
+                              icon: FontAwesomeIcons.eye.data,
                               iconColor: Colors.green,
                               label: 'Disponible',
                               iconSize: 15,
@@ -206,7 +206,7 @@ class BienImmoblierListCard extends StatelessWidget {
                           CustomChip(
                             backgroundColor: Colors.red.shade200,
                             iconSize: 15,
-                            icon: FontAwesomeIcons.eyeSlash,
+                            icon: FontAwesomeIcons.eyeSlash.data,
                             label: 'Indisponible',
                           ),
                         ],

@@ -96,15 +96,14 @@ class _CommuneSelectorPageState extends State<CommuneSelectorPage> {
               itemBuilder: (context, item, index) => Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: const Icon(FontAwesomeIcons.treeCity),
+                  leading: const FaIcon(FontAwesomeIcons.treeCity),
                   tileColor: AppColors.scafold,
                   title: Text(item.name),
                   titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   onTap: () {
                     context.pop<CommuneModel>(item);
                   },
-                  trailing: Icon(
-                    FontAwesomeIcons.circleArrowRight,
+                  trailing: FaIcon(FontAwesomeIcons.circleArrowRight,
                     color: AppColors.primary,
                   ),
                 ),

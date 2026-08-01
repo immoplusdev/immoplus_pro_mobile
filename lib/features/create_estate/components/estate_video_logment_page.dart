@@ -171,8 +171,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
-                                      FontAwesomeIcons.video,
+                                    FaIcon(FontAwesomeIcons.video,
                                       size: 100,
                                     ),
                                     Gap(10),
@@ -193,8 +192,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            FontAwesomeIcons.video,
+                          FaIcon(FontAwesomeIcons.video,
                             size: 100,
                           ),
                           Gap(10),

@@ -25,7 +25,7 @@
 //         SliverAppBar(
 //           backgroundColor: AppColors.scafold,
 //           leading: IconButton(
-//             icon: const Icon(FontAwesomeIcons.circleChevronLeft),
+//             icon: const FaIcon(FontAwesomeIcons.circleChevronLeft),
 //             onPressed: () {
 //               context.goNamed(LoginPage.name);
 //             },

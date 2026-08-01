@@ -68,7 +68,7 @@ class BookingCard extends StatelessWidget {
                                 reservationModel.datesReservation.first.date!,
                                 reservationModel.datesReservation.last.date!) ==
                             BookingStatus.ongoing)
-                        ? FontAwesomeIcons.suitcaseRolling
+                        ? FontAwesomeIcons.suitcaseRolling.data
                         : CupertinoIcons.calendar_today,
                     iconSize: 14,
                     backgroundColor: (BookingUtils.getBookingStatus(

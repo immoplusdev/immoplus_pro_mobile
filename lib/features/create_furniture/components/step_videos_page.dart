@@ -163,8 +163,7 @@ class _StepVideosPageState extends State<StepVideosPage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Icon(
-                                      FontAwesomeIcons.video,
+                                    const FaIcon(FontAwesomeIcons.video,
                                       size: 80,
                                     ),
                                     const Gap(12),
@@ -198,8 +197,7 @@ class _StepVideosPageState extends State<StepVideosPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            FontAwesomeIcons.video,
+                          FaIcon(FontAwesomeIcons.video,
                             size: 100,
                           ),
                           Gap(10),

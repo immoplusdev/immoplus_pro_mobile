@@ -117,7 +117,7 @@ class DetailActionBottomBar extends StatelessWidget {
                   ),
                 ),
                 onPressed: onDelete,
-                child: const Icon(FontAwesomeIcons.trash, size: 16),
+                child: const FaIcon(FontAwesomeIcons.trash, size: 16),
               ),
             ),
             const Gap(spacing),
@@ -174,7 +174,7 @@ class DetailActionBottomBar extends StatelessWidget {
                   style: primaryStyle,
                   onPressed: onEdit,
                   icon: Icon(
-                    config.editIcon ?? FontAwesomeIcons.penToSquare,
+                    config.editIcon ?? FontAwesomeIcons.penToSquare.data,
                     size: 12,
                   ),
                   label: Text(

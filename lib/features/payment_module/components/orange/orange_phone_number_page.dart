@@ -79,8 +79,7 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
               tileColor: Colors.white,
               leading: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                child: const Icon(
-                  FontAwesomeIcons.moneyBill,
+                child: const FaIcon(FontAwesomeIcons.moneyBill,
                   color: Colors.green,
                 ),
               ),
@@ -129,8 +128,7 @@ class _OrangePhoneNumberPageState extends State<OrangePhoneNumberPage> {
                         context: NavigationService.navigatorKey.currentContext!,
                         content:
                             "Votre demande de retrait a été enregistrée avec succès. Votre versement sera effectué dans les plus brefs délais sur votre moyen de paiement",
-                        icon: const Icon(
-                          FontAwesomeIcons.moneyBills,
+                        icon: const FaIcon(FontAwesomeIcons.moneyBills,
                           color: Colors.green,
                         ),
                         rollback: () {

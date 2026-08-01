@@ -126,8 +126,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                 prefixIcon: const Text('|'),
                 hintStyle: Theme.of(context).textTheme.bodyMedium,
                 suffixIcon: widget.suffixIcon ??
-                    const Icon(
-                      FontAwesomeIcons.whatsapp,
+                    const FaIcon(FontAwesomeIcons.whatsapp,
                       size: 20,
                       color: Colors.green,
                     ),

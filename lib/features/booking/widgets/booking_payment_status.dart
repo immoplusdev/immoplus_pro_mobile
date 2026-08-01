@@ -16,8 +16,7 @@ class BookingPaymentStatus extends StatelessWidget {
       ),
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(
-          FontAwesomeIcons.moneyBillWave,
+        child: FaIcon(FontAwesomeIcons.moneyBillWave,
           color: Colors.green,
         ),
         radius: 15,

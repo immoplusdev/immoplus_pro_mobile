@@ -48,7 +48,7 @@ class _LocationSelectorV2State extends State<LocationSelectorV2> {
         const Gap(10),
         if (widget.showVille) ...[
           SelectorTileV2(
-            icon: FontAwesomeIcons.city,
+            icon: FontAwesomeIcons.city.data,
             title: "Sélectionner une ville",
             value: _localSelectedVille?.name ??
                 ((widget.currentVille?.isNotEmpty ?? false)
@@ -62,7 +62,7 @@ class _LocationSelectorV2State extends State<LocationSelectorV2> {
         ],
         if (widget.showCommune) ...[
           SelectorTileV2(
-            icon: FontAwesomeIcons.mountainCity,
+            icon: FontAwesomeIcons.mountainCity.data,
             title: "Sélectionner une commune",
             value: _localSelectedCommune?.name ??
                 ((widget.currentCommune?.isNotEmpty ?? false)
@@ -75,7 +75,7 @@ class _LocationSelectorV2State extends State<LocationSelectorV2> {
           const Gap(10),
         ],
         SelectorTileV2(
-          icon: FontAwesomeIcons.locationDot,
+          icon: FontAwesomeIcons.locationDot.data,
           title: "Position du bien",
           value: widget.currentAdresse,
           hasValue: widget.currentAdresse?.isNotEmpty ?? false,

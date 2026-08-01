@@ -36,7 +36,7 @@ class AvailabilityStatusBadge extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(FontAwesomeIcons.pause, size: 12, color: _orange),
+            FaIcon(FontAwesomeIcons.pause, size: 12, color: _orange),
             const Gap(6),
             Text(
               inactiveLabel,
@@ -61,7 +61,7 @@ class AvailabilityStatusBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(FontAwesomeIcons.check, size: 12, color: _green),
+          FaIcon(FontAwesomeIcons.check, size: 12, color: _green),
           const Gap(6),
           Text(
             activeLabel,

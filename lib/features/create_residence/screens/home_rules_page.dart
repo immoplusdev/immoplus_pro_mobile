@@ -18,19 +18,19 @@ class HomeRulesPage extends StatefulWidget {
 class _HomeRulesPageState extends State<HomeRulesPage> {
   List<SelectionCardData> amentitiesList = <SelectionCardData>[
     SelectionCardData<LogmentType>(
-        icon: const Icon(FontAwesomeIcons.perbyte),
+        icon: const FaIcon(FontAwesomeIcons.perbyte),
         title: 'Animaux autorisés',
         state: LogmentType.apartment),
     SelectionCardData<LogmentType>(
-        icon: const Icon(FontAwesomeIcons.snowflake),
+        icon: const FaIcon(FontAwesomeIcons.snowflake),
         title: 'Climatisation',
         state: LogmentType.apartment),
     SelectionCardData<LogmentType>(
-        icon: const Icon(FontAwesomeIcons.tv),
+        icon: const FaIcon(FontAwesomeIcons.tv),
         title: 'Télévision',
         state: LogmentType.apartment),
     SelectionCardData<LogmentType>(
-        icon: const Icon(FontAwesomeIcons.personBooth),
+        icon: const FaIcon(FontAwesomeIcons.personBooth),
         title: 'Serviettes',
         state: LogmentType.apartment),
   ];

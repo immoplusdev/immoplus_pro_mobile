@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DetailLogmentRules extends StatelessWidget {
   const DetailLogmentRules({super.key, required this.logmentModel});
@@ -41,7 +42,7 @@ class DetailLogmentRules extends StatelessWidget {
         // ListTile(
         //   tileColor: AppColors.scafold,
         //   horizontalTitleGap: 0,
-        //   leading: Icon(FontAwesomeIcons.fileLines),
+        //   leading: FaIcon(FontAwesomeIcons.fileLines),
         //   title: Padding(
         //     padding: const EdgeInsets.only(bottom: 10),
         //     child: Text("Règles supplémentaires"),

@@ -147,7 +147,7 @@
 //                 EasyLoading.dismiss();
 //               }
 //             },
-//             icon: const Icon(FontAwesomeIcons.cloudArrowUp),
+//             icon: const FaIcon(FontAwesomeIcons.cloudArrowUp),
 //             label: const Text('Envoyer les images')),
 //       ),
 //     );

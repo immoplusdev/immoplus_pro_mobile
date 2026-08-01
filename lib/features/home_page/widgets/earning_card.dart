@@ -32,12 +32,10 @@ class EarningCard extends StatelessWidget {
         leading: CircleAvatar(
             backgroundColor: Colors.transparent,
             child: available
-                ? Icon(
-                    FontAwesomeIcons.moneyBillTransfer,
+                ? FaIcon(FontAwesomeIcons.moneyBillTransfer,
                     color: Colors.green.shade800,
                   )
-                : Icon(
-                    FontAwesomeIcons.circleXmark,
+                : FaIcon(FontAwesomeIcons.circleXmark,
                     color: Colors.red.shade200,
                   )),
         title: Text(Utils.formatCurrency(8000000)),

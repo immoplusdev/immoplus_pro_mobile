@@ -119,7 +119,7 @@ class ResidenceListCard extends StatelessWidget {
                                       subject:
                                           'Partager ma résidence ImmoPlus');
                                 },
-                                child: FaIcon(
+                                child: Icon(
                                   key: _shareButtonKey,
                                   CupertinoIcons.share,
                                   color: AppColors.primary,
@@ -199,7 +199,7 @@ class ResidenceListCard extends StatelessWidget {
                             CustomChip(
                               label: 'Ouvert',
                               backgroundColor: Colors.green.shade200,
-                              icon: FontAwesomeIcons.doorOpen,
+                              icon: FontAwesomeIcons.doorOpen.data,
                               iconSize: 15,
                               iconPadding: const EdgeInsets.only(right: 5),
                             ),
@@ -225,7 +225,7 @@ class ResidenceListCard extends StatelessWidget {
                             CustomChip(
                               label: 'Fermer',
                               backgroundColor: Colors.red.shade200,
-                              icon: FontAwesomeIcons.doorOpen,
+                              icon: FontAwesomeIcons.doorOpen.data,
                               iconSize: 15,
                               iconPadding: const EdgeInsets.only(right: 5),
                             ),

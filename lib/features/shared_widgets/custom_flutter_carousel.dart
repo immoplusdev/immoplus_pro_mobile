@@ -223,8 +223,7 @@ class _CustomFlutterCarouselState extends State<CustomFlutterCarousel> {
     return Container(
       color: Colors.grey.shade200,
       child: const Center(
-        child: Icon(
-          FontAwesomeIcons.images,
+        child: FaIcon(FontAwesomeIcons.images,
           size: 40,
           color: Colors.grey,
         ),

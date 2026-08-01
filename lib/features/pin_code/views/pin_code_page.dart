@@ -139,7 +139,7 @@
 //               toolbarHeight: 36,
 //               actions: [
 //                 IconButton(
-//                   icon: const Icon(FontAwesomeIcons.solidCircleXmark),
+//                   icon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
 //                   onPressed: () {
 //                     context.pop();
 //                   },

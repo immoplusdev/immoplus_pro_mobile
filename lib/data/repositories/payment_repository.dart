@@ -58,8 +58,7 @@ class PaymentRepository {
           AppDialog.info(
             context: NavigationService.navigatorKey.currentContext!,
             content: rep['message'].toString(),
-            icon: const Icon(
-              FontAwesomeIcons.moneyBills,
+            icon: const FaIcon(FontAwesomeIcons.moneyBills,
               color: Colors.red,
             ),
             rollback: () {
@@ -71,8 +70,7 @@ class PaymentRepository {
             context: NavigationService.navigatorKey.currentContext!,
             content:
                 "Nous n'avons pas pu donner suite à votre demande de retrait. Veuillez réessayer ou contacter notre service client.",
-            icon: const Icon(
-              FontAwesomeIcons.moneyBills,
+            icon: const FaIcon(FontAwesomeIcons.moneyBills,
               color: Colors.red,
             ),
             rollback: () {

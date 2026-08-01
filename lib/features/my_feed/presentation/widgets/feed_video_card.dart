@@ -248,13 +248,13 @@ class FeedVideoCard extends StatelessWidget {
     IconData entityIcon;
     switch (video.relatedTo?.entity) {
       case 'residence':
-        entityIcon = FontAwesomeIcons.building;
+        entityIcon = FontAwesomeIcons.building.data;
         break;
       case 'furniture':
-        entityIcon = FontAwesomeIcons.couch;
+        entityIcon = FontAwesomeIcons.couch.data;
         break;
       default:
-        entityIcon = FontAwesomeIcons.house;
+        entityIcon = FontAwesomeIcons.house.data;
     }
 
     return Padding(

@@ -124,8 +124,7 @@ class _StepLocationPageState extends State<StepLocationPage> {
                     : CupertinoColors.tertiarySystemFill,
                 leading: CircleAvatar(
                   backgroundColor: Colors.transparent,
-                  child: Icon(
-                    FontAwesomeIcons.locationDot,
+                  child: FaIcon(FontAwesomeIcons.locationDot,
                     color: AppColors.primary,
                   ),
                 ),

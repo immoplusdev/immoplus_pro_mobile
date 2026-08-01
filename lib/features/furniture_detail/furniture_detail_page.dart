@@ -152,8 +152,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                FontAwesomeIcons.triangleExclamation,
+              FaIcon(FontAwesomeIcons.triangleExclamation,
                 size: 48,
                 color: Colors.grey.shade400,
               ),
@@ -210,8 +209,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
             emptyPlaceholder: Container(
               color: Colors.grey.shade200,
               child: Center(
-                child: Icon(
-                  FontAwesomeIcons.couch,
+                child: FaIcon(FontAwesomeIcons.couch,
                   size: 64,
                   color: Colors.grey.shade400,
                 ),
@@ -266,8 +264,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                   const Gap(4),
                   Row(
                     children: [
-                      Icon(
-                        FontAwesomeIcons.eye,
+                      FaIcon(FontAwesomeIcons.eye,
                         size: 13,
                         color: Colors.grey.shade400,
                       ),
@@ -289,7 +286,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
           SliverToBoxAdapter(
             child: SectionCard(
               title: 'Description',
-              icon: FontAwesomeIcons.alignLeft,
+              icon: FontAwesomeIcons.alignLeft.data,
               iconColor: AppColors.primary,
               child: Text(
                 furniture.description,
@@ -305,7 +302,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
           SliverToBoxAdapter(
             child: SectionCard(
               title: 'Localisation',
-              icon: FontAwesomeIcons.locationDot,
+              icon: FontAwesomeIcons.locationDot.data,
               iconColor: AppColors.primary,
               child: Text(
                 furniture.adresse,
@@ -327,7 +324,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
             SliverToBoxAdapter(
               child: SectionCard(
                 title: 'Détails',
-                icon: FontAwesomeIcons.sliders,
+                icon: FontAwesomeIcons.sliders.data,
                 iconColor: AppColors.primary,
                 child: FurnitureMetadataChips(furniture: furniture),
               ),
@@ -338,7 +335,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
             SliverToBoxAdapter(
               child: SectionCard(
                 title: 'Vidéo',
-                icon: FontAwesomeIcons.video,
+                icon: FontAwesomeIcons.video.data,
                 iconColor: AppColors.primary,
                 child: Container(
                   height: 60,
@@ -349,8 +346,7 @@ class _FurnitureDetailPageState extends State<FurnitureDetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        FontAwesomeIcons.circlePlay,
+                      FaIcon(FontAwesomeIcons.circlePlay,
                         color: AppColors.primary,
                       ),
                       const Gap(10),

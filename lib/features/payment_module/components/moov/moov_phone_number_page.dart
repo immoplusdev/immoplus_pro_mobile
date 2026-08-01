@@ -78,8 +78,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
             ),
             ListTile(
               tileColor: Colors.white,
-              leading: const Icon(
-                FontAwesomeIcons.moneyBill,
+              leading: const FaIcon(FontAwesomeIcons.moneyBill,
                 color: Colors.green,
               ),
               title:
@@ -130,8 +129,7 @@ class _MoovNumberPageState extends State<MoovNumberPage> {
                         context: NavigationService.navigatorKey.currentContext!,
                         content:
                             "Votre demande de retrait a été enregistrée avec succès. Votre versement sera effectué dans les plus brefs délais sur votre moyen de paiement",
-                        icon: const Icon(
-                          FontAwesomeIcons.moneyBills,
+                        icon: const FaIcon(FontAwesomeIcons.moneyBills,
                           color: Colors.green,
                         ),
                         rollback: () {

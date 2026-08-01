@@ -102,8 +102,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        FontAwesomeIcons.video,
+                      FaIcon(FontAwesomeIcons.video,
                         size: 100,
                       ),
                       Gap(10),
@@ -170,7 +169,7 @@ class _UploadVideoPageState extends State<UploadVideoPage> {
             }
           },
           label: const Text("Envoyer la vidéo"),
-          icon: const Icon(FontAwesomeIcons.cloudArrowUp),
+          icon: const FaIcon(FontAwesomeIcons.cloudArrowUp),
         ),
       ),
     );

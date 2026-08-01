@@ -18,8 +18,7 @@ class ReservationStatusSection extends StatelessWidget {
       tileColor: Colors.white,
       leading: CircleAvatar(
         backgroundColor: Colors.transparent,
-        child: Icon(
-          FontAwesomeIcons.handHoldingDollar,
+        child: FaIcon(FontAwesomeIcons.handHoldingDollar,
           color: Colors.grey,
         ),
       ),

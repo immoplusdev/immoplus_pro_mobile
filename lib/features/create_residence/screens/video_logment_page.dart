@@ -153,8 +153,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
-                                      FontAwesomeIcons.video,
+                                    FaIcon(FontAwesomeIcons.video,
                                       size: 100,
                                     ),
                                     Gap(10),
@@ -175,8 +174,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            FontAwesomeIcons.video,
+                          FaIcon(FontAwesomeIcons.video,
                             size: 100,
                           ),
                           Gap(10),

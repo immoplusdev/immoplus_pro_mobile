@@ -69,12 +69,12 @@ class VisitCard extends StatelessWidget {
                           .textTheme
                           .bodySmall!
                           .copyWith(color: Colors.white),
-                      icon: FontAwesomeIcons.stopwatch20,
+                      icon: FontAwesomeIcons.stopwatch20.data,
                       iconColor: Colors.white,
                       iconSize: 15,
                       label: demandeVisiteModel.typeDemandeVisite.toString()),
                   CustomChip(
-                    icon: FontAwesomeIcons.signHanging,
+                    icon: FontAwesomeIcons.signHanging.data,
                     label: demandeVisiteModel.bienImmobilier?.nom ?? "_",
                     iconColor: Colors.white,
                     labelStyle: TextStyle(color: Colors.white),
@@ -141,8 +141,7 @@ class VisitCard extends StatelessWidget {
                     title: const AutoSizeText(
                         maxLines: 1,
                         "Sélectionner le jour et l'heure de la visite"),
-                    trailing: const Icon(
-                      FontAwesomeIcons.circleChevronRight,
+                    trailing: const FaIcon(FontAwesomeIcons.circleChevronRight,
                       color: Colors.red,
                       size: 18,
                     ),
@@ -163,7 +162,7 @@ class VisitCard extends StatelessWidget {
                         Chip(
                           avatar: Icon(
                             color: AppColors.primary,
-                            FontAwesomeIcons.triangleExclamation,
+                            FontAwesomeIcons.triangleExclamation.data,
                             size: 15,
                           ),
                           backgroundColor: AppColors.scafold,

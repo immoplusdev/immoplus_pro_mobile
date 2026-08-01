@@ -84,8 +84,7 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
               child: ListTile(
                 leading: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    child: Icon(
-                      FontAwesomeIcons.locationDot,
+                    child: FaIcon(FontAwesomeIcons.locationDot,
                       color: AppColors.primary,
                     )),
                 tileColor: EstateCreationModelBuilder().adresse.isNotEmpty
