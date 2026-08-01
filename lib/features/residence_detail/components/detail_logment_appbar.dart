@@ -114,7 +114,7 @@ class DetailLogmentAppBar extends StatelessWidget {
         //               color: CupertinoColors.systemRed,
         //             )
         //           : Icon(
-        //               CupertinoIcons.heart,
+        //               CupertinoIcons.heart, pro
         //             ),
         //     ),
         //   ),
