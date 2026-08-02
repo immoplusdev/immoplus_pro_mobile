@@ -18,7 +18,7 @@ class CertificationModel {
   factory CertificationModel.fromJson(Map<String, dynamic> json) {
     return CertificationModel(
       userId: json['userId'] as String,
-      scoreTotal: json['scoreTotal'] as int,
+      scoreTotal: json['scoreTotal'] as int? ?? 0,
       status: json['status'] as String,
       piliers: CertificationPiliers.fromJson(json['piliers'] as Map<String, dynamic>),
       conditionsAttribution: CertificationConditions.fromJson(
@@ -97,8 +97,8 @@ class CertificationScore {
 
   factory CertificationScore.fromJson(Map<String, dynamic> json) {
     return CertificationScore(
-      score: json['score'] as int,
-      max: json['max'] as int,
+      score: json['score'] as int? ?? 0,
+      max: json['max'] as int? ?? 0,
       nbReservationsEffectuees: json['nbReservationsEffectuees'] as int?,
       noteMoyenne: (json['noteMoyenne'] as num?)?.toDouble(),
       nbAvisRecus: json['nbAvisRecus'] as int?,

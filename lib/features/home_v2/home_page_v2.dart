@@ -91,9 +91,6 @@ class _HomePageV2State extends State<HomePageV2>
   @override
   void initState() {
     super.initState();
-    // TEMP DEBUG: force le ré-affichage du sheet de certification — à retirer après test.
-    SharedPreferences.getInstance()
-        .then((prefs) => prefs.remove('certification_announcement_seen'));
     _bannersCubit = context.read<BannersCubit>();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
