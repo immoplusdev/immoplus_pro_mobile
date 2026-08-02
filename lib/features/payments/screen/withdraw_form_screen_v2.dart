@@ -24,7 +24,13 @@ import 'package:immoplus_pro/utils/utils.dart';
 class WithdrawFormScreenV2 extends StatefulWidget {
   static const String name = 'withdraw_form_v2';
 
-  const WithdrawFormScreenV2({super.key});
+  /// Non-null quand on arrive depuis le flux "scan QR → présence validée" :
+  /// le montant n'est plus demandé (calculé côté backend depuis la
+  /// réservation) et la soumission utilise
+  /// POST /wallet/withdrawal-request/create-from-qr.
+  final String? reservationId;
+
+  const WithdrawFormScreenV2({super.key, this.reservationId});
 
   @override
   State<WithdrawFormScreenV2> createState() => _WithdrawFormScreenV2State();
@@ -73,6 +79,75 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
     super.dispose();
   }
 
+  /// Soumission dédiée au flux "scan QR → présence validée" : pas de montant
+  /// à saisir, POST /wallet/withdrawal-request/create-from-qr avec le
+  /// reservationId déjà connu.
+  Future<void> _submitFromQrRequest(String rawPhone) async {
+    setState(() => _isLoading = true);
+    bool isSuccess = false;
+    getIt<AnalyticsService>().logWithdrawalSubmitted(
+      montantRetrait: 0,
+      paymentMethod: selectedOperator?.value ?? 'unknown',
+    );
+    try {
+      EasyLoadingHandler.showLoadingToast(text: "Envoi de la demande...");
+
+      isSuccess = await context.read<WalletCubit>().onCreateWithdrawalRequestFromQr(
+            reservationId: widget.reservationId!,
+            phoneNumber: rawPhone,
+            operator: selectedOperator!.value,
+          );
+
+      EasyLoadingHandler.hideLoadingToast();
+      if (isSuccess) {
+        getIt<AnalyticsService>().logWithdrawalSuccess(
+          montantRetrait: 0,
+          paymentMethod: selectedOperator?.value ?? 'unknown',
+        );
+      } else {
+        getIt<AnalyticsService>().logWithdrawalFailed(
+          montantRetrait: 0,
+          paymentMethod: selectedOperator?.value,
+        );
+        if (mounted) {
+          toastification.show(
+            type: ToastificationType.error,
+            context: context,
+            title: const Text("Échec de la demande"),
+            description: const Text(
+                "La demande de retrait a échoué. Veuillez réessayer."),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        }
+      }
+    } catch (e) {
+      EasyLoadingHandler.hideLoadingToast();
+      getIt<AnalyticsService>().logWithdrawalFailed(
+        montantRetrait: 0,
+        paymentMethod: selectedOperator?.value,
+      );
+      if (mounted) {
+        toastification.show(
+          type: ToastificationType.error,
+          context: context,
+          title: const Text("Échec de la demande"),
+          description: const Text(
+              "La demande de retrait a échoué. Veuillez réessayer."),
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        await context.read<WalletCubit>().onGetWallet();
+
+        if (isSuccess && mounted) {
+          context.pushReplacementNamed(WithdrawalSuccessPage.name);
+        }
+      }
+    }
+  }
+
   Future<void> _submitRequest() async {
     if (selectedOperator == null) {
       toastification.show(
@@ -111,6 +186,11 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
         description: Text(validationErr),
         autoCloseDuration: const Duration(seconds: 4),
       );
+      return;
+    }
+
+    if (widget.reservationId != null) {
+      await _submitFromQrRequest(rawPhone);
       return;
     }
 
@@ -267,20 +347,22 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
 
                         const Gap(24),
 
-                        Text(
-                          "Montant à retirer :",
-                          style: GoogleFonts.sen(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.w500,
+                        if (widget.reservationId == null) ...[
+                          Text(
+                            "Montant à retirer :",
+                            style: GoogleFonts.sen(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const Gap(8),
+                          const Gap(8),
 
-                        // Amount Custom Input Box (Standard TextFormField styled)
-                        _buildAmountInputField(),
-                        const Gap(8),
-                        _buildAvailableBalanceHint(),
+                          // Amount Custom Input Box (Standard TextFormField styled)
+                          _buildAmountInputField(),
+                          const Gap(8),
+                          _buildAvailableBalanceHint(),
+                        ],
 
                         const Gap(40),
                       ],

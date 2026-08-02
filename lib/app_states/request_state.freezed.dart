@@ -40,6 +40,8 @@ RequestState _$RequestStateFromJson(Map<String, dynamic> json) {
       return WALLET.fromJson(json);
     case 'withdrawalRequest':
       return WITHDRAWAL_REQUEST.fromJson(json);
+    case 'certification':
+      return CERTIFICATION.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'RequestState',
@@ -63,6 +65,7 @@ mixin _$RequestState {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -79,6 +82,7 @@ mixin _$RequestState {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -95,6 +99,7 @@ mixin _$RequestState {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,6 +118,7 @@ mixin _$RequestState {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -129,6 +135,7 @@ mixin _$RequestState {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -145,6 +152,7 @@ mixin _$RequestState {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -234,6 +242,7 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return $default();
   }
@@ -253,6 +262,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return $default?.call();
   }
@@ -272,6 +282,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -296,6 +307,7 @@ class _$RequestStateImpl implements _RequestState {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return $default(this);
   }
@@ -315,6 +327,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return $default?.call(this);
   }
@@ -334,6 +347,7 @@ class _$RequestStateImpl implements _RequestState {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if ($default != null) {
@@ -418,6 +432,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return initial();
   }
@@ -437,6 +452,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return initial?.call();
   }
@@ -456,6 +472,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -480,6 +497,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return initial(this);
   }
@@ -499,6 +517,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return initial?.call(this);
   }
@@ -518,6 +537,7 @@ class _$REQUEST_INITIALImpl implements REQUEST_INITIAL {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -602,6 +622,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return loading();
   }
@@ -621,6 +642,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return loading?.call();
   }
@@ -640,6 +662,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -664,6 +687,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return loading(this);
   }
@@ -683,6 +707,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return loading?.call(this);
   }
@@ -702,6 +727,7 @@ class _$REQUEST_LOADINGImpl implements REQUEST_LOADING {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -814,6 +840,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return success(message);
   }
@@ -833,6 +860,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return success?.call(message);
   }
@@ -852,6 +880,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -876,6 +905,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return success(this);
   }
@@ -895,6 +925,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return success?.call(this);
   }
@@ -914,6 +945,7 @@ class _$REQUEST_SUCCESSImpl implements REQUEST_SUCCESS {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -1034,6 +1066,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return error(this.error);
   }
@@ -1053,6 +1086,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return error?.call(this.error);
   }
@@ -1072,6 +1106,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1096,6 +1131,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return error(this);
   }
@@ -1115,6 +1151,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return error?.call(this);
   }
@@ -1134,6 +1171,7 @@ class _$REQUEST_ERRORImpl implements REQUEST_ERROR {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1269,6 +1307,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return residence(data);
   }
@@ -1288,6 +1327,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return residence?.call(data);
   }
@@ -1307,6 +1347,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1331,6 +1372,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return residence(this);
   }
@@ -1350,6 +1392,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return residence?.call(this);
   }
@@ -1369,6 +1412,7 @@ class _$REQUEST_RESIDENCE_DATAImpl implements REQUEST_RESIDENCE_DATA {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (residence != null) {
@@ -1508,6 +1552,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return bienImmobilier(data);
   }
@@ -1527,6 +1572,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return bienImmobilier?.call(data);
   }
@@ -1546,6 +1592,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1570,6 +1617,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return bienImmobilier(this);
   }
@@ -1589,6 +1637,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return bienImmobilier?.call(this);
   }
@@ -1608,6 +1657,7 @@ class _$REQUEST_BIEN_IMMOBILIER_DATAImpl
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (bienImmobilier != null) {
@@ -1741,6 +1791,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return residences(data);
   }
@@ -1760,6 +1811,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return residences?.call(data);
   }
@@ -1779,6 +1831,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1803,6 +1856,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return residences(this);
   }
@@ -1822,6 +1876,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return residences?.call(this);
   }
@@ -1841,6 +1896,7 @@ class _$REQUEST_RESIDENCES_DATAImpl implements REQUEST_RESIDENCES_DATA {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (residences != null) {
@@ -1971,6 +2027,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return villes(data);
   }
@@ -1990,6 +2047,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return villes?.call(data);
   }
@@ -2009,6 +2067,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -2033,6 +2092,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return villes(this);
   }
@@ -2052,6 +2112,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return villes?.call(this);
   }
@@ -2071,6 +2132,7 @@ class _$REQUEST_VILLES_DATAImpl implements REQUEST_VILLES_DATA {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (villes != null) {
@@ -2201,6 +2263,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return communes(data);
   }
@@ -2220,6 +2283,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return communes?.call(data);
   }
@@ -2239,6 +2303,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2263,6 +2328,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return communes(this);
   }
@@ -2282,6 +2348,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return communes?.call(this);
   }
@@ -2301,6 +2368,7 @@ class _$REQUEST_COMMUNES_DATAImpl implements REQUEST_COMMUNES_DATA {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (communes != null) {
@@ -2433,6 +2501,7 @@ class _$WALLETImpl implements WALLET {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return wallet(data);
   }
@@ -2452,6 +2521,7 @@ class _$WALLETImpl implements WALLET {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return wallet?.call(data);
   }
@@ -2471,6 +2541,7 @@ class _$WALLETImpl implements WALLET {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (wallet != null) {
@@ -2495,6 +2566,7 @@ class _$WALLETImpl implements WALLET {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return wallet(this);
   }
@@ -2514,6 +2586,7 @@ class _$WALLETImpl implements WALLET {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return wallet?.call(this);
   }
@@ -2533,6 +2606,7 @@ class _$WALLETImpl implements WALLET {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (wallet != null) {
@@ -2664,6 +2738,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     required TResult Function(List<CommuneModel> data) communes,
     required TResult Function(WalletModel data) wallet,
     required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
   }) {
     return withdrawalRequest(data);
   }
@@ -2683,6 +2758,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult? Function(List<CommuneModel> data)? communes,
     TResult? Function(WalletModel data)? wallet,
     TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
   }) {
     return withdrawalRequest?.call(data);
   }
@@ -2702,6 +2778,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult Function(List<CommuneModel> data)? communes,
     TResult Function(WalletModel data)? wallet,
     TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
     required TResult orElse(),
   }) {
     if (withdrawalRequest != null) {
@@ -2726,6 +2803,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     required TResult Function(REQUEST_COMMUNES_DATA value) communes,
     required TResult Function(WALLET value) wallet,
     required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
   }) {
     return withdrawalRequest(this);
   }
@@ -2745,6 +2823,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult? Function(WALLET value)? wallet,
     TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
   }) {
     return withdrawalRequest?.call(this);
   }
@@ -2764,6 +2843,7 @@ class _$WITHDRAWAL_REQUESTImpl implements WITHDRAWAL_REQUEST {
     TResult Function(REQUEST_COMMUNES_DATA value)? communes,
     TResult Function(WALLET value)? wallet,
     TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
     required TResult orElse(),
   }) {
     if (withdrawalRequest != null) {
@@ -2794,5 +2874,231 @@ abstract class WITHDRAWAL_REQUEST implements RequestState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WITHDRAWAL_REQUESTImplCopyWith<_$WITHDRAWAL_REQUESTImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CERTIFICATIONImplCopyWith<$Res> {
+  factory _$$CERTIFICATIONImplCopyWith(
+          _$CERTIFICATIONImpl value, $Res Function(_$CERTIFICATIONImpl) then) =
+      __$$CERTIFICATIONImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({CertificationModel data});
+}
+
+/// @nodoc
+class __$$CERTIFICATIONImplCopyWithImpl<$Res>
+    extends _$RequestStateCopyWithImpl<$Res, _$CERTIFICATIONImpl>
+    implements _$$CERTIFICATIONImplCopyWith<$Res> {
+  __$$CERTIFICATIONImplCopyWithImpl(
+      _$CERTIFICATIONImpl _value, $Res Function(_$CERTIFICATIONImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? data = null,
+  }) {
+    return _then(_$CERTIFICATIONImpl(
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as CertificationModel,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CERTIFICATIONImpl implements CERTIFICATION {
+  const _$CERTIFICATIONImpl({required this.data, final String? $type})
+      : $type = $type ?? 'certification';
+
+  factory _$CERTIFICATIONImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CERTIFICATIONImplFromJson(json);
+
+  @override
+  final CertificationModel data;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'RequestState.certification(data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CERTIFICATIONImpl &&
+            (identical(other.data, data) || other.data == data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, data);
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CERTIFICATIONImplCopyWith<_$CERTIFICATIONImpl> get copyWith =>
+      __$$CERTIFICATIONImplCopyWithImpl<_$CERTIFICATIONImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function() $default, {
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(String? message) success,
+    required TResult Function(String error) error,
+    required TResult Function(ResidenceModel data) residence,
+    required TResult Function(BienImmobilierModel data) bienImmobilier,
+    required TResult Function(List<ResidenceModel> data) residences,
+    required TResult Function(List<VilleModel> data) villes,
+    required TResult Function(List<CommuneModel> data) communes,
+    required TResult Function(WalletModel data) wallet,
+    required TResult Function(WithdrawalRequestResponse data) withdrawalRequest,
+    required TResult Function(CertificationModel data) certification,
+  }) {
+    return certification(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function()? $default, {
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(String? message)? success,
+    TResult? Function(String error)? error,
+    TResult? Function(ResidenceModel data)? residence,
+    TResult? Function(BienImmobilierModel data)? bienImmobilier,
+    TResult? Function(List<ResidenceModel> data)? residences,
+    TResult? Function(List<VilleModel> data)? villes,
+    TResult? Function(List<CommuneModel> data)? communes,
+    TResult? Function(WalletModel data)? wallet,
+    TResult? Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult? Function(CertificationModel data)? certification,
+  }) {
+    return certification?.call(data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function()? $default, {
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String? message)? success,
+    TResult Function(String error)? error,
+    TResult Function(ResidenceModel data)? residence,
+    TResult Function(BienImmobilierModel data)? bienImmobilier,
+    TResult Function(List<ResidenceModel> data)? residences,
+    TResult Function(List<VilleModel> data)? villes,
+    TResult Function(List<CommuneModel> data)? communes,
+    TResult Function(WalletModel data)? wallet,
+    TResult Function(WithdrawalRequestResponse data)? withdrawalRequest,
+    TResult Function(CertificationModel data)? certification,
+    required TResult orElse(),
+  }) {
+    if (certification != null) {
+      return certification(data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_RequestState value) $default, {
+    required TResult Function(REQUEST_INITIAL value) initial,
+    required TResult Function(REQUEST_LOADING value) loading,
+    required TResult Function(REQUEST_SUCCESS value) success,
+    required TResult Function(REQUEST_ERROR value) error,
+    required TResult Function(REQUEST_RESIDENCE_DATA value) residence,
+    required TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)
+        bienImmobilier,
+    required TResult Function(REQUEST_RESIDENCES_DATA value) residences,
+    required TResult Function(REQUEST_VILLES_DATA value) villes,
+    required TResult Function(REQUEST_COMMUNES_DATA value) communes,
+    required TResult Function(WALLET value) wallet,
+    required TResult Function(WITHDRAWAL_REQUEST value) withdrawalRequest,
+    required TResult Function(CERTIFICATION value) certification,
+  }) {
+    return certification(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_RequestState value)? $default, {
+    TResult? Function(REQUEST_INITIAL value)? initial,
+    TResult? Function(REQUEST_LOADING value)? loading,
+    TResult? Function(REQUEST_SUCCESS value)? success,
+    TResult? Function(REQUEST_ERROR value)? error,
+    TResult? Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult? Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult? Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult? Function(REQUEST_VILLES_DATA value)? villes,
+    TResult? Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult? Function(WALLET value)? wallet,
+    TResult? Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult? Function(CERTIFICATION value)? certification,
+  }) {
+    return certification?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_RequestState value)? $default, {
+    TResult Function(REQUEST_INITIAL value)? initial,
+    TResult Function(REQUEST_LOADING value)? loading,
+    TResult Function(REQUEST_SUCCESS value)? success,
+    TResult Function(REQUEST_ERROR value)? error,
+    TResult Function(REQUEST_RESIDENCE_DATA value)? residence,
+    TResult Function(REQUEST_BIEN_IMMOBILIER_DATA value)? bienImmobilier,
+    TResult Function(REQUEST_RESIDENCES_DATA value)? residences,
+    TResult Function(REQUEST_VILLES_DATA value)? villes,
+    TResult Function(REQUEST_COMMUNES_DATA value)? communes,
+    TResult Function(WALLET value)? wallet,
+    TResult Function(WITHDRAWAL_REQUEST value)? withdrawalRequest,
+    TResult Function(CERTIFICATION value)? certification,
+    required TResult orElse(),
+  }) {
+    if (certification != null) {
+      return certification(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CERTIFICATIONImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class CERTIFICATION implements RequestState {
+  const factory CERTIFICATION({required final CertificationModel data}) =
+      _$CERTIFICATIONImpl;
+
+  factory CERTIFICATION.fromJson(Map<String, dynamic> json) =
+      _$CERTIFICATIONImpl.fromJson;
+
+  CertificationModel get data;
+
+  /// Create a copy of RequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CERTIFICATIONImplCopyWith<_$CERTIFICATIONImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

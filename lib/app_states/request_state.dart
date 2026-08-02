@@ -5,6 +5,7 @@ import 'package:immoplus_pro/data/models/configs/ville_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/wallet_model.dart';
 import 'package:immoplus_pro/features/payments/data/models/withdrawal_request_response.dart';
+import 'package:immoplus_pro/features/certification/models/certification_model.dart';
 
 part 'request_state.freezed.dart';
 part 'request_state.g.dart';
@@ -31,6 +32,8 @@ class RequestState with _$RequestState {
   const factory RequestState.wallet({required WalletModel data}) = WALLET;
   const factory RequestState.withdrawalRequest(
       {required WithdrawalRequestResponse data}) = WITHDRAWAL_REQUEST;
+  const factory RequestState.certification({required CertificationModel data}) =
+      CERTIFICATION;
   factory RequestState.fromJson(Map<String, dynamic> json) =>
       _$RequestStateFromJson(json);
 }

@@ -167,3 +167,15 @@ Map<String, dynamic> _$$WITHDRAWAL_REQUESTImplToJson(
       'data': instance.data,
       'runtimeType': instance.$type,
     };
+
+_$CERTIFICATIONImpl _$$CERTIFICATIONImplFromJson(Map<String, dynamic> json) =>
+    _$CERTIFICATIONImpl(
+      data: CertificationModel.fromJson(json['data'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$CERTIFICATIONImplToJson(_$CERTIFICATIONImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+      'runtimeType': instance.$type,
+    };
