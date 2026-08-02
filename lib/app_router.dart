@@ -27,6 +27,7 @@ import 'package:immoplus_pro/features/pin_code/views/pin_reset_page.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdrawal_success_page.dart';
+import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
@@ -83,6 +84,10 @@ import 'package:immoplus_pro/features/furniture_detail/furniture_detail_page_v2.
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_cubit.dart';
 import 'package:immoplus_pro/data/models/furniture/furniture_model.dart';
 import 'package:immoplus_pro/features/create_furniture/create_furniture_page.dart';
+
+// ── Certification module ──
+import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart';
+import 'package:immoplus_pro/core/injection.dart';
 
 class AppRouter {
   static bool userIs = false;
@@ -202,7 +207,9 @@ class AppRouter {
       GoRoute(
         path: '/withdraw_form_v2',
         name: WithdrawFormScreenV2.name,
-        builder: (context, state) => const WithdrawFormScreenV2(),
+        builder: (context, state) => WithdrawFormScreenV2(
+          reservationId: state.extra as String?,
+        ),
       ),
       GoRoute(
         path: '/withdrawal_success',
@@ -562,6 +569,16 @@ class AppRouter {
         path: RatingsHistoryPage.routePath(),
         name: RatingsHistoryPage.name,
         builder: (context, state) => const RatingsHistoryPage(),
+      ),
+
+      // ── Certification ──
+      GoRoute(
+        path: CertificationPage.routePath,
+        name: CertificationPage.name,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<CertificationCubit>(),
+          child: const CertificationPage(),
+        ),
       ),
     ],
   );

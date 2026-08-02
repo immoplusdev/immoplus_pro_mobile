@@ -41,6 +41,9 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 // import 'package:immoplus_pro/features/furnitures/furnitures_page_v2.dart';
 import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
+import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
+import 'package:immoplus_pro/features/certification/widgets/certification_announce_sheet.dart';
+import 'package:immoplus_pro/services/certification_announcement_service.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
@@ -73,6 +76,7 @@ class _HomePageV2State extends State<HomePageV2>
   bool _isUnlocked = false;
 
   final GlobalKey _scannerTutorialKey = GlobalKey();
+  final GlobalKey _certificationTutorialKey = GlobalKey();
   BuildContext? _showcaseContext;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
@@ -87,6 +91,9 @@ class _HomePageV2State extends State<HomePageV2>
   @override
   void initState() {
     super.initState();
+    // TEMP DEBUG: force le ré-affichage du sheet de certification — à retirer après test.
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.remove('certification_announcement_seen'));
     _bannersCubit = context.read<BannersCubit>();
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(() {
@@ -149,7 +156,34 @@ class _HomePageV2State extends State<HomePageV2>
   Future<void> _checkQrScanAnnouncement() async {
     if (!mounted) return;
     final shouldShow = await QrScanAnnouncementService.shouldShow();
-    if (!mounted || !shouldShow) return;
+    if (mounted && shouldShow) {
+      await showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        barrierColor: Colors.black.withValues(alpha: 0.6),
+        isScrollControlled: true,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (sheetCtx) => QrScanDepositSheet(
+          onAccept: () async {
+            Navigator.of(sheetCtx).pop();
+            await QrScanAnnouncementService.markSeen();
+          },
+        ),
+      );
+    }
+    // Enchaîné après les sheets (vu ou non) pour ne jamais superposer un
+    // tooltip showcase par-dessus un bottom sheet encore visible.
+    await _checkCertificationAnnouncement();
+  }
+
+  Future<void> _checkCertificationAnnouncement() async {
+    if (!mounted) return;
+    final shouldShow = await CertificationAnnouncementService.shouldShow();
+    if (!mounted || !shouldShow) {
+      await _checkAndShowScannerTutorial();
+      return;
+    }
     await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -157,21 +191,24 @@ class _HomePageV2State extends State<HomePageV2>
       isScrollControlled: true,
       isDismissible: false,
       enableDrag: false,
-      builder: (sheetCtx) => QrScanDepositSheet(
+      builder: (sheetCtx) => CertificationAnnounceSheet(
         onAccept: () async {
           Navigator.of(sheetCtx).pop();
-          await QrScanAnnouncementService.markSeen();
+          await CertificationAnnouncementService.markSeen();
+          if (!mounted) return;
+          context.pushNamed(CertificationPage.name);
+        },
+        onMaybeLater: () async {
+          Navigator.of(sheetCtx).pop();
+          await CertificationAnnouncementService.markSeen();
         },
       ),
     );
-    // Enchaîné après les sheets pour ne jamais superposer un tooltip
-    // showcase par-dessus un bottom sheet encore visible.
     await _checkAndShowScannerTutorial();
   }
 
-  /// Showcase (tooltip) pointant sur le bouton "Scanner" du dashboard,
-  /// affiché une seule fois — mirror du tutoriel du calendrier
-  /// (lib/features/calendar/calendar_page_v2.dart).
+  /// Showcases (tooltips) du dashboard, affichés une seule fois.
+  /// Enchaîne: Scanner → Certification
   Future<void> _checkAndShowScannerTutorial() async {
     if (!mounted || _showcaseContext == null) return;
     final prefs = await SharedPreferences.getInstance();
@@ -180,7 +217,7 @@ class _HomePageV2State extends State<HomePageV2>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _showcaseContext == null) return;
       ShowCaseWidget.of(_showcaseContext!)
-          .startShowCase([_scannerTutorialKey]);
+          .startShowCase([_scannerTutorialKey, _certificationTutorialKey]);
       prefs.setBool('scanner_tutorial_seen_v1', true);
     });
   }
@@ -276,7 +313,7 @@ class _HomePageV2State extends State<HomePageV2>
         montantCommission: reservation.montantCommission,
         onContinue: () {
           Navigator.of(sheetCtx).pop();
-          _continueToWithdrawal();
+          _continueToWithdrawal(reservationId);
         },
         onMaybeLater: () => Navigator.of(sheetCtx).pop(),
       ),
@@ -286,9 +323,11 @@ class _HomePageV2State extends State<HomePageV2>
 
   /// S'assure que le coffre (code PIN) est déverrouillé avant d'ouvrir la
   /// demande de retrait — sinon fait passer par [PinCodePageV2] d'abord.
-  void _continueToWithdrawal() {
+  /// [reservationId] non-null bascule [WithdrawFormScreenV2] sur le flux
+  /// "scan QR" (POST /wallet/withdrawal-request/create-from-qr).
+  void _continueToWithdrawal(String reservationId) {
     if (_isUnlocked) {
-      context.pushNamed(WithdrawFormScreenV2.name);
+      context.pushNamed(WithdrawFormScreenV2.name, extra: reservationId);
       return;
     }
     context.pushNamed(
@@ -296,7 +335,7 @@ class _HomePageV2State extends State<HomePageV2>
       extra: () {
         setState(() => _isUnlocked = true);
         context.pop();
-        context.pushNamed(WithdrawFormScreenV2.name);
+        context.pushNamed(WithdrawFormScreenV2.name, extra: reservationId);
       },
     );
   }
@@ -528,84 +567,115 @@ class _HomePageV2State extends State<HomePageV2>
                             ),
                           ),
                           const Gap(_Constants.gapLarge),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            physics: const BouncingScrollPhysics(),
-                            child: Row(
-                              children: [
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      Assets.svgs.buildings,
-                                      width: 30,
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              const crossAxisCount = 4;
+                              const spacing = 16.0;
+                              final itemWidth = (constraints.maxWidth -
+                                      spacing * (crossAxisCount - 1)) /
+                                  crossAxisCount;
+                              return Wrap(
+                                spacing: spacing,
+                                runSpacing: 20,
+                                children: [
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.buildings,
+                                          width: 30,
+                                        ),
+                                      ),
+                                      label: "Bien immobilier",
+                                      onTap: () => context
+                                          .pushNamed(EstatesPageV2.name),
                                     ),
                                   ),
-                                  label: "Bien immobilier",
-                                  onTap: () =>
-                                      context.pushNamed(EstatesPageV2.name),
-                                ),
-                                const Gap(24),
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      Assets.svgs.house,
-                                      width: 30,
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.house,
+                                          width: 30,
+                                        ),
+                                      ),
+                                      label: "Résidences",
+                                      onTap: () => context
+                                          .pushNamed(ResidencesPageV2.name),
                                     ),
                                   ),
-                                  label: "Résidences",
-                                  onTap: () =>
-                                      context.pushNamed(ResidencesPageV2.name),
-                                ),
-                                // const Gap(24),
-                                // _buildDashboardAction(
-                                //   iconWidget: Center(
-                                //     child: SvgPicture.asset(
-                                //       Assets.svgs.lobby,
-                                //       width: 30,
-                                //     ),
-                                //   ),
-                                //   label: "Mes meubles",
-                                //   onTap: () =>
-                                //       context.pushNamed(FurnituresPageV2.name),
-                                // ),
-                                const Gap(24),
-                                _buildDashboardAction(
-                                  iconWidget: Center(
-                                    child: SvgPicture.asset(
-                                      "assets/svgs/send-sqaure-2.svg",
-                                      width: 30,
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/svgs/send-sqaure-2.svg",
+                                          width: 30,
+                                        ),
+                                      ),
+                                      label: "Transactions",
+                                      onTap: () => context
+                                          .pushNamed(PaymentsPageV2.name),
                                     ),
                                   ),
-                                  label: "Transactions",
-                                  onTap: () =>
-                                      context.pushNamed(PaymentsPageV2.name),
-                                ),
-                                const Gap(24),
-                                Showcase(
-                                  key: _scannerTutorialKey,
-                                  description:
-                                      "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
-                                  tooltipBackgroundColor: Colors.white,
-                                  textColor: Colors.black87,
-                                  descTextStyle: const TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  targetBorderRadius:
-                                      BorderRadius.circular(8),
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        Assets.svgs.scan,
-                                        width: 30,
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: Showcase(
+                                      key: _scannerTutorialKey,
+                                      description:
+                                          "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
+                                      tooltipBackgroundColor: Colors.white,
+                                      textColor: Colors.black87,
+                                      descTextStyle: const TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      targetBorderRadius:
+                                          BorderRadius.circular(8),
+                                      child: _buildDashboardAction(
+                                        iconWidget: Center(
+                                          child: SvgPicture.asset(
+                                            Assets.svgs.scan,
+                                            width: 30,
+                                          ),
+                                        ),
+                                        label: "Scanner",
+                                        onTap: _scanAndValidatePresence,
                                       ),
                                     ),
-                                    label: "Scanner",
-                                    onTap: _scanAndValidatePresence,
                                   ),
-                                ),
-                              ],
-                            ),
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: Showcase(
+                                      key: _certificationTutorialKey,
+                                      description:
+                                          "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
+                                      tooltipBackgroundColor: Colors.white,
+                                      textColor: Colors.black87,
+                                      descTextStyle: const TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      targetBorderRadius:
+                                          BorderRadius.circular(8),
+                                      child: _buildDashboardAction(
+                                        iconWidget: Center(
+                                          child: SvgPicture.asset(
+                                            "assets/svgs/verify.svg",
+                                            width: 30,
+                                          ),
+                                        ),
+                                        label: "Certification",
+                                        onTap: () => context
+                                            .pushNamed(CertificationPage.name),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -863,13 +933,18 @@ class _HomePageV2State extends State<HomePageV2>
             child: Center(child: iconWidget),
           ),
           const Gap(_Constants.gapSmall),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
             ),
           )
         ],
