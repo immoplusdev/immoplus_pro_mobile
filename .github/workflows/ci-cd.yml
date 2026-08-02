@@ -141,9 +141,9 @@ jobs:
             <string>app-store</string>
             <key>provisioningProfiles</key>
             <dict>
-              <key>com.immoplus.ci</key>
+              <key>com.immoplus.pro.ci</key>
               <string>${{ env.PROFILE_UUID }}</string>
-              <key>com.immoplus.ci.OneSignalNotificationServiceExtension</key>
+              <key>com.immoplus.pro.ci.OneSignalNotificationServiceExtension</key>
               <string>${{ env.EXT_PROFILE_UUID }}</string>
             </dict>
             <key>signingCertificate</key>
