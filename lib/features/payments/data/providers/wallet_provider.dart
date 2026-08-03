@@ -44,6 +44,10 @@ abstract class WalletProvider {
   Future<WithdrawalRequestModel> createWithdrawalRequest(
       @Body() WithdrawalRequestDto withdrawalRequestDto);
 
+  /// Crée une demande de retrait liée à une réservation validée par scan QR
+  @POST('/wallet/withdrawal-request/create-from-qr')
+  Future<void> createWithdrawalRequestFromQr(@Body() Map<String, dynamic> body);
+
   /// Définir un nouveau code PIN pour le wallet
   @POST('/wallet/set-pin')
   Future<void> setPin(@Body() PinRequestModel pinRequest);

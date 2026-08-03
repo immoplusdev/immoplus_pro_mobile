@@ -130,14 +130,11 @@ class WalletRepository {
     required String operator,
   }) async {
     try {
-      await DioClient().dio.post(
-        '/wallet/withdrawal-request/create-from-qr',
-        data: {
-          'reservationId': reservationId,
-          'phoneNumber': phoneNumber,
-          'operator': operator,
-        },
-      );
+      await WalletProvider(DioClient().dio).createWithdrawalRequestFromQr({
+        'reservationId': reservationId,
+        'phoneNumber': phoneNumber,
+        'operator': operator,
+      });
     } on DioException catch (dioError) {
       log('DioError createWithdrawalRequestFromQr: ${dioError.message}');
       throw Exception(
