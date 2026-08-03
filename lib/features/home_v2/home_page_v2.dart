@@ -28,6 +28,7 @@ import 'package:immoplus_pro/services/qr_scan_announcement_service.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:immoplus_pro/core/showcase/showcase_coordinator.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -78,6 +79,12 @@ class _HomePageV2State extends State<HomePageV2>
   final GlobalKey _scannerTutorialKey = GlobalKey();
   final GlobalKey _certificationTutorialKey = GlobalKey();
   BuildContext? _showcaseContext;
+
+  /// `true` dès qu'on a navigué vers une autre route pleine page (ex:
+  /// Certification) pendant que le Dashboard reste monté en arrière-plan
+  /// (IndexedStack du shell router) — empêche le showcase du Dashboard de
+  /// démarrer par-dessus cette page.
+  bool _navigatedAwayFromDashboard = false;
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
       ValueNotifier(BookingFilterV2.nouvelle);
@@ -193,7 +200,7 @@ class _HomePageV2State extends State<HomePageV2>
           Navigator.of(sheetCtx).pop();
           await CertificationAnnouncementService.markSeen();
           if (!mounted) return;
-          context.pushNamed(CertificationPage.name);
+          _goToCertification();
         },
         onMaybeLater: () async {
           Navigator.of(sheetCtx).pop();
@@ -204,15 +211,30 @@ class _HomePageV2State extends State<HomePageV2>
     await _checkAndShowScannerTutorial();
   }
 
+  /// Point d'entrée unique vers la page Certification : pose le flag
+  /// [_navigatedAwayFromDashboard] *avant* de naviguer, que ce soit via le
+  /// bouton "Certification" du dashboard ou via le bottom sheet d'annonce,
+  /// pour empêcher le showcase du Dashboard de se déclencher par-dessus.
+  void _goToCertification() {
+    _navigatedAwayFromDashboard = true;
+    context.pushNamed(CertificationPage.name);
+  }
+
   /// Showcases (tooltips) du dashboard, affichés une seule fois.
   /// Enchaîne: Scanner → Certification
   Future<void> _checkAndShowScannerTutorial() async {
-    if (!mounted || _showcaseContext == null) return;
+    if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
+      return;
+    }
     final prefs = await SharedPreferences.getInstance();
     final hasSeen = prefs.getBool('scanner_tutorial_seen_v1') ?? false;
     if (hasSeen) return;
+    if (!ShowcaseCoordinator.tryAcquire()) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _showcaseContext == null) return;
+      if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
+        ShowcaseCoordinator.release();
+        return;
+      }
       ShowCaseWidget.of(_showcaseContext!)
           .startShowCase([_scannerTutorialKey, _certificationTutorialKey]);
       prefs.setBool('scanner_tutorial_seen_v1', true);
@@ -247,6 +269,7 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   Future<void> _scanAndValidatePresence() async {
+    _navigatedAwayFromDashboard = true;
     final qrToken = await QrScannerPage.scan(context);
     if (qrToken != null && qrToken.isNotEmpty) {
       EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
@@ -413,6 +436,7 @@ class _HomePageV2State extends State<HomePageV2>
   Widget build(BuildContext context) {
     return EnvironmentsBadge(
       child: ShowCaseWidget(
+        onFinish: ShowcaseCoordinator.release,
         builder: (showcaseCtx) {
           _showcaseContext = showcaseCtx;
           return _buildScaffold(context);
@@ -665,8 +689,7 @@ class _HomePageV2State extends State<HomePageV2>
                                           ),
                                         ),
                                         label: "Certification",
-                                        onTap: () => context
-                                            .pushNamed(CertificationPage.name),
+                                        onTap: _goToCertification,
                                       ),
                                     ),
                                   ),

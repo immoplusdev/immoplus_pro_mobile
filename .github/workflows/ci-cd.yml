@@ -150,12 +150,16 @@ jobs:
       - name: ⚙️ Generate code (freezed / json_serializable)
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: 🔢 Compute build number (base + run number)
+      - name: 🔢 Compute build number (pubspec base + run number)
         run: |
-          BASE=${{ vars.IOS_BASE_BUILD_NUMBER }}
+          BASE=$(grep '^version:' pubspec.yaml | sed -E 's/.*\+([0-9]+)$/\1/')
+          if [ -z "$BASE" ]; then
+            echo "❌ Impossible d'extraire le build number depuis pubspec.yaml (format attendu: X.Y.Z+N)"
+            exit 1
+          fi
           NEW_BUILD=$((BASE + ${{ github.run_number }}))
           echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
-          echo "➡️ Build number utilisé : $NEW_BUILD"
+          echo "➡️ Build number utilisé : $NEW_BUILD (base pubspec.yaml=$BASE + run_number=${{ github.run_number }})"
 
       - name: 📄 Create ExportOptions.plist
         run: |

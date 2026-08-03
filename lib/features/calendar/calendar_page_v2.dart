@@ -7,6 +7,7 @@ import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:immoplus_pro/core/showcase/showcase_coordinator.dart';
 
 import 'calendar_date_utils.dart';
 import 'calendar_theme.dart';
@@ -256,10 +257,13 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
     final prefs  = await SharedPreferences.getInstance();
     final hasSeen = prefs.getBool('calendar_tutorial_seen_v5') ?? false;
     if (!hasSeen) {
+      if (!ShowcaseCoordinator.tryAcquire()) return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           ShowCaseWidget.of(ctx).startShowCase([_tutorialKey1, _tutorialKey2]);
           prefs.setBool('calendar_tutorial_seen_v5', true);
+        } else {
+          ShowcaseCoordinator.release();
         }
       });
     }
@@ -318,6 +322,7 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
   @override
   Widget build(BuildContext context) {
     return ShowCaseWidget(
+      onFinish: ShowcaseCoordinator.release,
       builder: (showcaseCtx) {
         return Scaffold(
           backgroundColor: calBackgroundColor,
