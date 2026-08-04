@@ -1,0 +1,206 @@
+name: Deploy Android to Play Store
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+    inputs:
+      track:
+        description: 'Piste Play Store cible'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+
+jobs:
+  build-and-deploy-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🌍 Determine target track
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TRACK="${{ github.event.inputs.track }}"
+          else
+            TRACK="internal"
+          fi
+
+          echo "TRACK=$TRACK" >> $GITHUB_ENV
+          echo "➡️ Piste utilisée : $TRACK"
+
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 🔐 Decode keystore and write key.properties
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          KEYSTORE_PATH=$RUNNER_TEMP/release-keystore.jks
+          echo -n "$ANDROID_KEYSTORE_BASE64" | base64 -d > $KEYSTORE_PATH
+
+          echo "🔍 Vérification de la taille du fichier généré :"
+          ls -lh $KEYSTORE_PATH
+
+          cat <<EOF > android/key.properties
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=$KEYSTORE_PATH
+          EOF
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 🗄️ Cache Pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: 🗄️ Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      - name: ⚙️ Generate code (freezed / json_serializable)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: 🔢 Compute build number (via Google Play Developer API)
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          ANDROID_BASE_BUILD_NUMBER: ${{ vars.ANDROID_BASE_BUILD_NUMBER }}
+        run: |
+          gem install jwt --no-document
+
+          if [ -z "$ANDROID_BASE_BUILD_NUMBER" ]; then
+            echo "❌ Variable ANDROID_BASE_BUILD_NUMBER manquante ou vide"
+            exit 1
+          fi
+
+          NEW_BUILD=$(PACKAGE_NAME="com.immoplus_pro.ci" FALLBACK_BASE="$ANDROID_BASE_BUILD_NUMBER" ruby -e '
+            require "jwt"
+            require "openssl"
+            require "net/http"
+            require "json"
+            require "time"
+
+            service_account = JSON.parse(ENV.fetch("GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"))
+            private_key = OpenSSL::PKey::RSA.new(service_account.fetch("private_key"))
+            token_uri = service_account.fetch("token_uri")
+
+            now = Time.now.to_i
+            jwt = JWT.encode(
+              {
+                iss: service_account.fetch("client_email"),
+                scope: "https://www.googleapis.com/auth/androidpublisher",
+                aud: token_uri,
+                iat: now,
+                exp: now + 3600
+              },
+              private_key,
+              "RS256"
+            )
+
+            def api_call(method, uri, token, body = nil)
+              req = method.new(uri)
+              req["Authorization"] = "Bearer #{token}"
+              req["Content-Type"] = "application/json"
+              req.body = body.to_json if body
+              res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+              JSON.parse(res.body.to_s.empty? ? "{}" : res.body)
+            end
+
+            token_uri_obj = URI(token_uri)
+            token_req = Net::HTTP::Post.new(token_uri_obj)
+            token_req.set_form_data(
+              "grant_type" => "urn:ietf:params:oauth:grant-type:jwt-bearer",
+              "assertion" => jwt
+            )
+            token_res = Net::HTTP.start(token_uri_obj.hostname, token_uri_obj.port, use_ssl: true) { |http| http.request(token_req) }
+            access_token = JSON.parse(token_res.body)["access_token"]
+            raise "Échec de l\'authentification Google: #{token_res.body}" unless access_token
+
+            package_name = ENV.fetch("PACKAGE_NAME")
+            base_url = "https://androidpublisher.googleapis.com/androidpublisher/v3/applications/#{package_name}"
+
+            edit = api_call(Net::HTTP::Post, URI("#{base_url}/edits"), access_token)
+            edit_id = edit["id"]
+            raise "Impossible de créer un edit Play Console: #{edit}" unless edit_id
+
+            tracks = api_call(Net::HTTP::Get, URI("#{base_url}/edits/#{edit_id}/tracks"), access_token)
+
+            version_codes = (tracks["tracks"] || []).flat_map do |track|
+              (track["releases"] || []).flat_map { |release| release["versionCodes"] || [] }
+            end.map(&:to_i)
+
+            api_call(Net::HTTP::Delete, URI("#{base_url}/edits/#{edit_id}"), access_token)
+
+            latest = version_codes.max
+            new_build = latest ? latest + 1 : ENV.fetch("FALLBACK_BASE").to_i
+            puts new_build
+          ')
+
+          if [ -z "$NEW_BUILD" ]; then
+            echo "❌ Échec du calcul du build number via Google Play Developer API"
+            exit 1
+          fi
+
+          echo "BUILD_NUMBER=$NEW_BUILD" >> $GITHUB_ENV
+          echo "➡️ Build number utilisé : $NEW_BUILD (source=Google Play Developer API, fallback=$ANDROID_BASE_BUILD_NUMBER)"
+
+      - name: 🔨 Build App Bundle
+        run: |
+          flutter build appbundle --release --build-number=${{ env.BUILD_NUMBER }}
+
+      - name: 🔍 Resolve AAB path
+        id: aab
+        run: |
+          AAB_PATH=$(find build/app/outputs/bundle -name "*.aab" | head -n 1)
+          if [ -z "$AAB_PATH" ]; then
+            echo "❌ Aucun fichier .aab trouvé dans build/app/outputs/bundle"
+            exit 1
+          fi
+          echo "Fichier trouvé : $AAB_PATH"
+          echo "path=$AAB_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: 🚀 Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.immoplus_pro.ci
+          releaseFiles: ${{ steps.aab.outputs.path }}
+          track: ${{ env.TRACK }}
+          status: completed
+
+      - name: 🧹 Clean up keystore and key.properties
+        if: always()
+        run: |
+          rm -f $RUNNER_TEMP/release-keystore.jks
+          rm -f android/key.properties
