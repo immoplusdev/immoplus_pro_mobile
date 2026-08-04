@@ -296,7 +296,8 @@ class _HomePageV2State extends State<HomePageV2>
     try {
       final parts = qrToken.split('.');
       if (parts.length != 3) return null;
-      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final payload =
+          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
       final Map<String, dynamic> claims = jsonDecode(payload);
       return claims['rid'] as String?;
     } catch (_) {
@@ -313,7 +314,8 @@ class _HomePageV2State extends State<HomePageV2>
 
     final ReservationModel reservation;
     try {
-      final response = await LogmentRepository.getReservation(id: reservationId);
+      final response =
+          await LogmentRepository.getReservation(id: reservationId);
       reservation = response.data;
     } catch (_) {
       return false;
@@ -363,7 +365,8 @@ class _HomePageV2State extends State<HomePageV2>
   /// Messages métier renvoyés par POST /reservations/action/valider-presence
   /// (voir ErrorInterceptor._silentRequestPaths : cet endpoint est exclu du
   /// toast/dialog générique, on gère tout ici avec le dialog personnalisé).
-  static const _qrScanErrorContent = <String, (String title, String description)>{
+  static const _qrScanErrorContent =
+      <String, (String title, String description)>{
     'Le QR code a expiré. Veuillez générer un nouveau QR code.': (
       'QR code expiré',
       'Le QR code a expiré. Demandez au client de générer un nouveau QR code puis réessayez.',
@@ -447,492 +450,487 @@ class _HomePageV2State extends State<HomePageV2>
 
   Widget _buildScaffold(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              // L'en-tête bleu (fixed au scroll car pinned: true)
-              SliverAppBar(
-                pinned: true,
-                automaticallyImplyLeading: false,
-                backgroundColor: Colors.white,
-                elevation: 0,
-                toolbarHeight: 260,
-                flexibleSpace: Stack(
-                  children: [
-                    FlexibleSpaceBar(
-                      background: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          // Fond bleu avec coins arrondis prononcés
-                          Container(
-                            height: _Constants.blueHeaderHeight,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft:
-                                    Radius.circular(_Constants.radiusMedium),
-                                bottomRight:
-                                    Radius.circular(_Constants.radiusMedium),
-                              ),
+      backgroundColor: Colors.white,
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            // L'en-tête bleu (fixed au scroll car pinned: true)
+            SliverAppBar(
+              pinned: true,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              toolbarHeight: 260,
+              flexibleSpace: Stack(
+                children: [
+                  FlexibleSpaceBar(
+                    background: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        // Fond bleu avec coins arrondis prononcés
+                        Container(
+                          height: _Constants.blueHeaderHeight,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft:
+                                  Radius.circular(_Constants.radiusMedium),
+                              bottomRight:
+                                  Radius.circular(_Constants.radiusMedium),
                             ),
                           ),
+                        ),
 
-                          // Barre de statut et d'infos utilisateur
-                          SafeArea(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: _Constants.paddingStandard,
-                                vertical: _Constants.paddingMedium,
-                              ),
-                              child: BlocBuilder<LoginCubit, LoginCubitState>(
-                                builder: (context, state) {
-                                  currentUser = SessionManager().currentUser;
-                                  return Row(
-                                    children: [
-                                      CircleAvatar(
-                                        radius: _Constants.avatarRadius,
-                                        backgroundColor: Colors.white,
-                                        backgroundImage: (currentUser?.avatar !=
-                                                null)
-                                            ? CachedNetworkImageProvider(
-                                                Utils.getImagePath(
-                                                    id: currentUser!.avatar!))
-                                            : const NetworkImage(
-                                                    _Constants.defaultAvatarUrl)
-                                                as ImageProvider,
-                                      ),
-                                      const Gap(_Constants.gapMedium),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              currentUser!.greetingText,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                        // Barre de statut et d'infos utilisateur
+                        SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: _Constants.paddingStandard,
+                              vertical: _Constants.paddingMedium,
+                            ),
+                            child: BlocBuilder<LoginCubit, LoginCubitState>(
+                              builder: (context, state) {
+                                currentUser = SessionManager().currentUser;
+                                return Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: _Constants.avatarRadius,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: (currentUser?.avatar !=
+                                              null)
+                                          ? CachedNetworkImageProvider(
+                                              Utils.getImagePath(
+                                                  id: currentUser!.avatar!))
+                                          : const NetworkImage(
+                                                  _Constants.defaultAvatarUrl)
+                                              as ImageProvider,
+                                    ),
+                                    const Gap(_Constants.gapMedium),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            currentUser!.greetingText,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            const Text(
-                                              "Bienvenue dans votre dashboard",
-                                              style: TextStyle(
-                                                color: Colors.white70,
-                                                fontSize: 14,
-                                              ),
+                                          ),
+                                          const Text(
+                                            "Bienvenue dans votre dashboard",
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 14,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      const Gap(_Constants.gapMedium),
-                                      IconButton(
-                                        onPressed: () => context
-                                            .push(NotificationPage.routePath()),
-                                        icon: const Icon(
-                                          Iconsax.notification,
-                                          color: Colors.white,
-                                          size: _Constants.iconSizeLarge,
-                                        ),
+                                    ),
+                                    const Gap(_Constants.gapMedium),
+                                    IconButton(
+                                      onPressed: () => context
+                                          .push(NotificationPage.routePath()),
+                                      icon: const Icon(
+                                        Iconsax.notification,
+                                        color: Colors.white,
+                                        size: _Constants.iconSizeLarge,
                                       ),
-                                    ],
-                                  );
-                                },
-                              ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    // Wallet superposé (bien à l'intérieur du Stack pour le clic)
-                    Positioned(
+                  ),
+                  // Wallet superposé (bien à l'intérieur du Stack pour le clic)
+                  Positioned(
+                    left: _Constants.paddingStandard,
+                    right: _Constants.paddingStandard,
+                    bottom: 12,
+                    child: _isUnlocked
+                        ? _buildUnlockedWalletBanner()
+                        : _buildLockedWalletBanner(),
+                  ),
+                ],
+              ),
+            ),
+
+            // Contenu du haut : Wallet + Tableau de bord
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BannerCard(
+                    onDismiss: () {
+                      context.read<BannersCubit>().setDismissed(true);
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10,
                       left: _Constants.paddingStandard,
                       right: _Constants.paddingStandard,
-                      bottom: 12,
-                      child: _isUnlocked
-                          ? _buildUnlockedWalletBanner()
-                          : _buildLockedWalletBanner(),
+                      bottom: _Constants.paddingStandard,
                     ),
-                  ],
-                ),
-              ),
-
-              // Contenu du haut : Wallet + Tableau de bord
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BannerCard(
-                      onDismiss: () {
-                        context.read<BannersCubit>().setDismissed(true);
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        left: _Constants.paddingStandard,
-                        right: _Constants.paddingStandard,
-                        bottom: _Constants.paddingStandard,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Tableau de bord",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Tableau de bord",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
-                          const Gap(_Constants.gapLarge),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              const crossAxisCount = 4;
-                              const spacing = 16.0;
-                              final itemWidth = (constraints.maxWidth -
-                                      spacing * (crossAxisCount - 1)) /
-                                  crossAxisCount;
-                              return Wrap(
-                                spacing: spacing,
-                                runSpacing: 20,
-                                children: [
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: _buildDashboardAction(
-                                      iconWidget: Center(
-                                        child: SvgPicture.asset(
-                                          Assets.svgs.buildings,
-                                          width: 30,
-                                        ),
-                                      ),
-                                      label: "Bien immobilier",
-                                      onTap: () => context
-                                          .pushNamed(EstatesPageV2.name),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: _buildDashboardAction(
-                                      iconWidget: Center(
-                                        child: SvgPicture.asset(
-                                          Assets.svgs.house,
-                                          width: 30,
-                                        ),
-                                      ),
-                                      label: "Résidences",
-                                      onTap: () => context
-                                          .pushNamed(ResidencesPageV2.name),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: _buildDashboardAction(
-                                      iconWidget: Center(
-                                        child: SvgPicture.asset(
-                                          "assets/svgs/send-sqaure-2.svg",
-                                          width: 30,
-                                        ),
-                                      ),
-                                      label: "Transactions",
-                                      onTap: () => context
-                                          .pushNamed(PaymentsPageV2.name),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: Showcase(
-                                      key: _scannerTutorialKey,
-                                      description:
-                                          "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
-                                      tooltipBackgroundColor: Colors.white,
-                                      textColor: Colors.black87,
-                                      descTextStyle: const TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      targetBorderRadius:
-                                          BorderRadius.circular(8),
-                                      child: _buildDashboardAction(
-                                        iconWidget: Center(
-                                          child: SvgPicture.asset(
-                                            Assets.svgs.scan,
-                                            width: 30,
-                                          ),
-                                        ),
-                                        label: "Scanner",
-                                        onTap: _scanAndValidatePresence,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: Showcase(
-                                      key: _certificationTutorialKey,
-                                      description:
-                                          "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
-                                      tooltipBackgroundColor: Colors.white,
-                                      textColor: Colors.black87,
-                                      descTextStyle: const TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      targetBorderRadius:
-                                          BorderRadius.circular(8),
-                                      child: _buildDashboardAction(
-                                        iconWidget: Center(
-                                          child: SvgPicture.asset(
-                                            "assets/svgs/verify.svg",
-                                            width: 30,
-                                          ),
-                                        ),
-                                        label: "Certification",
-                                        onTap: _goToCertification,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Onglets et Filtres épinglés (pinned)
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _SliverAppBarDelegate(
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: _Constants.paddingStandard,
-                                vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Colors.grey.shade200, width: 2)),
-                            ),
-                            child: Row(
+                        ),
+                        const Gap(_Constants.gapLarge),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            const crossAxisCount = 4;
+                            const spacing = 16.0;
+                            final itemWidth = (constraints.maxWidth -
+                                    spacing * (crossAxisCount - 1)) /
+                                crossAxisCount;
+                            return Wrap(
+                              spacing: spacing,
+                              runSpacing: 20,
                               children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => _tabController.animateTo(0),
-                                    child: Transform.translate(
-                                      offset: const Offset(0, 2),
-                                      child: AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12),
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: _tabController.index == 0
-                                                  ? AppColors.primary
-                                                  : Colors.transparent,
-                                              width: 2.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Réservations",
-                                              style: TextStyle(
-                                                color: _tabController.index == 0
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade600,
-                                                fontWeight:
-                                                    _tabController.index == 0
-                                                        ? FontWeight.bold
-                                                        : FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const Gap(6),
-                                            if (_totalReservations > 0)
-                                              Container(
-                                                height: 17,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 6),
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: _tabController.index ==
-                                                          0
-                                                      ? AppColors.primary
-                                                      : Colors.grey.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border:
-                                                      _tabController.index == 0
-                                                          ? null
-                                                          : Border.all(
-                                                              color: Colors.grey
-                                                                  .shade300,
-                                                              width: 0.5),
-                                                ),
-                                                child: Text(
-                                                  "$_totalReservations",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: _tabController
-                                                                .index ==
-                                                            0
-                                                        ? Colors.white
-                                                        : Colors.grey.shade600,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        Assets.svgs.buildings,
+                                        width: 30,
+                                      ),
+                                    ),
+                                    label: "Bien immobilier",
+                                    onTap: () =>
+                                        context.pushNamed(EstatesPageV2.name),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        Assets.svgs.house,
+                                        width: 30,
+                                      ),
+                                    ),
+                                    label: "Résidences",
+                                    onTap: () => context
+                                        .pushNamed(ResidencesPageV2.name),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        "assets/svgs/send-sqaure-2.svg",
+                                        width: 30,
+                                      ),
+                                    ),
+                                    label: "Transactions",
+                                    onTap: () =>
+                                        context.pushNamed(PaymentsPageV2.name),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: Showcase(
+                                    key: _scannerTutorialKey,
+                                    description:
+                                        "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
+                                    tooltipBackgroundColor: Colors.white,
+                                    textColor: Colors.black87,
+                                    descTextStyle: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    targetBorderRadius:
+                                        BorderRadius.circular(8),
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.scan,
+                                          width: 30,
                                         ),
                                       ),
+                                      label: "Scanner",
+                                      onTap: _scanAndValidatePresence,
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => _tabController.animateTo(1),
-                                    child: Transform.translate(
-                                      offset: const Offset(0, 2),
-                                      child: AnimatedContainer(
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12),
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                              color: _tabController.index == 1
-                                                  ? AppColors.primary
-                                                  : Colors.transparent,
-                                              width: 2.5,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Visites",
-                                              style: TextStyle(
-                                                color: _tabController.index == 1
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade600,
-                                                fontWeight:
-                                                    _tabController.index == 1
-                                                        ? FontWeight.bold
-                                                        : FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const Gap(6),
-                                            if (_totalVisits > 0)
-                                              Container(
-                                                height: 17,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 6),
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: _tabController.index ==
-                                                          1
-                                                      ? AppColors.primary
-                                                      : Colors.grey.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border:
-                                                      _tabController.index == 1
-                                                          ? null
-                                                          : Border.all(
-                                                              color: Colors.grey
-                                                                  .shade300,
-                                                              width: 0.5),
-                                                ),
-                                                child: Text(
-                                                  "$_totalVisits",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: _tabController
-                                                                .index ==
-                                                            1
-                                                        ? Colors.white
-                                                        : Colors.grey.shade600,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: Showcase(
+                                    key: _certificationTutorialKey,
+                                    description:
+                                        "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
+                                    tooltipBackgroundColor: Colors.white,
+                                    textColor: Colors.black87,
+                                    descTextStyle: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    targetBorderRadius:
+                                        BorderRadius.circular(8),
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/svgs/verify.svg",
+                                          width: 30,
                                         ),
                                       ),
+                                      label: "Certification",
+                                      onTap: _goToCertification,
                                     ),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-                          // Filtres statiques
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.only(
-                                left: 5, right: 5, top: 15, bottom: 5),
-                            child: Row(
-                              children: _buildCurrentFilters(),
-                            ),
+            // Onglets et Filtres épinglés (pinned)
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverPersistentHeader(
+                pinned: true,
+                delegate: _SliverAppBarDelegate(
+                  Container(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: _Constants.paddingStandard,
+                              vertical: 8),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(
+                                    color: Colors.grey.shade200, width: 2)),
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => _tabController.animateTo(0),
+                                  child: Transform.translate(
+                                    offset: const Offset(0, 2),
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: _tabController.index == 0
+                                                ? AppColors.primary
+                                                : Colors.transparent,
+                                            width: 2.5,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Réservations",
+                                            style: TextStyle(
+                                              color: _tabController.index == 0
+                                                  ? AppColors.primary
+                                                  : Colors.grey.shade600,
+                                              fontWeight:
+                                                  _tabController.index == 0
+                                                      ? FontWeight.bold
+                                                      : FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          const Gap(6),
+                                          if (_totalReservations > 0)
+                                            Container(
+                                              height: 17,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 6),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: _tabController.index == 0
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade100,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border:
+                                                    _tabController.index == 0
+                                                        ? null
+                                                        : Border.all(
+                                                            color: Colors
+                                                                .grey.shade300,
+                                                            width: 0.5),
+                                              ),
+                                              child: Text(
+                                                "$_totalReservations",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: _tabController.index ==
+                                                          0
+                                                      ? Colors.white
+                                                      : Colors.grey.shade600,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => _tabController.animateTo(1),
+                                  child: Transform.translate(
+                                    offset: const Offset(0, 2),
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: _tabController.index == 1
+                                                ? AppColors.primary
+                                                : Colors.transparent,
+                                            width: 2.5,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Visites",
+                                            style: TextStyle(
+                                              color: _tabController.index == 1
+                                                  ? AppColors.primary
+                                                  : Colors.grey.shade600,
+                                              fontWeight:
+                                                  _tabController.index == 1
+                                                      ? FontWeight.bold
+                                                      : FontWeight.w600,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          const Gap(6),
+                                          if (_totalVisits > 0)
+                                            Container(
+                                              height: 17,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 6),
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: _tabController.index == 1
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade100,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border:
+                                                    _tabController.index == 1
+                                                        ? null
+                                                        : Border.all(
+                                                            color: Colors
+                                                                .grey.shade300,
+                                                            width: 0.5),
+                                              ),
+                                              child: Text(
+                                                "$_totalVisits",
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: _tabController.index ==
+                                                          1
+                                                      ? Colors.white
+                                                      : Colors.grey.shade600,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Filtres statiques
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(
+                              left: 5, right: 5, top: 15, bottom: 5),
+                          child: Row(
+                            children: _buildCurrentFilters(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ];
-          },
-          body: TabBarView(
-            controller: _tabController,
-            children: [
-              BookingPageV2(
-                filterNotifier: _bookingFilterNotifier,
-                onCountChanged: (count) {
-                  if (_totalReservations != count) {
-                    Future.microtask(() {
-                      if (mounted) setState(() => _totalReservations = count);
-                    });
-                  }
-                },
-              ),
-              VisitPageV2(
-                filterNotifier: _visitFilterNotifier,
-                onCountChanged: (count) {
-                  if (_totalVisits != count) {
-                    Future.microtask(() {
-                      if (mounted) setState(() => _totalVisits = count);
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
+            ),
+          ];
+        },
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            BookingPageV2(
+              filterNotifier: _bookingFilterNotifier,
+              onCountChanged: (count) {
+                if (_totalReservations != count) {
+                  Future.microtask(() {
+                    if (mounted) setState(() => _totalReservations = count);
+                  });
+                }
+              },
+            ),
+            VisitPageV2(
+              filterNotifier: _visitFilterNotifier,
+              onCountChanged: (count) {
+                if (_totalVisits != count) {
+                  Future.microtask(() {
+                    if (mounted) setState(() => _totalVisits = count);
+                  });
+                }
+              },
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 
   Widget _buildDashboardAction(
