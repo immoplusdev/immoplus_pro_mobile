@@ -11,6 +11,25 @@ subprojects {
 }
 subprojects {
     //project.evaluationDependsOn(":app")
+
+    // Force une cible JVM cohérente (Java + Kotlin) sur tous les modules,
+    // y compris les plugins tiers dont la config interne est incohérente
+    // (ex: flutter_facebook_auth mélange Java 1.8 et Kotlin 17).
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            project.android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
+                }
+            }
+        }
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {

@@ -150,6 +150,26 @@ class _WalletProvider implements WalletProvider {
   }
 
   @override
+  Future<void> createWithdrawalRequestFromQr(Map<String, dynamic> body) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _options = _setStreamType<void>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/wallet/withdrawal-request/create-from-qr',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    await _dio.fetch<void>(_options);
+  }
+
+  @override
   Future<void> setPin(PinRequestModel pinRequest) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

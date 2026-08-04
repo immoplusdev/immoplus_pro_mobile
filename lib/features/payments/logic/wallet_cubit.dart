@@ -50,6 +50,29 @@ class WalletCubit extends Cubit<RequestState> {
     }
   }
 
+  /// Demande de retrait liée à une réservation validée par scan QR — pas de
+  /// montant à fournir, il est calculé côté backend depuis la réservation.
+  Future<bool> onCreateWithdrawalRequestFromQr({
+    required String reservationId,
+    required String phoneNumber,
+    required String operator,
+  }) async {
+    try {
+      emit(const RequestState.loading());
+      await WalletRepository.createWithdrawalRequestFromQr(
+        reservationId: reservationId,
+        phoneNumber: phoneNumber,
+        operator: operator,
+      );
+      emit(const RequestState.initial());
+      return true;
+    } catch (e) {
+      inspect(e);
+      emit(const RequestState.initial());
+      return false;
+    }
+  }
+
   onSetInitialize() {
     emit(const RequestState.initial());
   }

@@ -10,6 +10,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart'
+    as _i922;
 import 'package:immoplus_pro/features/pin_code/data/repositories/pin_code_repository.dart'
     as _i177;
 import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart'
@@ -40,6 +42,7 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i177.PinCodeRepository>(() => _i177.PinCodeRepository());
     gh.factory<_i521.BiometryService>(() => _i521.BiometryService());
+    gh.factory<_i922.CertificationCubit>(() => _i922.CertificationCubit());
     gh.singleton<_i165.SessionManager>(() => _i165.SessionManager());
     gh.lazySingleton<_i166.EasyLoadingHandler>(
         () => _i166.EasyLoadingHandler());

@@ -121,6 +121,30 @@ class WalletRepository {
     }
   }
 
+  /// Crée une demande de retrait directement liée à une réservation dont la
+  /// présence vient d'être validée par scan QR — le montant est calculé côté
+  /// backend à partir de la réservation, pas de champ `amount` ici.
+  static Future<void> createWithdrawalRequestFromQr({
+    required String reservationId,
+    required String phoneNumber,
+    required String operator,
+  }) async {
+    try {
+      await WalletProvider(DioClient().dio).createWithdrawalRequestFromQr({
+        'reservationId': reservationId,
+        'phoneNumber': phoneNumber,
+        'operator': operator,
+      });
+    } on DioException catch (dioError) {
+      log('DioError createWithdrawalRequestFromQr: ${dioError.message}');
+      throw Exception(
+          dioError.response?.data['message'] ?? 'Échec de la demande de retrait');
+    } catch (error) {
+      log('Error createWithdrawalRequestFromQr: $error');
+      throw Exception('Erreur inconnue lors de la demande de retrait');
+    }
+  }
+
   static Future<void> changePin(String oldPin, String newPin) async {
     try {
       await WalletProvider(DioClient().dio).changePin({
