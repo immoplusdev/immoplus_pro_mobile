@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -26,9 +26,6 @@ import 'package:dio/dio.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/qr_scan_announcement_service.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
-import 'package:immoplus_pro/core/showcase/showcase_coordinator.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -44,7 +41,11 @@ import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
 import 'package:immoplus_pro/features/certification/widgets/certification_announce_sheet.dart';
+import 'package:immoplus_pro/features/certification/models/certification_model.dart';
+import 'package:immoplus_pro/features/certification/repositories/certification_repository.dart';
 import 'package:immoplus_pro/services/certification_announcement_service.dart';
+import 'package:immoplus_pro/utils/contact_utils.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
@@ -76,15 +77,8 @@ class _HomePageV2State extends State<HomePageV2>
   UserModelSchema? currentUser;
   bool _isUnlocked = false;
 
-  final GlobalKey _scannerTutorialKey = GlobalKey();
-  final GlobalKey _certificationTutorialKey = GlobalKey();
-  BuildContext? _showcaseContext;
-
-  /// `true` dès qu'on a navigué vers une autre route pleine page (ex:
-  /// Certification) pendant que le Dashboard reste monté en arrière-plan
-  /// (IndexedStack du shell router) — empêche le showcase du Dashboard de
-  /// démarrer par-dessus cette page.
-  bool _navigatedAwayFromDashboard = false;
+  // final GlobalKey _scannerTutorialKey = GlobalKey(); // voir tuile commentée plus bas
+  // final GlobalKey _certificationTutorialKey = GlobalKey(); // voir tuile commentée plus bas
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
       ValueNotifier(BookingFilterV2.nouvelle);
@@ -94,6 +88,9 @@ class _HomePageV2State extends State<HomePageV2>
   late BannersCubit _bannersCubit;
   int _totalReservations = 0;
   int _totalVisits = 0;
+  CertificationModel? _certificationData;
+  Timer? _certifBadgeTimer;
+  bool _showScorePercentInBadge = false;
 
   @override
   void initState() {
@@ -114,6 +111,7 @@ class _HomePageV2State extends State<HomePageV2>
     _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
     _checkNotifActif();
+    _loadCertificationBadge();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -184,11 +182,11 @@ class _HomePageV2State extends State<HomePageV2>
   Future<void> _checkCertificationAnnouncement() async {
     if (!mounted) return;
     final shouldShow = await CertificationAnnouncementService.shouldShow();
-    if (!mounted || !shouldShow) {
-      await _checkAndShowScannerTutorial();
-      return;
-    }
-    await showModalBottomSheet(
+    if (!mounted || !shouldShow) return;
+    // Le sheet se contente de renvoyer le choix de l'utilisateur (pop
+    // synchrone) : le travail asynchrone (markSeen, navigation) est
+    // séquencé ici, après la fermeture du sheet.
+    final accepted = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.6),
@@ -196,49 +194,118 @@ class _HomePageV2State extends State<HomePageV2>
       isDismissible: false,
       enableDrag: false,
       builder: (sheetCtx) => CertificationAnnounceSheet(
-        onAccept: () async {
-          Navigator.of(sheetCtx).pop();
-          await CertificationAnnouncementService.markSeen();
-          if (!mounted) return;
-          _goToCertification();
-        },
-        onMaybeLater: () async {
-          Navigator.of(sheetCtx).pop();
-          await CertificationAnnouncementService.markSeen();
-        },
+        onAccept: () => Navigator.of(sheetCtx).pop(true),
+        onMaybeLater: () => Navigator.of(sheetCtx).pop(false),
       ),
     );
-    await _checkAndShowScannerTutorial();
+    if (!mounted) return;
+    await CertificationAnnouncementService.markSeen();
+    if (accepted == true) {
+      if (!mounted) return;
+      _goToCertification();
+    }
   }
 
-  /// Point d'entrée unique vers la page Certification : pose le flag
-  /// [_navigatedAwayFromDashboard] *avant* de naviguer, que ce soit via le
-  /// bouton "Certification" du dashboard ou via le bottom sheet d'annonce,
-  /// pour empêcher le showcase du Dashboard de se déclencher par-dessus.
+  /// Point d'entrée unique vers la page Certification, que ce soit via
+  /// l'anneau de progression du dashboard ou via le bottom sheet d'annonce.
   void _goToCertification() {
-    _navigatedAwayFromDashboard = true;
     context.pushNamed(CertificationPage.name);
   }
 
-  /// Showcases (tooltips) du dashboard, affichés une seule fois.
-  /// Enchaîne: Scanner → Certification
-  Future<void> _checkAndShowScannerTutorial() async {
-    if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
-      return;
+  /// Charge le score de certification pour alimenter l'anneau de
+  /// progression affiché autour de l'avatar. Échec silencieux : l'anneau
+  /// reste simplement vide si l'appel échoue.
+  Future<void> _loadCertificationBadge() async {
+    try {
+      final data = await CertificationRepository.getMyCertification();
+      if (!mounted) return;
+      setState(() => _certificationData = data);
+      _startCertifBadgeAnimationIfNeeded();
+    } catch (_) {
+      // Silencieux : le badge/anneau reste masqué en cas d'échec.
     }
-    final prefs = await SharedPreferences.getInstance();
-    final hasSeen = prefs.getBool('scanner_tutorial_seen_v1') ?? false;
-    if (hasSeen) return;
-    if (!ShowcaseCoordinator.tryAcquire()) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
-        ShowcaseCoordinator.release();
-        return;
-      }
-      ShowCaseWidget.of(_showcaseContext!)
-          .startShowCase([_scannerTutorialKey, _certificationTutorialKey]);
-      prefs.setBool('scanner_tutorial_seen_v1', true);
+  }
+
+  /// `true` uniquement quand toutes les conditions d'attribution du badge
+  /// (`conditionsAttribution`) sont remplies — c'est ce champ, plutôt qu'un
+  /// seuil de score, qui reflète fidèlement le statut "certifié" côté API.
+  bool get _isCertified {
+    final c = _certificationData?.conditionsAttribution;
+    if (c == null) return false;
+    return c.identiteVerifiee &&
+        c.moyenPaiementVerifie &&
+        c.avisMinimum &&
+        c.reservationsMin10 &&
+        c.fiabiliteMin14 &&
+        c.aucuneSanctionActive;
+  }
+
+  /// Tant que le Pro n'est pas certifié, fait alterner le contenu du badge
+  void _startCertifBadgeAnimationIfNeeded() {
+    _certifBadgeTimer?.cancel();
+    if (_isCertified) return;
+    _certifBadgeTimer =
+        Timer.periodic(const Duration(milliseconds: 1800), (_) {
+      if (!mounted) return;
+      setState(() => _showScorePercentInBadge = !_showScorePercentInBadge);
     });
+  }
+
+  /// Couleur de l'anneau ET de l'icône du badge selon le score de
+  Color _certificationColor(int score) {
+    if (score >= 85) return const Color(0xFFFFD700); // Or
+    if (score >= 70) return const Color(0xFFC0C0C0); // Argent
+    if (score >= 50) return const Color(0xFFCD7F32); // Bronze
+    if (score > 0) return Colors.orange; // En progression
+    return Colors.grey; // Pas commencé
+  }
+
+  /// Contenu du badge sur l'avatar : icône verify fixe une fois certifié,
+  Widget _buildCertifBadgeContent() {
+    final score = _certificationData?.scoreTotal ?? 0;
+    final color = _certificationColor(score);
+    final icon = SvgPicture.asset(
+      "assets/svgs/verify.svg",
+      key: const ValueKey('certif_badge_icon'),
+      width: 14,
+      height: 14,
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+    );
+
+    if (_isCertified) return icon;
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 400),
+      transitionBuilder: (child, animation) {
+        final offset = Tween<Offset>(
+          begin: const Offset(0, 0.6),
+          end: Offset.zero,
+        ).animate(animation);
+        return ClipRect(
+          child: SlideTransition(
+            position: offset,
+            child: FadeTransition(opacity: animation, child: child),
+          ),
+        );
+      },
+      child: _showScorePercentInBadge
+          ? Padding(
+              key: const ValueKey('certif_badge_score'),
+              padding: const EdgeInsets.all(2),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '$score%',
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+              ),
+            )
+          : icon,
+    );
   }
 
   Future<void> _requestNotificationPermission() async {
@@ -269,7 +336,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   Future<void> _scanAndValidatePresence() async {
-    _navigatedAwayFromDashboard = true;
     final qrToken = await QrScannerPage.scan(context);
     if (qrToken != null && qrToken.isNotEmpty) {
       EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
@@ -289,9 +355,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// Décode la claim `rid` (id de réservation) du QR token sans vérifier sa
-  /// signature — la validation vient d'être faite côté backend par
-  /// [LogmentRepository.validerPresence]. Même technique que
-  /// [LoginCubit._extractEmailFromToken] pour l'identity token Apple.
   String? _extractReservationIdFromQrToken(String qrToken) {
     try {
       final parts = qrToken.split('.');
@@ -304,9 +367,6 @@ class _HomePageV2State extends State<HomePageV2>
     }
   }
 
-  /// Retourne `true` si le récap a bien été affiché (permet à l'appelant de
-  /// retomber sur un simple toast si l'id n'a pas pu être décodé ou que la
-  /// réservation n'a pas pu être chargée).
   Future<bool> _showWithdrawalRecap(String qrToken) async {
     final reservationId = _extractReservationIdFromQrToken(qrToken);
     if (reservationId == null) return false;
@@ -342,9 +402,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// S'assure que le coffre (code PIN) est déverrouillé avant d'ouvrir la
-  /// demande de retrait — sinon fait passer par [PinCodePageV2] d'abord.
-  /// [reservationId] non-null bascule [WithdrawFormScreenV2] sur le flux
-  /// "scan QR" (POST /wallet/withdrawal-request/create-from-qr).
   void _continueToWithdrawal(String reservationId) {
     if (_isUnlocked) {
       context.pushNamed(WithdrawFormScreenV2.name, extra: reservationId);
@@ -361,8 +418,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// Messages métier renvoyés par POST /reservations/action/valider-presence
-  /// (voir ErrorInterceptor._silentRequestPaths : cet endpoint est exclu du
-  /// toast/dialog générique, on gère tout ici avec le dialog personnalisé).
   static const _qrScanErrorContent = <String, (String title, String description)>{
     'Le QR code a expiré. Veuillez générer un nouveau QR code.': (
       'QR code expiré',
@@ -429,19 +484,14 @@ class _HomePageV2State extends State<HomePageV2>
     _pageController.dispose();
     _bookingFilterNotifier.dispose();
     _visitFilterNotifier.dispose();
+    _certifBadgeTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return EnvironmentsBadge(
-      child: ShowCaseWidget(
-        onFinish: ShowcaseCoordinator.release,
-        builder: (showcaseCtx) {
-          _showcaseContext = showcaseCtx;
-          return _buildScaffold(context);
-        },
-      ),
+      child: _buildScaffold(context),
     );
   }
 
@@ -490,17 +540,75 @@ class _HomePageV2State extends State<HomePageV2>
                                   currentUser = SessionManager().currentUser;
                                   return Row(
                                     children: [
-                                      CircleAvatar(
-                                        radius: _Constants.avatarRadius,
-                                        backgroundColor: Colors.white,
-                                        backgroundImage: (currentUser?.avatar !=
-                                                null)
-                                            ? CachedNetworkImageProvider(
-                                                Utils.getImagePath(
-                                                    id: currentUser!.avatar!))
-                                            : const NetworkImage(
-                                                    _Constants.defaultAvatarUrl)
-                                                as ImageProvider,
+                                      GestureDetector(
+                                        onTap: _goToCertification,
+                                        child: CircularStepProgressIndicator(
+                                          totalSteps: 100,
+                                          currentStep:
+                                              _certificationData?.scoreTotal ??
+                                                  0,
+                                          stepSize: _Constants.certifRingStroke,
+                                          padding: 0,
+                                          roundedCap: (_, __) => true,
+                                          selectedColor:
+                                              _certificationColor(
+                                                  _certificationData
+                                                          ?.scoreTotal ??
+                                                      0),
+                                          unselectedColor:
+                                              Colors.white.withOpacity(0.3),
+                                    
+                                          width: _Constants.avatarRadius * 2 +
+                                              _Constants.certifRingStroke * 2,
+                                          height: _Constants.avatarRadius * 2 +
+                                              _Constants.certifRingStroke * 2,
+                                          child: Stack(
+                                            clipBehavior: Clip.none,
+                                            children: [
+                                              CircleAvatar(
+                                                radius:
+                                                    _Constants.avatarRadius,
+                                                backgroundColor: Colors.white,
+                                                backgroundImage: (currentUser
+                                                            ?.avatar !=
+                                                        null)
+                                                    ? CachedNetworkImageProvider(
+                                                        Utils.getImagePath(
+                                                            id: currentUser!
+                                                                .avatar!))
+                                                    : const NetworkImage(
+                                                            _Constants
+                                                                .defaultAvatarUrl)
+                                                        as ImageProvider,
+                                              ),
+                                              Positioned(
+                                                bottom: -3,
+                                                right: -3,
+                                                child: Container(
+                                                  width: _Constants
+                                                      .certifBadgeDiameter,
+                                                  height: _Constants
+                                                      .certifBadgeDiameter,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.15),
+                                                        blurRadius: 3,
+                                                        offset:
+                                                            const Offset(0, 1),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: _buildCertifBadgeContent(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                       const Gap(_Constants.gapMedium),
                                       Expanded(
@@ -513,7 +621,7 @@ class _HomePageV2State extends State<HomePageV2>
                                               currentUser!.greetingText,
                                               style: const TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 22,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -521,7 +629,7 @@ class _HomePageV2State extends State<HomePageV2>
                                               "Bienvenue dans votre dashboard",
                                               style: TextStyle(
                                                 color: Colors.white70,
-                                                fontSize: 14,
+                                                fontSize: 12,
                                               ),
                                             ),
                                           ],
@@ -643,54 +751,56 @@ class _HomePageV2State extends State<HomePageV2>
                                   ),
                                   SizedBox(
                                     width: itemWidth,
-                                    child: Showcase(
-                                      key: _scannerTutorialKey,
-                                      description:
-                                          "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
-                                      tooltipBackgroundColor: Colors.white,
-                                      textColor: Colors.black87,
-                                      descTextStyle: const TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      targetBorderRadius:
-                                          BorderRadius.circular(8),
-                                      child: _buildDashboardAction(
-                                        iconWidget: Center(
-                                          child: SvgPicture.asset(
-                                            Assets.svgs.scan,
-                                            width: 30,
-                                          ),
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.scan,
+                                          width: 30,
                                         ),
-                                        label: "Scanner",
-                                        onTap: _scanAndValidatePresence,
                                       ),
+                                      label: "Scanner",
+                                      onTap: _scanAndValidatePresence,
                                     ),
                                   ),
+                                  // Certification retirée du tableau de bord :
+                                  // désormais accessible depuis la page Compte.
+                                  // SizedBox(
+                                  //   width: itemWidth,
+                                  //   child: Showcase(
+                                  //     key: _certificationTutorialKey,
+                                  //     description:
+                                  //         "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
+                                  //     tooltipBackgroundColor: Colors.white,
+                                  //     textColor: Colors.black87,
+                                  //     descTextStyle: const TextStyle(
+                                  //       color: Colors.black87,
+                                  //       fontWeight: FontWeight.w600,
+                                  //     ),
+                                  //     targetBorderRadius:
+                                  //         BorderRadius.circular(8),
+                                  //     child: _buildDashboardAction(
+                                  //       iconWidget: Center(
+                                  //         child: SvgPicture.asset(
+                                  //           "assets/svgs/verify.svg",
+                                  //           width: 30,
+                                  //         ),
+                                  //       ),
+                                  //       label: "Certification",
+                                  //       onTap: _goToCertification,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   SizedBox(
                                     width: itemWidth,
-                                    child: Showcase(
-                                      key: _certificationTutorialKey,
-                                      description:
-                                          "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
-                                      tooltipBackgroundColor: Colors.white,
-                                      textColor: Colors.black87,
-                                      descTextStyle: const TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      targetBorderRadius:
-                                          BorderRadius.circular(8),
-                                      child: _buildDashboardAction(
-                                        iconWidget: Center(
-                                          child: SvgPicture.asset(
-                                            "assets/svgs/verify.svg",
-                                            width: 30,
-                                          ),
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/svgs/information.svg",
+                                          width: 30,
                                         ),
-                                        label: "Certification",
-                                        onTap: _goToCertification,
                                       ),
+                                      label: "Support",
+                                      onTap: () => ContactUtils.showContact(),
                                     ),
                                   ),
                                 ],
@@ -1284,6 +1394,8 @@ class _Constants {
   // Icons & Avatar
   static const double avatarRadius = 32.0;
   static const double iconSizeLarge = 22.0;
+  static const double certifRingStroke = 4.0;
+  static const double certifBadgeDiameter = 24.0;
 
   // Colors
   static const Color primaryAccent = Color(0xFF2744DE);

@@ -41,5 +41,5 @@ class UserModelSchema {
 
   /// Retourne le texte de salutation complet
   String get greetingText =>
-      isEntreprise ? 'Entreprise : $displayName' : 'Bonjour, $displayName 👋';
+      isEntreprise ? 'Entreprise : $displayName' : 'Bonjour, $displayName ';
 }

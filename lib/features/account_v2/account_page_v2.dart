@@ -17,6 +17,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_identity_documents.dart';
+import 'package:immoplus_pro/features/certification/models/certification_model.dart';
+import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
+import 'package:immoplus_pro/features/certification/repositories/certification_repository.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
@@ -39,6 +42,7 @@ class _AccountPageV2State extends State<AccountPageV2>
   final sessionManager = SessionManager();
   UserModelSchema? currentUser;
   bool _notificationsEnabled = false;
+  CertificationModel? _certificationData;
 
   @override
   void initState() {
@@ -46,6 +50,7 @@ class _AccountPageV2State extends State<AccountPageV2>
     WidgetsBinding.instance.addObserver(this);
     currentUser = sessionManager.currentUser;
     _refreshNotificationStatus();
+    _loadCertification();
   }
 
   @override
@@ -83,14 +88,28 @@ class _AccountPageV2State extends State<AccountPageV2>
   }
 
   Future<void> _toggleNotifications(bool value) async {
-    // vers les paramètres spécifiques des notifications du système pour que 
-    // l'utilisateur gère l'activation ou la désactivation.
-    // Au retour dans l'application, didChangeAppLifecycleState mettra à jour
-    // le toggle (bouton bleu ou gris) en lisant le statut réel de l'OS.
+
     await AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
+  /// Échec silencieux : la tuile Certification retombe sur un état neutre
+  /// (icône primaire, pas de score affiché) si l'appel échoue.
+  Future<void> _loadCertification() async {
+    try {
+      final data = await CertificationRepository.getMyCertification();
+      if (!mounted) return;
+      setState(() => _certificationData = data);
+    } catch (_) {}
+  }
 
+  /// Mêmes paliers que sur la page Certification (Or/Argent/Bronze) pour
+  ({String name, Color color}) _certificationLevel(int score) {
+    if (score >= 85) return (name: 'Or', color: const Color(0xFFFFD700));
+    if (score >= 70) return (name: 'Argent', color: const Color(0xFFC0C0C0));
+    if (score >= 50) return (name: 'Bronze', color: const Color(0xFFCD7F32));
+    if (score > 0) return (name: 'Novice', color: Colors.orange);
+    return (name: 'Non démarré', color: AppColors.primary);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,6 +223,16 @@ class _AccountPageV2State extends State<AccountPageV2>
             //     ),
             //   ],
             // ),
+
+            const Gap(25),
+
+            // SECTION : Certification
+            _buildSection(
+              title: "Certification",
+              children: [
+                _buildCertificationTile(),
+              ],
+            ),
 
             const Gap(25),
 
@@ -373,6 +402,51 @@ class _AccountPageV2State extends State<AccountPageV2>
         onChanged: _toggleNotifications,
         activeColor: Colors.white,
         activeTrackColor: AppColors.primary,
+      ),
+    );
+  }
+
+  Widget _buildCertificationTile() {
+    final data = _certificationData;
+    final level = _certificationLevel(data?.scoreTotal ?? 0);
+
+    return ListTile(
+      onTap: () => context.pushNamed(CertificationPage.name),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: level.color.withValues(alpha: 0.12),
+          shape: BoxShape.circle,
+        ),
+        child: Center(
+          child: SvgPicture.asset(
+            "assets/svgs/verify.svg",
+            width: 18,
+            height: 18,
+            colorFilter: ColorFilter.mode(level.color, BlendMode.srcIn),
+          ),
+        ),
+      ),
+      title: const Text(
+        "Certification",
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.black87,
+        ),
+      ),
+      subtitle: Text(
+        data != null
+            ? '${data.scoreTotal}/100 · ${level.name}'
+            : "Renforcez la confiance des locataires",
+        style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 14,
+        color: AppColors.primary,
       ),
     );
   }
