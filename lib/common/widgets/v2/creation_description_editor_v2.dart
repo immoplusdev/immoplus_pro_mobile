@@ -7,7 +7,8 @@ class CreationDescriptionEditorV2 extends StatefulWidget {
   final String label;
   final double height;
 
-  const CreationDescriptionEditorV2({
+  const 
+  CreationDescriptionEditorV2({
     super.key,
     required this.controller,
     this.label = "Description :",
@@ -22,17 +23,53 @@ class CreationDescriptionEditorV2 extends StatefulWidget {
 class _CreationDescriptionEditorV2State
     extends State<CreationDescriptionEditorV2> {
   late final FocusNode _focusNode;
+  final GlobalKey _editorBoxKey = GlobalKey();
+  int _scrollRequestId = 0;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
+    _focusNode.addListener(_handleFocusChange);
   }
 
   @override
   void dispose() {
+    _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void _handleFocusChange() {
+    if (!_focusNode.hasFocus) return;
+    _scrollRequestId++;
+    _waitForKeyboardThenScroll(_scrollRequestId);
+  }
+
+  // The keyboard-open animation duration varies by device/OS, so instead of
+  // guessing a fixed delay we poll MediaQuery.viewInsets until it stops
+  // growing (i.e. the keyboard has finished sliding in) before scrolling.
+  Future<void> _waitForKeyboardThenScroll(int requestId) async {
+    double previousInset = -1;
+    double currentInset = MediaQuery.of(context).viewInsets.bottom;
+    for (var i = 0; i < 15; i++) {
+      await Future.delayed(const Duration(milliseconds: 60));
+      if (!mounted || requestId != _scrollRequestId) return;
+      previousInset = currentInset;
+      currentInset = MediaQuery.of(context).viewInsets.bottom;
+      if (currentInset > 0 && currentInset == previousInset) break;
+    }
+    if (!mounted || requestId != _scrollRequestId || !_focusNode.hasFocus) {
+      return;
+    }
+    final targetContext = _editorBoxKey.currentContext;
+    if (targetContext == null || !targetContext.mounted) return;
+    await Scrollable.ensureVisible(
+      targetContext,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      alignment: 1.0,
+    );
   }
 
   @override
@@ -113,6 +150,7 @@ class _CreationDescriptionEditorV2State
                   }
                 },
                 child: Container(
+                  key: _editorBoxKey,
                   height: widget.height,
                   padding: const EdgeInsets.all(12),
                   decoration: const BoxDecoration(

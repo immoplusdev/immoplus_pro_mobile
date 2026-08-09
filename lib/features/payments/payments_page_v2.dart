@@ -153,7 +153,7 @@ class _PaymentsPageV2State extends State<PaymentsPageV2> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  currentUser?.greetingText ?? "Bonjour 👋",
+                  currentUser?.greetingText ?? "Bonjour ",
                   style: GoogleFonts.sen(
                     color: Colors.white,
                     fontSize: 20,

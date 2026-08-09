@@ -47,7 +47,9 @@ class _CertificationPageState extends State<CertificationPage> {
       body: BlocBuilder<CertificationCubit, RequestState>(
         builder: (context, state) {
           if (state is REQUEST_LOADING || state is REQUEST_INITIAL) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
 
           if (state is CERTIFICATION) {
@@ -63,7 +65,9 @@ class _CertificationPageState extends State<CertificationPage> {
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          );
         },
       ),
     );
@@ -87,15 +91,15 @@ class _CertificationPageState extends State<CertificationPage> {
 
           // Score section
           _buildScoreSection(data),
-          const Gap(30),
+          const Gap(24),
 
           // KPI Cards
           _buildKPICards(data),
           const Gap(30),
 
           // Conditions d'attribution
-          Text(
-            'Évolution des revenus',
+          const Text(
+            'Critères de certification',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -135,65 +139,124 @@ class _CertificationPageState extends State<CertificationPage> {
   }
 
   Widget _buildScoreSection(CertificationModel data) {
-    final percentage = (data.scoreTotal / 100) * 100;
+    final percentage = (data.scoreTotal / 100).clamp(0.0, 1.0);
     final level = _getLevelFromScore(data.scoreTotal);
+    final levelColor = level['color'] as Color;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '${data.scoreTotal}/100 ${level['name']}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${data.scoreTotal}',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.primary,
+                  height: 1,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6, left: 4),
+                child: Text(
+                  '/100',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              _buildLevelChip(level['name'] as String, levelColor),
+            ],
+          ),
+          const Gap(16),
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: percentage),
+            duration: const Duration(milliseconds: 900),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, _) => ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: LinearProgressIndicator(
+                value: value,
+                minHeight: 12,
+                backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               ),
             ),
-          ],
-        ),
-        const Gap(12),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: LinearProgressIndicator(
-            value: percentage / 100,
-            minHeight: 10,
-            backgroundColor: Colors.grey.shade200,
-            valueColor: AlwaysStoppedAnimation<Color>(level['color'] as Color),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLevelChip(String name, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.workspace_premium_rounded, size: 14, color: color),
+          const Gap(4),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildKPICards(CertificationModel data) {
     final tauxReponse = data.piliers.fiabilite.tauxReponse ?? 0.0;
-    final nbReservations = data.piliers.reservations.nbReservationsEffectuees ?? 0;
+    final nbReservations =
+        data.piliers.reservations.nbReservationsEffectuees ?? 0;
     final delaiMedian = data.piliers.fiabilite.delaiMedianMinutes ?? 0;
 
     final kpis = [
-      {
-        'label': 'Taux d\'acceptation',
-        'value': '${tauxReponse.toStringAsFixed(0)}%',
-        'color': Colors.green,
-      },
-      {
-        'label': 'Taux de refus',
-        'value': '${(100 - tauxReponse).toStringAsFixed(0)}%',
-        'color': Colors.red,
-      },
-      {
-        'label': 'Temps de réponse',
-        'value': '$delaiMedian',
-        'color': Colors.black,
-      },
-      {
-        'label': 'Transactions',
-        'value': '$nbReservations',
-        'color': Colors.black,
-      },
+      _KpiData(
+        label: "Taux d'acceptation",
+        value: '${tauxReponse.toStringAsFixed(0)}%',
+        icon: Icons.thumb_up_alt_rounded,
+        color: AppColors.green1CA53F,
+      ),
+      _KpiData(
+        label: 'Taux de refus',
+        value: '${(100 - tauxReponse).toStringAsFixed(0)}%',
+        icon: Icons.thumb_down_alt_rounded,
+        color: AppColors.redFF0000,
+      ),
+      _KpiData(
+        label: 'Temps de réponse',
+        value: '$delaiMedian min',
+        icon: Icons.timer_rounded,
+        color: AppColors.primary,
+      ),
+      _KpiData(
+        label: 'Transactions',
+        value: '$nbReservations',
+        icon: Icons.receipt_long_rounded,
+        color: AppColors.primary,
+      ),
     ];
 
     return GridView.count(
@@ -202,46 +265,48 @@ class _CertificationPageState extends State<CertificationPage> {
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: 12,
       mainAxisSpacing: 12,
-      childAspectRatio: 1.2,
-      children: kpis.map((kpi) {
-        return _buildKPICard(
-          label: kpi['label'] as String,
-          value: kpi['value'] as String,
-          color: kpi['color'] as Color,
-        );
-      }).toList(),
+      childAspectRatio: 1.3,
+      children: kpis.map(_buildKPICard).toList(),
     );
   }
 
-  Widget _buildKPICard({
-    required String label,
-    required String value,
-    required Color color,
-  }) {
+  Widget _buildKPICard(_KpiData kpi) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(16),
+        color: kpi.color.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: kpi.color.withValues(alpha: 0.15)),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: kpi.color.withValues(alpha: 0.14),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(kpi.icon, size: 16, color: kpi.color),
+          ),
+          const Gap(10),
           Text(
-            label,
+            kpi.value,
             style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: kpi.color,
             ),
           ),
+          const Gap(2),
           Text(
-            value,
+            kpi.label,
             style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: color,
+              fontSize: 12,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -251,65 +316,91 @@ class _CertificationPageState extends State<CertificationPage> {
 
   Widget _buildConditionsChecklist(CertificationModel data) {
     final conditions = [
-      {
-        'label': 'Identité vérifiée',
-        'completed': data.conditionsAttribution.identiteVerifiee,
-      },
-      {
-        'label': '20 transactions minimum',
-        'completed': data.conditionsAttribution.reservationsMin10,
-      },
-      {
-        'label': 'Taux d\'acceptation supérieur à 90%',
-        'completed': data.conditionsAttribution.avisMinimum,
-      },
-      {
-        'label': 'Aucun litige sur 6 mois',
-        'completed': data.conditionsAttribution.aucuneSanctionActive,
-      },
+      _ConditionData(
+        label: 'Identité vérifiée',
+        completed: data.conditionsAttribution.identiteVerifiee,
+      ),
+      _ConditionData(
+        label: '20 transactions minimum',
+        completed: data.conditionsAttribution.reservationsMin10,
+      ),
+      _ConditionData(
+        label: "Taux d'acceptation supérieur à 90%",
+        completed: data.conditionsAttribution.avisMinimum,
+      ),
+      _ConditionData(
+        label: 'Aucun litige sur 6 mois',
+        completed: data.conditionsAttribution.aucuneSanctionActive,
+      ),
     ];
 
-    return Column(
-      children: conditions.map((condition) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.08)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: List.generate(conditions.length, (i) {
+          final condition = conditions[i];
+          final isLast = i == conditions.length - 1;
+          return Column(
             children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: condition['completed'] == true
-                        ? Colors.green
-                        : Colors.grey.shade300,
-                    width: 2,
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 26,
+                      height: 26,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: condition.completed
+                            ? AppColors.primary
+                            : Colors.transparent,
+                        border: Border.all(
+                          color: condition.completed
+                              ? AppColors.primary
+                              : Colors.grey.shade300,
+                          width: 2,
+                        ),
+                      ),
+                      child: condition.completed
+                          ? const Icon(
+                              Icons.check,
+                              size: 15,
+                              color: Colors.white,
+                            )
+                          : null,
+                    ),
+                    const Gap(12),
+                    Expanded(
+                      child: Text(
+                        condition.label,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: condition.completed
+                              ? Colors.black87
+                              : Colors.grey.shade600,
+                          fontWeight: condition.completed
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: condition['completed'] == true
-                    ? const Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.green,
-                      )
-                    : null,
               ),
-              const Gap(12),
-              Text(
-                condition['label'] as String,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: condition['completed'] == true
-                      ? Colors.black
-                      : Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
+              if (!isLast)
+                Divider(
+                  height: 1,
+                  color: AppColors.primary.withValues(alpha: 0.08),
                 ),
-              ),
             ],
-          ),
-        );
-      }).toList(),
+          );
+        }),
+      ),
     );
   }
 
@@ -336,4 +427,28 @@ class _CertificationPageState extends State<CertificationPage> {
       };
     }
   }
+}
+
+class _KpiData {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _KpiData({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
+}
+
+class _ConditionData {
+  final String label;
+  final bool completed;
+
+  const _ConditionData({
+    required this.label,
+    required this.completed,
+  });
 }

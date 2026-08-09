@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -26,9 +26,6 @@ import 'package:dio/dio.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/qr_scan_announcement_service.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
-import 'package:immoplus_pro/core/showcase/showcase_coordinator.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -44,7 +41,11 @@ import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 import 'package:immoplus_pro/features/residence/residences_page_v2.dart';
 import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
 import 'package:immoplus_pro/features/certification/widgets/certification_announce_sheet.dart';
+import 'package:immoplus_pro/features/certification/models/certification_model.dart';
+import 'package:immoplus_pro/features/certification/repositories/certification_repository.dart';
 import 'package:immoplus_pro/services/certification_announcement_service.dart';
+import 'package:immoplus_pro/utils/contact_utils.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:immoplus_pro/features/pin_code/views/pin_code_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.dart';
@@ -76,15 +77,8 @@ class _HomePageV2State extends State<HomePageV2>
   UserModelSchema? currentUser;
   bool _isUnlocked = false;
 
-  final GlobalKey _scannerTutorialKey = GlobalKey();
-  final GlobalKey _certificationTutorialKey = GlobalKey();
-  BuildContext? _showcaseContext;
-
-  /// `true` dès qu'on a navigué vers une autre route pleine page (ex:
-  /// Certification) pendant que le Dashboard reste monté en arrière-plan
-  /// (IndexedStack du shell router) — empêche le showcase du Dashboard de
-  /// démarrer par-dessus cette page.
-  bool _navigatedAwayFromDashboard = false;
+  // final GlobalKey _scannerTutorialKey = GlobalKey(); // voir tuile commentée plus bas
+  // final GlobalKey _certificationTutorialKey = GlobalKey(); // voir tuile commentée plus bas
 
   final ValueNotifier<BookingFilterV2> _bookingFilterNotifier =
       ValueNotifier(BookingFilterV2.nouvelle);
@@ -94,6 +88,9 @@ class _HomePageV2State extends State<HomePageV2>
   late BannersCubit _bannersCubit;
   int _totalReservations = 0;
   int _totalVisits = 0;
+  CertificationModel? _certificationData;
+  Timer? _certifBadgeTimer;
+  bool _showScorePercentInBadge = false;
 
   @override
   void initState() {
@@ -114,6 +111,7 @@ class _HomePageV2State extends State<HomePageV2>
     _bannersCubit.fetchBanners(source: AccountSource.proApp.value);
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
     _checkNotifActif();
+    _loadCertificationBadge();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -184,11 +182,11 @@ class _HomePageV2State extends State<HomePageV2>
   Future<void> _checkCertificationAnnouncement() async {
     if (!mounted) return;
     final shouldShow = await CertificationAnnouncementService.shouldShow();
-    if (!mounted || !shouldShow) {
-      await _checkAndShowScannerTutorial();
-      return;
-    }
-    await showModalBottomSheet(
+    if (!mounted || !shouldShow) return;
+    // Le sheet se contente de renvoyer le choix de l'utilisateur (pop
+    // synchrone) : le travail asynchrone (markSeen, navigation) est
+    // séquencé ici, après la fermeture du sheet.
+    final accepted = await showModalBottomSheet<bool>(
       context: context,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.6),
@@ -196,49 +194,118 @@ class _HomePageV2State extends State<HomePageV2>
       isDismissible: false,
       enableDrag: false,
       builder: (sheetCtx) => CertificationAnnounceSheet(
-        onAccept: () async {
-          Navigator.of(sheetCtx).pop();
-          await CertificationAnnouncementService.markSeen();
-          if (!mounted) return;
-          _goToCertification();
-        },
-        onMaybeLater: () async {
-          Navigator.of(sheetCtx).pop();
-          await CertificationAnnouncementService.markSeen();
-        },
+        onAccept: () => Navigator.of(sheetCtx).pop(true),
+        onMaybeLater: () => Navigator.of(sheetCtx).pop(false),
       ),
     );
-    await _checkAndShowScannerTutorial();
+    if (!mounted) return;
+    await CertificationAnnouncementService.markSeen();
+    if (accepted == true) {
+      if (!mounted) return;
+      _goToCertification();
+    }
   }
 
-  /// Point d'entrée unique vers la page Certification : pose le flag
-  /// [_navigatedAwayFromDashboard] *avant* de naviguer, que ce soit via le
-  /// bouton "Certification" du dashboard ou via le bottom sheet d'annonce,
-  /// pour empêcher le showcase du Dashboard de se déclencher par-dessus.
+  /// Point d'entrée unique vers la page Certification, que ce soit via
+  /// l'anneau de progression du dashboard ou via le bottom sheet d'annonce.
   void _goToCertification() {
-    _navigatedAwayFromDashboard = true;
     context.pushNamed(CertificationPage.name);
   }
 
-  /// Showcases (tooltips) du dashboard, affichés une seule fois.
-  /// Enchaîne: Scanner → Certification
-  Future<void> _checkAndShowScannerTutorial() async {
-    if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
-      return;
+  /// Charge le score de certification pour alimenter l'anneau de
+  /// progression affiché autour de l'avatar. Échec silencieux : l'anneau
+  /// reste simplement vide si l'appel échoue.
+  Future<void> _loadCertificationBadge() async {
+    try {
+      final data = await CertificationRepository.getMyCertification();
+      if (!mounted) return;
+      setState(() => _certificationData = data);
+      _startCertifBadgeAnimationIfNeeded();
+    } catch (_) {
+      // Silencieux : le badge/anneau reste masqué en cas d'échec.
     }
-    final prefs = await SharedPreferences.getInstance();
-    final hasSeen = prefs.getBool('scanner_tutorial_seen_v1') ?? false;
-    if (hasSeen) return;
-    if (!ShowcaseCoordinator.tryAcquire()) return;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _showcaseContext == null || _navigatedAwayFromDashboard) {
-        ShowcaseCoordinator.release();
-        return;
-      }
-      ShowCaseWidget.of(_showcaseContext!)
-          .startShowCase([_scannerTutorialKey, _certificationTutorialKey]);
-      prefs.setBool('scanner_tutorial_seen_v1', true);
+  }
+
+  /// `true` uniquement quand toutes les conditions d'attribution du badge
+  /// (`conditionsAttribution`) sont remplies — c'est ce champ, plutôt qu'un
+  /// seuil de score, qui reflète fidèlement le statut "certifié" côté API.
+  bool get _isCertified {
+    final c = _certificationData?.conditionsAttribution;
+    if (c == null) return false;
+    return c.identiteVerifiee &&
+        c.moyenPaiementVerifie &&
+        c.avisMinimum &&
+        c.reservationsMin10 &&
+        c.fiabiliteMin14 &&
+        c.aucuneSanctionActive;
+  }
+
+  /// Tant que le Pro n'est pas certifié, fait alterner le contenu du badge
+  void _startCertifBadgeAnimationIfNeeded() {
+    _certifBadgeTimer?.cancel();
+    if (_isCertified) return;
+    _certifBadgeTimer =
+        Timer.periodic(const Duration(milliseconds: 1800), (_) {
+      if (!mounted) return;
+      setState(() => _showScorePercentInBadge = !_showScorePercentInBadge);
     });
+  }
+
+  /// Couleur de l'anneau ET de l'icône du badge selon le score de
+  Color _certificationColor(int score) {
+    if (score >= 85) return const Color(0xFFFFD700); // Or
+    if (score >= 70) return const Color(0xFFC0C0C0); // Argent
+    if (score >= 50) return const Color(0xFFCD7F32); // Bronze
+    if (score > 0) return Colors.orange; // En progression
+    return Colors.grey; // Pas commencé
+  }
+
+  /// Contenu du badge sur l'avatar : icône verify fixe une fois certifié,
+  Widget _buildCertifBadgeContent() {
+    final score = _certificationData?.scoreTotal ?? 0;
+    final color = _certificationColor(score);
+    final icon = SvgPicture.asset(
+      "assets/svgs/verify.svg",
+      key: const ValueKey('certif_badge_icon'),
+      width: 14,
+      height: 14,
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+    );
+
+    if (_isCertified) return icon;
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 400),
+      transitionBuilder: (child, animation) {
+        final offset = Tween<Offset>(
+          begin: const Offset(0, 0.6),
+          end: Offset.zero,
+        ).animate(animation);
+        return ClipRect(
+          child: SlideTransition(
+            position: offset,
+            child: FadeTransition(opacity: animation, child: child),
+          ),
+        );
+      },
+      child: _showScorePercentInBadge
+          ? Padding(
+              key: const ValueKey('certif_badge_score'),
+              padding: const EdgeInsets.all(2),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '$score%',
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
+              ),
+            )
+          : icon,
+    );
   }
 
   Future<void> _requestNotificationPermission() async {
@@ -269,7 +336,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   Future<void> _scanAndValidatePresence() async {
-    _navigatedAwayFromDashboard = true;
     final qrToken = await QrScannerPage.scan(context);
     if (qrToken != null && qrToken.isNotEmpty) {
       EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
@@ -289,15 +355,11 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// Décode la claim `rid` (id de réservation) du QR token sans vérifier sa
-  /// signature — la validation vient d'être faite côté backend par
-  /// [LogmentRepository.validerPresence]. Même technique que
-  /// [LoginCubit._extractEmailFromToken] pour l'identity token Apple.
   String? _extractReservationIdFromQrToken(String qrToken) {
     try {
       final parts = qrToken.split('.');
       if (parts.length != 3) return null;
-      final payload =
-          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
       final Map<String, dynamic> claims = jsonDecode(payload);
       return claims['rid'] as String?;
     } catch (_) {
@@ -305,17 +367,13 @@ class _HomePageV2State extends State<HomePageV2>
     }
   }
 
-  /// Retourne `true` si le récap a bien été affiché (permet à l'appelant de
-  /// retomber sur un simple toast si l'id n'a pas pu être décodé ou que la
-  /// réservation n'a pas pu être chargée).
   Future<bool> _showWithdrawalRecap(String qrToken) async {
     final reservationId = _extractReservationIdFromQrToken(qrToken);
     if (reservationId == null) return false;
 
     final ReservationModel reservation;
     try {
-      final response =
-          await LogmentRepository.getReservation(id: reservationId);
+      final response = await LogmentRepository.getReservation(id: reservationId);
       reservation = response.data;
     } catch (_) {
       return false;
@@ -344,9 +402,6 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// S'assure que le coffre (code PIN) est déverrouillé avant d'ouvrir la
-  /// demande de retrait — sinon fait passer par [PinCodePageV2] d'abord.
-  /// [reservationId] non-null bascule [WithdrawFormScreenV2] sur le flux
-  /// "scan QR" (POST /wallet/withdrawal-request/create-from-qr).
   void _continueToWithdrawal(String reservationId) {
     if (_isUnlocked) {
       context.pushNamed(WithdrawFormScreenV2.name, extra: reservationId);
@@ -363,10 +418,7 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   /// Messages métier renvoyés par POST /reservations/action/valider-presence
-  /// (voir ErrorInterceptor._silentRequestPaths : cet endpoint est exclu du
-  /// toast/dialog générique, on gère tout ici avec le dialog personnalisé).
-  static const _qrScanErrorContent =
-      <String, (String title, String description)>{
+  static const _qrScanErrorContent = <String, (String title, String description)>{
     'Le QR code a expiré. Veuillez générer un nouveau QR code.': (
       'QR code expiré',
       'Le QR code a expiré. Demandez au client de générer un nouveau QR code puis réessayez.',
@@ -432,232 +484,273 @@ class _HomePageV2State extends State<HomePageV2>
     _pageController.dispose();
     _bookingFilterNotifier.dispose();
     _visitFilterNotifier.dispose();
+    _certifBadgeTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return EnvironmentsBadge(
-      child: ShowCaseWidget(
-        onFinish: ShowcaseCoordinator.release,
-        builder: (showcaseCtx) {
-          _showcaseContext = showcaseCtx;
-          return _buildScaffold(context);
-        },
-      ),
+      child: _buildScaffold(context),
     );
   }
 
   Widget _buildScaffold(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            // L'en-tête bleu (fixed au scroll car pinned: true)
-            SliverAppBar(
-              pinned: true,
-              automaticallyImplyLeading: false,
-              backgroundColor: Colors.white,
-              elevation: 0,
-              toolbarHeight: 260,
-              flexibleSpace: Stack(
-                children: [
-                  FlexibleSpaceBar(
-                    background: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        // Fond bleu avec coins arrondis prononcés
-                        Container(
-                          height: _Constants.blueHeaderHeight,
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft:
-                                  Radius.circular(_Constants.radiusMedium),
-                              bottomRight:
-                                  Radius.circular(_Constants.radiusMedium),
+        backgroundColor: Colors.white,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              // L'en-tête bleu (fixed au scroll car pinned: true)
+              SliverAppBar(
+                pinned: true,
+                automaticallyImplyLeading: false,
+                backgroundColor: Colors.white,
+                elevation: 0,
+                toolbarHeight: 260,
+                flexibleSpace: Stack(
+                  children: [
+                    FlexibleSpaceBar(
+                      background: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // Fond bleu avec coins arrondis prononcés
+                          Container(
+                            height: _Constants.blueHeaderHeight,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft:
+                                    Radius.circular(_Constants.radiusMedium),
+                                bottomRight:
+                                    Radius.circular(_Constants.radiusMedium),
+                              ),
                             ),
                           ),
-                        ),
 
-                        // Barre de statut et d'infos utilisateur
-                        SafeArea(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: _Constants.paddingStandard,
-                              vertical: _Constants.paddingMedium,
-                            ),
-                            child: BlocBuilder<LoginCubit, LoginCubitState>(
-                              builder: (context, state) {
-                                currentUser = SessionManager().currentUser;
-                                return Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: _Constants.avatarRadius,
-                                      backgroundColor: Colors.white,
-                                      backgroundImage: (currentUser?.avatar !=
-                                              null)
-                                          ? CachedNetworkImageProvider(
-                                              Utils.getImagePath(
-                                                  id: currentUser!.avatar!))
-                                          : const NetworkImage(
-                                                  _Constants.defaultAvatarUrl)
-                                              as ImageProvider,
-                                    ),
-                                    const Gap(_Constants.gapMedium),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            currentUser!.greetingText,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                          // Barre de statut et d'infos utilisateur
+                          SafeArea(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: _Constants.paddingStandard,
+                                vertical: _Constants.paddingMedium,
+                              ),
+                              child: BlocBuilder<LoginCubit, LoginCubitState>(
+                                builder: (context, state) {
+                                  currentUser = SessionManager().currentUser;
+                                  return Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: _goToCertification,
+                                        child: CircularStepProgressIndicator(
+                                          totalSteps: 100,
+                                          currentStep:
+                                              _certificationData?.scoreTotal ??
+                                                  0,
+                                          stepSize: _Constants.certifRingStroke,
+                                          padding: 0,
+                                          roundedCap: (_, __) => true,
+                                          selectedColor:
+                                              _certificationColor(
+                                                  _certificationData
+                                                          ?.scoreTotal ??
+                                                      0),
+                                          unselectedColor:
+                                              Colors.white.withOpacity(0.3),
+                                    
+                                          width: _Constants.avatarRadius * 2 +
+                                              _Constants.certifRingStroke * 2,
+                                          height: _Constants.avatarRadius * 2 +
+                                              _Constants.certifRingStroke * 2,
+                                          child: Stack(
+                                            clipBehavior: Clip.none,
+                                            children: [
+                                              CircleAvatar(
+                                                radius:
+                                                    _Constants.avatarRadius,
+                                                backgroundColor: Colors.white,
+                                                backgroundImage: (currentUser
+                                                            ?.avatar !=
+                                                        null)
+                                                    ? CachedNetworkImageProvider(
+                                                        Utils.getImagePath(
+                                                            id: currentUser!
+                                                                .avatar!))
+                                                    : const NetworkImage(
+                                                            _Constants
+                                                                .defaultAvatarUrl)
+                                                        as ImageProvider,
+                                              ),
+                                              Positioned(
+                                                bottom: -3,
+                                                right: -3,
+                                                child: Container(
+                                                  width: _Constants
+                                                      .certifBadgeDiameter,
+                                                  height: _Constants
+                                                      .certifBadgeDiameter,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.15),
+                                                        blurRadius: 3,
+                                                        offset:
+                                                            const Offset(0, 1),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: _buildCertifBadgeContent(),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          const Text(
-                                            "Bienvenue dans votre dashboard",
-                                            style: TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 14,
+                                        ),
+                                      ),
+                                      const Gap(_Constants.gapMedium),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              currentUser!.greetingText,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            const Text(
+                                              "Bienvenue dans votre dashboard",
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    const Gap(_Constants.gapMedium),
-                                    IconButton(
-                                      onPressed: () => context
-                                          .push(NotificationPage.routePath()),
-                                      icon: const Icon(
-                                        Iconsax.notification,
-                                        color: Colors.white,
-                                        size: _Constants.iconSizeLarge,
+                                      const Gap(_Constants.gapMedium),
+                                      IconButton(
+                                        onPressed: () => context
+                                            .push(NotificationPage.routePath()),
+                                        icon: const Icon(
+                                          Iconsax.notification,
+                                          color: Colors.white,
+                                          size: _Constants.iconSizeLarge,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  // Wallet superposé (bien à l'intérieur du Stack pour le clic)
-                  Positioned(
-                    left: _Constants.paddingStandard,
-                    right: _Constants.paddingStandard,
-                    bottom: 12,
-                    child: _isUnlocked
-                        ? _buildUnlockedWalletBanner()
-                        : _buildLockedWalletBanner(),
-                  ),
-                ],
-              ),
-            ),
-
-            // Contenu du haut : Wallet + Tableau de bord
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BannerCard(
-                    onDismiss: () {
-                      context.read<BannersCubit>().setDismissed(true);
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
+                    // Wallet superposé (bien à l'intérieur du Stack pour le clic)
+                    Positioned(
                       left: _Constants.paddingStandard,
                       right: _Constants.paddingStandard,
-                      bottom: _Constants.paddingStandard,
+                      bottom: 12,
+                      child: _isUnlocked
+                          ? _buildUnlockedWalletBanner()
+                          : _buildLockedWalletBanner(),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Tableau de bord",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                  ],
+                ),
+              ),
+
+              // Contenu du haut : Wallet + Tableau de bord
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BannerCard(
+                      onDismiss: () {
+                        context.read<BannersCubit>().setDismissed(true);
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        left: _Constants.paddingStandard,
+                        right: _Constants.paddingStandard,
+                        bottom: _Constants.paddingStandard,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Tableau de bord",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const Gap(_Constants.gapLarge),
-                        LayoutBuilder(
-                          builder: (context, constraints) {
-                            const crossAxisCount = 4;
-                            const spacing = 16.0;
-                            final itemWidth = (constraints.maxWidth -
-                                    spacing * (crossAxisCount - 1)) /
-                                crossAxisCount;
-                            return Wrap(
-                              spacing: spacing,
-                              runSpacing: 20,
-                              children: [
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        Assets.svgs.buildings,
-                                        width: 30,
+                          const Gap(_Constants.gapLarge),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              const crossAxisCount = 4;
+                              const spacing = 16.0;
+                              final itemWidth = (constraints.maxWidth -
+                                      spacing * (crossAxisCount - 1)) /
+                                  crossAxisCount;
+                              return Wrap(
+                                spacing: spacing,
+                                runSpacing: 20,
+                                children: [
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.buildings,
+                                          width: 30,
+                                        ),
                                       ),
+                                      label: "Bien immobilier",
+                                      onTap: () => context
+                                          .pushNamed(EstatesPageV2.name),
                                     ),
-                                    label: "Bien immobilier",
-                                    onTap: () =>
-                                        context.pushNamed(EstatesPageV2.name),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        Assets.svgs.house,
-                                        width: 30,
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.house,
+                                          width: 30,
+                                        ),
                                       ),
+                                      label: "Résidences",
+                                      onTap: () => context
+                                          .pushNamed(ResidencesPageV2.name),
                                     ),
-                                    label: "Résidences",
-                                    onTap: () => context
-                                        .pushNamed(ResidencesPageV2.name),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        "assets/svgs/send-sqaure-2.svg",
-                                        width: 30,
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          "assets/svgs/send-sqaure-2.svg",
+                                          width: 30,
+                                        ),
                                       ),
+                                      label: "Transactions",
+                                      onTap: () => context
+                                          .pushNamed(PaymentsPageV2.name),
                                     ),
-                                    label: "Transactions",
-                                    onTap: () =>
-                                        context.pushNamed(PaymentsPageV2.name),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: Showcase(
-                                    key: _scannerTutorialKey,
-                                    description:
-                                        "💡 Scannez le QR code dans l'historique de réservation du client pour recevoir votre paiement.",
-                                    tooltipBackgroundColor: Colors.white,
-                                    textColor: Colors.black87,
-                                    descTextStyle: const TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    targetBorderRadius:
-                                        BorderRadius.circular(8),
+                                  SizedBox(
+                                    width: itemWidth,
                                     child: _buildDashboardAction(
                                       iconWidget: Center(
                                         child: SvgPicture.asset(
@@ -669,268 +762,287 @@ class _HomePageV2State extends State<HomePageV2>
                                       onTap: _scanAndValidatePresence,
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: Showcase(
-                                    key: _certificationTutorialKey,
-                                    description:
-                                        "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
-                                    tooltipBackgroundColor: Colors.white,
-                                    textColor: Colors.black87,
-                                    descTextStyle: const TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    targetBorderRadius:
-                                        BorderRadius.circular(8),
+                                  // Certification retirée du tableau de bord :
+                                  // désormais accessible depuis la page Compte.
+                                  // SizedBox(
+                                  //   width: itemWidth,
+                                  //   child: Showcase(
+                                  //     key: _certificationTutorialKey,
+                                  //     description:
+                                  //         "📊 Consultez votre certification et votre niveau de confiance auprès des locataires.",
+                                  //     tooltipBackgroundColor: Colors.white,
+                                  //     textColor: Colors.black87,
+                                  //     descTextStyle: const TextStyle(
+                                  //       color: Colors.black87,
+                                  //       fontWeight: FontWeight.w600,
+                                  //     ),
+                                  //     targetBorderRadius:
+                                  //         BorderRadius.circular(8),
+                                  //     child: _buildDashboardAction(
+                                  //       iconWidget: Center(
+                                  //         child: SvgPicture.asset(
+                                  //           "assets/svgs/verify.svg",
+                                  //           width: 30,
+                                  //         ),
+                                  //       ),
+                                  //       label: "Certification",
+                                  //       onTap: _goToCertification,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  SizedBox(
+                                    width: itemWidth,
                                     child: _buildDashboardAction(
                                       iconWidget: Center(
                                         child: SvgPicture.asset(
-                                          "assets/svgs/verify.svg",
+                                          "assets/svgs/information.svg",
                                           width: 30,
                                         ),
                                       ),
-                                      label: "Certification",
-                                      onTap: _goToCertification,
+                                      label: "Support",
+                                      onTap: () => ContactUtils.showContact(),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Onglets et Filtres épinglés (pinned)
+              SliverOverlapAbsorber(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _SliverAppBarDelegate(
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: _Constants.paddingStandard,
+                                vertical: 8),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(
+                                      color: Colors.grey.shade200, width: 2)),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => _tabController.animateTo(0),
+                                    child: Transform.translate(
+                                      offset: const Offset(0, 2),
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: _tabController.index == 0
+                                                  ? AppColors.primary
+                                                  : Colors.transparent,
+                                              width: 2.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Réservations",
+                                              style: TextStyle(
+                                                color: _tabController.index == 0
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade600,
+                                                fontWeight:
+                                                    _tabController.index == 0
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const Gap(6),
+                                            if (_totalReservations > 0)
+                                              Container(
+                                                height: 17,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: _tabController.index ==
+                                                          0
+                                                      ? AppColors.primary
+                                                      : Colors.grey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 0
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
+                                                ),
+                                                child: Text(
+                                                  "$_totalReservations",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: _tabController
+                                                                .index ==
+                                                            0
+                                                        ? Colors.white
+                                                        : Colors.grey.shade600,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => _tabController.animateTo(1),
+                                    child: Transform.translate(
+                                      offset: const Offset(0, 2),
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: _tabController.index == 1
+                                                  ? AppColors.primary
+                                                  : Colors.transparent,
+                                              width: 2.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Visites",
+                                              style: TextStyle(
+                                                color: _tabController.index == 1
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade600,
+                                                fontWeight:
+                                                    _tabController.index == 1
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const Gap(6),
+                                            if (_totalVisits > 0)
+                                              Container(
+                                                height: 17,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: _tabController.index ==
+                                                          1
+                                                      ? AppColors.primary
+                                                      : Colors.grey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 1
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
+                                                ),
+                                                child: Text(
+                                                  "$_totalVisits",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: _tabController
+                                                                .index ==
+                                                            1
+                                                        ? Colors.white
+                                                        : Colors.grey.shade600,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                            ),
+                          ),
 
-            // Onglets et Filtres épinglés (pinned)
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: SliverPersistentHeader(
-                pinned: true,
-                delegate: _SliverAppBarDelegate(
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: _Constants.paddingStandard,
-                              vertical: 8),
-                          decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    color: Colors.grey.shade200, width: 2)),
+                          // Filtres statiques
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.only(
+                                left: 5, right: 5, top: 15, bottom: 5),
+                            child: Row(
+                              children: _buildCurrentFilters(),
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => _tabController.animateTo(0),
-                                  child: Transform.translate(
-                                    offset: const Offset(0, 2),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: _tabController.index == 0
-                                                ? AppColors.primary
-                                                : Colors.transparent,
-                                            width: 2.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Réservations",
-                                            style: TextStyle(
-                                              color: _tabController.index == 0
-                                                  ? AppColors.primary
-                                                  : Colors.grey.shade600,
-                                              fontWeight:
-                                                  _tabController.index == 0
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const Gap(6),
-                                          if (_totalReservations > 0)
-                                            Container(
-                                              height: 17,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 0
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border:
-                                                    _tabController.index == 0
-                                                        ? null
-                                                        : Border.all(
-                                                            color: Colors
-                                                                .grey.shade300,
-                                                            width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalReservations",
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: _tabController.index ==
-                                                          0
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => _tabController.animateTo(1),
-                                  child: Transform.translate(
-                                    offset: const Offset(0, 2),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: _tabController.index == 1
-                                                ? AppColors.primary
-                                                : Colors.transparent,
-                                            width: 2.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Visites",
-                                            style: TextStyle(
-                                              color: _tabController.index == 1
-                                                  ? AppColors.primary
-                                                  : Colors.grey.shade600,
-                                              fontWeight:
-                                                  _tabController.index == 1
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const Gap(6),
-                                          if (_totalVisits > 0)
-                                            Container(
-                                              height: 17,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 1
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border:
-                                                    _tabController.index == 1
-                                                        ? null
-                                                        : Border.all(
-                                                            color: Colors
-                                                                .grey.shade300,
-                                                            width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalVisits",
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: _tabController.index ==
-                                                          1
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Filtres statiques
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(
-                              left: 5, right: 5, top: 15, bottom: 5),
-                          child: Row(
-                            children: _buildCurrentFilters(),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ];
-        },
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            BookingPageV2(
-              filterNotifier: _bookingFilterNotifier,
-              onCountChanged: (count) {
-                if (_totalReservations != count) {
-                  Future.microtask(() {
-                    if (mounted) setState(() => _totalReservations = count);
-                  });
-                }
-              },
-            ),
-            VisitPageV2(
-              filterNotifier: _visitFilterNotifier,
-              onCountChanged: (count) {
-                if (_totalVisits != count) {
-                  Future.microtask(() {
-                    if (mounted) setState(() => _totalVisits = count);
-                  });
-                }
-              },
-            ),
-          ],
+            ];
+          },
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              BookingPageV2(
+                filterNotifier: _bookingFilterNotifier,
+                onCountChanged: (count) {
+                  if (_totalReservations != count) {
+                    Future.microtask(() {
+                      if (mounted) setState(() => _totalReservations = count);
+                    });
+                  }
+                },
+              ),
+              VisitPageV2(
+                filterNotifier: _visitFilterNotifier,
+                onCountChanged: (count) {
+                  if (_totalVisits != count) {
+                    Future.microtask(() {
+                      if (mounted) setState(() => _totalVisits = count);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildDashboardAction(
@@ -1282,6 +1394,8 @@ class _Constants {
   // Icons & Avatar
   static const double avatarRadius = 32.0;
   static const double iconSizeLarge = 22.0;
+  static const double certifRingStroke = 4.0;
+  static const double certifBadgeDiameter = 24.0;
 
   // Colors
   static const Color primaryAccent = Color(0xFF2744DE);
