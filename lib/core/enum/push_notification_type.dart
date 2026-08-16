@@ -78,6 +78,7 @@ enum PushNotificationType {
   wallet, // Wallet
   newReservationWaiting, // Nouvelle réservation en attente
   ratingRequest, // Demande de notation (évaluation)
+  reverseSearchInvitation, // Invitation "reverse search" (vague propriétaire)
   marketing; // Notifications marketing (pro-notifications)
 
   /// Retourne la route correspondante
@@ -104,6 +105,11 @@ enum PushNotificationType {
 
       case PushNotificationType.ratingRequest:
         return id != null ? CreateRatingPage.route(id: id) : null;
+
+      case PushNotificationType.reverseSearchInvitation:
+        // Même route que newReservationWaiting : une page poussée "normale"
+
+        return PendingReservationsPage.route();
 
       case PushNotificationType.marketing:
         final mktCode = MarketingNotificationCode.fromString(code);
@@ -215,6 +221,9 @@ enum PushNotificationType {
 
       case 'rating_request':
         return PushNotificationType.ratingRequest;
+
+      case 'reverse_search_invitation':
+        return PushNotificationType.reverseSearchInvitation;
 
       case 'marketing':
         return PushNotificationType.marketing;

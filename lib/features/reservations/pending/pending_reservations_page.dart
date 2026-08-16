@@ -9,6 +9,9 @@ import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservation_card.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/owner_invitation_card_v2.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -27,24 +30,30 @@ class PendingReservationsPage extends StatefulWidget {
 
 class _PendingReservationsPageState extends State<PendingReservationsPage> {
   late final PendingReservationsCubit _cubit;
+  final OwnerInvitationsCubit _invitationsCubit = OwnerInvitationsCubit();
 
   @override
   void initState() {
     super.initState();
     _cubit = PendingReservationsCubit();
     _cubit.init();
+    _invitationsCubit.load();
   }
 
   @override
   void dispose() {
     _cubit.close();
+    _invitationsCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _cubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _cubit),
+        BlocProvider.value(value: _invitationsCubit),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Reservations en attente'),
@@ -113,8 +122,31 @@ class _PendingReservationsPageState extends State<PendingReservationsPage> {
                       CupertinoSliverRefreshControl(
                         onRefresh: () async {
                           _cubit.pagingController.refresh();
+                          if (_cubit.currentFilter ==
+                              PendingReservationFilter.enAttenteReponse) {
+                            _invitationsCubit.load();
+                          }
                         },
                       ),
+                      if (_cubit.currentFilter ==
+                          PendingReservationFilter.enAttenteReponse)
+                        SliverToBoxAdapter(
+                          child: BlocBuilder<OwnerInvitationsCubit,
+                              OwnerInvitationsState>(
+                            builder: (context, state) {
+                              if (state is! OwnerInvitationsLoaded ||
+                                  state.items.isEmpty) {
+                                return const SizedBox.shrink();
+                              }
+                              return Column(
+                                children: state.items
+                                    .map((item) =>
+                                        OwnerInvitationCardV2(item: item))
+                                    .toList(),
+                              );
+                            },
+                          ),
+                        ),
                       PagedSliverList<int, ReservationModel>(
                         pagingController: _cubit.pagingController,
                         builderDelegate: PagedChildBuilderDelegate(
