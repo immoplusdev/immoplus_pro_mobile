@@ -24,7 +24,6 @@ import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/features/home_v2/widgets/owner_invitation_card_v2.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 
@@ -263,15 +262,12 @@ class _BookingPageV2State extends State<BookingPageV2> {
                     child: BlocBuilder<OwnerInvitationsCubit,
                         OwnerInvitationsState>(
                       builder: (context, state) {
-                        if (state is! OwnerInvitationsLoaded ||
-                            state.items.isEmpty) {
-                          return const SizedBox.shrink();
-                        }
                         return Column(
-                          children: state.items
-                              .map((item) =>
-                                  OwnerInvitationCardV2(item: item))
-                              .toList(),
+                          children: [
+                            if (state is OwnerInvitationsLoaded)
+                              ...state.items.map((item) =>
+                                  PendingReservationCardV2(invitation: item)),
+                          ],
                         );
                       },
                     ),

@@ -1,46 +1,32 @@
-class OwnerInvitationZone {
-  final String adresse;
-  final double? lat;
-  final double? lng;
+import 'dart:developer';
+import 'package:immoplus_pro/utils/utils.dart';
 
-  const OwnerInvitationZone({required this.adresse, this.lat, this.lng});
-
-  factory OwnerInvitationZone.fromJson(Map<String, dynamic> json) {
-    return OwnerInvitationZone(
-      adresse: json['adresse'] as String? ?? '',
-      lat: (json['lat'] as num?)?.toDouble(),
-      lng: (json['lng'] as num?)?.toDouble(),
-    );
-  }
-}
-
-/// Une invitation "reverse search" à répondre, aplatie sur UNE résidence
-/// (l'API groupe par recherche et peut proposer plusieurs résidences du
-/// même propriétaire pour une seule recherche — chaque résidence a son
-/// propre statut et se confirme/décline indépendamment côté back, donc on
-/// aplatit ici pour avoir une card = une action possible).
+/// Une invitation "reverse search" à répondre : un client cherche une
+/// résidence correspondant à ses critères et celle-ci est éligible. L'API
+/// renvoie déjà une entrée par résidence (plus de wrapper `residencesOffered`
+/// groupé par recherche — chaque objet est directement actionnable).
 class OwnerInvitationItem {
   final String reverseSearchId;
   final String residenceId;
+  final String nom;
+  final String adresse;
+  final String? miniatureId;
+  final String? miniatureUrl;
   final int montant;
-  final List<OwnerInvitationZone> zones;
   final DateTime dateDebut;
   final DateTime dateFin;
-  final int nombrePersonnes;
-  final int budgetMin;
-  final int budgetMax;
   final DateTime expiresAt;
 
   const OwnerInvitationItem({
     required this.reverseSearchId,
     required this.residenceId,
+    required this.nom,
+    required this.adresse,
+    this.miniatureId,
+    this.miniatureUrl,
     required this.montant,
-    required this.zones,
     required this.dateDebut,
     required this.dateFin,
-    required this.nombrePersonnes,
-    required this.budgetMin,
-    required this.budgetMax,
     required this.expiresAt,
   });
 
@@ -49,40 +35,43 @@ class OwnerInvitationItem {
   /// pas à identifier une action).
   String get id => '$reverseSearchId:$residenceId';
 
-  String get zonesLabel =>
-      zones.map((z) => z.adresse).where((a) => a.isNotEmpty).join(', ');
+  /// Calcule l'URL d'image résolue : si miniatureId/Url est un identifiant UUID,
+  /// utilise Utils.getImagePath(id: id) ; si c'est une URL complète http(s), l'utilise directement.
+  String? get resolvedImageUrl {
+    final raw = miniatureId ?? miniatureUrl;
+    if (raw == null || raw.isEmpty) return null;
+    if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
+    return Utils.getImagePath(id: raw);
+  }
 
+  /// Parse la liste brute en cards. Chaque entrée est parsée
+  /// indépendamment : une entrée malformée ne doit jamais faire planter
+  /// tout le reste de la liste, elle est simplement ignorée (et loguée) au
+  /// lieu de faire disparaître toutes les invitations valides d'un coup.
   static List<OwnerInvitationItem> listFromJson(List<dynamic> json) {
     final items = <OwnerInvitationItem>[];
     for (final entry in json) {
-      final map = entry as Map<String, dynamic>;
-      final zones = (map['zones'] as List<dynamic>? ?? [])
-          .map((z) => OwnerInvitationZone.fromJson(z as Map<String, dynamic>))
-          .toList();
-      final dateDebut = DateTime.parse(map['dateDebut'] as String);
-      final dateFin = DateTime.parse(map['dateFin'] as String);
-      final nombrePersonnes = map['nombrePersonnes'] as int? ?? 1;
-      final budgetMin = map['budgetMin'] as int? ?? 0;
-      final budgetMax = map['budgetMax'] as int? ?? 0;
-      final expiresAt = DateTime.parse(map['expiresAt'] as String);
-      final reverseSearchId = map['reverseSearchId'] as String;
-      final residencesOffered =
-          map['residencesOffered'] as List<dynamic>? ?? [];
-
-      for (final r in residencesOffered) {
-        final rm = r as Map<String, dynamic>;
+      try {
+        final map = entry as Map<String, dynamic>;
+        final rawMiniatureId = (map['miniatureId'] as String?) ?? (map['miniatureUrl'] as String?);
         items.add(OwnerInvitationItem(
-          reverseSearchId: reverseSearchId,
-          residenceId: rm['residenceId'] as String,
-          montant: (rm['montant'] as num).toInt(),
-          zones: zones,
-          dateDebut: dateDebut,
-          dateFin: dateFin,
-          nombrePersonnes: nombrePersonnes,
-          budgetMin: budgetMin,
-          budgetMax: budgetMax,
-          expiresAt: expiresAt,
+          reverseSearchId: map['reverseSearchId'] as String,
+          residenceId: map['residenceId'] as String,
+          nom: map['nom'] as String? ?? '',
+          adresse: map['adresse'] as String? ?? '',
+          miniatureId: map['miniatureId'] as String?,
+          miniatureUrl: map['miniatureUrl'] as String? ?? rawMiniatureId,
+          montant: (map['montant'] as num?)?.toInt() ?? 0,
+          dateDebut: DateTime.parse(map['dateDebut'] as String),
+          dateFin: DateTime.parse(map['dateFin'] as String),
+          expiresAt: DateTime.parse(map['expiresAt'] as String),
         ));
+      } catch (e) {
+        log(
+          'Invitation ignorée (champ manquant/invalide), entrée brute: '
+          '$entry, erreur: $e',
+          name: 'OWNER_INVITATIONS_PARSE',
+        );
       }
     }
     return items;

@@ -5,42 +5,79 @@ import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/data/models/reservations/owner_invitation_model.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/core/injection.dart';
 
+/// Card d'action "à répondre" : réservation en attente de réponse
+/// propriétaire OU invitation reverse-search (client cherchant une
+/// résidence correspondant à ses critères). Même gabarit visuel pour les
+/// deux — seuls les boutons d'action et le cubit qu'ils appellent diffèrent,
+/// vu que ce sont deux flux backend distincts (réservation vs reverse
+/// search). Fournir exactement un des deux paramètres.
 class PendingReservationCardV2 extends StatelessWidget {
-  final ReservationModel reservationModel;
+  final ReservationModel? reservationModel;
+  final OwnerInvitationItem? invitation;
 
   const PendingReservationCardV2({
     super.key,
-    required this.reservationModel,
-  });
+    this.reservationModel,
+    this.invitation,
+  }) : assert(
+          (reservationModel != null) != (invitation != null),
+          'Fournir soit reservationModel soit invitation, jamais les deux ni aucun.',
+        );
 
   @override
   Widget build(BuildContext context) {
     final DateFormat formatDate = DateFormat('d MMMM yyyy');
+    final isInvitation = invitation != null;
 
-    final propertyName = reservationModel.residence.nom;
-    final address = reservationModel.residence.adresse;
-    final imageUrl = reservationModel.residence.miniature ??
-        reservationModel.residence.images.firstOrNull;
+    final String propertyName;
+    final String address;
+    final String? resolvedImageUrl;
+    final DateTime startDate;
+    final DateTime endDate;
+    final int duration;
+    final num montant;
 
-    final startDate = Utils.toDateTime(reservationModel.dateDebut);
-    final endDate = Utils.toDateTime(reservationModel.dateFin);
-
-    final checkInTime = reservationModel.residence.heureEntree;
-    final checkOutTime = reservationModel.residence.heureDepart;
-    final duration = reservationModel.datesReservation.length;
+    if (isInvitation) {
+      final item = invitation!;
+      propertyName =
+          item.nom.isNotEmpty ? item.nom : "Nouvelle demande de location";
+      address = item.adresse;
+      resolvedImageUrl = item.resolvedImageUrl;
+      startDate = item.dateDebut;
+      endDate = item.dateFin;
+      final calcDuration = endDate.difference(startDate).inDays;
+      duration = calcDuration > 0 ? calcDuration : 1;
+      montant = item.montant;
+    } else {
+      final r = reservationModel!;
+      propertyName = r.residence.nom;
+      address = r.residence.adresse;
+      final rawImageId = r.residence.miniature ?? r.residence.images.firstOrNull;
+      resolvedImageUrl = (rawImageId != null && rawImageId.isNotEmpty)
+          ? Utils.getImagePath(id: rawImageId)
+          : null;
+      startDate = Utils.toDateTime(r.dateDebut);
+      endDate = Utils.toDateTime(r.dateFin);
+      duration = r.datesReservation.length;
+      montant = r.montantTotalReservation;
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: GestureDetector(
-        onTap: () => _showDetail(context),
+        onTap: isInvitation ? null : () => _showDetail(context),
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -61,25 +98,17 @@ class PendingReservationCardV2 extends StatelessWidget {
                   // 1. Image
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: imageUrl != null && imageUrl.isNotEmpty
+                    child: resolvedImageUrl != null
                         ? CachedNetworkImage(
-                            imageUrl: Utils.getImagePath(id: imageUrl),
+                            imageUrl: resolvedImageUrl,
                             width: 55,
                             height: 55,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey.shade50,
-                              child: Icon(Iconsax.image,
-                                  color: Colors.grey.shade300, size: 24),
-                            ),
+                            placeholder: (context, url) => _imagePlaceholder(),
+                            errorWidget: (context, url, error) =>
+                                _imagePlaceholder(),
                           )
-                        : Container(
-                            width: 55,
-                            height: 55,
-                            color: Colors.grey.shade50,
-                            child: Icon(Iconsax.image,
-                                color: Colors.grey.shade300, size: 24),
-                          ),
+                        : _imagePlaceholder(),
                   ),
                   const Gap(14),
 
@@ -109,10 +138,6 @@ class PendingReservationCardV2 extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 4),
-                              // decoration: BoxDecoration(
-                              //   color: AppColors.customBlue.withOpacity(0.08),
-                              //   borderRadius: BorderRadius.circular(8),
-                              // ),
                               child: Text(
                                 "$duration jr${duration > 1 ? 's' : ''}",
                                 style: TextStyle(
@@ -132,7 +157,7 @@ class PendingReservationCardV2 extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                "En attente : ${Utils.formatCurrency(reservationModel.montantTotalReservation)}",
+                                "En attente : ${Utils.formatCurrency(montant)}",
                                 style: TextStyle(
                                   fontSize: 8,
                                   color: Colors.orange.shade800,
@@ -194,34 +219,6 @@ class PendingReservationCardV2 extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // const Gap(6),
-
-                        // Times Row (CheckIn -> CheckOut)
-                        // Row(
-                        //   children: [
-                        //     Icon(Iconsax.clock, size: 14, color: AppColors.primary),
-                        //     const Gap(4),
-                        //     Text(
-                        //       checkInTime,
-                        //       style: TextStyle(
-                        //         fontSize: 11,
-                        //         color: Colors.grey.shade600,
-                        //         fontWeight: FontWeight.w600,
-                        //       ),
-                        //     ),
-                        //     const Gap(4),
-                        //     Icon(Iconsax.arrow_right_3, size: 14, color: Colors.grey.shade400),
-                        //     const Gap(4),
-                        //     Text(
-                        //       checkOutTime,
-                        //       style: TextStyle(
-                        //         fontSize: 11,
-                        //         color: Colors.grey.shade600,
-                        //         fontWeight: FontWeight.w600,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),
@@ -230,66 +227,9 @@ class PendingReservationCardV2 extends StatelessWidget {
               const Gap(14),
 
               // Actions
-              BlocBuilder<PendingReservationsCubit, RequestState>(
-                builder: (context, state) {
-                  final isLoading = state is REQUEST_LOADING;
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton.icon(
-                        onPressed: isLoading
-                            ? null
-                            : () => context
-                                .read<PendingReservationsCubit>()
-                                .refuser(reservationModel.id),
-                        icon: const Icon(Iconsax.close_circle, size: 16),
-                        label: const Text("Refuser",
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red.shade400,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                      const Gap(8),
-                      ElevatedButton.icon(
-                        onPressed: isLoading
-                            ? null
-                            : () => context
-                                .read<PendingReservationsCubit>()
-                                .accepter(reservationModel.id),
-                        icon: isLoading
-                            ? const SizedBox(
-                                width: 14,
-                                height: 14,
-                                child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white))
-                            : const Icon(Iconsax.tick_circle, size: 16),
-                        label: const Text("Accepter",
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors
-                              .primary, // Using primary color instead of green raw
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+              isInvitation
+                  ? _buildInvitationActions(context, invitation!)
+                  : _buildReservationActions(context, reservationModel!),
             ],
           ),
         ),
@@ -297,10 +237,149 @@ class PendingReservationCardV2 extends StatelessWidget {
     );
   }
 
+  Widget _imagePlaceholder() {
+    return Container(
+      width: 55,
+      height: 55,
+      color: Colors.grey.shade50,
+      child: Icon(Iconsax.image, color: Colors.grey.shade300, size: 24),
+    );
+  }
+
+  Widget _buildReservationActions(
+      BuildContext context, ReservationModel reservationModel) {
+    return BlocBuilder<PendingReservationsCubit, RequestState>(
+      builder: (context, state) {
+        final isLoading = state is REQUEST_LOADING;
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () => context
+                      .read<PendingReservationsCubit>()
+                      .refuser(reservationModel.id),
+              icon: const Icon(Iconsax.close_circle, size: 16),
+              label: const Text("Refuser",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red.shade400,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+            const Gap(8),
+            ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () => context
+                      .read<PendingReservationsCubit>()
+                      .accepter(reservationModel.id),
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : const Icon(Iconsax.tick_circle, size: 16),
+              label: const Text("Accepter",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildInvitationActions(
+      BuildContext context, OwnerInvitationItem invitation) {
+    return BlocBuilder<OwnerInvitationsCubit, OwnerInvitationsState>(
+      builder: (context, state) {
+        final isLoading = state is OwnerInvitationsLoaded &&
+            state.actingItemId == invitation.id;
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () => context
+                      .read<OwnerInvitationsCubit>()
+                      .decline(invitation),
+              icon: const Icon(Iconsax.close_circle, size: 16),
+              label: const Text("Décliner",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red.shade400,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+            const Gap(8),
+            ElevatedButton.icon(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final success = await context
+                          .read<OwnerInvitationsCubit>()
+                          .confirm(invitation);
+                      if (success) {
+                        EasyLoadingHandler.showSuccessToast(
+                            text: "Disponibilité confirmée !");
+                      }
+                    },
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.white))
+                  : const Icon(Iconsax.tick_circle, size: 16),
+              label: const Text("Confirmer",
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showDetail(BuildContext context) {
+    final r = reservationModel!;
     getIt<AnalyticsService>().logBookingCardTapped(
-      idReservation: reservationModel.id,
-      status: reservationModel.statusReservation ?? 'unknown',
+      idReservation: r.id,
+      status: r.statusReservation,
     );
     showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -317,7 +396,7 @@ class PendingReservationCardV2 extends StatelessWidget {
       context: context,
       builder: (context) => FractionallySizedBox(
         heightFactor: 0.60,
-        child: BookingDetailPage(id: reservationModel.id),
+        child: BookingDetailPage(id: r.id),
       ),
     );
   }

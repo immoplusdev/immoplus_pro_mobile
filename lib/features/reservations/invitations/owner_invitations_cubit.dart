@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/models/reservations/owner_invitation_model.dart';
 import 'package:immoplus_pro/data/repositories/owner_invitations_repository.dart';
@@ -10,8 +12,10 @@ class OwnerInvitationsCubit extends Cubit<OwnerInvitationsState> {
     emit(const OwnerInvitationsLoading());
     try {
       final items = await OwnerInvitationsRepository.getOwnerInvitations();
+      log('load() success: ${items.length} item(s)', name: 'OWNER_INVITATIONS_CUBIT');
       emit(OwnerInvitationsLoaded(items));
     } catch (e) {
+      log('load() failed: $e', name: 'OWNER_INVITATIONS_CUBIT');
       emit(OwnerInvitationsError(e.toString()));
     }
   }

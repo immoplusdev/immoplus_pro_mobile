@@ -9,7 +9,7 @@ import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/home_page/widgets/booking_loading_card.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservation_card.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
-import 'package:immoplus_pro/features/home_v2/widgets/owner_invitation_card_v2.dart';
+import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
@@ -134,16 +134,14 @@ class _PendingReservationsPageState extends State<PendingReservationsPage> {
                           child: BlocBuilder<OwnerInvitationsCubit,
                               OwnerInvitationsState>(
                             builder: (context, state) {
-                              if (state is! OwnerInvitationsLoaded ||
-                                  state.items.isEmpty) {
-                                return const SizedBox.shrink();
-                              }
-                              return Column(
-                                children: state.items
-                                    .map((item) =>
-                                        OwnerInvitationCardV2(item: item))
-                                    .toList(),
-                              );
+                               return Column(
+                                 children: [
+                                   if (state is OwnerInvitationsLoaded)
+                                     ...state.items.map((item) =>
+                                         PendingReservationCardV2(
+                                             invitation: item)),
+                                 ],
+                               );
                             },
                           ),
                         ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/data/models/reservations/owner_invitation_model.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 
 /// Wrapper API pour le flux "reverse search" côté propriétaire : la liste
 /// des invitations en attente et les deux actions (confirmer/décliner),
@@ -12,18 +13,38 @@ class OwnerInvitationsRepository {
 
   static Future<List<OwnerInvitationItem>> getOwnerInvitations() async {
     try {
+      final currentUser = SessionManager().currentUser;
+      log(
+        'Appel avec userId=${currentUser?.userId}, '
+        'role=${currentUser?.roleName} (à comparer avec le compte qui a '
+        'reçu la notif push)',
+        name: 'OWNER_INVITATIONS',
+      );
       final response =
           await DioClient().dio.get('$_baseUrl/data/invitations/owner');
+      log(
+        'GET $_baseUrl/data/invitations/owner → status ${response.statusCode}, '
+        'raw body: ${response.data}',
+        name: 'OWNER_INVITATIONS',
+      );
       final data = (response.data as Map<String, dynamic>)['data']
               as List<dynamic>? ??
           [];
-      return OwnerInvitationItem.listFromJson(data);
+      final items = OwnerInvitationItem.listFromJson(data);
+      log('Parsed ${items.length} invitation item(s)', name: 'OWNER_INVITATIONS');
+      return items;
     } on DioException catch (e) {
-      log('DioError in OwnerInvitationsRepository: ${e.message}');
-      throw Exception('Failed to load owner invitations: ${e.message}');
+      log(
+        'DioError in OwnerInvitationsRepository: ${e.message}, '
+        'status: ${e.response?.statusCode}, body: ${e.response?.data}',
+        name: 'OWNER_INVITATIONS',
+      );
+      // En cas d'erreur serveur (ex: HTTP 500 côté backend), on retourne une liste
+      // vide de manière sécurisée pour ne pas faire planter la liste principale.
+      return [];
     } catch (e) {
-      log('Error in OwnerInvitationsRepository: $e');
-      throw Exception('Failed to load owner invitations: $e');
+      log('Error in OwnerInvitationsRepository: $e', name: 'OWNER_INVITATIONS');
+      return [];
     }
   }
 

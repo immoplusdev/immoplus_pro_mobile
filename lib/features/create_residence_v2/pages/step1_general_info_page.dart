@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -85,18 +87,47 @@ class _Step1GeneralInfoPageState extends State<Step1GeneralInfoPage> {
                       onCommuneSelected: (commune) => context
                           .read<ResidenceCreationCubitV2>()
                           .updateCommune(commune.id),
-                      onPositionSelected: (address) => context
-                          .read<ResidenceCreationCubitV2>()
-                          .updateLocalisation(
-                            address.description!,
-                            PositionModel(
-                              type: 'Point',
-                              coordinates: [
-                                address.longitude!,
-                                address.latitude!
-                              ],
-                            ),
-                          ),
+                      onPositionSelected: (address) {
+                        log(
+                          'Localisation sélectionnée → adresse: ${address.description}, '
+                          'lat: ${address.latitude}, lng: ${address.longitude}',
+                          name: 'RESIDENCE_LOCATION_V2',
+                        );
+                        context.read<ResidenceCreationCubitV2>().updateLocalisation(
+                              address.description!,
+                              PositionModel(
+                                type: 'Point',
+                                coordinates: [
+                                  address.longitude!,
+                                  address.latitude!
+                                ],
+                              ),
+                            );
+                      },
+                    );
+                  },
+                ),
+                BlocBuilder<ResidenceCreationCubitV2, ResidenceCreationStateV2>(
+                  buildWhen: (p, c) =>
+                      p.position != c.position || p.adresse != c.adresse,
+                  builder: (context, state) {
+                    final hasCoords = state.position.coordinates.length == 2;
+                    return Container(
+                      margin: const EdgeInsets.only(top: 6),
+                      padding: const EdgeInsets.all(8),
+                      width: double.infinity,
+                      color: Colors.yellow,
+                      child: Text(
+                        hasCoords
+                            ? 'DEBUG lat: ${state.position.coordinates[1]}  '
+                                'lng: ${state.position.coordinates[0]}\n'
+                                'adresse: ${state.adresse}'
+                            : 'DEBUG aucune position (coordinates: ${state.position.coordinates})',
+                        style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
                     );
                   },
                 ),
