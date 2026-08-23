@@ -47,6 +47,9 @@ class BannerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = _parseHexColor(banner.textColor, Colors.white);
+    final Color iconColor = _parseHexColor(banner.iconColor, textColor);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +58,7 @@ class BannerItem extends StatelessWidget {
             padding: const EdgeInsets.only(top: 4.0),
             child: Icon(
               _getIconData(banner.icon!),
-              color: Colors.white,
+              color: iconColor,
               size: 24,
             ),
           ),
@@ -64,6 +67,9 @@ class BannerItem extends StatelessWidget {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: banner.ctaLabel != null
+                ? MainAxisAlignment.start
+                : MainAxisAlignment.center,
             children: [
               Row(
                 children: [
@@ -73,9 +79,11 @@ class BannerItem extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w700,
+                            height: 1.0,
+                            letterSpacing: 0,
                           ),
                     ),
                   ),
@@ -83,30 +91,35 @@ class BannerItem extends StatelessWidget {
                   GestureDetector(
                     onTap: onCloseTap,
                     behavior: HitTestBehavior.opaque,
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.close, color: Colors.white, size: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Icon(Icons.close, color: textColor, size: 16),
                     ),
                   ),
                 ],
               ),
+              const Gap(2),
               Text(
                 banner.subtitle ?? '',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
-                      fontSize: 11,
+                      color: textColor.withValues(alpha: 0.9),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      height: 1.0,
+                      letterSpacing: 0,
                     ),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
-              Spacer(),
               if (banner.ctaLabel != null) ...[
+                const Spacer(),
                 Row(
                   children: [
                     BannerButton(
                       label: banner.ctaLabel!,
                       onPressed: () => _handleAction(context, banner.ctaUrl),
                       isPrimary: true,
+                      color: textColor,
                     ),
                     if (banner.cta2Label != null) ...[
                       const Gap(16),
@@ -114,6 +127,7 @@ class BannerItem extends StatelessWidget {
                         label: banner.cta2Label!,
                         onPressed: () => _handleAction(context, banner.cta2Url),
                         isPrimary: false,
+                        color: textColor,
                       ),
                     ],
                   ],
@@ -128,12 +142,30 @@ class BannerItem extends StatelessWidget {
 
   IconData _getIconData(String iconName) {
     switch (iconName) {
+      case 'wallet':
+        return Iconsax.wallet;
+      case 'clock':
+        return Iconsax.clock;
+      case 'calendar':
+        return Iconsax.calendar;
       case 'calendar-check':
         return Iconsax.calendar_tick;
+      case 'bell':
       case 'notification':
         return Iconsax.notification;
+      case 'search':
+        return Iconsax.search_normal;
       default:
         return Iconsax.notification;
+    }
+  }
+
+  Color _parseHexColor(String? hex, Color fallback) {
+    if (hex == null || hex.isEmpty) return fallback;
+    try {
+      return Color(int.parse(hex.replaceAll('#', '0xFF')));
+    } catch (_) {
+      return fallback;
     }
   }
 }

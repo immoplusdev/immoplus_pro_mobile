@@ -35,6 +35,8 @@ import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.da
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_new_page.dart';
 import 'package:immoplus_pro/features/onboarding/onboarding_notification_page.dart';
+import 'package:immoplus_pro/features/contact_change/view/change_address_page.dart';
+import 'package:immoplus_pro/features/payment_method/pages/change_payment_method_page.dart';
 import 'package:immoplus_pro/features/payment_module/operators_selector_page.dart';
 import 'package:immoplus_pro/features/payment_module/utils/payment_adapter.dart';
 import 'package:immoplus_pro/features/payments/payments_page.dart';
@@ -464,6 +466,16 @@ class AppRouter {
         path: '/settings/credentials',
         name: ChangeCredentialsPage.name,
         builder: (context, state) => const ChangeCredentialsPage(),
+      ),
+      GoRoute(
+        path: '/settings/payment-method',
+        name: ChangePaymentMethodPage.name,
+        builder: (context, state) => const ChangePaymentMethodPage(),
+      ),
+      GoRoute(
+        path: '/settings/address',
+        name: ChangeAddressPage.name,
+        builder: (context, state) => const ChangeAddressPage(),
       ),
       GoRoute(
         path: '/settings/change-contact',

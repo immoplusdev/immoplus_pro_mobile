@@ -121,6 +121,11 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
                             value.latitude!,
                           ]);
                         });
+                        log(
+                          'Localisation sélectionnée → adresse: ${value.description}, '
+                          'lat: ${value.latitude}, lng: ${value.longitude}',
+                          name: 'ESTATE_LOCATION',
+                        );
                       }
                     },
                   );
@@ -128,6 +133,18 @@ class _EstateLogmentLocationPageState extends State<EstateLogmentLocationPage> {
               ),
             ),
           ),
+          if (EstateCreationModelBuilder().position.coordinates.length == 2)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'lat: ${EstateCreationModelBuilder().position.coordinates[1]}  '
+                  'lng: ${EstateCreationModelBuilder().position.coordinates[0]}\n'
+                  'adresse: ${EstateCreationModelBuilder().adresse}',
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+              ),
+            ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 50,

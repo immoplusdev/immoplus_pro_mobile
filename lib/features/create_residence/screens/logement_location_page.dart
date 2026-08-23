@@ -128,6 +128,11 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
                             value.latitude!,
                           ]);
                         });
+                        log(
+                          'Localisation sélectionnée → adresse: ${value.description}, '
+                          'lat: ${value.latitude}, lng: ${value.longitude}',
+                          name: 'RESIDENCE_LOCATION',
+                        );
                       }
                     },
                   );
@@ -135,6 +140,19 @@ class _LogmentLocationPageState extends State<LogmentLocationPage> {
               ),
             ),
           ),
+          if (ResidenceCreationModelBuilder().position.coordinates.length ==
+              2)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'lat: ${ResidenceCreationModelBuilder().position.coordinates[1]}  '
+                  'lng: ${ResidenceCreationModelBuilder().position.coordinates[0]}\n'
+                  'adresse: ${ResidenceCreationModelBuilder().adresse}',
+                  style: const TextStyle(fontSize: 11, color: Colors.grey),
+                ),
+              ),
+            ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: 50,

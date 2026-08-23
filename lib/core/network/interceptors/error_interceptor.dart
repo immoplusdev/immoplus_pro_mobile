@@ -23,6 +23,7 @@ const _silentErrorCodes = {
 /// générique ci-dessous.
 const _silentRequestPaths = {
   '/reservations/action/valider-presence',
+  '/reverse-searches/data/invitations/owner',
 };
 
 class ErrorInterceptor extends Interceptor {
@@ -32,7 +33,6 @@ class ErrorInterceptor extends Interceptor {
 
     // Parser la réponse d'erreur
     final apiErrorResponse = _parseErrorResponse(err.response);
-
 
     // Gestion spéciale du token expiré
     if (apiErrorResponse?.errorCode == ApiErrorCode.jwtTokenExpired) {

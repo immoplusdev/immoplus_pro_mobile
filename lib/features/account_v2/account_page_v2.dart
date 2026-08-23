@@ -17,6 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_identity_documents.dart';
+import 'package:immoplus_pro/features/account_v2/widgets/profile_completion_card.dart';
 import 'package:immoplus_pro/features/certification/models/certification_model.dart';
 import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
 import 'package:immoplus_pro/features/certification/repositories/certification_repository.dart';
@@ -173,6 +174,15 @@ class _AccountPageV2State extends State<AccountPageV2>
             ),
 
             const Gap(30),
+
+            // CARTE : Complétion du profil (masquée une fois le profil complet)
+            if (_certificationData != null &&
+                !_certificationData!.verificationsProfil.isComplete) ...[
+              ProfileCompletionCard(
+                verifications: _certificationData!.verificationsProfil,
+              ),
+              const Gap(25),
+            ],
 
             // SECTION 1 : Propriétés
             // _buildSection(

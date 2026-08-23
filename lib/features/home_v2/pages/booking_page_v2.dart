@@ -24,10 +24,8 @@ import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
-import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
-import 'package:immoplus_pro/features/home_v2/widgets/pending_reservation_card_v2.dart';
-import 'package:immoplus_pro/app_states/request_state.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
+import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 
 enum BookingFilterV2 { all, pending, paid, nouvelle }
 
@@ -44,7 +42,10 @@ class _BookingPageV2State extends State<BookingPageV2> {
   final PagingController<int, ReservationModel> _pagingController =
       PagingController(firstPageKey: 1);
   final PendingReservationsCubit _pendingCubit = PendingReservationsCubit();
+  final OwnerInvitationsCubit _invitationsCubit = OwnerInvitationsCubit();
   StreamSubscription<ReservationStatusUpdatedEvent>? _socketSubscription;
+  int _reservationsTotal = 0;
+  int _invitationsTotal = 0;
 
   @override
   void initState() {
@@ -56,6 +57,9 @@ class _BookingPageV2State extends State<BookingPageV2> {
     _socketSubscription = getIt<ReservationSocketService>()
         .onStatusUpdated
         .listen(_onReservationStatusUpdated);
+    if (widget.filterNotifier.value == BookingFilterV2.nouvelle) {
+      _invitationsCubit.load();
+    }
   }
 
   /// Réagit au canal temps réel des réservations (voir ReservationSocketService).
@@ -107,6 +111,19 @@ class _BookingPageV2State extends State<BookingPageV2> {
 
   void _onFilterChanged() {
     _pagingController.refresh();
+    if (widget.filterNotifier.value == BookingFilterV2.nouvelle) {
+      _invitationsCubit.load();
+    }
+    // Rebuild pour que la section invitations (visible seulement sur le
+    // filtre "nouvelle") apparaisse/disparaisse avec le reste de la liste.
+    if (mounted) setState(() {});
+  }
+
+  void _reportTotalCount() {
+    final invitations = widget.filterNotifier.value == BookingFilterV2.nouvelle
+        ? _invitationsTotal
+        : 0;
+    widget.onCountChanged?.call(_reservationsTotal + invitations);
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -170,7 +187,8 @@ class _BookingPageV2State extends State<BookingPageV2> {
       }
 
       if (pageKey == 1) {
-        widget.onCountChanged?.call(result.totalCount);
+        _reservationsTotal = result.totalCount;
+        _reportTotalCount();
       }
 
       final isLastPage = result.hasNext == false;
@@ -191,6 +209,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
     _socketSubscription?.cancel();
     _pagingController.dispose();
     _pendingCubit.close();
+    _invitationsCubit.close();
     super.dispose();
   }
 
@@ -198,18 +217,36 @@ class _BookingPageV2State extends State<BookingPageV2> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocProvider.value(
-        value: _pendingCubit,
-        child: BlocListener<PendingReservationsCubit, RequestState>(
-          listener: (context, state) {
-            if (state is REQUEST_SUCCESS) {
-              _pagingController.refresh();
-            }
-          },
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: _pendingCubit),
+          BlocProvider.value(value: _invitationsCubit),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<PendingReservationsCubit, RequestState>(
+              listener: (context, state) {
+                if (state is REQUEST_SUCCESS) {
+                  _pagingController.refresh();
+                }
+              },
+            ),
+            BlocListener<OwnerInvitationsCubit, OwnerInvitationsState>(
+              listener: (context, state) {
+                if (state is OwnerInvitationsLoaded) {
+                  _invitationsTotal = state.items.length;
+                  _reportTotalCount();
+                }
+              },
+            ),
+          ],
           child: RefreshIndicator(
             onRefresh: () async {
               _pagingController.refresh();
               context.read<WalletCubit>().onGetWallet();
+              if (widget.filterNotifier.value == BookingFilterV2.nouvelle) {
+                _invitationsCubit.load();
+              }
             },
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
@@ -220,6 +257,21 @@ class _BookingPageV2State extends State<BookingPageV2> {
                   handle:
                       NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 ),
+                if (widget.filterNotifier.value == BookingFilterV2.nouvelle)
+                  SliverToBoxAdapter(
+                    child: BlocBuilder<OwnerInvitationsCubit,
+                        OwnerInvitationsState>(
+                      builder: (context, state) {
+                        return Column(
+                          children: [
+                            if (state is OwnerInvitationsLoaded)
+                              ...state.items.map((item) =>
+                                  PendingReservationCardV2(invitation: item)),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 PagedSliverList<int, ReservationModel>(
                   pagingController: _pagingController,
                   builderDelegate: PagedChildBuilderDelegate(
