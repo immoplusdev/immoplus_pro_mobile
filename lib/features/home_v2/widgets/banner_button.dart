@@ -4,12 +4,14 @@ class BannerButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
   final bool isPrimary;
+  final Color color;
 
   const BannerButton({
     super.key,
     required this.label,
     required this.onPressed,
     required this.isPrimary,
+    this.color = Colors.white,
   });
 
   @override
@@ -18,15 +20,16 @@ class BannerButton extends StatelessWidget {
       onTap: onPressed,
       behavior: HitTestBehavior.opaque,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        padding: const EdgeInsets.symmetric(vertical: 2.0),
         child: Text(
           label,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: Colors.white,
+                color: color,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                height: 1.0,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.white,
+                decorationColor: color,
                 decorationThickness: 1.5,
               ),
         ),

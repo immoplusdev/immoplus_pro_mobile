@@ -76,7 +76,7 @@ class _BannerCardState extends State<BannerCard> {
                     carouselController: _carouselController,
                     itemCount: apiBanners.length,
                     options: CarouselOptions(
-                      height: 90,
+                      height: 88,
                       viewportFraction: 1.0,
                       enableInfiniteScroll: false,
                       onPageChanged: (index, reason) {

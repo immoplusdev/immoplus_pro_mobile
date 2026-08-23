@@ -4,6 +4,7 @@ class CertificationModel {
   final String status;
   final CertificationPiliers piliers;
   final CertificationConditions conditionsAttribution;
+  final ProfileVerifications verificationsProfil;
   final DateTime lastCalculatedAt;
 
   CertificationModel({
@@ -12,6 +13,7 @@ class CertificationModel {
     required this.status,
     required this.piliers,
     required this.conditionsAttribution,
+    required this.verificationsProfil,
     required this.lastCalculatedAt,
   });
 
@@ -24,6 +26,9 @@ class CertificationModel {
       conditionsAttribution: CertificationConditions.fromJson(
         json['conditionsAttribution'] as Map<String, dynamic>,
       ),
+      verificationsProfil: ProfileVerifications.fromJson(
+        json['verificationsProfil'] as Map<String, dynamic>?,
+      ),
       lastCalculatedAt: DateTime.parse(json['lastCalculatedAt'] as String),
     );
   }
@@ -34,6 +39,7 @@ class CertificationModel {
     'status': status,
     'piliers': piliers.toJson(),
     'conditionsAttribution': conditionsAttribution.toJson(),
+    'verificationsProfil': verificationsProfil.toJson(),
     'lastCalculatedAt': lastCalculatedAt.toIso8601String(),
   };
 }
@@ -158,4 +164,72 @@ class CertificationConditions {
     'fiabiliteMin14': fiabiliteMin14,
     'aucuneSanctionActive': aucuneSanctionActive,
   };
+}
+
+/// Statut des étapes de complétion du profil pro, utilisé par la carte
+/// "Compléter le profil" (compte). Chaque champ est une étape indépendante.
+class ProfileVerifications {
+  final bool photoLogo;
+  final bool numerosVerifies;
+  final bool identiteRccm;
+  final bool email;
+  final bool adresse;
+  final bool moyenPaiement;
+  final bool annonceComplete;
+
+  const ProfileVerifications({
+    required this.photoLogo,
+    required this.numerosVerifies,
+    required this.identiteRccm,
+    required this.email,
+    required this.adresse,
+    required this.moyenPaiement,
+    required this.annonceComplete,
+  });
+
+  const ProfileVerifications.empty()
+      : photoLogo = false,
+        numerosVerifies = false,
+        identiteRccm = false,
+        email = false,
+        adresse = false,
+        moyenPaiement = false,
+        annonceComplete = false;
+
+  factory ProfileVerifications.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const ProfileVerifications.empty();
+    return ProfileVerifications(
+      photoLogo: json['photoLogo'] as bool? ?? false,
+      numerosVerifies: json['numerosVerifies'] as bool? ?? false,
+      identiteRccm: json['identiteRccm'] as bool? ?? false,
+      email: json['email'] as bool? ?? false,
+      adresse: json['adresse'] as bool? ?? false,
+      moyenPaiement: json['moyenPaiement'] as bool? ?? false,
+      annonceComplete: json['annonceComplete'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'photoLogo': photoLogo,
+    'numerosVerifies': numerosVerifies,
+    'identiteRccm': identiteRccm,
+    'email': email,
+    'adresse': adresse,
+    'moyenPaiement': moyenPaiement,
+    'annonceComplete': annonceComplete,
+  };
+
+  List<bool> get values => [
+    photoLogo,
+    numerosVerifies,
+    identiteRccm,
+    email,
+    adresse,
+    moyenPaiement,
+    annonceComplete,
+  ];
+
+  int get completedCount => values.where((v) => v).length;
+  int get totalCount => values.length;
+  bool get isComplete => completedCount == totalCount;
 }
