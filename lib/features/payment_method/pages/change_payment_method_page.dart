@@ -1,20 +1,41 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-import 'package:immoplus_pro/data/models/payment/operator_model.dart';
 import 'package:immoplus_pro/features/payment_method/repositories/payment_method_repository.dart';
-import 'package:immoplus_pro/features/payment_module/utils/payment_utils.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
-import 'package:immoplus_pro/utils/operator_payment.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:toastification/toastification.dart';
 
-/// Permet au pro de définir/modifier le moyen de paiement (opérateur mobile
-/// money + numéro) sur lequel il reçoit ses paiements. Consomme
+class _PaymentMethodOption {
+  final String value;
+  final String label;
+  final IconData icon;
+  final Color color;
+
+  const _PaymentMethodOption({
+    required this.value,
+    required this.label,
+    required this.icon,
+    required this.color,
+  });
+}
+
+/// Valeurs de l'enum backend `PaymentMethod` (moyenPaiementType).
+const List<_PaymentMethodOption> _paymentMethodOptions = [
+  _PaymentMethodOption(value: 'orange', label: 'Orange Money', icon: Iconsax.wallet_money, color: Color(0xFFFF6600)),
+  _PaymentMethodOption(value: 'mtn', label: 'MTN MoMo', icon: Iconsax.wallet_money, color: Color(0xFFFFC107)),
+  _PaymentMethodOption(value: 'moov', label: 'Moov Money', icon: Iconsax.wallet_money, color: Color(0xFF0057A0)),
+  _PaymentMethodOption(value: 'wave', label: 'Wave', icon: Iconsax.wallet_money, color: Color(0xFF1DC8F2)),
+  _PaymentMethodOption(value: 'ecobank', label: 'Ecobank', icon: Iconsax.bank, color: Color(0xFF00A651)),
+  _PaymentMethodOption(value: 'cash', label: 'Espèces', icon: Iconsax.money, color: Color(0xFF1CA53F)),
+  _PaymentMethodOption(value: 'visa_card', label: 'Carte Visa', icon: Iconsax.card, color: Color(0xFF1A1F71)),
+  _PaymentMethodOption(value: 'visa_card_retrait', label: 'Carte Visa (retrait)', icon: Iconsax.card, color: Color(0xFF1A1F71)),
+];
+
+/// Permet au pro de définir/modifier le moyen de paiement (type + numéro ou
+/// identifiant équivalent) sur lequel il reçoit ses paiements. Consomme
 /// GET/POST /payments/proprietaire/moyen-paiement.
 class ChangePaymentMethodPage extends StatefulWidget {
   static const String name = 'CHANGE_PAYMENT_METHOD';
@@ -27,26 +48,21 @@ class ChangePaymentMethodPage extends StatefulWidget {
 }
 
 class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
-  late final TextEditingController _phoneController;
-  OperatorModel? _selectedOperator;
+  late final TextEditingController _numeroController;
+  String? _selectedType;
   bool _isLoading = true;
   bool _isSaving = false;
-
-  final _phoneFormatter = MaskTextInputFormatter(
-    mask: '## ## ## ## ##',
-    filter: {'#': RegExp(r'[0-9]')},
-  );
 
   @override
   void initState() {
     super.initState();
-    _phoneController = TextEditingController();
+    _numeroController = TextEditingController();
     _loadCurrentMethod();
   }
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _numeroController.dispose();
     super.dispose();
   }
 
@@ -54,12 +70,9 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
     try {
       final data = await PaymentMethodRepository.getMoyenPaiement();
       if (!mounted) return;
-      if (data.moyenPaiementType != null) {
-        _selectedOperator = OrderPaymentController.retraitOperatorsItems
-            .firstWhereOrNull((op) => op.value == data.moyenPaiementType);
-      }
+      _selectedType = data.moyenPaiementType;
       if (data.moyenPaiementNumero != null) {
-        _phoneController.text = data.moyenPaiementNumero!;
+        _numeroController.text = data.moyenPaiementNumero!;
       }
     } catch (_) {
       // Échec silencieux : le formulaire reste vide, l'utilisateur peut
@@ -70,29 +83,25 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
   }
 
   Future<void> _submit() async {
-    if (_selectedOperator == null) {
+    if (_selectedType == null) {
       toastification.show(
         type: ToastificationType.warning,
         context: context,
-        title: const Text("Opérateur requis"),
-        description: const Text("Veuillez sélectionner un opérateur."),
+        title: const Text("Moyen de paiement requis"),
+        description: const Text("Veuillez sélectionner un moyen de paiement."),
         autoCloseDuration: const Duration(seconds: 3),
       );
       return;
     }
 
-    final rawPhone = _phoneController.text.replaceAll(' ', '');
-    final validationErr = PaymentUtils.numberValidator(
-      number: rawPhone,
-      operatorName: _selectedOperator!.value,
-    );
-    if (validationErr != null) {
+    final numero = _numeroController.text.trim();
+    if (numero.isEmpty) {
       toastification.show(
-        type: ToastificationType.error,
+        type: ToastificationType.warning,
         context: context,
-        title: const Text("Numéro invalide"),
-        description: Text(validationErr),
-        autoCloseDuration: const Duration(seconds: 4),
+        title: const Text("Numéro requis"),
+        description: const Text("Veuillez renseigner le numéro ou l'identifiant associé."),
+        autoCloseDuration: const Duration(seconds: 3),
       );
       return;
     }
@@ -101,8 +110,8 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
     try {
       EasyLoadingHandler.showLoadingToast(text: "Enregistrement...");
       await PaymentMethodRepository.updateMoyenPaiement(
-        type: _selectedOperator!.value,
-        numero: rawPhone,
+        type: _selectedType!,
+        numero: numero,
       );
       EasyLoadingHandler.hideLoadingToast();
       if (!mounted) return;
@@ -126,7 +135,7 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.whiteBackground,
       appBar: AppBar(
         title: const Text('Moyen de paiement'),
         backgroundColor: AppColors.whiteBackground,
@@ -142,7 +151,7 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
             ? const Center(child: CircularProgressIndicator())
             : Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   children: [
                     Expanded(
@@ -150,31 +159,48 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Opérateur mobile money utilisé pour recevoir vos paiements :",
-                              style: GoogleFonts.sen(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w500,
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.primary.withValues(alpha: 0.15),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Moyen utilisé pour recevoir vos paiements",
+                                    style: GoogleFonts.sen(
+                                      fontSize: 14,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  _buildOptionsGrid(),
+                                  const SizedBox(height: 22),
+                                  Text(
+                                    "Numéro / identifiant",
+                                    style: GoogleFonts.sen(
+                                      fontSize: 14,
+                                      color: Colors.grey.shade600,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _buildNumeroField(),
+                                ],
                               ),
                             ),
-                            const SizedBox(height: 12),
-                            _buildOperatorSelectorRow(),
-                            const SizedBox(height: 24),
-                            Text(
-                              "Numéro associé :",
-                              style: GoogleFonts.sen(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            _buildPhoneInputField(),
                           ],
                         ),
                       ),
                     ),
+                    const SizedBox(height: 16),
                     SizedBox(
                       width: double.infinity,
                       height: 52,
@@ -208,58 +234,104 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
     );
   }
 
-  Widget _buildOperatorSelectorRow() {
-    return Row(
-      spacing: 10,
-      children:
-          OrderPaymentController.retraitOperatorsItems.map((operator) {
-        final isSelected = _selectedOperator == operator;
+  Widget _buildOptionsGrid() {
+    final rows = <Widget>[];
+    for (var i = 0; i < _paymentMethodOptions.length; i += 2) {
+      final left = _paymentMethodOptions[i];
+      final right = i + 1 < _paymentMethodOptions.length
+          ? _paymentMethodOptions[i + 1]
+          : null;
 
-        return Expanded(
-          child: GestureDetector(
-            onTap: () => setState(() => _selectedOperator = operator),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              height: 66,
+      rows.add(
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: i + 2 < _paymentMethodOptions.length ? 10 : 0,
+          ),
+          child: Row(
+            children: [
+              Expanded(child: _buildOptionTile(left)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: right != null
+                    ? _buildOptionTile(right)
+                    : const SizedBox.shrink(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Column(children: rows);
+  }
+
+  Widget _buildOptionTile(_PaymentMethodOption option) {
+    final isSelected = _selectedType == option.value;
+    final fg = isSelected ? Colors.white : const Color(0xFF1E293B);
+
+    return GestureDetector(
+      onTap: () => setState(() => _selectedType = option.value),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected
+                ? AppColors.primary
+                : AppColors.primary.withValues(alpha: 0.18),
+            width: 1.3,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 28,
+              height: 28,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isSelected ? AppColors.primary : Colors.transparent,
-                  width: isSelected ? 2.0 : 0.0,
-                ),
-                image: DecorationImage(
-                  image: CachedNetworkImageProvider(operator.logo),
-                  fit: BoxFit.cover,
+                color: option.color,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(option.icon, size: 14, color: Colors.white),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                option.label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.sen(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w600,
+                  color: fg,
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildPhoneInputField() {
+  Widget _buildNumeroField() {
     return TextFormField(
-      controller: _phoneController,
-      keyboardType: TextInputType.phone,
+      controller: _numeroController,
       style: GoogleFonts.sen(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: Colors.black,
       ),
-      inputFormatters: [_phoneFormatter],
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey.shade100,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        prefixIcon: const Icon(
-          CupertinoIcons.phone,
-          color: Color(0xFF2563EB),
+        prefixIcon: Icon(
+          CupertinoIcons.number,
+          color: AppColors.primary,
           size: 20,
         ),
-        hintText: "07 00 00 00 00",
+        hintText: "Ex: 0700000000",
         hintStyle: GoogleFonts.sen(
           fontSize: 16,
           fontWeight: FontWeight.w600,
