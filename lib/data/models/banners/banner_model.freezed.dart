@@ -193,6 +193,10 @@ mixin _$BannerModel {
   String? get icon => throw _privateConstructorUsedError;
   @JsonKey(name: 'bg_color')
   String? get bgColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_color')
+  String? get iconColor => throw _privateConstructorUsedError;
+  @JsonKey(name: 'text_color')
+  String? get textColor => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
   String? get audience => throw _privateConstructorUsedError;
   int? get order => throw _privateConstructorUsedError;
@@ -230,6 +234,8 @@ abstract class $BannerModelCopyWith<$Res> {
       @JsonKey(name: 'cta2_url') String? cta2Url,
       String? icon,
       @JsonKey(name: 'bg_color') String? bgColor,
+      @JsonKey(name: 'icon_color') String? iconColor,
+      @JsonKey(name: 'text_color') String? textColor,
       String? type,
       String? audience,
       int? order,
@@ -264,6 +270,8 @@ class _$BannerModelCopyWithImpl<$Res, $Val extends BannerModel>
     Object? cta2Url = freezed,
     Object? icon = freezed,
     Object? bgColor = freezed,
+    Object? iconColor = freezed,
+    Object? textColor = freezed,
     Object? type = freezed,
     Object? audience = freezed,
     Object? order = freezed,
@@ -309,6 +317,14 @@ class _$BannerModelCopyWithImpl<$Res, $Val extends BannerModel>
       bgColor: freezed == bgColor
           ? _value.bgColor
           : bgColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconColor: freezed == iconColor
+          ? _value.iconColor
+          : iconColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      textColor: freezed == textColor
+          ? _value.textColor
+          : textColor // ignore: cast_nullable_to_non_nullable
               as String?,
       type: freezed == type
           ? _value.type
@@ -364,6 +380,8 @@ abstract class _$$BannerModelImplCopyWith<$Res>
       @JsonKey(name: 'cta2_url') String? cta2Url,
       String? icon,
       @JsonKey(name: 'bg_color') String? bgColor,
+      @JsonKey(name: 'icon_color') String? iconColor,
+      @JsonKey(name: 'text_color') String? textColor,
       String? type,
       String? audience,
       int? order,
@@ -396,6 +414,8 @@ class __$$BannerModelImplCopyWithImpl<$Res>
     Object? cta2Url = freezed,
     Object? icon = freezed,
     Object? bgColor = freezed,
+    Object? iconColor = freezed,
+    Object? textColor = freezed,
     Object? type = freezed,
     Object? audience = freezed,
     Object? order = freezed,
@@ -441,6 +461,14 @@ class __$$BannerModelImplCopyWithImpl<$Res>
       bgColor: freezed == bgColor
           ? _value.bgColor
           : bgColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconColor: freezed == iconColor
+          ? _value.iconColor
+          : iconColor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      textColor: freezed == textColor
+          ? _value.textColor
+          : textColor // ignore: cast_nullable_to_non_nullable
               as String?,
       type: freezed == type
           ? _value.type
@@ -491,6 +519,8 @@ class _$BannerModelImpl implements _BannerModel {
       @JsonKey(name: 'cta2_url') this.cta2Url,
       this.icon,
       @JsonKey(name: 'bg_color') this.bgColor,
+      @JsonKey(name: 'icon_color') this.iconColor,
+      @JsonKey(name: 'text_color') this.textColor,
       this.type,
       this.audience,
       this.order,
@@ -528,6 +558,12 @@ class _$BannerModelImpl implements _BannerModel {
   @JsonKey(name: 'bg_color')
   final String? bgColor;
   @override
+  @JsonKey(name: 'icon_color')
+  final String? iconColor;
+  @override
+  @JsonKey(name: 'text_color')
+  final String? textColor;
+  @override
   final String? type;
   @override
   final String? audience;
@@ -555,7 +591,7 @@ class _$BannerModelImpl implements _BannerModel {
 
   @override
   String toString() {
-    return 'BannerModel(id: $id, title: $title, subtitle: $subtitle, ctaLabel: $ctaLabel, ctaUrl: $ctaUrl, cta2Label: $cta2Label, cta2Url: $cta2Url, icon: $icon, bgColor: $bgColor, type: $type, audience: $audience, order: $order, active: $active, dismissible: $dismissible, createdAt: $createdAt, updatedAt: $updatedAt, metadata: $metadata)';
+    return 'BannerModel(id: $id, title: $title, subtitle: $subtitle, ctaLabel: $ctaLabel, ctaUrl: $ctaUrl, cta2Label: $cta2Label, cta2Url: $cta2Url, icon: $icon, bgColor: $bgColor, iconColor: $iconColor, textColor: $textColor, type: $type, audience: $audience, order: $order, active: $active, dismissible: $dismissible, createdAt: $createdAt, updatedAt: $updatedAt, metadata: $metadata)';
   }
 
   @override
@@ -575,6 +611,10 @@ class _$BannerModelImpl implements _BannerModel {
             (identical(other.cta2Url, cta2Url) || other.cta2Url == cta2Url) &&
             (identical(other.icon, icon) || other.icon == icon) &&
             (identical(other.bgColor, bgColor) || other.bgColor == bgColor) &&
+            (identical(other.iconColor, iconColor) ||
+                other.iconColor == iconColor) &&
+            (identical(other.textColor, textColor) ||
+                other.textColor == textColor) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.audience, audience) ||
                 other.audience == audience) &&
@@ -591,25 +631,28 @@ class _$BannerModelImpl implements _BannerModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      subtitle,
-      ctaLabel,
-      ctaUrl,
-      cta2Label,
-      cta2Url,
-      icon,
-      bgColor,
-      type,
-      audience,
-      order,
-      active,
-      dismissible,
-      createdAt,
-      updatedAt,
-      const DeepCollectionEquality().hash(_metadata));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        title,
+        subtitle,
+        ctaLabel,
+        ctaUrl,
+        cta2Label,
+        cta2Url,
+        icon,
+        bgColor,
+        iconColor,
+        textColor,
+        type,
+        audience,
+        order,
+        active,
+        dismissible,
+        createdAt,
+        updatedAt,
+        const DeepCollectionEquality().hash(_metadata)
+      ]);
 
   /// Create a copy of BannerModel
   /// with the given fields replaced by the non-null parameter values.
@@ -638,6 +681,8 @@ abstract class _BannerModel implements BannerModel {
       @JsonKey(name: 'cta2_url') final String? cta2Url,
       final String? icon,
       @JsonKey(name: 'bg_color') final String? bgColor,
+      @JsonKey(name: 'icon_color') final String? iconColor,
+      @JsonKey(name: 'text_color') final String? textColor,
       final String? type,
       final String? audience,
       final int? order,
@@ -673,6 +718,12 @@ abstract class _BannerModel implements BannerModel {
   @override
   @JsonKey(name: 'bg_color')
   String? get bgColor;
+  @override
+  @JsonKey(name: 'icon_color')
+  String? get iconColor;
+  @override
+  @JsonKey(name: 'text_color')
+  String? get textColor;
   @override
   String? get type;
   @override
