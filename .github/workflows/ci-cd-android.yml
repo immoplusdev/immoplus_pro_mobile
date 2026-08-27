@@ -62,10 +62,10 @@ jobs:
           storeFile=$KEYSTORE_PATH
           EOF
 
-      - name: 🐦 Setup Flutter (pub get — Dart 3.12+ requis par flutter_quill)
+      - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.44.8'
+          flutter-version: '3.35.5'
           channel: 'stable'
           cache: true
 
@@ -96,22 +96,8 @@ jobs:
           path: .dart_tool/build
           key: build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock', 'lib/**/*.dart') }}
 
-      - name: 🐦 Setup Flutter (codegen — Dart 3.9.2 requis par analyzer)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.35.5'
-          channel: 'stable'
-          cache: true
-
       - name: ⚙️ Generate code (freezed / json_serializable)
         run: dart run build_runner build --delete-conflicting-outputs
-
-      - name: 🐦 Setup Flutter (build — retour à Dart 3.12+ pour compiler flutter_quill)
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.44.8'
-          channel: 'stable'
-          cache: true
 
       - name: 🔢 Get latest Play Store version code
         id: latest_version
