@@ -16,6 +16,9 @@ import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
+import 'package:immoplus_pro/features/home_v2/pages/demandes_page_v2.dart';
+import 'package:immoplus_pro/data/enums/alert_enums.dart';
+import 'package:immoplus_pro/data/repositories/alerts_repository.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
 import 'package:immoplus_pro/features/payments/logic/wallet_cubit.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
@@ -85,10 +88,13 @@ class _HomePageV2State extends State<HomePageV2>
       ValueNotifier(BookingFilterV2.nouvelle);
   final ValueNotifier<VisitFilterV2> _visitFilterNotifier =
       ValueNotifier(VisitFilterV2.all);
+  final ValueNotifier<AlertViewFilter> _demandeFilterNotifier =
+      ValueNotifier(AlertViewFilter.all);
 
   late BannersCubit _bannersCubit;
   int _totalReservations = 0;
   int _totalVisits = 0;
+  int _totalDemandes = 0;
   CertificationModel? _certificationData;
   Timer? _certifBadgeTimer;
   bool _showScorePercentInBadge = false;
@@ -97,7 +103,7 @@ class _HomePageV2State extends State<HomePageV2>
   void initState() {
     super.initState();
     _bannersCubit = context.read<BannersCubit>();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         setState(() {}); // Rafraîchir pour mettre à jour les filtres affichés
@@ -113,6 +119,7 @@ class _HomePageV2State extends State<HomePageV2>
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
     _checkNotifActif();
     _loadCertificationBadge();
+    _loadDemandesBadge();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -224,6 +231,21 @@ class _HomePageV2State extends State<HomePageV2>
       _startCertifBadgeAnimationIfNeeded();
     } catch (_) {
       // Silencieux : le badge/anneau reste masqué en cas d'échec.
+    }
+  }
+
+  /// Charge le badge pour la Tab Demandes
+  Future<void> _loadDemandesBadge() async {
+    try {
+      final badge = await AlertsRepository.getBadgeCount();
+      if (!mounted) return;
+      setState(() {
+        _totalDemandes = badge.newDemandsCount > 0
+            ? badge.newDemandsCount
+            : badge.totalActiveDemands;
+      });
+    } catch (_) {
+      // Silencieux : le badge reste à 0 en cas d'échec
     }
   }
 
@@ -1011,6 +1033,85 @@ class _HomePageV2State extends State<HomePageV2>
                                     ),
                                   ),
                                 ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => _tabController.animateTo(2),
+                                    child: Transform.translate(
+                                      offset: const Offset(0, 2),
+                                      child: AnimatedContainer(
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              color: _tabController.index == 2
+                                                  ? AppColors.primary
+                                                  : Colors.transparent,
+                                              width: 2.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Demandes",
+                                              style: TextStyle(
+                                                color: _tabController.index == 2
+                                                    ? AppColors.primary
+                                                    : Colors.grey.shade600,
+                                                fontWeight:
+                                                    _tabController.index == 2
+                                                        ? FontWeight.bold
+                                                        : FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const Gap(6),
+                                            if (_totalDemandes > 0)
+                                              Container(
+                                                height: 17,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 6),
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: _tabController.index ==
+                                                          2
+                                                      ? AppColors.primary
+                                                      : Colors.grey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border:
+                                                      _tabController.index == 2
+                                                          ? null
+                                                          : Border.all(
+                                                              color: Colors.grey
+                                                                  .shade300,
+                                                              width: 0.5),
+                                                ),
+                                                child: Text(
+                                                  "$_totalDemandes",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: _tabController
+                                                                .index ==
+                                                            2
+                                                        ? Colors.white
+                                                        : Colors.grey.shade600,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1051,6 +1152,16 @@ class _HomePageV2State extends State<HomePageV2>
                   if (_totalVisits != count) {
                     Future.microtask(() {
                       if (mounted) setState(() => _totalVisits = count);
+                    });
+                  }
+                },
+              ),
+              DemandesPageV2(
+                filterNotifier: _demandeFilterNotifier,
+                onCountChanged: (count) {
+                  if (_totalDemandes != count) {
+                    Future.microtask(() {
+                      if (mounted) setState(() => _totalDemandes = count);
                     });
                   }
                 },
@@ -1118,7 +1229,7 @@ class _HomePageV2State extends State<HomePageV2>
             () => setState(
                 () => _bookingFilterNotifier.value = BookingFilterV2.paid)),
       ];
-    } else {
+    } else if (_tabController.index == 1) {
       return [
         _buildFilterChip(
             "Tous",
@@ -1135,6 +1246,27 @@ class _HomePageV2State extends State<HomePageV2>
             _visitFilterNotifier.value == VisitFilterV2.normal,
             () => setState(
                 () => _visitFilterNotifier.value = VisitFilterV2.normal)),
+      ];
+    } else {
+      return [
+        _buildFilterChip(
+          "Tous",
+          _demandeFilterNotifier.value == AlertViewFilter.all,
+          () => setState(
+              () => _demandeFilterNotifier.value = AlertViewFilter.all),
+        ),
+        _buildFilterChip(
+          "Demandes",
+          _demandeFilterNotifier.value == AlertViewFilter.demands,
+          () => setState(
+              () => _demandeFilterNotifier.value = AlertViewFilter.demands),
+        ),
+        _buildFilterChip(
+          "Propositions",
+          _demandeFilterNotifier.value == AlertViewFilter.myProposals,
+          () => setState(
+              () => _demandeFilterNotifier.value = AlertViewFilter.myProposals),
+        ),
       ];
     }
   }
