@@ -112,6 +112,26 @@ class AlertMarketplaceItem {
 
   bool get isNew => viewedByProfessionalAt == null;
 
+  String get formattedPublishedDate {
+    if (createdAt == null) return '';
+    final diff = DateTime.now().difference(createdAt!);
+    if (diff.isNegative || diff.inSeconds < 60) {
+      return "Publiée à l'instant";
+    } else if (diff.inMinutes < 60) {
+      return 'Publiée il y a ${diff.inMinutes} min';
+    } else if (diff.inHours < 24) {
+      return 'Publiée il y a ${diff.inHours} h';
+    } else if (diff.inDays < 7) {
+      return 'Publiée il y a ${diff.inDays} j';
+    } else if (diff.inDays < 30) {
+      final weeks = (diff.inDays / 7).floor();
+      return 'Publiée il y a $weeks sem';
+    } else {
+      final months = (diff.inDays / 30).floor();
+      return 'Publiée il y a $months mois';
+    }
+  }
+
   factory AlertMarketplaceItem.fromJson(Map<String, dynamic> json) {
     final criteria =
         json['criteria'] != null && json['criteria'] is Map<String, dynamic>

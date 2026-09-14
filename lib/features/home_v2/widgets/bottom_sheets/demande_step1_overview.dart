@@ -45,14 +45,15 @@ class DemandeStep1Overview extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                'Publiée il y a 2 h',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+              if (item.formattedPublishedDate.isNotEmpty)
+                Text(
+                  item.formattedPublishedDate,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
             ],
           ),
           const Gap(20),
