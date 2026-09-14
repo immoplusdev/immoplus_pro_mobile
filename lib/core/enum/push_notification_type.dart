@@ -13,6 +13,8 @@ import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
 import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
+import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
+import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
 
 enum MarketingNotificationCode {
   proOnb01('PRO-ONB-01'),
@@ -78,6 +80,7 @@ enum PushNotificationType {
   newReservationWaiting, // Nouvelle réservation en attente
   ratingRequest, // Demande de notation (évaluation)
   reverseSearchInvitation, // Invitation "reverse search" (vague propriétaire)
+  newMessage, // Nouveau message (payload backend: type "new_message")
   marketing; // Notifications marketing (pro-notifications)
 
   /// Retourne la route correspondante
@@ -109,6 +112,11 @@ enum PushNotificationType {
         // Même route que newReservationWaiting : une page poussée "normale"
 
         return PendingReservationsPage.route();
+
+      case PushNotificationType.newMessage:
+        return id != null
+            ? MessageThreadPage.route(id: id)
+            : MessagesInboxPage.routePath;
 
       case PushNotificationType.marketing:
         final mktCode = MarketingNotificationCode.fromString(code);
@@ -223,6 +231,9 @@ enum PushNotificationType {
 
       case 'reverse_search_invitation':
         return PushNotificationType.reverseSearchInvitation;
+
+      case 'new_message':
+        return PushNotificationType.newMessage;
 
       case 'marketing':
         return PushNotificationType.marketing;

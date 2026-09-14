@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
@@ -760,6 +761,21 @@ class _HomePageV2State extends State<HomePageV2>
                                       ),
                                       label: "Scanner",
                                       onTap: _scanAndValidatePresence,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: const Center(
+                                        child: Icon(
+                                          Iconsax.chart,
+                                          size: 28,
+                                          color: _Constants.primaryAccent,
+                                        ),
+                                      ),
+                                      label: "Statistiques",
+                                      onTap: () => context
+                                          .push(OwnerStatsPage.routePath()),
                                     ),
                                   ),
                                   // Certification retirée du tableau de bord :

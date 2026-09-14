@@ -91,6 +91,10 @@ import 'package:immoplus_pro/features/create_furniture/create_furniture_page.dar
 import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart';
 import 'package:immoplus_pro/core/injection.dart';
 
+// ── Messagerie ──
+import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
+import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
+
 class AppRouter {
   static bool userIs = false;
   static bool alreadyOpened = false;
@@ -123,9 +127,9 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: CalendarPageV2.routePath,
-                name: CalendarPageV2.name,
-                builder: (context, state) => const CalendarPageV2(),
+                path: MessagesInboxPage.routePath,
+                name: MessagesInboxPage.name,
+                builder: (context, state) => const MessagesInboxPage(),
               ),
             ],
           ),
@@ -140,8 +144,9 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: OwnerStatsPage.routePath(),
-                builder: (context, state) => const OwnerStatsPage(),
+                path: CalendarPageV2.routePath,
+                name: CalendarPageV2.name,
+                builder: (context, state) => const CalendarPageV2(),
               ),
             ],
           ),
@@ -590,6 +595,23 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (context) => getIt<CertificationCubit>(),
           child: const CertificationPage(),
+        ),
+      ),
+
+      // ── Statistiques (poussé depuis le header du Tableau de bord,
+      // n'est plus un onglet de la bottom nav) ──
+      GoRoute(
+        path: OwnerStatsPage.routePath(),
+        name: OwnerStatsPage.name,
+        builder: (context, state) => const OwnerStatsPage(),
+      ),
+
+      // ── Messagerie — détail d'un fil (poussé depuis l'onglet Messages) ──
+      GoRoute(
+        path: MessageThreadPage.routePath,
+        name: MessageThreadPage.name,
+        builder: (context, state) => MessageThreadPage(
+          conversationId: state.pathParameters['conversationId']!,
         ),
       ),
     ],

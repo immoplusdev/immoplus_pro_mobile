@@ -12,6 +12,9 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart'
     as _i922;
+import 'package:immoplus_pro/features/messaging/logic/conversation_thread_cubit.dart'
+    as _i135;
+import 'package:immoplus_pro/features/messaging/logic/inbox_cubit.dart' as _i14;
 import 'package:immoplus_pro/features/pin_code/data/repositories/pin_code_repository.dart'
     as _i177;
 import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart'
@@ -20,6 +23,7 @@ import 'package:immoplus_pro/features/pin_code/views/services/biometry_service.d
     as _i521;
 import 'package:immoplus_pro/services/analytics_service.dart' as _i1047;
 import 'package:immoplus_pro/services/deep_link_services.dart' as _i178;
+import 'package:immoplus_pro/services/messaging_socket_service.dart' as _i185;
 import 'package:immoplus_pro/services/notification_service.dart' as _i873;
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart'
     as _i579;
@@ -55,11 +59,19 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i215.RemoteConfigService());
     gh.lazySingleton<_i873.NotificationService>(
         () => _i873.NotificationService());
+    gh.lazySingleton<_i185.MessagingSocketService>(
+        () => _i185.MessagingSocketService());
     gh.lazySingleton<_i1047.AnalyticsService>(
         () => _i1047.FirebaseAnalyticsService());
+    gh.factory<_i135.ConversationThreadCubit>(() =>
+        _i135.ConversationThreadCubit(gh<_i185.MessagingSocketService>()));
     gh.factory<_i581.PinCodeCubit>(() => _i581.PinCodeCubit(
           gh<_i177.PinCodeRepository>(),
           gh<_i521.BiometryService>(),
+        ));
+    gh.factory<_i14.InboxCubit>(() => _i14.InboxCubit(
+          gh<_i185.MessagingSocketService>(),
+          gh<_i165.SessionManager>(),
         ));
     return this;
   }

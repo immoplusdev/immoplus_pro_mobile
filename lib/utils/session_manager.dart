@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/authentification/authentification_page.dar
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/messaging_socket_service.dart';
 import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
@@ -119,6 +120,7 @@ class SessionManager {
     await clearSession();
     OneSignal.logout();
     getIt<ReservationSocketService>().disconnect();
+    getIt<MessagingSocketService>().disconnect();
 
     // 4. Navigate to the authentication screen
     AppRouter.router.goNamed(AuthenticationPage.name);

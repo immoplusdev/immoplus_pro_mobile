@@ -17,6 +17,11 @@ class Constantes {
   static late BuildContext appContext;
   static test() {}
 
+  /// Total de messages non lus (badge de l'onglet Messages de la bottom
+  /// nav) — mis à jour par `InboxCubit` à chaque chargement/refresh et sur
+  /// réception d'un event socket `message_new`/`notification_new`.
+  static final ValueNotifier<int> unreadMessagesCount = ValueNotifier(0);
+
   // static visibilityVisitAndBooking(
   //         {required ProductDetailModel productDetailModel}) =>
   //     (productDetailModel.category!.productType == booking) ||

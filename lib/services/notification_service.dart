@@ -7,6 +7,7 @@ import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/core/enum/push_notification_type.dart';
 import 'package:immoplus_pro/core/extensions/go_router_extensions.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/features/messaging/logic/inbox_cubit.dart';
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/firebase_options.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -54,6 +55,15 @@ class NotificationService {
 
           getIt<PendingReservationOverlayService>().refreshPendingReservation();
         }
+
+        if (type == PushNotificationType.newMessage) {
+          log(
+            '🔔 New message push received → refresh unread messages badge',
+            name: 'NOTIFICATION',
+          );
+
+          getIt<InboxCubit>().refreshBadgeOnly();
+        }
       }
 
       event.preventDefault();
@@ -73,7 +83,8 @@ class NotificationService {
         final typeString = data['type'] as String?;
         final id = data['id'] as String? ??
             data['referenceId'] as String? ??
-            data['reservationId'] as String?;
+            data['reservationId'] as String? ??
+            data['conversationId'] as String?;
 
         final type = PushNotificationType.fromString(typeString);
         final sessionManager = getIt<SessionManager>();
