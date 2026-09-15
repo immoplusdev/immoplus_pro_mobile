@@ -10,7 +10,7 @@ class AlertMarketplaceResponse {
   });
 
   factory AlertMarketplaceResponse.fromJson(Map<String, dynamic> json) {
-    final rawData = json['data'];
+    final rawData = json['data'] ?? json;
     List<AlertMarketplaceItem> items = [];
     AlertMarketplacePagination? pagination;
 
@@ -24,13 +24,37 @@ class AlertMarketplaceResponse {
             json['pagination'] as Map<String, dynamic>);
       }
     } else if (rawData is Map<String, dynamic>) {
-      final demandsList = rawData['demands'] ?? rawData['data'];
-      if (demandsList is List) {
-        items = demandsList
+      // 1. Extraction de la liste des demandes/propositions
+      final innerData = rawData['data'];
+      List<dynamic>? rawItemsList;
+
+      if (innerData is Map<String, dynamic>) {
+        final dList = innerData['demands'] as List<dynamic>?;
+        final pList = (innerData['myProposals'] ?? innerData['proposals'])
+            as List<dynamic>?;
+        if (dList != null || pList != null) {
+          rawItemsList = [
+            if (dList != null) ...dList,
+            if (pList != null) ...pList,
+          ];
+        }
+      } else if (innerData is List) {
+        rawItemsList = innerData;
+      }
+
+      // Si non trouvé dans innerData, chercher directement dans rawData
+      rawItemsList ??= (rawData['demands'] as List<dynamic>?) ??
+          (rawData['myProposals'] as List<dynamic>?) ??
+          (rawData['proposals'] as List<dynamic>?);
+
+      if (rawItemsList != null) {
+        items = rawItemsList
             .whereType<Map<String, dynamic>>()
             .map((e) => AlertMarketplaceItem.fromJson(e))
             .toList();
       }
+
+      // 2. Extraction de la pagination
       final paginationJson = rawData['pagination'] ?? json['pagination'];
       if (paginationJson is Map<String, dynamic>) {
         pagination = AlertMarketplacePagination.fromJson(paginationJson);
@@ -225,13 +249,14 @@ class AlertCriteria {
     return AlertCriteria(
       location:
           json['location'] == '<UNKNOWN>' ? null : json['location'] as String?,
-      propertyType: json['property_type'] as String?,
-      transactionType: json['transaction_type'] as String?,
-      roomsMin: json['rooms_min'] as int?,
-      roomsMax: json['rooms_max'] as int?,
-      priceMin: json['price_min'] as num?,
-      priceMax: json['price_max'] as num?,
-      surfaceMin: json['surface_min'] as num?,
+      propertyType: (json['property_type'] ?? json['propertyType']) as String?,
+      transactionType:
+          (json['transaction_type'] ?? json['transactionType']) as String?,
+      roomsMin: (json['rooms_min'] ?? json['roomsMin']) as int?,
+      roomsMax: (json['rooms_max'] ?? json['roomsMax']) as int?,
+      priceMin: (json['price_min'] ?? json['priceMin']) as num?,
+      priceMax: (json['price_max'] ?? json['priceMax']) as num?,
+      surfaceMin: (json['surface_min'] ?? json['surfaceMin']) as num?,
       extras: rawExtras,
     );
   }
