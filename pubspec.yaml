@@ -12,6 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  device_info_plus: ^10.1.2
+  cupertino_native:
+    git:
+      url: https://github.com/kitoko2/cupertino_native.git
   mobile_scanner: ^7.4.0
   isar_community: ^3.1.8
   isar_community_flutter_libs: ^3.1.8
@@ -181,6 +185,7 @@ flutter:
     - .env.prod
     - assets/
     - assets/icons/
+    - assets/icons/bottom_sheet/
     - assets/animations/
     - assets/lotties/
     - assets/icons/empty.svg
