@@ -4,7 +4,7 @@ import 'package:immoplus_pro/features/account_v2/account_page_v2.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/creations_v2/creations_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
-import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
+import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
 
 extension GoRouterExtension on GoRouter {
   /// Obtenir la route actuelle
@@ -32,7 +32,7 @@ extension GoRouterExtension on GoRouter {
       HomePageV2.routePath,
       CalendarPageV2.routePath,
       CreationsPageV2.routePath,
-      OwnerStatsPage.routePath(),
+      MessagesInboxPage.routePath,
       AccountPageV2.routePath,
     ];
 

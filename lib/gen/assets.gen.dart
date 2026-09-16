@@ -384,11 +384,17 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/empty.png
   AssetGenImage get empty => const AssetGenImage('assets/svgs/empty.png');
 
+  /// File path: assets/svgs/happyemoji.svg
+  String get happyemoji => 'assets/svgs/happyemoji.svg';
+
   /// File path: assets/svgs/house.svg
   String get house => 'assets/svgs/house.svg';
 
   /// Directory path: assets/svgs/icons
   $AssetsSvgsIconsGen get icons => const $AssetsSvgsIconsGen();
+
+  /// File path: assets/svgs/information.svg
+  String get information => 'assets/svgs/information.svg';
 
   /// File path: assets/svgs/lobby.svg
   String get lobby => 'assets/svgs/lobby.svg';
@@ -414,13 +420,18 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/user-square.svg
   String get userSquare => 'assets/svgs/user-square.svg';
 
+  /// File path: assets/svgs/verify.svg
+  String get verify => 'assets/svgs/verify.svg';
+
   /// List of all assets
   List<dynamic> get values => [
     buildings,
     documentText,
     dollard,
     empty,
+    happyemoji,
     house,
+    information,
     lobby,
     moneyRecive,
     retraitDollars,
@@ -428,6 +439,7 @@ class $AssetsSvgsGen {
     sendSqaure2,
     userEdit,
     userSquare,
+    verify,
   ];
 }
 

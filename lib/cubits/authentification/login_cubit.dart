@@ -37,6 +37,7 @@ import 'package:immoplus_pro/features/registration/models/data_router_registrati
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/splash_screen.dart';
+import 'package:immoplus_pro/services/messaging_socket_service.dart';
 import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
@@ -110,6 +111,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
       getIt<ReservationSocketService>().connect();
+      getIt<MessagingSocketService>().connect();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       emit(const LoginCubitState.initial());
@@ -450,6 +452,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       emit(const LoginCubitState.success());
       getIt<NotificationService>().suscribeCurrentUser();
       getIt<ReservationSocketService>().connect();
+      getIt<MessagingSocketService>().connect();
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } on DioException catch (e) {
       final errorData = e.response?.data;

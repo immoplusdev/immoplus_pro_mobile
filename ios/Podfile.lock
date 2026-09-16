@@ -16,6 +16,8 @@ PODS:
   - connectivity_plus (0.0.1):
     - Flutter
     - FlutterMacOS
+  - cupertino_native (0.0.1):
+    - Flutter
   - device_info_plus (0.0.1):
     - Flutter
   - FBAEMKit (18.0.2):
@@ -324,6 +326,7 @@ DEPENDENCIES:
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
+  - cupertino_native (from `.symlinks/plugins/cupertino_native/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -405,6 +408,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/darwin"
+  cupertino_native:
+    :path: ".symlinks/plugins/cupertino_native/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_analytics:
@@ -488,6 +493,7 @@ SPEC CHECKSUMS:
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   audio_session: f08db0697111ac84ba46191b55488c0563bb29c6
   connectivity_plus: 2256d3e20624a7749ed21653aafe291a46446fee
+  cupertino_native: 1db0611c94f9a9ea28433ed16a344dcb996370b5
   device_info_plus: 71ffc6ab7634ade6267c7a93088ed7e4f74e5896
   FBAEMKit: 56a4f5a9607957b547b6458b17a98c5bb2736367
   FBSDKCoreKit: 54f1240567e16862ab71c53c33dc347db5c524c5
