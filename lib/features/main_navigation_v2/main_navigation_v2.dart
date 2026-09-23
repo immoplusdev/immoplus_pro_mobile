@@ -83,87 +83,98 @@ class _MainNavigationV2State extends State<MainNavigationV2>
     );
   }
 
-  List<AdaptiveBottomNavItem> get _navItems => [
-        AdaptiveBottomNavItem(
-          label: 'Accueil',
-          iosIconName: 'immo_home',
-          iosIconNameSelected: 'immo_home_fill',
-          androidIcon: Icon(
-            Iconsax.trend_up,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.trend_up,
-            color: AppColors.primary,
-            size: 22,
-          ),
+  List<AdaptiveBottomNavItem> _buildNavItems(int unreadCount) {
+    final badge =
+        unreadCount > 0 ? (unreadCount > 99 ? '99+' : '$unreadCount') : null;
+
+    return [
+      AdaptiveBottomNavItem(
+        label: 'Accueil',
+        iosIconName: 'immo_home',
+        iosIconNameSelected: 'immo_home_fill',
+        androidIcon: Icon(
+          Iconsax.trend_up,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-        const AdaptiveBottomNavItem(
-          label: 'Messages',
-          iosIconName: 'immo_message',
-          iosIconNameSelected: 'immo_message_fill',
-          androidIcon: _MessagesNavIcon(isSelected: false),
-          androidIconSelected: _MessagesNavIcon(isSelected: true),
+        androidIconSelected: Icon(
+          Iconsax.trend_up,
+          color: AppColors.primary,
+          size: 22,
         ),
-        AdaptiveBottomNavItem(
-          label: 'Publier',
-          iosIconName: 'immo_add',
-          iosIconNameSelected: 'immo_add_fill',
-          androidIcon: Icon(
-            Iconsax.add_square,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.add_square5,
-            color: AppColors.primary,
-            size: 22,
-          ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Messages',
+        iosIconName: 'immo_message',
+        iosIconNameSelected: 'immo_message_fill',
+        badgeValue: badge,
+        androidIcon: const _MessagesNavIcon(isSelected: false),
+        androidIconSelected: const _MessagesNavIcon(isSelected: true),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Publier',
+        iosIconName: 'immo_add',
+        iosIconNameSelected: 'immo_add_fill',
+        androidIcon: Icon(
+          Iconsax.add_square,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-        AdaptiveBottomNavItem(
-          label: 'Calendrier',
-          iosIconName: 'immo_calendar',
-          iosIconNameSelected: 'immo_calendar_fill',
-          androidIcon: Icon(
-            Iconsax.calendar_1,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.calendar_1,
-            color: AppColors.primary,
-            size: 22,
-          ),
+        androidIconSelected: Icon(
+          Iconsax.add_square5,
+          color: AppColors.primary,
+          size: 22,
         ),
-        AdaptiveBottomNavItem(
-          label: 'Compte',
-          iosIconName: 'immo_user',
-          iosIconNameSelected: 'immo_user_fill',
-          androidIcon: Icon(
-            Iconsax.user,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.user,
-            color: AppColors.primary,
-            size: 22,
-          ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Calendrier',
+        iosIconName: 'immo_calendar',
+        iosIconNameSelected: 'immo_calendar_fill',
+        androidIcon: Icon(
+          Iconsax.calendar_1,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-      ];
+        androidIconSelected: Icon(
+          Iconsax.calendar_1,
+          color: AppColors.primary,
+          size: 22,
+        ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Compte',
+        iosIconName: 'immo_user',
+        iosIconNameSelected: 'immo_user_fill',
+        androidIcon: Icon(
+          Iconsax.user,
+          color: Colors.grey.shade600,
+          size: 22,
+        ),
+        androidIconSelected: Icon(
+          Iconsax.user,
+          color: AppColors.primary,
+          size: 22,
+        ),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: widget.navigationShell,
-      bottomNavigationBar: AdaptiveLiquidBottomNavigationBar(
-        selectedIndex: widget.navigationShell.currentIndex,
-        onDestinationSelected: _onTap,
-        tint: AppColors.primary,
-        items: _navItems,
-      ),
+    return ValueListenableBuilder<int>(
+      valueListenable: Constantes.unreadMessagesCount,
+      builder: (context, unreadCount, _) {
+        return Scaffold(
+          extendBody: true,
+          body: widget.navigationShell,
+          bottomNavigationBar: AdaptiveLiquidBottomNavigationBar(
+            selectedIndex: widget.navigationShell.currentIndex,
+            onDestinationSelected: _onTap,
+            tint: AppColors.primary,
+            items: _buildNavItems(unreadCount),
+          ),
+        );
+      },
     );
   }
 }
