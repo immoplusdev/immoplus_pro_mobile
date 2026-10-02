@@ -50,6 +50,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i165.SessionManager>(() => _i165.SessionManager());
     gh.lazySingleton<_i166.EasyLoadingHandler>(
         () => _i166.EasyLoadingHandler());
+    gh.lazySingleton<_i185.MessagingSocketService>(
+        () => _i185.MessagingSocketService());
     gh.lazySingleton<_i178.DeepLinkServices>(() => _i178.DeepLinkServices());
     gh.lazySingleton<_i908.ReservationSocketService>(
         () => _i908.ReservationSocketService());
@@ -59,8 +61,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i215.RemoteConfigService());
     gh.lazySingleton<_i873.NotificationService>(
         () => _i873.NotificationService());
-    gh.lazySingleton<_i185.MessagingSocketService>(
-        () => _i185.MessagingSocketService());
     gh.lazySingleton<_i1047.AnalyticsService>(
         () => _i1047.FirebaseAnalyticsService());
     gh.factory<_i135.ConversationThreadCubit>(() =>
