@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -43,7 +44,11 @@ class _ConversationTileState extends State<ConversationTile> {
     switch (conversation.typeEnum) {
       case ConversationType.support:
         return Future.value(
-          const _TileInfo(title: 'Support ImmoPlus', clientName: 'Vous'),
+          const _TileInfo(title: 'Support ImmoPlus', clientName: 'Équipe Support'),
+        );
+      case ConversationType.relais:
+        return Future.value(
+          const _TileInfo(title: 'Relais client', clientName: 'Participant client'),
         );
       case ConversationType.visite:
         final id = conversation.visiteId;
@@ -84,9 +89,6 @@ class _ConversationTileState extends State<ConversationTile> {
             return _TileInfo(
               title: residence.nom.isNotEmpty ? residence.nom : 'Résidence',
               photoUrl: residence.miniature,
-              // Pas d'identité client résolue au niveau résidence côté API
-              // Pro (pas d'endpoint "profil client par id") — libellé
-              // générique plutôt qu'un nom non fiable.
               clientName: 'Client',
             );
           } catch (_) {
@@ -96,10 +98,18 @@ class _ConversationTileState extends State<ConversationTile> {
     }
   }
 
-  IconData get _fallbackIcon => widget.conversation.typeEnum ==
-          ConversationType.support
-      ? Icons.support_agent_outlined
-      : Icons.home_outlined;
+  IconData get _fallbackIcon {
+    switch (widget.conversation.typeEnum) {
+      case ConversationType.support:
+        return Iconsax.headphone;
+      case ConversationType.visite:
+        return Iconsax.eye;
+      case ConversationType.relais:
+        return Iconsax.repeat;
+      case ConversationType.reservation:
+        return Iconsax.home;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

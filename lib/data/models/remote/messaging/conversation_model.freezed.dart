@@ -39,6 +39,16 @@ mixin _$ConversationModel {
   String? get lastMessagePreview => throw _privateConstructorUsedError;
   DateTime? get lastMessageAt => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  String? get stage => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readPendingActionFor)
+  String? get pendingActionFor => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readRelaisId)
+  String? get relaisId => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readReservationId)
+  String? get reservationId => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>>? get actions => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readReadOnly)
+  bool get readOnly => throw _privateConstructorUsedError;
 
   /// Serializes this ConversationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -68,7 +78,13 @@ abstract class $ConversationModelCopyWith<$Res> {
       int unreadCountPro,
       String? lastMessagePreview,
       DateTime? lastMessageAt,
-      DateTime? createdAt});
+      DateTime? createdAt,
+      String? stage,
+      @JsonKey(readValue: _readPendingActionFor) String? pendingActionFor,
+      @JsonKey(readValue: _readRelaisId) String? relaisId,
+      @JsonKey(readValue: _readReservationId) String? reservationId,
+      List<Map<String, dynamic>>? actions,
+      @JsonKey(readValue: _readReadOnly) bool readOnly});
 }
 
 /// @nodoc
@@ -98,6 +114,12 @@ class _$ConversationModelCopyWithImpl<$Res, $Val extends ConversationModel>
     Object? lastMessagePreview = freezed,
     Object? lastMessageAt = freezed,
     Object? createdAt = freezed,
+    Object? stage = freezed,
+    Object? pendingActionFor = freezed,
+    Object? relaisId = freezed,
+    Object? reservationId = freezed,
+    Object? actions = freezed,
+    Object? readOnly = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -148,6 +170,30 @@ class _$ConversationModelCopyWithImpl<$Res, $Val extends ConversationModel>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      stage: freezed == stage
+          ? _value.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pendingActionFor: freezed == pendingActionFor
+          ? _value.pendingActionFor
+          : pendingActionFor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      relaisId: freezed == relaisId
+          ? _value.relaisId
+          : relaisId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reservationId: freezed == reservationId
+          ? _value.reservationId
+          : reservationId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      actions: freezed == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
+      readOnly: null == readOnly
+          ? _value.readOnly
+          : readOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -172,7 +218,13 @@ abstract class _$$ConversationModelImplCopyWith<$Res>
       int unreadCountPro,
       String? lastMessagePreview,
       DateTime? lastMessageAt,
-      DateTime? createdAt});
+      DateTime? createdAt,
+      String? stage,
+      @JsonKey(readValue: _readPendingActionFor) String? pendingActionFor,
+      @JsonKey(readValue: _readRelaisId) String? relaisId,
+      @JsonKey(readValue: _readReservationId) String? reservationId,
+      List<Map<String, dynamic>>? actions,
+      @JsonKey(readValue: _readReadOnly) bool readOnly});
 }
 
 /// @nodoc
@@ -200,6 +252,12 @@ class __$$ConversationModelImplCopyWithImpl<$Res>
     Object? lastMessagePreview = freezed,
     Object? lastMessageAt = freezed,
     Object? createdAt = freezed,
+    Object? stage = freezed,
+    Object? pendingActionFor = freezed,
+    Object? relaisId = freezed,
+    Object? reservationId = freezed,
+    Object? actions = freezed,
+    Object? readOnly = null,
   }) {
     return _then(_$ConversationModelImpl(
       id: null == id
@@ -250,6 +308,30 @@ class __$$ConversationModelImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      stage: freezed == stage
+          ? _value.stage
+          : stage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pendingActionFor: freezed == pendingActionFor
+          ? _value.pendingActionFor
+          : pendingActionFor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      relaisId: freezed == relaisId
+          ? _value.relaisId
+          : relaisId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reservationId: freezed == reservationId
+          ? _value.reservationId
+          : reservationId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      actions: freezed == actions
+          ? _value._actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
+      readOnly: null == readOnly
+          ? _value.readOnly
+          : readOnly // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -269,8 +351,15 @@ class _$ConversationModelImpl extends _ConversationModel {
       this.unreadCountPro = 0,
       this.lastMessagePreview,
       this.lastMessageAt,
-      this.createdAt})
-      : super._();
+      this.createdAt,
+      this.stage,
+      @JsonKey(readValue: _readPendingActionFor) this.pendingActionFor,
+      @JsonKey(readValue: _readRelaisId) this.relaisId,
+      @JsonKey(readValue: _readReservationId) this.reservationId,
+      final List<Map<String, dynamic>>? actions,
+      @JsonKey(readValue: _readReadOnly) this.readOnly = false})
+      : _actions = actions,
+        super._();
 
   factory _$ConversationModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ConversationModelImplFromJson(json);
@@ -310,10 +399,34 @@ class _$ConversationModelImpl extends _ConversationModel {
   final DateTime? lastMessageAt;
   @override
   final DateTime? createdAt;
+  @override
+  final String? stage;
+  @override
+  @JsonKey(readValue: _readPendingActionFor)
+  final String? pendingActionFor;
+  @override
+  @JsonKey(readValue: _readRelaisId)
+  final String? relaisId;
+  @override
+  @JsonKey(readValue: _readReservationId)
+  final String? reservationId;
+  final List<Map<String, dynamic>>? _actions;
+  @override
+  List<Map<String, dynamic>>? get actions {
+    final value = _actions;
+    if (value == null) return null;
+    if (_actions is EqualUnmodifiableListView) return _actions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  @JsonKey(readValue: _readReadOnly)
+  final bool readOnly;
 
   @override
   String toString() {
-    return 'ConversationModel(id: $id, type: $type, residenceId: $residenceId, visiteId: $visiteId, proId: $proId, clientId: $clientId, status: $status, unreadCountClient: $unreadCountClient, unreadCountPro: $unreadCountPro, lastMessagePreview: $lastMessagePreview, lastMessageAt: $lastMessageAt, createdAt: $createdAt)';
+    return 'ConversationModel(id: $id, type: $type, residenceId: $residenceId, visiteId: $visiteId, proId: $proId, clientId: $clientId, status: $status, unreadCountClient: $unreadCountClient, unreadCountPro: $unreadCountPro, lastMessagePreview: $lastMessagePreview, lastMessageAt: $lastMessageAt, createdAt: $createdAt, stage: $stage, pendingActionFor: $pendingActionFor, relaisId: $relaisId, reservationId: $reservationId, actions: $actions, readOnly: $readOnly)';
   }
 
   @override
@@ -340,7 +453,17 @@ class _$ConversationModelImpl extends _ConversationModel {
             (identical(other.lastMessageAt, lastMessageAt) ||
                 other.lastMessageAt == lastMessageAt) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.stage, stage) || other.stage == stage) &&
+            (identical(other.pendingActionFor, pendingActionFor) ||
+                other.pendingActionFor == pendingActionFor) &&
+            (identical(other.relaisId, relaisId) ||
+                other.relaisId == relaisId) &&
+            (identical(other.reservationId, reservationId) ||
+                other.reservationId == reservationId) &&
+            const DeepCollectionEquality().equals(other._actions, _actions) &&
+            (identical(other.readOnly, readOnly) ||
+                other.readOnly == readOnly));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -358,7 +481,13 @@ class _$ConversationModelImpl extends _ConversationModel {
       unreadCountPro,
       lastMessagePreview,
       lastMessageAt,
-      createdAt);
+      createdAt,
+      stage,
+      pendingActionFor,
+      relaisId,
+      reservationId,
+      const DeepCollectionEquality().hash(_actions),
+      readOnly);
 
   /// Create a copy of ConversationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -390,7 +519,14 @@ abstract class _ConversationModel extends ConversationModel {
       final int unreadCountPro,
       final String? lastMessagePreview,
       final DateTime? lastMessageAt,
-      final DateTime? createdAt}) = _$ConversationModelImpl;
+      final DateTime? createdAt,
+      final String? stage,
+      @JsonKey(readValue: _readPendingActionFor) final String? pendingActionFor,
+      @JsonKey(readValue: _readRelaisId) final String? relaisId,
+      @JsonKey(readValue: _readReservationId) final String? reservationId,
+      final List<Map<String, dynamic>>? actions,
+      @JsonKey(readValue: _readReadOnly)
+      final bool readOnly}) = _$ConversationModelImpl;
   const _ConversationModel._() : super._();
 
   factory _ConversationModel.fromJson(Map<String, dynamic> json) =
@@ -427,6 +563,22 @@ abstract class _ConversationModel extends ConversationModel {
   DateTime? get lastMessageAt;
   @override
   DateTime? get createdAt;
+  @override
+  String? get stage;
+  @override
+  @JsonKey(readValue: _readPendingActionFor)
+  String? get pendingActionFor;
+  @override
+  @JsonKey(readValue: _readRelaisId)
+  String? get relaisId;
+  @override
+  @JsonKey(readValue: _readReservationId)
+  String? get reservationId;
+  @override
+  List<Map<String, dynamic>>? get actions;
+  @override
+  @JsonKey(readValue: _readReadOnly)
+  bool get readOnly;
 
   /// Create a copy of ConversationModel
   /// with the given fields replaced by the non-null parameter values.

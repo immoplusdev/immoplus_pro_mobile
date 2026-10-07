@@ -104,12 +104,19 @@ class _MainNavigationV2State extends State<MainNavigationV2>
         ),
       ),
       AdaptiveBottomNavItem(
-        label: 'Messages',
-        iosIconName: 'immo_message',
-        iosIconNameSelected: 'immo_message_fill',
-        badgeValue: badge,
-        androidIcon: const _MessagesNavIcon(isSelected: false),
-        androidIconSelected: const _MessagesNavIcon(isSelected: true),
+        label: 'Calendrier',
+        iosIconName: 'immo_calendar',
+        iosIconNameSelected: 'immo_calendar_fill',
+        androidIcon: Icon(
+          Iconsax.calendar_1,
+          color: Colors.grey.shade600,
+          size: 22,
+        ),
+        androidIconSelected: Icon(
+          Iconsax.calendar_1,
+          color: AppColors.primary,
+          size: 22,
+        ),
       ),
       AdaptiveBottomNavItem(
         label: 'Publier',
@@ -127,19 +134,12 @@ class _MainNavigationV2State extends State<MainNavigationV2>
         ),
       ),
       AdaptiveBottomNavItem(
-        label: 'Calendrier',
-        iosIconName: 'immo_calendar',
-        iosIconNameSelected: 'immo_calendar_fill',
-        androidIcon: Icon(
-          Iconsax.calendar_1,
-          color: Colors.grey.shade600,
-          size: 22,
-        ),
-        androidIconSelected: Icon(
-          Iconsax.calendar_1,
-          color: AppColors.primary,
-          size: 22,
-        ),
+        label: 'Messages',
+        iosIconName: 'immo_message',
+        iosIconNameSelected: 'immo_message_fill',
+        badgeValue: badge,
+        androidIcon: const _MessagesNavIcon(isSelected: false),
+        androidIconSelected: const _MessagesNavIcon(isSelected: true),
       ),
       AdaptiveBottomNavItem(
         label: 'Compte',

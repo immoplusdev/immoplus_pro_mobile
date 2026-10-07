@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,13 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:immoplus_pro/app_router.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
-
 import 'package:immoplus_pro/request_path.dart';
-import 'package:immoplus_pro/utils/app_dialog.dart';
-import 'package:immoplus_pro/features/login_page/login_page.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -207,6 +202,10 @@ class Utils {
   static String formatTimeOnly({required DateTime dateTime}) {
     String formattedDate = DateFormat("HH'h':mm").format(dateTime);
     return formattedDate;
+  }
+
+  static String formatCancelDate({required DateTime dateTime}) {
+    return DateFormat("d MMMM yyyy 'à' HH'h'mm", 'fr_FR').format(dateTime);
   }
 
   static Color getStatusColor({required String status}) {

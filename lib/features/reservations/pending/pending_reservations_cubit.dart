@@ -95,15 +95,18 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     }
   }
 
-  Future<void> refuser(String reservationId, {String? notes}) async {
+  Future<bool> refuser(String reservationId, {String? notes}) async {
     emit(const RequestState.loading());
     try {
       await LogmentRepository.refuserReservation(reservationId, notes: notes);
       getIt<AnalyticsService>().logBookingRefused(idReservation: reservationId);
       pagingController.refresh();
+      getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());
+      return true;
     } catch (e) {
       emit(RequestState.error(error: e.toString()));
+      return false;
     }
   }
 
