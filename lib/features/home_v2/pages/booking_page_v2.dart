@@ -26,6 +26,9 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
+import 'package:immoplus_pro/data/models/remote/messaging/conversation_model.dart';
+import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
+import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
 
 enum BookingFilterV2 { all, pending, paid, nouvelle }
 
@@ -46,6 +49,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
   StreamSubscription<ReservationStatusUpdatedEvent>? _socketSubscription;
   int _reservationsTotal = 0;
   int _invitationsTotal = 0;
+  final Map<String, String> _reservationConversationIds = {};
 
   @override
   void initState() {
@@ -60,6 +64,39 @@ class _BookingPageV2State extends State<BookingPageV2> {
     if (widget.filterNotifier.value == BookingFilterV2.nouvelle) {
       _invitationsCubit.load();
     }
+    unawaited(_loadReservationConversations());
+  }
+
+  /// Les fils de réservation existent déjà côté serveur. On ne fait ici que
+  /// retrouver leur id pour ouvrir le bon fil depuis une carte de réservation.
+  Future<void> _loadReservationConversations() async {
+    try {
+      final conversations = await MessagingRepository.getConversations(
+        type: ConversationType.reservation,
+      );
+      if (!mounted) return;
+      setState(() {
+        _reservationConversationIds
+          ..clear()
+          ..addEntries(conversations
+              .where((conversation) => conversation.reservationId != null)
+              .map((conversation) => MapEntry(
+                    conversation.reservationId!,
+                    conversation.id,
+                  )));
+      });
+    } catch (_) {
+      // L'absence temporaire du fil ne doit pas empêcher les réservations de
+      // s'afficher. Un prochain passage sur l'écran relancera la récupération.
+    }
+  }
+
+  void _openClientMessage(String conversationId) {
+    context.pushNamed(
+      MessageThreadPage.name,
+      pathParameters: {'conversationId': conversationId},
+      queryParameters: const {'focusComposer': 'true'},
+    );
   }
 
   /// Réagit au canal temps réel des réservations (voir ReservationSocketService).
@@ -302,6 +339,11 @@ class _BookingPageV2State extends State<BookingPageV2> {
                       }
                       return BookingCardV2(
                         reservationModel: item,
+                        conversationId: item.statusEnum ==
+                                StatusReservation.enAttentePaiementClient
+                            ? _reservationConversationIds[item.id]
+                            : null,
+                        onMessageClient: _openClientMessage,
                       );
                     },
                   ),

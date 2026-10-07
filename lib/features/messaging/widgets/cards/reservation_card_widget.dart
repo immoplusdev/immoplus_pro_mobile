@@ -215,6 +215,8 @@ class ReservationCardWidget extends StatelessWidget {
         return Iconsax.building;
       case 'view_reservation':
         return Iconsax.receipt_item;
+      case 'message_client':
+        return Iconsax.message;
       default:
         return null;
     }
@@ -234,6 +236,8 @@ class ReservationCardWidget extends StatelessWidget {
         return 'Évaluer le client';
       case 'complete_arrival_info':
         return 'Fiche d\'arrivée';
+      case 'message_client':
+        return 'Envoyer un message au client';
       default:
         return 'Action';
     }

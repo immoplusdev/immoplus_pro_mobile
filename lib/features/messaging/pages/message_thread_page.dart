@@ -47,9 +47,14 @@ import '../widgets/thread_typing_indicator.dart';
 import '../../../services/messaging_socket_service.dart';
 
 class MessageThreadPage extends StatelessWidget {
-  const MessageThreadPage({super.key, required this.conversationId});
+  const MessageThreadPage({
+    super.key,
+    required this.conversationId,
+    this.focusComposer = false,
+  });
 
   final String conversationId;
+  final bool focusComposer;
 
   static const String routePath = '/messages/:conversationId';
   static const String name = 'message_thread';
@@ -60,13 +65,15 @@ class MessageThreadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<ConversationThreadCubit>()..load(conversationId),
-      child: const _ThreadView(),
+      child: _ThreadView(focusComposer: focusComposer),
     );
   }
 }
 
 class _ThreadView extends StatefulWidget {
-  const _ThreadView();
+  const _ThreadView({this.focusComposer = false});
+
+  final bool focusComposer;
 
   @override
   State<_ThreadView> createState() => _ThreadViewState();
@@ -491,6 +498,17 @@ class _ThreadViewState extends State<_ThreadView> {
           EasyLoading.showError('Impossible d\'accepter la réservation.');
         });
         break;
+      case 'message_client':
+        final conversationId = target['id']?.toString() ?? '';
+        final collection = target['collection']?.toString();
+        if (collection == 'conversations' && conversationId.isNotEmpty) {
+          context.pushNamed(
+            MessageThreadPage.name,
+            pathParameters: {'conversationId': conversationId},
+            queryParameters: const {'focusComposer': 'true'},
+          );
+        }
+        break;
       case 'reject_reservation':
         RejectReservationSheet.show(
           context,
@@ -657,6 +675,7 @@ class _ThreadViewState extends State<_ThreadView> {
                   )
                 else
                   MessageComposerBar(
+                    autofocus: widget.focusComposer,
                     onChanged: (draft) =>
                         _onComposerChanged(draft, loaded, context),
                     onSend: (text) =>

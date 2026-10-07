@@ -12,11 +12,13 @@ class MessageComposerBar extends StatefulWidget {
     required this.onChanged,
     required this.onSend,
     this.onOpenActions,
+    this.autofocus = false,
   });
 
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSend;
   final VoidCallback? onOpenActions;
+  final bool autofocus;
 
   @override
   State<MessageComposerBar> createState() => _MessageComposerBarState();
@@ -98,6 +100,7 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
               constraints: const BoxConstraints(maxHeight: 120),
               child: TextField(
                 controller: _controller,
+                autofocus: widget.autofocus,
                 minLines: 1,
                 maxLines: 5,
                 maxLength: 2000,

@@ -612,6 +612,7 @@ class AppRouter {
         name: MessageThreadPage.name,
         builder: (context, state) => MessageThreadPage(
           conversationId: state.pathParameters['conversationId']!,
+          focusComposer: state.uri.queryParameters['focusComposer'] == 'true',
         ),
       ),
     ],
