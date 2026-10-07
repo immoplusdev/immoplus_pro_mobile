@@ -72,15 +72,23 @@ class _MainNavigationV2State extends State<MainNavigationV2>
   }
 
   void _onTap(int index) {
+    const branchIndexByNavigationIndex = [0, 3, 2, 1, 4];
+    final branchIndex = branchIndexByNavigationIndex[index];
+
     // When navigating to a new branch, it's recommended to use the goBranch
     // method, as doing so makes sure the last navigation state of the
     // Navigator for the branch is restored.
     widget.navigationShell.goBranch(
-      index,
+      branchIndex,
       // A common pattern when tapping on the current tab is to
       // navigate to the initial location of that branch.
-      initialLocation: index == widget.navigationShell.currentIndex,
+      initialLocation: branchIndex == widget.navigationShell.currentIndex,
     );
+  }
+
+  int get _selectedNavigationIndex {
+    const navigationIndexByBranchIndex = [0, 3, 2, 1, 4];
+    return navigationIndexByBranchIndex[widget.navigationShell.currentIndex];
   }
 
   List<ImmoplusBottomNavItem> get _navItems => [
@@ -99,12 +107,20 @@ class _MainNavigationV2State extends State<MainNavigationV2>
             size: 22,
           ),
         ),
-        const ImmoplusBottomNavItem(
-          label: 'Messages',
-          iosIconName: 'immo_message',
-          iosIconNameSelected: 'immo_message_fill',
-          androidIcon: _MessagesNavIcon(isSelected: false),
-          androidIconSelected: _MessagesNavIcon(isSelected: true),
+        ImmoplusBottomNavItem(
+          label: 'Calendrier',
+          iosIconName: 'immo_calendar',
+          iosIconNameSelected: 'immo_calendar_fill',
+          androidIcon: Icon(
+            Iconsax.calendar_1,
+            color: Colors.grey.shade600,
+            size: 22,
+          ),
+          androidIconSelected: Icon(
+            Iconsax.calendar_1,
+            color: AppColors.primary,
+            size: 22,
+          ),
         ),
         ImmoplusBottomNavItem(
           label: 'Publier',
@@ -121,20 +137,12 @@ class _MainNavigationV2State extends State<MainNavigationV2>
             size: 22,
           ),
         ),
-        ImmoplusBottomNavItem(
-          label: 'Calendrier',
-          iosIconName: 'immo_calendar',
-          iosIconNameSelected: 'immo_calendar_fill',
-          androidIcon: Icon(
-            Iconsax.calendar_1,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.calendar_1,
-            color: AppColors.primary,
-            size: 22,
-          ),
+        const ImmoplusBottomNavItem(
+          label: 'Messages',
+          iosIconName: 'immo_message',
+          iosIconNameSelected: 'immo_message_fill',
+          androidIcon: _MessagesNavIcon(isSelected: false),
+          androidIconSelected: _MessagesNavIcon(isSelected: true),
         ),
         ImmoplusBottomNavItem(
           label: 'Compte',
@@ -159,7 +167,7 @@ class _MainNavigationV2State extends State<MainNavigationV2>
       extendBody: true,
       body: widget.navigationShell,
       bottomNavigationBar: ImmoplusBottomNavigationBar(
-        selectedIndex: widget.navigationShell.currentIndex,
+        selectedIndex: _selectedNavigationIndex,
         onDestinationSelected: _onTap,
         items: _navItems,
       ),

@@ -13,10 +13,3 @@ _$CreateConversationResponseImpl _$$CreateConversationResponseImplFromJson(
           json['conversation'] as Map<String, dynamic>),
       message: MessageModel.fromJson(json['message'] as Map<String, dynamic>),
     );
-
-Map<String, dynamic> _$$CreateConversationResponseImplToJson(
-        _$CreateConversationResponseImpl instance) =>
-    <String, dynamic>{
-      'conversation': instance.conversation,
-      'message': instance.message,
-    };

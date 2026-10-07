@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visite_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/estate_detail/estate_details_page_v2.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
@@ -19,12 +23,28 @@ import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/models/remote/messaging/message_model.dart';
 import '../logic/conversation_thread_cubit.dart';
 import '../logic/conversation_thread_state.dart';
+import '../logic/pro_guidance_rule.dart';
 import '../utils/messaging_time_format.dart';
+import '../widgets/actions/arrival_info_sheet.dart';
+import '../widgets/actions/availability_answer_sheet.dart';
+import '../widgets/actions/composer_actions_sheet.dart';
+import '../widgets/actions/qr_checkin_scanner_sheet.dart';
+import '../widgets/actions/pro_guidance_sheet.dart';
+import '../widgets/actions/rate_guest_sheet.dart';
+import '../widgets/actions/reject_reservation_sheet.dart';
+import '../widgets/actions/stay_proposal_sheet.dart';
+import '../widgets/actions/withdrawal_request_sheet.dart';
 import '../widgets/block_conversation_dialog.dart';
+import '../widgets/cards/availability_request_card.dart';
+import '../widgets/cards/choice_prompt_widget.dart';
+import '../widgets/cards/reservation_card_widget.dart';
+import '../widgets/cards/residence_card_widget.dart';
+import '../widgets/cards/stay_proposal_card.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/message_composer_bar.dart';
 import '../widgets/report_conversation_sheet.dart';
 import '../widgets/thread_typing_indicator.dart';
+import '../../../services/messaging_socket_service.dart';
 
 class MessageThreadPage extends StatelessWidget {
   const MessageThreadPage({super.key, required this.conversationId});
@@ -59,11 +79,123 @@ class _ThreadViewState extends State<_ThreadView> {
   String? _peerName;
   bool _sideEffectsLoaded = false;
   int _lastMessageCount = 0;
+  List<ProGuidanceRule> _proGuidanceRules = [];
+  StreamSubscription<void>? _proGuidanceUpdatedSub;
+  String? _activeGuidanceKey;
+  final Map<String, int> _guidanceShows = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _proGuidanceUpdatedSub = getIt<MessagingSocketService>()
+        .onProGuidanceUpdated
+        .listen((_) => unawaited(_reloadProGuidance()));
+  }
 
   @override
   void dispose() {
+    _proGuidanceUpdatedSub?.cancel();
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future<void> _reloadProGuidance() async {
+    final jsonRules = await MessagingRepository.getProGuidance();
+    if (!mounted) return;
+    setState(() {
+      _proGuidanceRules = jsonRules
+          .map(ProGuidanceRule.fromJson)
+          .where((rule) => rule.id.isNotEmpty)
+          .toList()
+        ..sort((a, b) => b.priority.compareTo(a.priority));
+      _activeGuidanceKey = null;
+    });
+  }
+
+  void _onComposerChanged(
+    String draft,
+    ConversationThreadLoaded loaded,
+    BuildContext context,
+  ) {
+    context.read<ConversationThreadCubit>().onComposerTextChanged();
+    final conversation = loaded.conversation;
+    if (draft.trim().isEmpty || conversation.isReadOnly) {
+      _activeGuidanceKey = null;
+      return;
+    }
+
+    final List<Map<String, dynamic>> serverActions = [
+      ...?conversation.actions,
+      ...loaded.messages.expand((message) => message.actions ?? const []),
+    ];
+    ProGuidanceRule? suggestion;
+    for (final rule in _proGuidanceRules) {
+      if (rule.matches(
+        draft: draft,
+        type: conversation.typeEnum,
+        serverActions: serverActions,
+      )) {
+        suggestion = rule;
+        break;
+      }
+    }
+
+    if (suggestion == null) {
+      _activeGuidanceKey = null;
+      return;
+    }
+    final rule = suggestion;
+    final key = '${conversation.id}:${rule.id}';
+    if (_activeGuidanceKey == key) return;
+    _activeGuidanceKey = key;
+    final shownCount = _guidanceShows[key] ?? 0;
+    if (shownCount >= rule.maxShowsPerConversation) return;
+    _guidanceShows[key] = shownCount + 1;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ProGuidanceSheet.show(
+        context,
+        rule: rule,
+        onAction: () => unawaited(_executeGuidanceAction(rule, conversation)),
+      );
+    });
+  }
+
+  Future<void> _executeGuidanceAction(
+    ProGuidanceRule rule,
+    ConversationModel conversation,
+  ) async {
+    final actionId = rule.actionId;
+    if (actionId == null || !mounted) return;
+    try {
+      final refreshed =
+          await MessagingRepository.getConversation(conversation.id);
+      if (!mounted || refreshed.isReadOnly) return;
+      final freshMessages = await MessagingRepository.getMessages(
+        conversation.id,
+        limit: 30,
+      );
+      if (!mounted) return;
+      final freshActions = [
+        ...?refreshed.actions,
+        ...freshMessages.expand((message) => message.actions ?? const []),
+      ];
+      final action = freshActions.where(
+        (item) => item['id']?.toString() == actionId,
+      );
+      if (action.isEmpty) return;
+      _handleAction(
+        actionId,
+        Map<String, dynamic>.from(action.first['target'] as Map? ?? {}),
+        context,
+        context.read<ConversationThreadCubit>(),
+        refreshed,
+      );
+    } catch (_) {
+      EasyLoading.showError('Cette action n’est plus disponible.');
+      context.read<ConversationThreadCubit>().load(conversation.id);
+    }
   }
 
   /// Libellé par défaut de l'interlocuteur (le client) selon le type, tant
@@ -72,6 +204,8 @@ class _ThreadViewState extends State<_ThreadView> {
     switch (type) {
       case ConversationType.support:
         return 'Support ImmoPlus';
+      case ConversationType.relais:
+        return 'Client Relais';
       case ConversationType.visite:
       case ConversationType.reservation:
         return 'Client';
@@ -81,6 +215,7 @@ class _ThreadViewState extends State<_ThreadView> {
   Future<void> _loadSideEffects(ConversationModel conversation) async {
     if (_sideEffectsLoaded) return;
     _sideEffectsLoaded = true;
+    unawaited(_reloadProGuidance());
 
     switch (conversation.typeEnum) {
       case ConversationType.reservation:
@@ -91,8 +226,6 @@ class _ThreadViewState extends State<_ThreadView> {
             if (mounted) setState(() => _residence = residence.data);
           } catch (_) {}
         }
-        // Pas d'endpoint "profil client par id" côté Pro — le nom du client
-        // reste au libellé générique par défaut pour ce type.
         break;
 
       case ConversationType.visite:
@@ -113,8 +246,8 @@ class _ThreadViewState extends State<_ThreadView> {
         }
         break;
 
+      case ConversationType.relais:
       case ConversationType.support:
-        // Pas d'identité individuelle — libellé fixe.
         break;
     }
   }
@@ -195,7 +328,7 @@ class _ThreadViewState extends State<_ThreadView> {
             if (type == ConversationType.reservation &&
                 conversation.residenceId != null) ...[
               ListTile(
-                leading: const Icon(Icons.home_outlined),
+                leading: const Icon(Iconsax.building),
                 title: const Text('Voir la résidence'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
@@ -206,7 +339,7 @@ class _ThreadViewState extends State<_ThreadView> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.calendar_month_outlined),
+                leading: const Icon(Iconsax.calendar),
                 title: const Text('Gérer disponibilité'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
@@ -217,7 +350,7 @@ class _ThreadViewState extends State<_ThreadView> {
             if (type == ConversationType.visite &&
                 _visitData?.bienImmobilier != null) ...[
               ListTile(
-                leading: const Icon(Icons.home_outlined),
+                leading: const Icon(Iconsax.house),
                 title: const Text('Voir le bien'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
@@ -228,7 +361,7 @@ class _ThreadViewState extends State<_ThreadView> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.event_note_outlined),
+                leading: const Icon(Iconsax.document_text),
                 title: const Text('Voir la demande de visite'),
                 onTap: () {
                   Navigator.of(sheetContext).pop();
@@ -237,7 +370,7 @@ class _ThreadViewState extends State<_ThreadView> {
               ),
             ],
             ListTile(
-              leading: const Icon(Icons.flag_outlined),
+              leading: const Icon(Iconsax.flag),
               title: const Text('Signaler'),
               onTap: () {
                 Navigator.of(sheetContext).pop();
@@ -253,7 +386,7 @@ class _ThreadViewState extends State<_ThreadView> {
             // pas d'interlocuteur unique à bloquer.
             if (!isBlocked && type != ConversationType.support)
               ListTile(
-                leading: Icon(Icons.block, color: AppColors.redFF0000),
+                leading: Icon(Iconsax.forbidden, color: AppColors.redFF0000),
                 title: Text('Bloquer',
                     style: TextStyle(color: AppColors.redFF0000)),
                 onTap: () {
@@ -265,7 +398,8 @@ class _ThreadViewState extends State<_ThreadView> {
                     onConfirm: () async {
                       final ok = await cubit.block();
                       if (!ok && context.mounted) {
-                        EasyLoading.showError('Le blocage a échoué. Réessayer.');
+                        EasyLoading.showError(
+                            'Le blocage a échoué. Réessayer.');
                       }
                       return ok;
                     },
@@ -276,6 +410,133 @@ class _ThreadViewState extends State<_ThreadView> {
         ),
       ),
     );
+  }
+
+  void _handleAction(
+    String actionId,
+    Map<String, dynamic> target,
+    BuildContext context,
+    ConversationThreadCubit cubit,
+    ConversationModel conversation,
+  ) {
+    if (conversation.isReadOnly) return;
+    final targetId = target['id']?.toString() ?? conversation.id;
+    final residenceId = conversation.residenceId ??
+        target['residenceId']?.toString() ??
+        targetId;
+
+    switch (actionId) {
+      case 'view_residence':
+        context.pushNamed(
+          ResidenceDetailsPageV2.name,
+          pathParameters: {'id': residenceId},
+        );
+        break;
+      case 'view_reservation':
+        if (targetId.isNotEmpty) {
+          context.pushNamed(
+            ResidenceDetailsPageV2.name,
+            pathParameters: {'id': residenceId},
+          );
+        }
+        break;
+      case 'open_calendar':
+        context.go(CalendarPageV2.routePath);
+        break;
+      case 'schedule_visit':
+        final visitId = target['id']?.toString() ?? conversation.visiteId;
+        if (visitId != null && visitId.isNotEmpty) {
+          _showVisitDetailSheet(context, visitId);
+        }
+        break;
+      case 'answer_availability':
+        AvailabilityAnswerSheet.show(
+          context,
+          onAnswer: (available) async {
+            final sent = await cubit.sendStructuredMessage(
+              type: 'availability_answer',
+              content: available ? 'Disponible' : 'Indisponible',
+              payload: {
+                'requestMessageId': targetId,
+                'available': available,
+                'origin': 'pro',
+              },
+            );
+            if (sent) cubit.load(conversation.id);
+          },
+        );
+        break;
+      case 'propose_stay':
+        final proposalResidenceId =
+            target['residenceId']?.toString() ?? conversation.residenceId;
+        if (proposalResidenceId == null) return;
+        StayProposalSheet.show(
+          context,
+          residenceId: proposalResidenceId,
+          onSendProposal: (
+                  {required checkIn, required checkOut, required guests}) =>
+              cubit.sendStayProposal(
+            residenceId: proposalResidenceId,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            guests: guests,
+          ),
+        );
+        break;
+      case 'accept_reservation':
+        MessagingRepository.acceptReservation(targetId).then((_) {
+          EasyLoading.showSuccess('Réservation acceptée !');
+          cubit.load(conversation.id);
+        }).catchError((e) {
+          EasyLoading.showError('Impossible d\'accepter la réservation.');
+        });
+        break;
+      case 'reject_reservation':
+        RejectReservationSheet.show(
+          context,
+          reservationId: targetId,
+          onRejected: () => cubit.load(conversation.id),
+        );
+        break;
+      case 'scan_checkin_qr':
+        QrCheckinScannerSheet.show(
+          context,
+          onScanned: () => cubit.load(conversation.id),
+        );
+        break;
+      case 'complete_arrival_info':
+        ArrivalInfoSheet.show(
+          context,
+          residenceId: residenceId,
+          onUpdated: () => cubit.load(conversation.id),
+        );
+        break;
+      case 'rate_guest':
+        RateGuestSheet.show(
+          context,
+          reservationId: targetId,
+          onRated: () => cubit.load(conversation.id),
+        );
+        break;
+      case 'open_withdrawal':
+        WithdrawalRequestSheet.show(
+          context,
+          reservationId: targetId,
+          onRequested: () => cubit.load(conversation.id),
+        );
+        break;
+      case 'open_support':
+        MessagingRepository.openSupportGuided().then((res) {
+          if (!context.mounted) return;
+          context.pushNamed(
+            MessageThreadPage.name,
+            pathParameters: {'conversationId': res.conversation.id},
+          );
+        }).catchError((_) {
+          EasyLoading.showError('Impossible d\'ouvrir le support.');
+        });
+        break;
+    }
   }
 
   @override
@@ -292,11 +553,10 @@ class _ThreadViewState extends State<_ThreadView> {
           },
           builder: (context, state) {
             if (state is ConversationThreadLoading) {
-              // Toujours un moyen de sortir même si le chargement traîne
-              // (réseau lent) — jamais un écran figé sans retour possible.
               return Column(
                 children: [
-                  _MinimalHeader(onBack: () => Navigator.of(context).maybePop()),
+                  _MinimalHeader(
+                      onBack: () => Navigator.of(context).maybePop()),
                   const Expanded(
                       child: Center(child: CircularProgressIndicator())),
                 ],
@@ -305,7 +565,8 @@ class _ThreadViewState extends State<_ThreadView> {
             if (state is ConversationThreadError) {
               return Column(
                 children: [
-                  _MinimalHeader(onBack: () => Navigator.of(context).maybePop()),
+                  _MinimalHeader(
+                      onBack: () => Navigator.of(context).maybePop()),
                   Expanded(
                     child: Center(
                       child: Padding(
@@ -313,14 +574,15 @@ class _ThreadViewState extends State<_ThreadView> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.wifi_off,
+                            Icon(Iconsax.wifi_square,
                                 size: 40, color: Colors.grey.shade400),
                             const SizedBox(height: 12),
                             Text(state.message, textAlign: TextAlign.center),
                             const SizedBox(height: 16),
                             OutlinedButton(
-                              onPressed: () =>
-                                  context.read<ConversationThreadCubit>().retry(),
+                              onPressed: () => context
+                                  .read<ConversationThreadCubit>()
+                                  .retry(),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.primary,
                                 side: BorderSide(color: AppColors.primary),
@@ -337,15 +599,10 @@ class _ThreadViewState extends State<_ThreadView> {
             }
 
             final loaded = state as ConversationThreadLoaded;
-            final isBlocked =
-                loaded.conversation.statusEnum == ConversationStatus.blocked;
+            final isBlocked = loaded.conversation.isReadOnly;
             final type = loaded.conversation.typeEnum;
             final peerLabel = _peerName ?? _defaultPeerLabel(type);
 
-            // Carte de contexte façon Airbnb (comme côté client) : premier
-            // élément du fil, pas un bandeau figé — elle défile avec la
-            // conversation. Alignée à gauche, côté client/peer : c'est sa
-            // demande, pas un message du pro.
             Widget? topCard;
             if (type == ConversationType.reservation && _residence != null) {
               topCard = _ResidenceContextCard(
@@ -365,7 +622,9 @@ class _ThreadViewState extends State<_ThreadView> {
                     _visitData?.bienImmobilier != null)
                   _VisiteContextCard(visitData: _visitData!)
                 else if (type == ConversationType.support)
-                  const _SupportContextBanner(),
+                  const _SupportContextBanner()
+                else if (type == ConversationType.relais)
+                  const _RelaisContextBanner(),
                 Expanded(
                   child: _MessageList(
                     scrollController: _scrollController,
@@ -373,6 +632,13 @@ class _ThreadViewState extends State<_ThreadView> {
                     peerName: peerLabel,
                     isSupport: type == ConversationType.support,
                     topCard: topCard,
+                    onActionTap: (actionId, target) => _handleAction(
+                      actionId,
+                      target,
+                      context,
+                      context.read<ConversationThreadCubit>(),
+                      loaded.conversation,
+                    ),
                   ),
                 ),
                 if (loaded.moderationBannerMessage != null)
@@ -385,16 +651,103 @@ class _ThreadViewState extends State<_ThreadView> {
                     child: Text(
                       'Vous ne pouvez plus échanger de messages dans cette conversation.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                      style:
+                          TextStyle(fontSize: 13, color: Colors.grey.shade700),
                     ),
                   )
                 else
                   MessageComposerBar(
-                    onChanged: (_) => context
-                        .read<ConversationThreadCubit>()
-                        .onComposerTextChanged(),
+                    onChanged: (draft) =>
+                        _onComposerChanged(draft, loaded, context),
                     onSend: (text) =>
                         context.read<ConversationThreadCubit>().sendText(text),
+                    onOpenActions: () {
+                      final serverActions = <Map<String, dynamic>>[
+                        ...?loaded.conversation.actions,
+                        ...loaded.messages.expand(
+                          (message) => message.actions ?? const [],
+                        ),
+                      ];
+                      final actionTypes = <ComposerActionType>[];
+                      if (loaded.conversation.residenceId != null &&
+                          serverActions.any((action) =>
+                              action['id']?.toString() == 'propose_stay')) {
+                        actionTypes.add(ComposerActionType.proposeStay);
+                      }
+                      if (serverActions.any((action) =>
+                          action['id']?.toString() == 'open_withdrawal')) {
+                        actionTypes.add(ComposerActionType.requestWithdrawal);
+                      }
+                      if (loaded.conversation.typeEnum !=
+                          ConversationType.support) {
+                        actionTypes.add(ComposerActionType.openSupport);
+                      }
+                      if (actionTypes.isEmpty) return;
+
+                      ComposerActionsSheet.show(
+                        context,
+                        actions: actionTypes,
+                        onActionSelected: (actionType) {
+                          switch (actionType) {
+                            case ComposerActionType.proposeStay:
+                              if (loaded.conversation.residenceId != null) {
+                                final action = serverActions.firstWhere(
+                                  (item) =>
+                                      item['id']?.toString() == 'propose_stay',
+                                  orElse: () => <String, dynamic>{},
+                                );
+                                final residenceId = action['target'] is Map &&
+                                        action['target']['residenceId'] != null
+                                    ? action['target']['residenceId'].toString()
+                                    : loaded.conversation.residenceId!;
+                                StayProposalSheet.show(
+                                  context,
+                                  residenceId: residenceId,
+                                  onSendProposal: ({
+                                    required checkIn,
+                                    required checkOut,
+                                    required guests,
+                                  }) =>
+                                      context
+                                          .read<ConversationThreadCubit>()
+                                          .sendStayProposal(
+                                            residenceId: residenceId,
+                                            checkIn: checkIn,
+                                            checkOut: checkOut,
+                                            guests: guests,
+                                          ),
+                                );
+                              }
+                              break;
+                            case ComposerActionType.requestWithdrawal:
+                              final action = serverActions.firstWhere(
+                                (item) =>
+                                    item['id']?.toString() == 'open_withdrawal',
+                                orElse: () => <String, dynamic>{},
+                              );
+                              _handleAction(
+                                'open_withdrawal',
+                                Map<String, dynamic>.from(
+                                  action['target'] as Map? ?? const {},
+                                ),
+                                context,
+                                context.read<ConversationThreadCubit>(),
+                                loaded.conversation,
+                              );
+                              break;
+                            case ComposerActionType.openSupport:
+                              _handleAction(
+                                'open_support',
+                                {'id': loaded.conversation.id},
+                                context,
+                                context.read<ConversationThreadCubit>(),
+                                loaded.conversation,
+                              );
+                              break;
+                          }
+                        },
+                      );
+                    },
                   ),
               ],
             );
@@ -416,11 +769,12 @@ class _MinimalHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border:
+            Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
       ),
       child: Row(
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack),
+          IconButton(icon: const Icon(Iconsax.arrow_left_1), onPressed: onBack),
         ],
       ),
     );
@@ -446,20 +800,22 @@ class _Header extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border:
+            Border(bottom: BorderSide(color: Colors.grey.shade100, width: 1)),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(Iconsax.arrow_left),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           CircleAvatar(
             radius: 18,
             backgroundColor: AppColors.primaryLite,
             child: Icon(
-              isSupport ? Icons.support_agent_outlined : Icons.person,
+              isSupport ? Iconsax.headphone : Iconsax.user,
               color: AppColors.primary,
+              size: 20,
             ),
           ),
           const SizedBox(width: 10),
@@ -469,8 +825,8 @@ class _Header extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(peerLabel,
-                    style:
-                        const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w600),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis),
                 if (presenceLabel.isNotEmpty)
@@ -502,7 +858,7 @@ class _Header extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Iconsax.more),
             onPressed: onMenuTap,
           ),
         ],
@@ -653,8 +1009,9 @@ class _VisiteContextCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bien = visitData.bienImmobilier!;
-    final photoUrl =
-        bien.images.isNotEmpty ? Utils.getImagePath(id: bien.images.first) : null;
+    final photoUrl = bien.images.isNotEmpty
+        ? Utils.getImagePath(id: bien.images.first)
+        : null;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -719,9 +1076,30 @@ class _SupportContextBanner extends StatelessWidget {
       color: Colors.grey.shade50,
       child: Row(
         children: [
-          Icon(Icons.support_agent_outlined, size: 18, color: AppColors.primary),
+          Icon(Iconsax.headphone, size: 18, color: AppColors.primary),
           const SizedBox(width: 8),
           const Text('Assistance ImmoPlus',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+        ],
+      ),
+    );
+  }
+}
+
+class _RelaisContextBanner extends StatelessWidget {
+  const _RelaisContextBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: Colors.grey.shade50,
+      child: Row(
+        children: [
+          Icon(Iconsax.repeat, size: 18, color: AppColors.primary),
+          const SizedBox(width: 8),
+          const Text('Relais Client Concerné',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
         ],
       ),
@@ -735,6 +1113,7 @@ class _MessageList extends StatelessWidget {
     required this.state,
     required this.peerName,
     required this.isSupport,
+    required this.onActionTap,
     this.topCard,
   });
 
@@ -742,6 +1121,7 @@ class _MessageList extends StatelessWidget {
   final ConversationThreadLoaded state;
   final String peerName;
   final bool isSupport;
+  final Function(String actionId, Map<String, dynamic> target) onActionTap;
 
   /// Carte de contexte résidence — s'affiche juste sous le tout premier
   /// message du fil (comme la card côté client), pas avant.
@@ -753,10 +1133,10 @@ class _MessageList extends StatelessWidget {
     final cubit = context.read<ConversationThreadCubit>();
 
     final lastSelfIndex = messages.lastIndexWhere((m) => m.isFromPro);
-    final typingLabel =
-        isSupport ? 'Un conseiller écrit…' : '$peerName est en train d\'écrire…';
+    final typingLabel = isSupport
+        ? 'Un conseiller écrit…'
+        : '$peerName est en train d\'écrire…';
     final topCardCount = topCard != null ? 1 : 0;
-    // Sous le premier message s'il y en a un, sinon en tout premier (fil vide).
     final cardPosition = messages.isNotEmpty ? 1 : 0;
 
     return ListView.builder(
@@ -788,12 +1168,55 @@ class _MessageList extends StatelessWidget {
         final showReadMarker =
             index == lastSelfIndex && state.peerLastReadAt != null;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (showDaySeparator && message.createdAt != null)
-              DaySeparator(label: formatDaySeparator(message.createdAt!)),
-            MessageBubble(
+        Widget cardWidget;
+        switch (message.type) {
+          case 'availability_request':
+            cardWidget = AvailabilityRequestCard(
+              message: message,
+              canAnswer: !state.conversation.isReadOnly &&
+                  (message.actions ?? []).any((action) =>
+                      action['id']?.toString() == 'answer_availability'),
+              onAnswerTap: () => onActionTap(
+                'answer_availability',
+                {'id': message.id, ...?message.payload},
+              ),
+            );
+            break;
+          case 'stay_proposal':
+            cardWidget = StayProposalCard(message: message);
+            break;
+          case 'reservation_card':
+            cardWidget = ReservationCardWidget(
+              message: message,
+              isReadOnly: state.conversation.isReadOnly,
+              onActionTap: onActionTap,
+            );
+            break;
+          case 'residence_card':
+            cardWidget = ResidenceCardWidget(
+              message: message,
+              canViewResidence: !state.conversation.isReadOnly &&
+                  (message.actions ?? []).any(
+                      (action) => action['id']?.toString() == 'view_residence'),
+              onViewResidence: (id) =>
+                  onActionTap('view_residence', {'id': id}),
+            );
+            break;
+          case 'choice_prompt':
+            cardWidget = ChoicePromptWidget(
+              message: message,
+              isReadOnly: state.conversation.isReadOnly,
+              onOptionSelected: (topic, optId, label) {
+                cubit.sendStructuredMessage(
+                  type: 'choice_answer',
+                  content: label,
+                  payload: {'topic': topic, 'optionId': optId},
+                );
+              },
+            );
+            break;
+          default:
+            cardWidget = MessageBubble(
               message: message,
               showAvatar: showAvatar,
               showReadMarker: showReadMarker,
@@ -803,7 +1226,16 @@ class _MessageList extends StatelessWidget {
               onDelete: message.deliveryState == MessageDeliveryState.failed
                   ? () => cubit.deleteFailedMessage(message.clientTempId!)
                   : null,
-            ),
+            );
+            break;
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (showDaySeparator && message.createdAt != null)
+              DaySeparator(label: formatDaySeparator(message.createdAt!)),
+            cardWidget,
           ],
         );
       },

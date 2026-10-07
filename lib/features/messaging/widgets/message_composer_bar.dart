@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 
-/// Composer bas d'écran du fil : champ extensible + bouton d'envoi,
-/// désactivé tant que le champ est vide.
+import 'actions/quick_replies_sheet.dart';
+
+/// Composer bas d'écran du fil : champ extensible + boutons d'action & d'envoi.
 class MessageComposerBar extends StatefulWidget {
   const MessageComposerBar({
     super.key,
     required this.onChanged,
     required this.onSend,
+    this.onOpenActions,
   });
 
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSend;
+  final VoidCallback? onOpenActions;
 
   @override
   State<MessageComposerBar> createState() => _MessageComposerBarState();
@@ -35,23 +40,59 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
     setState(() => _hasText = false);
   }
 
+  void _openQuickReplies() {
+    QuickRepliesSheet.show(
+      context,
+      onSelectReply: (replyText) {
+        _controller.text = replyText;
+        widget.onChanged(replyText);
+        setState(() => _hasText = replyText.trim().isNotEmpty);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        left: 12,
+        left: 8,
         right: 8,
         top: 8,
         bottom: MediaQuery.of(context).padding.bottom + 8,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        border:
-            Border(top: BorderSide(color: Colors.grey.shade100, width: 1)),
+        border: Border(top: BorderSide(color: Colors.grey.shade200, width: 1)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          if (widget.onOpenActions != null)
+            IconButton(
+              onPressed: widget.onOpenActions,
+              tooltip: 'Actions du fil',
+              icon: Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Iconsax.add,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
+              ),
+            ),
+          IconButton(
+            onPressed: _openQuickReplies,
+            tooltip: 'Réponses rapides',
+            icon: Icon(
+              Iconsax.flash_1,
+              color: AppColors.primary,
+            ),
+          ),
           Expanded(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 120),
@@ -59,18 +100,33 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
                 controller: _controller,
                 minLines: 1,
                 maxLines: 5,
+                maxLength: 2000,
+                maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                buildCounter: (context,
+                        {required currentLength,
+                        required isFocused,
+                        maxLength}) =>
+                    const SizedBox.shrink(),
                 textCapitalization: TextCapitalization.sentences,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
                   hintText: 'Écrire un message…',
                   hintStyle: TextStyle(color: Colors.grey.shade400),
                   filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 10),
+                  fillColor: const Color(0xFFF8FAFC),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(color: Colors.grey.shade200),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    borderSide: BorderSide(color: Colors.grey.shade200),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(22),
+                    borderSide: BorderSide(color: AppColors.primary),
                   ),
                 ),
                 onChanged: (value) {
@@ -82,11 +138,11 @@ class _MessageComposerBarState extends State<MessageComposerBar> {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           IconButton(
             onPressed: _hasText ? _send : null,
             icon: Icon(
-              Icons.send_rounded,
+              Iconsax.send_1,
               color: _hasText ? AppColors.primary : Colors.grey.shade300,
             ),
           ),

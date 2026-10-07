@@ -21,6 +21,7 @@ enum ConversationStatus {
 enum ConversationType {
   reservation('reservation'),
   visite('visite'),
+  relais('relais'),
   support('support');
 
   final String value;
@@ -37,6 +38,8 @@ enum ConversationType {
 @freezed
 class ConversationModel with _$ConversationModel {
   const ConversationModel._();
+
+  static final Map<String, Map<String, dynamic>> _extraData = {};
 
   const factory ConversationModel({
     required String id,
@@ -60,9 +63,27 @@ class ConversationModel with _$ConversationModel {
     DateTime? createdAt,
   }) = _ConversationModel;
 
-  factory ConversationModel.fromJson(Map<String, dynamic> json) =>
-      _$ConversationModelFromJson(json);
+  factory ConversationModel.fromJson(Map<String, dynamic> json) {
+    final model = _$ConversationModelFromJson(json);
+    _extraData[model.id] = json;
+    return model;
+  }
 
   ConversationStatus get statusEnum => ConversationStatus.fromString(status);
   ConversationType get typeEnum => ConversationType.fromString(type);
+
+  String? get stage => _extraData[id]?['stage']?.toString();
+  String? get pendingActionFor => _extraData[id]?['pendingActionFor']?.toString();
+  String? get relaisId => _extraData[id]?['relaisId']?.toString();
+  List<Map<String, dynamic>>? get actions {
+    final raw = _extraData[id]?['actions'];
+    if (raw is List) {
+      return raw.map((e) => Map<String, dynamic>.from(e is Map ? e : {})).toList();
+    }
+    return null;
+  }
+
+  bool get isReadOnly =>
+      (_extraData[id]?['readOnly'] == true) || status == 'blocked';
 }
+
