@@ -24,9 +24,6 @@ mixin _$CreateConversationResponse {
   ConversationModel get conversation => throw _privateConstructorUsedError;
   MessageModel get message => throw _privateConstructorUsedError;
 
-  /// Serializes this CreateConversationResponse to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
   /// Create a copy of CreateConversationResponse
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -148,7 +145,7 @@ class __$$CreateConversationResponseImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class _$CreateConversationResponseImpl implements _CreateConversationResponse {
   const _$CreateConversationResponseImpl(
       {required this.conversation, required this.message});
@@ -189,13 +186,6 @@ class _$CreateConversationResponseImpl implements _CreateConversationResponse {
   _$$CreateConversationResponseImplCopyWith<_$CreateConversationResponseImpl>
       get copyWith => __$$CreateConversationResponseImplCopyWithImpl<
           _$CreateConversationResponseImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CreateConversationResponseImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _CreateConversationResponse

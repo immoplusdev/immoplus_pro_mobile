@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-MessageModel _$MessageModelFromJson(Map<String, dynamic> json) {
-  return _MessageModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$MessageModel {
   String get id => throw _privateConstructorUsedError;
@@ -40,9 +36,6 @@ mixin _$MessageModel {
   /// jamais renvoyé par le backend.
   @JsonKey(includeFromJson: false, includeToJson: false)
   MessageDeliveryState get deliveryState => throw _privateConstructorUsedError;
-
-  /// Serializes this MessageModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of MessageModel
   /// with the given fields replaced by the non-null parameter values.
@@ -248,7 +241,7 @@ class __$$MessageModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$MessageModelImpl extends _MessageModel {
   const _$MessageModelImpl(
       {required this.id,
@@ -264,9 +257,6 @@ class _$MessageModelImpl extends _MessageModel {
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.deliveryState = MessageDeliveryState.sent})
       : super._();
-
-  factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MessageModelImplFromJson(json);
 
   @override
   final String id;
@@ -332,7 +322,6 @@ class _$MessageModelImpl extends _MessageModel {
                 other.deliveryState == deliveryState));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -355,13 +344,6 @@ class _$MessageModelImpl extends _MessageModel {
   @pragma('vm:prefer-inline')
   _$$MessageModelImplCopyWith<_$MessageModelImpl> get copyWith =>
       __$$MessageModelImplCopyWithImpl<_$MessageModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MessageModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _MessageModel extends MessageModel {
@@ -380,9 +362,6 @@ abstract class _MessageModel extends MessageModel {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final MessageDeliveryState deliveryState}) = _$MessageModelImpl;
   const _MessageModel._() : super._();
-
-  factory _MessageModel.fromJson(Map<String, dynamic> json) =
-      _$MessageModelImpl.fromJson;
 
   @override
   String get id;

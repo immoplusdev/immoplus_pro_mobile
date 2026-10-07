@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ConversationModel _$ConversationModelFromJson(Map<String, dynamic> json) {
-  return _ConversationModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ConversationModel {
   String get id => throw _privateConstructorUsedError;
@@ -39,9 +35,6 @@ mixin _$ConversationModel {
   String? get lastMessagePreview => throw _privateConstructorUsedError;
   DateTime? get lastMessageAt => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
-
-  /// Serializes this ConversationModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of ConversationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -255,7 +248,7 @@ class __$$ConversationModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$ConversationModelImpl extends _ConversationModel {
   const _$ConversationModelImpl(
       {required this.id,
@@ -271,9 +264,6 @@ class _$ConversationModelImpl extends _ConversationModel {
       this.lastMessageAt,
       this.createdAt})
       : super._();
-
-  factory _$ConversationModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ConversationModelImplFromJson(json);
 
   @override
   final String id;
@@ -343,7 +333,6 @@ class _$ConversationModelImpl extends _ConversationModel {
                 other.createdAt == createdAt));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -368,13 +357,6 @@ class _$ConversationModelImpl extends _ConversationModel {
   _$$ConversationModelImplCopyWith<_$ConversationModelImpl> get copyWith =>
       __$$ConversationModelImplCopyWithImpl<_$ConversationModelImpl>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ConversationModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _ConversationModel extends ConversationModel {
@@ -392,9 +374,6 @@ abstract class _ConversationModel extends ConversationModel {
       final DateTime? lastMessageAt,
       final DateTime? createdAt}) = _$ConversationModelImpl;
   const _ConversationModel._() : super._();
-
-  factory _ConversationModel.fromJson(Map<String, dynamic> json) =
-      _$ConversationModelImpl.fromJson;
 
   @override
   String get id;

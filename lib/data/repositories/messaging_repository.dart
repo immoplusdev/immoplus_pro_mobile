@@ -73,9 +73,24 @@ class MessagingRepository {
   static Future<List<MessageModel>> getMessages(
     String conversationId, {
     int limit = 30,
+    String? before,
   }) async {
     try {
-      return await _provider.getMessages(conversationId, limit: limit);
+      final queryParams = <String, dynamic>{'limit': limit};
+      if (before != null && before.isNotEmpty) {
+        queryParams['before'] = before;
+      }
+      final res = await DioClient().dio.get(
+        '/conversations/$conversationId/messages',
+        queryParameters: queryParams,
+      );
+      final data = res.data;
+      if (data is List) {
+        return data
+            .map((e) => MessageModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
     } on DioException catch (e) {
       log('DioError getMessages: ${e.message}');
       throw Exception('Erreur chargement messages: ${e.message}');
@@ -94,7 +109,11 @@ class MessagingRepository {
     try {
       return await _provider.sendMessage(
         conversationId,
-        {'content': content, 'clientTempId': clientTempId},
+        {
+          'type': 'text',
+          'content': content,
+          'clientTempId': clientTempId,
+        },
       );
     } on DioException catch (e) {
       // Rethrown : l'appelant distingue CONTACT_INFO_DETECTED des autres
@@ -104,6 +123,19 @@ class MessagingRepository {
     } catch (e) {
       log('Error sendMessageHttp: $e');
       throw Exception('Erreur envoi message: $e');
+    }
+  }
+
+  /// Envoi d'un message spécifique avec payload personnalisé (stay_proposal, choice_answer, etc.).
+  static Future<MessageModel> sendCustomMessage(
+    String conversationId,
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      return await _provider.sendMessage(conversationId, body);
+    } catch (e) {
+      log('Error sendCustomMessage: $e');
+      rethrow;
     }
   }
 
@@ -159,7 +191,7 @@ class MessagingRepository {
     }
   }
 
-  /// Somme du non-lu sur les 3 types — alimente le badge de l'onglet
+  /// Somme du non-lu sur les 4 types — alimente le badge de l'onglet
   /// Messages (`GET /conversations/counts` n'a pas de ligne "toutes").
   static Future<int> getTotalUnreadCount() async {
     try {
@@ -168,6 +200,188 @@ class MessagingRepository {
     } catch (e) {
       log('Error getTotalUnreadCount: $e');
       return 0;
+    }
+  }
+
+  /// `POST /conversations/support/open` -> Ouvrir ou reprendre le parcours support guidé
+  static Future<CreateConversationResponse> openSupportGuided() async {
+    try {
+      final res = await DioClient().dio.post('/conversations/support/open');
+      return CreateConversationResponse.fromJson(res.data);
+    } catch (e) {
+      log('Error openSupportGuided: $e');
+      rethrow;
+    }
+  }
+
+  /// `GET /messaging/pro-guidance` — catalogue de suggestions métier côté pro.
+  static Future<List<Map<String, dynamic>>> getProGuidance() async {
+    try {
+      final response = await DioClient().dio.get('/messaging/pro-guidance');
+      final data = response.data;
+      final rules = data is Map ? data['rules'] : null;
+      if (rules is! List) return [];
+      return rules
+          .whereType<Map>()
+          .map((rule) => Map<String, dynamic>.from(rule))
+          .toList();
+    } catch (e) {
+      log('Error getProGuidance: $e');
+      return [];
+    }
+  }
+
+  /// `POST /reservations/action/accepter/:id`
+  static Future<void> acceptReservation(String reservationId) async {
+    try {
+      await DioClient().dio.post('/reservations/action/accepter/$reservationId', data: {});
+    } catch (e) {
+      log('Error acceptReservation: $e');
+      rethrow;
+    }
+  }
+
+  /// `POST /reservations/action/refuser/:id`
+  static Future<void> rejectReservation(String reservationId, {required String reasonCode, String? notes}) async {
+    try {
+      await DioClient().dio.post('/reservations/action/refuser/$reservationId', data: {
+        'reasonCode': reasonCode,
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+      });
+    } catch (e) {
+      log('Error rejectReservation: $e');
+      rethrow;
+    }
+  }
+
+  /// `POST /reservations/action/valider-presence`
+  static Future<Map<String, dynamic>> validatePresenceQr(String qrToken) async {
+    try {
+      final res = await DioClient().dio.post('/reservations/action/valider-presence', data: {
+        'qrToken': qrToken,
+      });
+      final data = res.data;
+      if (data is Map && data['data'] != null) {
+        return Map<String, dynamic>.from(data['data']);
+      }
+      return Map<String, dynamic>.from(data ?? {});
+    } catch (e) {
+      log('Error validatePresenceQr: $e');
+      rethrow;
+    }
+  }
+
+  /// `PUT /residences/:residenceId/arrival-info`
+  static Future<void> updateArrivalInfo(String residenceId, {String? accessInstructions, String? accessCode}) async {
+    try {
+      await DioClient().dio.put('/residences/$residenceId/arrival-info', data: {
+        'accessInstructions': accessInstructions,
+        'accessCode': accessCode,
+      });
+    } catch (e) {
+      log('Error updateArrivalInfo: $e');
+      rethrow;
+    }
+  }
+
+  /// `POST /ratings/host`
+  static Future<void> rateGuest({
+    required String reservationId,
+    required int clientRating,
+    required String guestBehavior,
+    required String propertyCondition,
+    required bool wouldRecommend,
+    String? clientFeedback,
+    String? anyIssues,
+  }) async {
+    try {
+      await DioClient().dio.post('/ratings/host', data: {
+        'reservationId': reservationId,
+        'clientRating': clientRating,
+        'guestBehavior': guestBehavior,
+        'propertyCondition': propertyCondition,
+        'wouldRecommend': wouldRecommend,
+        if (clientFeedback != null && clientFeedback.isNotEmpty) 'clientFeedback': clientFeedback,
+        if (anyIssues != null && anyIssues.isNotEmpty) 'anyIssues': anyIssues,
+      });
+    } catch (e) {
+      log('Error rateGuest: $e');
+      rethrow;
+    }
+  }
+
+  /// `POST /payments/action/create-demande-retrait-reservation`
+  static Future<void> requestWithdrawal({
+    required String reservationId,
+    required String paymentMethod,
+    required String paymentAddress,
+  }) async {
+    try {
+      await DioClient().dio.post('/payments/action/create-demande-retrait-reservation', data: {
+        'reservationId': reservationId,
+        'paymentMethod': paymentMethod,
+        'paymentAddress': paymentAddress,
+      });
+    } catch (e) {
+      log('Error requestWithdrawal: $e');
+      rethrow;
+    }
+  }
+
+  /// `GET /messaging/settings`
+  static Future<Map<String, dynamic>> getMessagingSettings() async {
+    try {
+      final res = await DioClient().dio.get('/messaging/settings');
+      return Map<String, dynamic>.from(res.data);
+    } catch (e) {
+      log('Error getMessagingSettings: $e');
+      return {'autoAvailabilityReply': false};
+    }
+  }
+
+  /// `PUT /messaging/settings`
+  static Future<void> updateMessagingSettings({bool? autoAvailabilityReply, String? absenceUntil}) async {
+    try {
+      await DioClient().dio.put('/messaging/settings', data: {
+        if (autoAvailabilityReply != null) 'autoAvailabilityReply': autoAvailabilityReply,
+        if (absenceUntil != null) 'absenceUntil': absenceUntil,
+      });
+    } catch (e) {
+      log('Error updateMessagingSettings: $e');
+      rethrow;
+    }
+  }
+
+  /// `GET /messaging/quick-replies`
+  static Future<List<String>> getQuickReplies() async {
+    try {
+      final res = await DioClient().dio.get('/messaging/quick-replies');
+      final data = res.data;
+      if (data is Map && data['labels'] is List) {
+        return List<String>.from(data['labels']);
+      } else if (data is List) {
+        return List<String>.from(data);
+      }
+      return [
+        'Bonjour, je vérifie ce point et je reviens vers vous.',
+        'Merci pour votre message.',
+      ];
+    } catch (e) {
+      log('Error getQuickReplies: $e');
+      return [
+        'Bonjour, je vérifie ce point et je reviens vers vous.',
+        'Merci pour votre message.',
+      ];
+    }
+  }
+
+  /// `PUT /messaging/quick-replies`
+  static Future<void> updateQuickReplies(List<String> labels) async {
+    try {
+      await DioClient().dio.put('/messaging/quick-replies', data: {'labels': labels});
+    } catch (e) {
+      log('Error updateQuickReplies: $e');
+      rethrow;
     }
   }
 }

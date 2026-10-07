@@ -211,6 +211,10 @@ class MessagingSocketService {
   final _connectedController = StreamController<void>.broadcast();
   Stream<void> get onConnected => _connectedController.stream;
 
+  final _proGuidanceUpdatedController = StreamController<void>.broadcast();
+  Stream<void> get onProGuidanceUpdated =>
+      _proGuidanceUpdatedController.stream;
+
   bool get isConnected => _socket?.connected ?? false;
 
   /// Ouvre (ou rouvre) la connexion avec le token courant.
@@ -297,6 +301,10 @@ class MessagingSocketService {
       }
     });
 
+    socket.on('pro_guidance_updated', (_) {
+      _proGuidanceUpdatedController.add(null);
+    });
+
     socket.connect();
     _socket = socket;
   }
@@ -357,6 +365,7 @@ class MessagingSocketService {
     }
     final ack = await socket.emitWithAckAsync('send_message', {
       'conversationId': conversationId,
+      'type': 'text',
       'content': content,
       'clientTempId': clientTempId,
     }).timeout(const Duration(seconds: 8));

@@ -6,6 +6,9 @@ part of 'conversation_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ConversationModel _$ConversationModelFromJson(Map<String, dynamic> json) =>
+    _$$ConversationModelImplFromJson(json);
+
 _$ConversationModelImpl _$$ConversationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ConversationModelImpl(
