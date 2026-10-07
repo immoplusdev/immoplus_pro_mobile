@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:immoplus_pro/configs/app_flavor.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:immoplus_pro/features/appli/my_app.dart';
-import 'package:immoplus_pro/features/main_navigation_v2/widgets/immoplus_bottom_nav_bar.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:isar_community/isar.dart';
@@ -20,7 +20,7 @@ Future<void> main() async {
   await initializeDateFormatting('fr_FR');
   await configureDependencies();
   await preload();
-  await ImmoplusBottomNavigationBar.precacheIOSVersion();
+  await AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
 
   final dir = await getApplicationDocumentsDirectory();
 

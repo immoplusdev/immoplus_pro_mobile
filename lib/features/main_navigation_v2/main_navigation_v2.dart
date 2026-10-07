@@ -7,7 +7,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
-import 'package:immoplus_pro/features/main_navigation_v2/widgets/immoplus_bottom_nav_bar.dart';
+import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:immoplus_pro/services/messaging_socket_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
@@ -59,7 +59,7 @@ class _MainNavigationV2State extends State<MainNavigationV2>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    ImmoplusBottomNavigationBar.precacheIOSVersion();
+    AdaptiveLiquidBottomNavigationBar.precacheIOSVersion();
     _fetchUnreadMessagesCount();
     _listenForUnreadMessages();
   }
@@ -72,105 +72,109 @@ class _MainNavigationV2State extends State<MainNavigationV2>
   }
 
   void _onTap(int index) {
-    const branchIndexByNavigationIndex = [0, 3, 2, 1, 4];
-    final branchIndex = branchIndexByNavigationIndex[index];
-
     // When navigating to a new branch, it's recommended to use the goBranch
     // method, as doing so makes sure the last navigation state of the
     // Navigator for the branch is restored.
     widget.navigationShell.goBranch(
-      branchIndex,
+      index,
       // A common pattern when tapping on the current tab is to
       // navigate to the initial location of that branch.
-      initialLocation: branchIndex == widget.navigationShell.currentIndex,
+      initialLocation: index == widget.navigationShell.currentIndex,
     );
   }
 
-  int get _selectedNavigationIndex {
-    const navigationIndexByBranchIndex = [0, 3, 2, 1, 4];
-    return navigationIndexByBranchIndex[widget.navigationShell.currentIndex];
-  }
+  List<AdaptiveBottomNavItem> _buildNavItems(int unreadCount) {
+    final badge =
+        unreadCount > 0 ? (unreadCount > 99 ? '99+' : '$unreadCount') : null;
 
-  List<ImmoplusBottomNavItem> get _navItems => [
-        ImmoplusBottomNavItem(
-          label: 'Accueil',
-          iosIconName: 'immo_home',
-          iosIconNameSelected: 'immo_home_fill',
-          androidIcon: Icon(
-            Iconsax.trend_up,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.trend_up,
-            color: AppColors.primary,
-            size: 22,
-          ),
+    return [
+      AdaptiveBottomNavItem(
+        label: 'Accueil',
+        iosIconName: 'immo_home',
+        iosIconNameSelected: 'immo_home_fill',
+        androidIcon: Icon(
+          Iconsax.trend_up,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-        ImmoplusBottomNavItem(
-          label: 'Calendrier',
-          iosIconName: 'immo_calendar',
-          iosIconNameSelected: 'immo_calendar_fill',
-          androidIcon: Icon(
-            Iconsax.calendar_1,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.calendar_1,
-            color: AppColors.primary,
-            size: 22,
-          ),
+        androidIconSelected: Icon(
+          Iconsax.trend_up,
+          color: AppColors.primary,
+          size: 22,
         ),
-        ImmoplusBottomNavItem(
-          label: 'Publier',
-          iosIconName: 'immo_add',
-          iosIconNameSelected: 'immo_add_fill',
-          androidIcon: Icon(
-            Iconsax.add_square,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.add_square5,
-            color: AppColors.primary,
-            size: 22,
-          ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Calendrier',
+        iosIconName: 'immo_calendar',
+        iosIconNameSelected: 'immo_calendar_fill',
+        androidIcon: Icon(
+          Iconsax.calendar_1,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-        const ImmoplusBottomNavItem(
-          label: 'Messages',
-          iosIconName: 'immo_message',
-          iosIconNameSelected: 'immo_message_fill',
-          androidIcon: _MessagesNavIcon(isSelected: false),
-          androidIconSelected: _MessagesNavIcon(isSelected: true),
+        androidIconSelected: Icon(
+          Iconsax.calendar_1,
+          color: AppColors.primary,
+          size: 22,
         ),
-        ImmoplusBottomNavItem(
-          label: 'Compte',
-          iosIconName: 'immo_user',
-          iosIconNameSelected: 'immo_user_fill',
-          androidIcon: Icon(
-            Iconsax.user,
-            color: Colors.grey.shade600,
-            size: 22,
-          ),
-          androidIconSelected: Icon(
-            Iconsax.user,
-            color: AppColors.primary,
-            size: 22,
-          ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Publier',
+        iosIconName: 'immo_add',
+        iosIconNameSelected: 'immo_add_fill',
+        androidIcon: Icon(
+          Iconsax.add_square,
+          color: Colors.grey.shade600,
+          size: 22,
         ),
-      ];
+        androidIconSelected: Icon(
+          Iconsax.add_square5,
+          color: AppColors.primary,
+          size: 22,
+        ),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Messages',
+        iosIconName: 'immo_message',
+        iosIconNameSelected: 'immo_message_fill',
+        badgeValue: badge,
+        androidIcon: const _MessagesNavIcon(isSelected: false),
+        androidIconSelected: const _MessagesNavIcon(isSelected: true),
+      ),
+      AdaptiveBottomNavItem(
+        label: 'Compte',
+        iosIconName: 'immo_user',
+        iosIconNameSelected: 'immo_user_fill',
+        androidIcon: Icon(
+          Iconsax.user,
+          color: Colors.grey.shade600,
+          size: 22,
+        ),
+        androidIconSelected: Icon(
+          Iconsax.user,
+          color: AppColors.primary,
+          size: 22,
+        ),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: widget.navigationShell,
-      bottomNavigationBar: ImmoplusBottomNavigationBar(
-        selectedIndex: _selectedNavigationIndex,
-        onDestinationSelected: _onTap,
-        items: _navItems,
-      ),
+    return ValueListenableBuilder<int>(
+      valueListenable: Constantes.unreadMessagesCount,
+      builder: (context, unreadCount, _) {
+        return Scaffold(
+          extendBody: true,
+          body: widget.navigationShell,
+          bottomNavigationBar: AdaptiveLiquidBottomNavigationBar(
+            selectedIndex: widget.navigationShell.currentIndex,
+            onDestinationSelected: _onTap,
+            tint: AppColors.primary,
+            items: _buildNavItems(unreadCount),
+          ),
+        );
+      },
     );
   }
 }

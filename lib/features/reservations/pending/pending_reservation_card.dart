@@ -7,6 +7,8 @@ import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/features/reservations/refusal/reservation_refusal_reason_bottom_sheet.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -131,10 +133,25 @@ class PendingReservationCard extends StatelessWidget {
                         child: ElevatedButton.icon(
                           onPressed: isLoading
                               ? null
-                              : () {
-                                  context
-                                      .read<PendingReservationsCubit>()
-                                      .refuser(reservationModel.id);
+                              : () async {
+                                  final confirmed =
+                                      await AppDialog.confirmDialog(
+                                    context: context,
+                                    content:
+                                        "Êtes-vous sûr de vouloir refuser cette réservation ?",
+                                  );
+                                  if (confirmed == true && context.mounted) {
+                                    final success = await context
+                                        .read<PendingReservationsCubit>()
+                                        .refuser(reservationModel.id);
+                                    if (success && context.mounted) {
+                                      ReservationRefusalReasonBottomSheet.show(
+                                        context,
+                                        reservationId: reservationModel.id,
+                                        reservation: reservationModel,
+                                      );
+                                    }
+                                  }
                                 },
                           icon: const Icon(Icons.cancel_outlined,
                               color: Colors.white),
