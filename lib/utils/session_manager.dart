@@ -73,14 +73,19 @@ class SessionManager {
     }
   });
 
-  Future<void> saveUser(UserModelSchema user) async {
+  bool _isLoggingOut = false;
+
+  Future<void> saveUser(UserModelSchema user,
+      {bool registerPush = true}) async {
     await isarInstance.writeTxn(() async {
       await isarInstance.userModelSchemas.put(user);
     });
     currentUser = user;
 
     // Enregistrement de l'appareil FCM dès la connexion
-    getIt<NotificationService>().suscribeCurrentUser();
+    if (registerPush) {
+      getIt<NotificationService>().suscribeCurrentUser();
+    }
   }
 
   Future<UserModelSchema?> getCurrentUser() async {
@@ -103,41 +108,47 @@ class SessionManager {
 
   /// logout user clear session and navigate to login page
   Future<void> logout() async {
-    // 1. Stop polling before anything
+    if (_isLoggingOut) return;
+    _isLoggingOut = true;
+
     try {
-      final context = NavigationService.navigatorKey.currentContext;
-      if (context != null) {
-        context.read<BannersCubit>().stopPolling();
+      // 1. Stop polling before anything
+      try {
+        final context = NavigationService.navigatorKey.currentContext;
+        if (context != null) {
+          context.read<BannersCubit>().stopPolling();
+        }
+      } catch (e) {
+        log('SessionManager: Error stopping banners polling on logout: $e');
       }
-    } catch (e) {
-      log('SessionManager: Error stopping banners polling on logout: $e');
-    }
 
-    final navigator = NavigationService.navigatorKey.currentState;
-    if (navigator != null) {
-      while (navigator.canPop()) {
-        navigator.pop();
+      final navigator = NavigationService.navigatorKey.currentState;
+      if (navigator != null) {
+        while (navigator.canPop()) {
+          navigator.pop();
+        }
       }
+
+      getIt<AnalyticsService>().clearUser();
+
+      // ⚠️ CRITIQUE : Désabonner du backend AVANT de vider le token de session
+      try {
+        await getIt<NotificationService>().unsubcribeCurrentUser();
+      } catch (e) {
+        log('Error unsubscribing push: $e');
+      }
+
+      // 3. Clear local session & disconnect sockets
+      await clearSession();
+      getIt<ReservationSocketService>().disconnect();
+      getIt<MessagingSocketService>().disconnect();
+
+      // 4. Navigate to the authentication screen
+      AppRouter.router.goNamed(AuthenticationPage.name);
+    } finally {
+      _isLoggingOut = false;
     }
-
-    getIt<AnalyticsService>().clearUser();
-
-    // ⚠️ CRITIQUE : Désabonner du backend AVANT de vider le token de session
-    try {
-      await getIt<NotificationService>().unsubcribeCurrentUser();
-    } catch (e) {
-      log('Error unsubscribing push: $e');
-    }
-
-    // 3. Clear local session & disconnect sockets
-    await clearSession();
-    getIt<ReservationSocketService>().disconnect();
-    getIt<MessagingSocketService>().disconnect();
-
-    // 4. Navigate to the authentication screen
-    AppRouter.router.goNamed(AuthenticationPage.name);
   }
-
 
   // Fonction qui sera exécutée dans le nouvel isolat
   Future<UserModelSchema?> getUserInIsolate() async {

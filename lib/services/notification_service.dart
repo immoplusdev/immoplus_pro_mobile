@@ -27,6 +27,9 @@ class NotificationService {
   final PushInstallationService pushInstallationService;
 
   bool _listenersConfigured = false;
+  bool _isSubscribing = false;
+  String? _lastRegisteredToken;
+  String? _lastRegisteredUserId;
 
   NotificationService(
     this.pushProvider,
@@ -45,7 +48,7 @@ class NotificationService {
 
     pushProvider.onTokenRefresh.listen((token) {
       log('🔔 Push token refreshed: $token', name: 'NOTIFICATION_SERVICE');
-      suscribeCurrentUser(token: token);
+      suscribeCurrentUser(token: token, force: true);
     });
 
     await suscribeCurrentUser();
@@ -146,7 +149,13 @@ class NotificationService {
   }
 
   /// Enregistre l'appareil auprès du backend (`PUT /me/push-installations/:id`)
-  Future<void> suscribeCurrentUser({String? token}) async {
+  Future<void> suscribeCurrentUser({String? token, bool force = false}) async {
+    if (_isSubscribing) {
+      log('🔔 Push registration already in progress, skipping concurrent call',
+          name: 'NOTIFICATION_SERVICE');
+      return;
+    }
+
     try {
       final user = sessionManager.currentUser;
       if (user == null) {
@@ -160,6 +169,17 @@ class NotificationService {
         log('⚠️ Push token is null or empty', name: 'NOTIFICATION_SERVICE');
         return;
       }
+
+      // Évite d'appeler l'API en boucle si déjà enregistré avec le même token pour cet utilisateur
+      if (!force &&
+          _lastRegisteredToken == pushToken &&
+          _lastRegisteredUserId == user.userId) {
+        log('🔔 Push installation already up-to-date for user ${user.userId}',
+            name: 'NOTIFICATION_SERVICE');
+        return;
+      }
+
+      _isSubscribing = true;
 
       final installationId = await getPushInstallationId();
       final appVersion = await AppVersionService.getFullVersion();
@@ -182,15 +202,23 @@ class NotificationService {
         body: body,
       );
 
+      _lastRegisteredToken = pushToken;
+      _lastRegisteredUserId = user.userId;
+
       log('✅ Push installation successfully registered',
           name: 'NOTIFICATION_SERVICE');
     } catch (e) {
       log('⚠️ Error in suscribeCurrentUser: $e', name: 'NOTIFICATION_SERVICE');
+    } finally {
+      _isSubscribing = false;
     }
   }
 
   /// Détache l'appareil du compte lors de la déconnexion (`DELETE /me/push-installations/:id`)
   Future<void> unsubcribeCurrentUser() async {
+    _lastRegisteredToken = null;
+    _lastRegisteredUserId = null;
+
     try {
       final user = sessionManager.currentUser;
       if (user != null) {

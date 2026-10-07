@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +24,7 @@ import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dar
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 
@@ -84,7 +83,6 @@ class _AccountPageV2State extends State<AccountPageV2>
   }
 
   Future<void> _toggleNotifications(bool value) async {
-
     await AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
@@ -341,6 +339,7 @@ class _AccountPageV2State extends State<AccountPageV2>
                 ),
               ),
             ),
+            Gap(25 + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
@@ -522,9 +521,15 @@ class _AccountPageV2State extends State<AccountPageV2>
             CupertinoDialogAction(
               isDestructiveAction: true,
               onPressed: () async {
-                // SessionManager.logout() ferme tous les dialogs ouverts
-                // via navigatorKey avant de naviguer — pas besoin de pop() ici.
-                await SessionManager().logout();
+                Navigator.of(dialogContext).pop();
+                EasyLoadingHandler.showLoadingToast(
+                  text: "Déconnexion en cours...",
+                );
+                try {
+                  await SessionManager().logout();
+                } finally {
+                  EasyLoadingHandler.hideLoadingToast();
+                }
               },
               child: const Text('Déconnexion'),
             ),
