@@ -102,7 +102,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..identityVerified = response.data.user.identityVerified
           ..createdAt = response.data.user.createdAt,
       );
-      //OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
       _identifyAndLogLogin(response.data.user, "email");
       DioClient.token = response.data.accessToken;
@@ -163,7 +162,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..identityVerified = response.data.user.identityVerified
           ..createdAt = response.data.user.createdAt,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
       _identifyAndLogLogin(response.data.user, "otp");
       DioClient.token = response.data.accessToken;
@@ -204,7 +202,6 @@ class LoginCubit extends Cubit<LoginCubitState> {
           ..pieceIdentite = response.data.additionalData.pieceIdentiteId
           ..emailEntreprise = response.data.additionalData.emailEntreprise,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
 
       emit(const LoginCubitState.success());

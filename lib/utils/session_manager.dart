@@ -2,19 +2,20 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_router.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
-import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/data/models/configs/config_model.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/authentification/authentification_page.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
-import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/messaging_socket_service.dart';
+import 'package:immoplus_pro/services/navigation_service.dart';
+import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/reservation_socket_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:isar_community/isar.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 @singleton
@@ -77,6 +78,9 @@ class SessionManager {
       await isarInstance.userModelSchemas.put(user);
     });
     currentUser = user;
+
+    // Enregistrement de l'appareil FCM dès la connexion
+    getIt<NotificationService>().suscribeCurrentUser();
   }
 
   Future<UserModelSchema?> getCurrentUser() async {
@@ -116,15 +120,24 @@ class SessionManager {
       }
     }
 
-    // 3. Clear local session & sign out of OneSignal
+    getIt<AnalyticsService>().clearUser();
+
+    // ⚠️ CRITIQUE : Désabonner du backend AVANT de vider le token de session
+    try {
+      await getIt<NotificationService>().unsubcribeCurrentUser();
+    } catch (e) {
+      log('Error unsubscribing push: $e');
+    }
+
+    // 3. Clear local session & disconnect sockets
     await clearSession();
-    OneSignal.logout();
     getIt<ReservationSocketService>().disconnect();
     getIt<MessagingSocketService>().disconnect();
 
     // 4. Navigate to the authentication screen
     AppRouter.router.goNamed(AuthenticationPage.name);
   }
+
 
   // Fonction qui sera exécutée dans le nouvel isolat
   Future<UserModelSchema?> getUserInIsolate() async {

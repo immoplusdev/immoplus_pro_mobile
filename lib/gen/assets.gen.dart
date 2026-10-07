@@ -131,6 +131,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/bell.svg
   String get bell => 'assets/icons/bell.svg';
 
+  /// Directory path: assets/icons/bottom_sheet
+  $AssetsIconsBottomSheetGen get bottomSheet =>
+      const $AssetsIconsBottomSheetGen();
+
   /// File path: assets/icons/compte.svg
   String get compte => 'assets/icons/compte.svg';
 
@@ -440,6 +444,54 @@ class $AssetsSvgsGen {
     userEdit,
     userSquare,
     verify,
+  ];
+}
+
+class $AssetsIconsBottomSheetGen {
+  const $AssetsIconsBottomSheetGen();
+
+  /// File path: assets/icons/bottom_sheet/add-square-fill.svg
+  String get addSquareFill => 'assets/icons/bottom_sheet/add-square-fill.svg';
+
+  /// File path: assets/icons/bottom_sheet/add-square.svg
+  String get addSquare => 'assets/icons/bottom_sheet/add-square.svg';
+
+  /// File path: assets/icons/bottom_sheet/calendar.svg
+  String get calendar => 'assets/icons/bottom_sheet/calendar.svg';
+
+  /// File path: assets/icons/bottom_sheet/calendar_fill.svg
+  String get calendarFill => 'assets/icons/bottom_sheet/calendar_fill.svg';
+
+  /// File path: assets/icons/bottom_sheet/home.svg
+  String get home => 'assets/icons/bottom_sheet/home.svg';
+
+  /// File path: assets/icons/bottom_sheet/home_fill.svg
+  String get homeFill => 'assets/icons/bottom_sheet/home_fill.svg';
+
+  /// File path: assets/icons/bottom_sheet/message.svg
+  String get message => 'assets/icons/bottom_sheet/message.svg';
+
+  /// File path: assets/icons/bottom_sheet/message_fill.svg
+  String get messageFill => 'assets/icons/bottom_sheet/message_fill.svg';
+
+  /// File path: assets/icons/bottom_sheet/profile.svg
+  String get profile => 'assets/icons/bottom_sheet/profile.svg';
+
+  /// File path: assets/icons/bottom_sheet/profile_fill.svg
+  String get profileFill => 'assets/icons/bottom_sheet/profile_fill.svg';
+
+  /// List of all assets
+  List<String> get values => [
+    addSquareFill,
+    addSquare,
+    calendar,
+    calendarFill,
+    home,
+    homeFill,
+    message,
+    messageFill,
+    profile,
+    profileFill,
   ];
 }
 

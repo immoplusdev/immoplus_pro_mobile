@@ -11,8 +11,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
@@ -69,20 +70,14 @@ class _AccountPageV2State extends State<AccountPageV2>
 
   Future<void> _refreshNotificationStatus() async {
     if (!mounted) return;
-    
-    // On vérifie le statut réel dans le système du téléphone
-    final osGranted = OneSignal.Notifications.permission;
-    
-    // On force l'abonnement ou le désabonnement pour s'aligner avec l'OS
+
+    final osGranted = await Permission.notification.isGranted;
     if (osGranted) {
-      await OneSignal.User.pushSubscription.optIn();
-    } else {
-      await OneSignal.User.pushSubscription.optOut();
+      getIt<NotificationService>().suscribeCurrentUser();
     }
-    
+
     if (!mounted) return;
-    
-    // Le toggle reflète toujours 100% la réalité du téléphone
+
     setState(() {
       _notificationsEnabled = osGranted;
     });
