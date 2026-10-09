@@ -84,24 +84,33 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       AccountCreationResponse response =
           await AuthRepository.registrationEnterprise(body: body);
 
+      final user = response.data.user;
+      final addData = user.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.user.id
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..avatar = response.data.user.avatar
+          ..userId = user.id
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..role = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
-          ..identityVerified = response.data.user.identityVerified
-          ..createdAt = response.data.user.createdAt,
+          ..roleName = user.role.name
+          ..role = user.role.name
+          ..identityVerified = user.identityVerified
+          ..createdAt = user.createdAt
+          ..activite = addData.activite
+          ..nomEntreprise = addData.nomEntreprise
+          ..emailEntreprise = addData.emailEntreprise
+          ..photoIdentite = addData.photoIdentiteId
+          ..pieceIdentite = addData.pieceIdentiteId
+          ..pieceIdentiteVerso = addData.pieceIdentiteVersoId
+          ..lieuNaissance = addData.lieuNaissance
+          ..registreCommerce = addData.registreCommerceId
+          ..numeroContribuable = addData.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise,
       );
       _identifyAndLogSignUp(response.data.user, "email");
       getIt<AnalyticsService>().logKycSubmitted();
@@ -148,29 +157,33 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       AccountCreationResponse response =
           await AuthRepository.registrationParticulier(body: body);
 
+      final user = response.data.user;
+      final addData = user.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.user.id
-          ..avatar = response.data.user.avatar
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..avatar = response.data.user.avatar
+          ..userId = user.id
+          ..avatar = user.avatar
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..role = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
-          ..identityVerified = response.data.user.identityVerified
-          ..createdAt = response.data.user.createdAt,
+          ..roleName = user.role.name
+          ..role = user.role.name
+          ..identityVerified = user.identityVerified
+          ..createdAt = user.createdAt
+          ..activite = addData.activite
+          ..nomEntreprise = addData.nomEntreprise
+          ..emailEntreprise = addData.emailEntreprise
+          ..photoIdentite = addData.photoIdentiteId
+          ..pieceIdentite = addData.pieceIdentiteId
+          ..pieceIdentiteVerso = addData.pieceIdentiteVersoId
+          ..lieuNaissance = addData.lieuNaissance
+          ..registreCommerce = addData.registreCommerceId
+          ..numeroContribuable = addData.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise,
       );
       _identifyAndLogSignUp(response.data.user, "email");
       getIt<AnalyticsService>().logKycSubmitted();

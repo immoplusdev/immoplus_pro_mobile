@@ -13,12 +13,17 @@ _$AdditionalDataModelImpl _$$AdditionalDataModelImplFromJson(
       user: json['user'] as String?,
       lieuNaissance: json['lieuNaissance'] as String?,
       activite: json['activite'] as String?,
-      photoIdentiteId: json['photoIdentiteId'] as String?,
-      pieceIdentiteId: json['pieceIdentiteId'] as String?,
+      photoIdentiteId:
+          _fileIdFromJson(_readPhotoIdentite(json, 'photoIdentiteId')),
+      pieceIdentiteId:
+          _fileIdFromJson(_readPieceIdentite(json, 'pieceIdentiteId')),
+      pieceIdentiteVersoId: _fileIdFromJson(
+          _readPieceIdentiteVerso(json, 'pieceIdentiteVersoId')),
       nomEntreprise: json['nomEntreprise'] as String?,
-      registreCommerceId: json['registreCommerceId'] as String?,
+      registreCommerceId:
+          _fileIdFromJson(_readRegistreCommerce(json, 'registreCommerceId')),
       emailEntreprise: json['emailEntreprise'] as String?,
-      numeroContribuable: json['numeroContribuable'] as String?,
+      numeroContribuable: _stringFromJson(json['numeroContribuable']),
       typeEntreprise: json['typeEntreprise'] as String?,
     );
 
@@ -31,6 +36,7 @@ Map<String, dynamic> _$$AdditionalDataModelImplToJson(
       'activite': instance.activite,
       'photoIdentiteId': instance.photoIdentiteId,
       'pieceIdentiteId': instance.pieceIdentiteId,
+      'pieceIdentiteVersoId': instance.pieceIdentiteVersoId,
       'nomEntreprise': instance.nomEntreprise,
       'registreCommerceId': instance.registreCommerceId,
       'emailEntreprise': instance.emailEntreprise,

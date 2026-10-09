@@ -641,7 +641,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
-                                            currentUser!.greetingText,
+                                            currentUser?.greetingText ?? "",
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,

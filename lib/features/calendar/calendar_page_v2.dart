@@ -16,11 +16,19 @@ import 'widgets/block_sheet.dart';
 import 'widgets/calendar_grid.dart';
 import 'widgets/calendar_top_bar.dart';
 import 'widgets/calendar_ui_widgets.dart';
+import 'widgets/post_refusal_calendar_notice_dialog.dart';
 import 'widgets/residence_strip.dart';
 import 'widgets/unblock_sheet.dart';
 
 class CalendarPageV2 extends StatefulWidget {
-  const CalendarPageV2({super.key});
+  final bool showPostRefusalNotice;
+  final Object? noticeToken;
+
+  const CalendarPageV2({
+    super.key,
+    this.showPostRefusalNotice = false,
+    this.noticeToken,
+  });
 
   static const name      = 'CALENDAR_PAGE_V2';
   static const routePath = '/calendar_v2';
@@ -105,6 +113,27 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
   void initState() {
     super.initState();
     _loadResidences();
+    if (widget.showPostRefusalNotice) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          showPostRefusalCalendarNoticeDialog(context);
+        }
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant CalendarPageV2 oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.showPostRefusalNotice &&
+        (!oldWidget.showPostRefusalNotice ||
+            widget.noticeToken != oldWidget.noticeToken)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          showPostRefusalCalendarNoticeDialog(context);
+        }
+      });
+    }
   }
 
   // ── Data loading ──────────────────────────────────────────────────────────

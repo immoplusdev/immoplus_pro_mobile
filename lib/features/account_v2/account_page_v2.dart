@@ -292,6 +292,7 @@ class _AccountPageV2State extends State<AccountPageV2>
                   title: "Conditions générales d'utilisation",
                   onTap: () {
                     showModalBottomSheet(
+                      useRootNavigator: true,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       isScrollControlled: true,
