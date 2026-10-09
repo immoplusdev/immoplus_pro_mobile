@@ -49,7 +49,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
   StreamSubscription<ReservationStatusUpdatedEvent>? _socketSubscription;
   int _reservationsTotal = 0;
   int _invitationsTotal = 0;
-  final Map<String, String> _reservationConversationIds = {};
+  List<ConversationModel> _reservationConversations = const [];
 
   @override
   void initState() {
@@ -76,14 +76,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
       );
       if (!mounted) return;
       setState(() {
-        _reservationConversationIds
-          ..clear()
-          ..addEntries(conversations
-              .where((conversation) => conversation.reservationId != null)
-              .map((conversation) => MapEntry(
-                    conversation.reservationId!,
-                    conversation.id,
-                  )));
+        _reservationConversations = conversations;
       });
     } catch (_) {
       // L'absence temporaire du fil ne doit pas empêcher les réservations de
@@ -91,7 +84,36 @@ class _BookingPageV2State extends State<BookingPageV2> {
     }
   }
 
-  void _openClientMessage(String conversationId) {
+  String? _conversationIdFor(ReservationModel reservation) {
+    for (final conversation in _reservationConversations) {
+      if (conversation.reservationId == reservation.id) return conversation.id;
+    }
+
+    // L'API historique des conversations n'expose que la résidence et le
+    // client. C'est le repli nécessaire pour retrouver le fil déjà créé.
+    for (final conversation in _reservationConversations) {
+      if (conversation.residenceId == reservation.residence.id &&
+          conversation.clientId == reservation.client.id) {
+        return conversation.id;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _openClientMessage(ReservationModel reservation) async {
+    // Rafraîchit la liste au clic : le fil a pu être créé juste après le
+    // chargement initial de la page.
+    await _loadReservationConversations();
+    if (!mounted) return;
+    final conversationId = _conversationIdFor(reservation);
+    if (conversationId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Le fil de discussion de cette réservation est indisponible.'),
+        ),
+      );
+      return;
+    }
     context.pushNamed(
       MessageThreadPage.name,
       pathParameters: {'conversationId': conversationId},
@@ -339,10 +361,6 @@ class _BookingPageV2State extends State<BookingPageV2> {
                       }
                       return BookingCardV2(
                         reservationModel: item,
-                        conversationId: item.statusEnum ==
-                                StatusReservation.enAttentePaiementClient
-                            ? _reservationConversationIds[item.id]
-                            : null,
                         onMessageClient: _openClientMessage,
                       );
                     },

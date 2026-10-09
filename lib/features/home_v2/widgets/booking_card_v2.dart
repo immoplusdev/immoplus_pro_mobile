@@ -13,13 +13,11 @@ import 'package:intl/intl.dart';
 
 class BookingCardV2 extends StatelessWidget {
   final ReservationModel reservationModel;
-  final String? conversationId;
-  final ValueChanged<String>? onMessageClient;
+  final ValueChanged<ReservationModel>? onMessageClient;
 
   const BookingCardV2({
     super.key,
     required this.reservationModel,
-    this.conversationId,
     this.onMessageClient,
   });
 
@@ -49,8 +47,6 @@ class BookingCardV2 extends StatelessWidget {
             statusEnum == StatusReservation.enAttenteReponseProprietaire;
     final canMessageClient = statusEnum ==
             StatusReservation.enAttentePaiementClient &&
-        conversationId != null &&
-        conversationId!.isNotEmpty &&
         onMessageClient != null;
 
     // Duration
@@ -265,22 +261,24 @@ class BookingCardV2 extends StatelessWidget {
                     ],
                   ),
                   if (canMessageClient) ...[
-                    const Gap(14),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => onMessageClient!(conversationId!),
-                        icon: const Icon(Iconsax.message, size: 18),
-                        label: const Text('Envoyer un message au client'),
-                        style: OutlinedButton.styleFrom(
+                    const Gap(10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: () => onMessageClient!(reservationModel),
+                        icon: const Icon(Iconsax.message, size: 16),
+                        label: const Text(
+                          'Envoyer un message au client',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        style: TextButton.styleFrom(
                           foregroundColor: AppColors.primary,
-                          side: BorderSide(
-                            color: AppColors.primary.withValues(alpha: 0.35),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 6,
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 11),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
                     ),
