@@ -14,7 +14,8 @@ extension GoRouterExtension on GoRouter {
 
   /// Push seulement si différent
   void pushIfDifferent(String route) {
-    if (!route.startsWith(currentLocation)) {
+    final targetPath = Uri.tryParse(route)?.path ?? route;
+    if (currentLocation != targetPath) {
       push(route);
     }
   }

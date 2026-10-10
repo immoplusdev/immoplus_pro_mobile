@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.29+48
+version: 1.0.30+49
 
 environment:
   sdk: ^3.6.0
@@ -107,8 +107,9 @@ dependencies:
   google_maps_custom_marker: ^1.0.3
   google_places_flutter: ^2.0.9
   firebase_core: ^4.3.0 
+  firebase_messaging: ^16.7.0
   firebase_analytics: any
-  onesignal_flutter: ^5.3.4
+  flutter_local_notifications: ^22.3.1
   jumping_dot: ^0.0.7
   delta_to_html: ^0.2.2
   markdown_quill: ^4.2.0

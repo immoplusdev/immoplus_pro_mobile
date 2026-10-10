@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
 import 'package:immoplus_pro/features/appli/my_app.dart';
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
+import 'package:immoplus_pro/services/push/firebase_push_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:isar_community/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -16,6 +18,7 @@ late Isar isarInstance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   await dotenv.load(fileName: AppFlavor.envFileName);
   await initializeDateFormatting('fr_FR');
   await configureDependencies();

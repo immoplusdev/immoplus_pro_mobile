@@ -22,9 +22,6 @@ enum MessageSenderRole {
 class MessageModel with _$MessageModel {
   const MessageModel._();
 
-  static final Map<String, Map<String, dynamic>> _extraPayloads = {};
-  static final Map<String, List<Map<String, dynamic>>> _extraActions = {};
-
   const factory MessageModel({
     required String id,
     required String conversationId,
@@ -35,6 +32,8 @@ class MessageModel with _$MessageModel {
     String? moderationStatus,
     DateTime? readAt,
     DateTime? createdAt,
+    Map<String, dynamic>? payload,
+    List<Map<String, dynamic>>? actions,
 
     /// Id temporaire côté client (envoi optimiste), jamais renvoyé par
     /// l'API — sert uniquement à réconcilier la bulle locale avec la
@@ -49,18 +48,8 @@ class MessageModel with _$MessageModel {
     MessageDeliveryState deliveryState,
   }) = _MessageModel;
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
-    final model = _$MessageModelFromJson(json);
-    if (json['payload'] is Map) {
-      _extraPayloads[model.id] = Map<String, dynamic>.from(json['payload']);
-    }
-    if (json['actions'] is List) {
-      _extraActions[model.id] = (json['actions'] as List)
-          .map((e) => Map<String, dynamic>.from(e is Map ? e : {}))
-          .toList();
-    }
-    return model;
-  }
+  factory MessageModel.fromJson(Map<String, dynamic> json) =>
+      _$MessageModelFromJson(json);
 
   MessageSenderRole get senderRoleEnum =>
       MessageSenderRole.fromString(senderRole);
@@ -68,8 +57,6 @@ class MessageModel with _$MessageModel {
   /// Côté Pro, l'utilisateur connecté est le pro : "de moi" = `pro`.
   bool get isFromPro => senderRoleEnum == MessageSenderRole.pro;
 
-  Map<String, dynamic>? get payload => _extraPayloads[id];
-  List<Map<String, dynamic>>? get actions => _extraActions[id];
   bool get isExpired => payload?['expired'] == true;
 }
 

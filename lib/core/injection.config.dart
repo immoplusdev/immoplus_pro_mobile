@@ -10,6 +10,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:immoplus_pro/data/providers/notification_provider.dart'
+    as _i472;
+import 'package:immoplus_pro/data/repositories/notification_repository.dart'
+    as _i347;
 import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart'
     as _i922;
 import 'package:immoplus_pro/features/messaging/logic/conversation_thread_cubit.dart'
@@ -27,6 +31,11 @@ import 'package:immoplus_pro/services/messaging_socket_service.dart' as _i185;
 import 'package:immoplus_pro/services/notification_service.dart' as _i873;
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart'
     as _i579;
+import 'package:immoplus_pro/services/push/firebase_push_provider.dart'
+    as _i212;
+import 'package:immoplus_pro/services/push/push_installation_service.dart'
+    as _i991;
+import 'package:immoplus_pro/services/push/push_provider.dart' as _i1036;
 import 'package:immoplus_pro/services/remote_config_service.dart' as _i215;
 import 'package:immoplus_pro/services/reservation_socket_service.dart' as _i908;
 import 'package:immoplus_pro/utils/easy_loading_handler.dart' as _i166;
@@ -44,12 +53,15 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final notificationModule = _$NotificationModule();
     gh.factory<_i177.PinCodeRepository>(() => _i177.PinCodeRepository());
     gh.factory<_i521.BiometryService>(() => _i521.BiometryService());
     gh.factory<_i922.CertificationCubit>(() => _i922.CertificationCubit());
     gh.singleton<_i165.SessionManager>(() => _i165.SessionManager());
     gh.lazySingleton<_i166.EasyLoadingHandler>(
         () => _i166.EasyLoadingHandler());
+    gh.lazySingleton<_i472.NotificationProvider>(
+        () => notificationModule.notificationProvider);
     gh.lazySingleton<_i185.MessagingSocketService>(
         () => _i185.MessagingSocketService());
     gh.lazySingleton<_i178.DeepLinkServices>(() => _i178.DeepLinkServices());
@@ -59,12 +71,22 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i579.PendingReservationOverlayService());
     gh.lazySingleton<_i215.RemoteConfigService>(
         () => _i215.RemoteConfigService());
-    gh.lazySingleton<_i873.NotificationService>(
-        () => _i873.NotificationService());
+    gh.lazySingleton<_i991.PushInstallationService>(
+        () => _i991.PushInstallationService());
     gh.lazySingleton<_i1047.AnalyticsService>(
         () => _i1047.FirebaseAnalyticsService());
+    gh.lazySingleton<_i1036.PushProvider>(() => _i212.FirebasePushProvider());
     gh.factory<_i135.ConversationThreadCubit>(() =>
         _i135.ConversationThreadCubit(gh<_i185.MessagingSocketService>()));
+    gh.lazySingleton<_i347.NotificationRepository>(
+        () => _i347.NotificationRepository(gh<_i472.NotificationProvider>()));
+    gh.lazySingleton<_i873.NotificationService>(() => _i873.NotificationService(
+          gh<_i1036.PushProvider>(),
+          gh<_i165.SessionManager>(),
+          gh<_i347.NotificationRepository>(),
+          gh<_i1047.AnalyticsService>(),
+          gh<_i991.PushInstallationService>(),
+        ));
     gh.factory<_i581.PinCodeCubit>(() => _i581.PinCodeCubit(
           gh<_i177.PinCodeRepository>(),
           gh<_i521.BiometryService>(),
@@ -76,3 +98,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$NotificationModule extends _i347.NotificationModule {}

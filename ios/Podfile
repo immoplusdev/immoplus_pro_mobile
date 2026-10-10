@@ -46,8 +46,3 @@ post_install do |installer|
   installer.pods_project.root_object.attributes['objectVersion'] = '60'
   installer.pods_project.save
 end
-
-target 'OneSignalNotificationServiceExtension' do
-  use_frameworks!
-  pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
-end

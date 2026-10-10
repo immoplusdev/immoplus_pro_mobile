@@ -20,11 +20,13 @@ UpdateUserDto _$UpdateUserDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UpdateUserDto {
-  String get firstName => throw _privateConstructorUsedError;
-  String get lastName => throw _privateConstructorUsedError;
+  String? get firstName => throw _privateConstructorUsedError;
+  String? get lastName => throw _privateConstructorUsedError;
   String? get avatar => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get phoneNumber => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false)
+  String? get email => throw _privateConstructorUsedError;
+  @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+  String? get phoneNumber => throw _privateConstructorUsedError;
 
   /// Serializes this UpdateUserDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,11 +45,12 @@ abstract class $UpdateUserDtoCopyWith<$Res> {
       _$UpdateUserDtoCopyWithImpl<$Res, UpdateUserDto>;
   @useResult
   $Res call(
-      {String firstName,
-      String lastName,
+      {String? firstName,
+      String? lastName,
       String? avatar,
-      String email,
-      String phoneNumber});
+      @JsonKey(includeIfNull: false) String? email,
+      @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+      String? phoneNumber});
 }
 
 /// @nodoc
@@ -65,33 +68,33 @@ class _$UpdateUserDtoCopyWithImpl<$Res, $Val extends UpdateUserDto>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? firstName = null,
-    Object? lastName = null,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
     Object? avatar = freezed,
-    Object? email = null,
-    Object? phoneNumber = null,
+    Object? email = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_value.copyWith(
-      firstName: null == firstName
+      firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
+              as String?,
+      lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatar: freezed == avatar
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: null == phoneNumber
+              as String?,
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -105,11 +108,12 @@ abstract class _$$UpdateUserDtoImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String firstName,
-      String lastName,
+      {String? firstName,
+      String? lastName,
       String? avatar,
-      String email,
-      String phoneNumber});
+      @JsonKey(includeIfNull: false) String? email,
+      @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+      String? phoneNumber});
 }
 
 /// @nodoc
@@ -125,33 +129,33 @@ class __$$UpdateUserDtoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? firstName = null,
-    Object? lastName = null,
+    Object? firstName = freezed,
+    Object? lastName = freezed,
     Object? avatar = freezed,
-    Object? email = null,
-    Object? phoneNumber = null,
+    Object? email = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_$UpdateUserDtoImpl(
-      firstName: null == firstName
+      firstName: freezed == firstName
           ? _value.firstName
           : firstName // ignore: cast_nullable_to_non_nullable
-              as String,
-      lastName: null == lastName
+              as String?,
+      lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       avatar: freezed == avatar
           ? _value.avatar
           : avatar // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: null == phoneNumber
+              as String?,
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -160,29 +164,27 @@ class __$$UpdateUserDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UpdateUserDtoImpl implements _UpdateUserDto {
   const _$UpdateUserDtoImpl(
-      {this.firstName = '',
-      this.lastName = '',
+      {this.firstName,
+      this.lastName,
       this.avatar,
-      this.email = '',
-      this.phoneNumber = ''});
+      @JsonKey(includeIfNull: false) this.email,
+      @JsonKey(toJson: _phoneToJson, includeIfNull: false) this.phoneNumber});
 
   factory _$UpdateUserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UpdateUserDtoImplFromJson(json);
 
   @override
-  @JsonKey()
-  final String firstName;
+  final String? firstName;
   @override
-  @JsonKey()
-  final String lastName;
+  final String? lastName;
   @override
   final String? avatar;
   @override
-  @JsonKey()
-  final String email;
+  @JsonKey(includeIfNull: false)
+  final String? email;
   @override
-  @JsonKey()
-  final String phoneNumber;
+  @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+  final String? phoneNumber;
 
   @override
   String toString() {
@@ -227,25 +229,28 @@ class _$UpdateUserDtoImpl implements _UpdateUserDto {
 
 abstract class _UpdateUserDto implements UpdateUserDto {
   const factory _UpdateUserDto(
-      {final String firstName,
-      final String lastName,
+      {final String? firstName,
+      final String? lastName,
       final String? avatar,
-      final String email,
-      final String phoneNumber}) = _$UpdateUserDtoImpl;
+      @JsonKey(includeIfNull: false) final String? email,
+      @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+      final String? phoneNumber}) = _$UpdateUserDtoImpl;
 
   factory _UpdateUserDto.fromJson(Map<String, dynamic> json) =
       _$UpdateUserDtoImpl.fromJson;
 
   @override
-  String get firstName;
+  String? get firstName;
   @override
-  String get lastName;
+  String? get lastName;
   @override
   String? get avatar;
   @override
-  String get email;
+  @JsonKey(includeIfNull: false)
+  String? get email;
   @override
-  String get phoneNumber;
+  @JsonKey(toJson: _phoneToJson, includeIfNull: false)
+  String? get phoneNumber;
 
   /// Create a copy of UpdateUserDto
   /// with the given fields replaced by the non-null parameter values.
