@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/remote/messaging/message_model.dart';
+import 'package:intl/intl.dart';
 
 class StayProposalCard extends StatelessWidget {
   const StayProposalCard({
@@ -17,7 +18,7 @@ class StayProposalCard extends StatelessWidget {
     final checkIn = payload['checkIn']?.toString() ?? '—';
     final checkOut = payload['checkOut']?.toString() ?? '—';
     final guests = payload['guests']?.toString() ?? '1';
-    final amount = payload['amount']?.toString() ?? payload['totalAmount']?.toString();
+    final amount = _formatAmount(payload['amount'] ?? payload['totalAmount']);
     final isExpired = message.isExpired || payload['expired'] == true;
 
     final isSelf = message.isFromPro;
@@ -138,7 +139,7 @@ class StayProposalCard extends StatelessWidget {
                     style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
                   ),
                   Text(
-                    '$amount FCFA',
+                    amount,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -152,5 +153,26 @@ class StayProposalCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// The API can return a scalar amount or a money object such as
+  static String? _formatAmount(Object? rawAmount) {
+    if (rawAmount == null) return null;
+
+    Object? value = rawAmount;
+    var currency = 'FCFA';
+    if (rawAmount is Map) {
+      value = rawAmount['value'] ?? rawAmount['amount'] ?? rawAmount['total'];
+      final rawCurrency = rawAmount['currency']?.toString().trim();
+      if (rawCurrency != null && rawCurrency.isNotEmpty && rawCurrency != 'XOF') {
+        currency = rawCurrency;
+      }
+    }
+
+    if (value == null) return null;
+    final numericValue = value is num ? value : num.tryParse(value.toString());
+    if (numericValue == null) return null;
+
+    return '${NumberFormat('#,##0.##', 'fr_FR').format(numericValue)} $currency';
   }
 }

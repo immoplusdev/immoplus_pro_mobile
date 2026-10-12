@@ -24,6 +24,7 @@ const _silentErrorCodes = {
 const _silentRequestPaths = {
   '/reservations/action/valider-presence',
   '/reverse-searches/data/invitations/owner',
+  '/me/push-installations',
 };
 
 class ErrorInterceptor extends Interceptor {

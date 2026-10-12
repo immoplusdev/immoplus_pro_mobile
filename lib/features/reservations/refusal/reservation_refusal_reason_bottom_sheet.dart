@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
 import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motif_item.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/refusal_reason_recap_card.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/residence_mini_card.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
@@ -618,7 +620,13 @@ class _ReservationRefusalReasonBottomSheetState
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.go(
+                  CalendarPageV2.routePath,
+                  extra: {'showPostRefusalCalendarNotice': true},
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: _Constants.primaryBlue,
                 elevation: 0,

@@ -24,11 +24,17 @@ mixin _$AdditionalDataModel {
   String? get user => throw _privateConstructorUsedError;
   String? get lieuNaissance => throw _privateConstructorUsedError;
   String? get activite => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
   String? get photoIdentiteId => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
   String? get pieceIdentiteId => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+  String? get pieceIdentiteVersoId => throw _privateConstructorUsedError;
   String? get nomEntreprise => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
   String? get registreCommerceId => throw _privateConstructorUsedError;
   String? get emailEntreprise => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _stringFromJson)
   String? get numeroContribuable => throw _privateConstructorUsedError;
   String? get typeEntreprise => throw _privateConstructorUsedError;
 
@@ -53,12 +59,17 @@ abstract class $AdditionalDataModelCopyWith<$Res> {
       String? user,
       String? lieuNaissance,
       String? activite,
+      @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
       String? photoIdentiteId,
+      @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
       String? pieceIdentiteId,
+      @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+      String? pieceIdentiteVersoId,
       String? nomEntreprise,
+      @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
       String? registreCommerceId,
       String? emailEntreprise,
-      String? numeroContribuable,
+      @JsonKey(fromJson: _stringFromJson) String? numeroContribuable,
       String? typeEntreprise});
 }
 
@@ -83,6 +94,7 @@ class _$AdditionalDataModelCopyWithImpl<$Res, $Val extends AdditionalDataModel>
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? pieceIdentiteVersoId = freezed,
     Object? nomEntreprise = freezed,
     Object? registreCommerceId = freezed,
     Object? emailEntreprise = freezed,
@@ -113,6 +125,10 @@ class _$AdditionalDataModelCopyWithImpl<$Res, $Val extends AdditionalDataModel>
       pieceIdentiteId: freezed == pieceIdentiteId
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pieceIdentiteVersoId: freezed == pieceIdentiteVersoId
+          ? _value.pieceIdentiteVersoId
+          : pieceIdentiteVersoId // ignore: cast_nullable_to_non_nullable
               as String?,
       nomEntreprise: freezed == nomEntreprise
           ? _value.nomEntreprise
@@ -151,12 +167,17 @@ abstract class _$$AdditionalDataModelImplCopyWith<$Res>
       String? user,
       String? lieuNaissance,
       String? activite,
+      @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
       String? photoIdentiteId,
+      @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
       String? pieceIdentiteId,
+      @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+      String? pieceIdentiteVersoId,
       String? nomEntreprise,
+      @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
       String? registreCommerceId,
       String? emailEntreprise,
-      String? numeroContribuable,
+      @JsonKey(fromJson: _stringFromJson) String? numeroContribuable,
       String? typeEntreprise});
 }
 
@@ -179,6 +200,7 @@ class __$$AdditionalDataModelImplCopyWithImpl<$Res>
     Object? activite = freezed,
     Object? photoIdentiteId = freezed,
     Object? pieceIdentiteId = freezed,
+    Object? pieceIdentiteVersoId = freezed,
     Object? nomEntreprise = freezed,
     Object? registreCommerceId = freezed,
     Object? emailEntreprise = freezed,
@@ -209,6 +231,10 @@ class __$$AdditionalDataModelImplCopyWithImpl<$Res>
       pieceIdentiteId: freezed == pieceIdentiteId
           ? _value.pieceIdentiteId
           : pieceIdentiteId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pieceIdentiteVersoId: freezed == pieceIdentiteVersoId
+          ? _value.pieceIdentiteVersoId
+          : pieceIdentiteVersoId // ignore: cast_nullable_to_non_nullable
               as String?,
       nomEntreprise: freezed == nomEntreprise
           ? _value.nomEntreprise
@@ -242,12 +268,17 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
       this.user,
       this.lieuNaissance,
       this.activite,
+      @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
       this.photoIdentiteId,
+      @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
       this.pieceIdentiteId,
+      @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+      this.pieceIdentiteVersoId,
       this.nomEntreprise,
+      @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
       this.registreCommerceId,
       this.emailEntreprise,
-      this.numeroContribuable,
+      @JsonKey(fromJson: _stringFromJson) this.numeroContribuable,
       this.typeEntreprise});
 
   factory _$AdditionalDataModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -262,23 +293,30 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
   @override
   final String? activite;
   @override
+  @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
   final String? photoIdentiteId;
   @override
+  @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
   final String? pieceIdentiteId;
+  @override
+  @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+  final String? pieceIdentiteVersoId;
   @override
   final String? nomEntreprise;
   @override
+  @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
   final String? registreCommerceId;
   @override
   final String? emailEntreprise;
   @override
+  @JsonKey(fromJson: _stringFromJson)
   final String? numeroContribuable;
   @override
   final String? typeEntreprise;
 
   @override
   String toString() {
-    return 'AdditionalDataModel(id: $id, user: $user, lieuNaissance: $lieuNaissance, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, nomEntreprise: $nomEntreprise, registreCommerceId: $registreCommerceId, emailEntreprise: $emailEntreprise, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise)';
+    return 'AdditionalDataModel(id: $id, user: $user, lieuNaissance: $lieuNaissance, activite: $activite, photoIdentiteId: $photoIdentiteId, pieceIdentiteId: $pieceIdentiteId, pieceIdentiteVersoId: $pieceIdentiteVersoId, nomEntreprise: $nomEntreprise, registreCommerceId: $registreCommerceId, emailEntreprise: $emailEntreprise, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise)';
   }
 
   @override
@@ -296,6 +334,8 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
                 other.photoIdentiteId == photoIdentiteId) &&
             (identical(other.pieceIdentiteId, pieceIdentiteId) ||
                 other.pieceIdentiteId == pieceIdentiteId) &&
+            (identical(other.pieceIdentiteVersoId, pieceIdentiteVersoId) ||
+                other.pieceIdentiteVersoId == pieceIdentiteVersoId) &&
             (identical(other.nomEntreprise, nomEntreprise) ||
                 other.nomEntreprise == nomEntreprise) &&
             (identical(other.registreCommerceId, registreCommerceId) ||
@@ -318,6 +358,7 @@ class _$AdditionalDataModelImpl implements _AdditionalDataModel {
       activite,
       photoIdentiteId,
       pieceIdentiteId,
+      pieceIdentiteVersoId,
       nomEntreprise,
       registreCommerceId,
       emailEntreprise,
@@ -347,12 +388,17 @@ abstract class _AdditionalDataModel implements AdditionalDataModel {
       final String? user,
       final String? lieuNaissance,
       final String? activite,
+      @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
       final String? photoIdentiteId,
+      @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
       final String? pieceIdentiteId,
+      @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+      final String? pieceIdentiteVersoId,
       final String? nomEntreprise,
+      @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
       final String? registreCommerceId,
       final String? emailEntreprise,
-      final String? numeroContribuable,
+      @JsonKey(fromJson: _stringFromJson) final String? numeroContribuable,
       final String? typeEntreprise}) = _$AdditionalDataModelImpl;
 
   factory _AdditionalDataModel.fromJson(Map<String, dynamic> json) =
@@ -367,16 +413,23 @@ abstract class _AdditionalDataModel implements AdditionalDataModel {
   @override
   String? get activite;
   @override
+  @JsonKey(readValue: _readPhotoIdentite, fromJson: _fileIdFromJson)
   String? get photoIdentiteId;
   @override
+  @JsonKey(readValue: _readPieceIdentite, fromJson: _fileIdFromJson)
   String? get pieceIdentiteId;
+  @override
+  @JsonKey(readValue: _readPieceIdentiteVerso, fromJson: _fileIdFromJson)
+  String? get pieceIdentiteVersoId;
   @override
   String? get nomEntreprise;
   @override
+  @JsonKey(readValue: _readRegistreCommerce, fromJson: _fileIdFromJson)
   String? get registreCommerceId;
   @override
   String? get emailEntreprise;
   @override
+  @JsonKey(fromJson: _stringFromJson)
   String? get numeroContribuable;
   @override
   String? get typeEntreprise;

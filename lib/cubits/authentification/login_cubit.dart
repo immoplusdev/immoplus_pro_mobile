@@ -81,28 +81,33 @@ class LoginCubit extends Cubit<LoginCubitState> {
       AccountCreationResponse response = await AuthRepository.login(body: body);
 
       _checkRole(response.data.user.role.name);
+      final user = response.data.user;
+      final addData = user.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.user.id
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..role = response.data.user.role.name
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..avatar = response.data.user.avatar
+          ..userId = user.id
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..role = user.role.name
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
-          ..identityVerified = response.data.user.identityVerified
-          ..createdAt = response.data.user.createdAt,
+          ..roleName = user.role.name
+          ..activite = addData.activite
+          ..nomEntreprise = addData.nomEntreprise
+          ..photoIdentite = addData.photoIdentiteId
+          ..pieceIdentite = addData.pieceIdentiteId
+          ..pieceIdentiteVerso = addData.pieceIdentiteVersoId
+          ..lieuNaissance = addData.lieuNaissance
+          ..registreCommerce = addData.registreCommerceId
+          ..numeroContribuable = addData.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise
+          ..identityVerified = user.identityVerified
+          ..createdAt = user.createdAt,
       );
-      //OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
       _identifyAndLogLogin(response.data.user, "email");
       DioClient.token = response.data.accessToken;
@@ -142,28 +147,33 @@ class LoginCubit extends Cubit<LoginCubitState> {
       AccountCreationResponse response =
           await AuthRepository.loginWithOtp(body: body);
       _checkRole(response.data.user.role.name);
+      final user = response.data.user;
+      final addData = user.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.user.id
-          ..role = response.data.user.role.name
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..avatar = response.data.user.avatar
+          ..userId = user.id
+          ..role = user.role.name
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
-          ..identityVerified = response.data.user.identityVerified
-          ..createdAt = response.data.user.createdAt,
+          ..roleName = user.role.name
+          ..activite = addData.activite
+          ..nomEntreprise = addData.nomEntreprise
+          ..photoIdentite = addData.photoIdentiteId
+          ..pieceIdentite = addData.pieceIdentiteId
+          ..pieceIdentiteVerso = addData.pieceIdentiteVersoId
+          ..lieuNaissance = addData.lieuNaissance
+          ..registreCommerce = addData.registreCommerceId
+          ..numeroContribuable = addData.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise
+          ..identityVerified = user.identityVerified
+          ..createdAt = user.createdAt,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
       _identifyAndLogLogin(response.data.user, "otp");
       DioClient.token = response.data.accessToken;
@@ -184,27 +194,39 @@ class LoginCubit extends Cubit<LoginCubitState> {
       UpdateUserResponseModel response = await AuthRepository.updateUser(
           userId: SessionManager().currentUser!.userId!, body: body);
       _checkRole(response.data.role.name);
+      final current = SessionManager().currentUser;
+      final addData = response.data.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.id
-          ..firstName = response.data.firstName
+          ..userId = response.data.id ?? current?.userId
+          ..firstName = response.data.firstName ?? current?.firstName
+          ..lastName = response.data.lastName ?? current?.lastName
           ..role = response.data.role.name
-          ..lastName = response.data.lastName
-          ..avatar = response.data.avatar
-          ..phoneNumber = response.data.phoneNumber
-          ..email = response.data.email
-          ..avatar = response.data.avatar
-          ..accessToken = SessionManager().currentUser!.accessToken
-          ..refreshToken = SessionManager().currentUser!.refreshToken
           ..roleName = response.data.role.name
-          ..activite = response.data.additionalData.activite
-          ..nomEntreprise = response.data.additionalData.nomEntreprise
-          ..photoIdentite = response.data.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.additionalData.emailEntreprise,
+          ..avatar = response.data.avatar ?? current?.avatar
+          ..phoneNumber = response.data.phoneNumber ?? current?.phoneNumber
+          ..email = response.data.email ?? current?.email
+          ..accessToken = current?.accessToken
+          ..refreshToken = current?.refreshToken
+          ..identityVerified =
+              response.data.identityVerified ?? current?.identityVerified
+          ..createdAt = response.data.createdAt ?? current?.createdAt
+          ..activite = addData.activite ?? current?.activite
+          ..nomEntreprise = addData.nomEntreprise ?? current?.nomEntreprise
+          ..emailEntreprise =
+              addData.emailEntreprise ?? current?.emailEntreprise
+          ..photoIdentite = addData.photoIdentiteId ?? current?.photoIdentite
+          ..pieceIdentite = addData.pieceIdentiteId ?? current?.pieceIdentite
+          ..pieceIdentiteVerso =
+              addData.pieceIdentiteVersoId ?? current?.pieceIdentiteVerso
+          ..lieuNaissance = addData.lieuNaissance ?? current?.lieuNaissance
+          ..registreCommerce =
+              addData.registreCommerceId ?? current?.registreCommerce
+          ..numeroContribuable =
+              addData.numeroContribuable ?? current?.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise ?? current?.typeEntreprise,
       );
-      // OneSignal.login(response.data.user.id ?? 'user');
       await SessionManager().getCurrentUser();
 
       emit(const LoginCubitState.success());
@@ -421,26 +443,33 @@ class LoginCubit extends Cubit<LoginCubitState> {
       AccountCreationResponse response =
           await AuthRepository().socialLogin(body: body);
 
+      final user = response.data.user;
+      final addData = user.additionalData;
       await SessionManager().saveUser(
         UserModelSchema()
           ..id = 1
-          ..userId = response.data.user.id
-          ..role = response.data.user.role.name
-          ..firstName = response.data.user.firstName
-          ..lastName = response.data.user.lastName
-          ..phoneNumber = response.data.user.phoneNumber
-          ..email = response.data.user.email
-          ..avatar = response.data.user.avatar
+          ..userId = user.id
+          ..role = user.role.name
+          ..firstName = user.firstName
+          ..lastName = user.lastName
+          ..phoneNumber = user.phoneNumber
+          ..email = user.email
+          ..avatar = user.avatar
           ..accessToken = response.data.accessToken
           ..refreshToken = response.data.refreshToken
-          ..roleName = response.data.user.role.name
-          ..activite = response.data.user.additionalData.activite
-          ..nomEntreprise = response.data.user.additionalData.nomEntreprise
-          ..photoIdentite = response.data.user.additionalData.photoIdentiteId
-          ..pieceIdentite = response.data.user.additionalData.pieceIdentiteId
-          ..emailEntreprise = response.data.user.additionalData.emailEntreprise
-          ..identityVerified = response.data.user.identityVerified
-          ..createdAt = response.data.user.createdAt,
+          ..roleName = user.role.name
+          ..identityVerified = user.identityVerified
+          ..createdAt = user.createdAt
+          ..activite = addData.activite
+          ..nomEntreprise = addData.nomEntreprise
+          ..emailEntreprise = addData.emailEntreprise
+          ..photoIdentite = addData.photoIdentiteId
+          ..pieceIdentite = addData.pieceIdentiteId
+          ..pieceIdentiteVerso = addData.pieceIdentiteVersoId
+          ..lieuNaissance = addData.lieuNaissance
+          ..registreCommerce = addData.registreCommerceId
+          ..numeroContribuable = addData.numeroContribuable
+          ..typeEntreprise = addData.typeEntreprise,
       );
 
       final sessionManager = SessionManager();
@@ -489,7 +518,8 @@ class LoginCubit extends Cubit<LoginCubitState> {
     try {
       int totalPropertiesCount = 0;
       try {
-        final collection = await BienImmobilierRepository.getBiensImmobiliers(page: 1, perPage: 1);
+        final collection = await BienImmobilierRepository.getBiensImmobiliers(
+            page: 1, perPage: 1);
         totalPropertiesCount = collection.totalCount ?? 0;
       } catch (e) {
         log('GA4 identify error fetching properties: $e', name: 'ANALYTICS');
@@ -498,7 +528,8 @@ class LoginCubit extends Cubit<LoginCubitState> {
       await getIt<AnalyticsService>().identifyUser(
         userId: user.id ?? '',
         totalProperties: totalPropertiesCount,
-        kycStatus: (user.identityVerified == true) ? 'validated' : 'not_validated',
+        kycStatus:
+            (user.identityVerified == true) ? 'validated' : 'not_validated',
         isProValidated: user.role.name != Roles.customer.name,
         accountStatus: user.status ?? 'activated',
         accountType: user.role.name ?? '',

@@ -20,8 +20,9 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-       sourceCompatibility = JavaVersion.VERSION_17
-       targetCompatibility = JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
@@ -35,6 +36,7 @@ android {
         targetSdk = 36//flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled true
         //minSdkVersion 24 
     }
     signingConfigs {
@@ -55,6 +57,11 @@ android {
     }
 }
 
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+}
+
 flutter {
     source = "../.."
 }
+

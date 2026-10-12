@@ -18,10 +18,13 @@ class CertificationAnnounceSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final bottomGap = bottomPadding > 0 ? bottomPadding + 16 : 28.0;
+
     return PopScope(
       canPop: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 36),
+        padding: EdgeInsets.fromLTRB(16, 0, 16, bottomGap),
         child: Stack(
           clipBehavior: Clip.none,
           children: [

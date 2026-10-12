@@ -105,8 +105,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
     final hasTextChange = isEntreprise &&
         (_nomEntrepriseController.text != _initialNomEntreprise ||
             _emailEntrepriseController.text != _initialEmailEntreprise ||
-            _numeroContribuableController.text !=
-                _initialNumeroContribuable ||
+            _numeroContribuableController.text != _initialNumeroContribuable ||
             _typeEntrepriseController.text != _initialTypeEntreprise);
 
     if (!hasFileChange && !hasTextChange) {

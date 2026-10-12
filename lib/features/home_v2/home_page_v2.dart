@@ -31,7 +31,6 @@ import 'package:immoplus_pro/data/models/error/api_error_response.dart';
 import 'package:immoplus_pro/services/qr_scan_announcement_service.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
 import 'package:immoplus_pro/services/version_update_service.dart';
@@ -137,6 +136,7 @@ class _HomePageV2State extends State<HomePageV2>
       if (mounted && shouldShow) {
         await showModalBottomSheet(
           context: context,
+          useRootNavigator: true,
           backgroundColor: Colors.transparent,
           barrierColor: Colors.black.withValues(alpha: 0.6),
           isScrollControlled: true,
@@ -169,6 +169,7 @@ class _HomePageV2State extends State<HomePageV2>
     if (mounted && shouldShow) {
       await showModalBottomSheet(
         context: context,
+        useRootNavigator: true,
         backgroundColor: Colors.transparent,
         barrierColor: Colors.black.withValues(alpha: 0.6),
         isScrollControlled: true,
@@ -196,6 +197,7 @@ class _HomePageV2State extends State<HomePageV2>
     // séquencé ici, après la fermeture du sheet.
     final accepted = await showModalBottomSheet<bool>(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.6),
       isScrollControlled: true,
@@ -341,7 +343,7 @@ class _HomePageV2State extends State<HomePageV2>
       // Redirige vers les paramètres de notification si déjà refusé
       await AppSettings.openAppSettings(type: AppSettingsType.notification);
     } else if (status.isGranted) {
-      await OneSignal.User.pushSubscription.optIn();
+      await getIt<NotificationService>().suscribeCurrentUser();
     }
   }
 
@@ -639,7 +641,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
-                                            currentUser!.greetingText,
+                                            currentUser?.greetingText ?? "",
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 20,

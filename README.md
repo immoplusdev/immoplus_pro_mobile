@@ -19,6 +19,27 @@ samples, guidance on mobile development, and a full API reference.
 `flutter pub run build_runner build --delete-conflicting-outputs`
 `flutter pub run build_runner watch --delete-conflicting-outputs`
 
+
+## Build Android (AppBundle .aab)
+
+### Environnement Développement (DEV)
+```bash
+flutter build appbundle --release --dart-define=FLAVOR=dev
+```
+*Avec FVM :*
+```bash
+fvm flutter build appbundle --release --dart-define=FLAVOR=dev
+```
+
+### Environnement Production (PROD)
+```bash
+flutter build appbundle --release --dart-define=FLAVOR=prod
+```
+*Avec FVM :*
+```bash
+fvm flutter build appbundle --release --dart-define=FLAVOR=prod
+```
+
 ## Coding Rules
 ### Avoid Magic Values
 Always avoid hardcoding magic values (padding, font sizes, colors, duration, etc.) directly in the UI code. 
