@@ -66,3 +66,7 @@ pubspec.lock
 ios/build/
 **/ios/build/
 
+# Apple Auth / APNs keys
+*.p8
+ios/*.p8
+

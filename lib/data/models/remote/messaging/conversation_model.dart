@@ -35,11 +35,33 @@ enum ConversationType {
   }
 }
 
+Object? _readReservationId(Map json, String key) {
+  final direct = json['reservationId'] ?? json['reservation_id'];
+  if (direct != null && direct.toString().isNotEmpty) {
+    return direct.toString();
+  }
+  final reservation = json['reservation'];
+  if (reservation is Map && reservation['id'] != null) {
+    return reservation['id'].toString();
+  }
+  return null;
+}
+
+Object? _readPendingActionFor(Map json, String key) {
+  return json['pendingActionFor'] ?? json['pending_action_for'];
+}
+
+Object? _readRelaisId(Map json, String key) {
+  return json['relaisId'] ?? json['relais_id'];
+}
+
+Object? _readReadOnly(Map json, String key) {
+  return json['readOnly'] ?? json['read_only'] ?? false;
+}
+
 @freezed
 class ConversationModel with _$ConversationModel {
   const ConversationModel._();
-
-  static final Map<String, Map<String, dynamic>> _extraData = {};
 
   const factory ConversationModel({
     required String id,
@@ -61,44 +83,19 @@ class ConversationModel with _$ConversationModel {
     String? lastMessagePreview,
     DateTime? lastMessageAt,
     DateTime? createdAt,
+    String? stage,
+    @JsonKey(readValue: _readPendingActionFor) String? pendingActionFor,
+    @JsonKey(readValue: _readRelaisId) String? relaisId,
+    @JsonKey(readValue: _readReservationId) String? reservationId,
+    List<Map<String, dynamic>>? actions,
+    @Default(false) @JsonKey(readValue: _readReadOnly) bool readOnly,
   }) = _ConversationModel;
 
-  factory ConversationModel.fromJson(Map<String, dynamic> json) {
-    final model = _$ConversationModelFromJson(json);
-    _extraData[model.id] = json;
-    return model;
-  }
+  factory ConversationModel.fromJson(Map<String, dynamic> json) =>
+      _$ConversationModelFromJson(json);
 
   ConversationStatus get statusEnum => ConversationStatus.fromString(status);
   ConversationType get typeEnum => ConversationType.fromString(type);
 
-  String? get stage => _extraData[id]?['stage']?.toString();
-  String? get pendingActionFor => _extraData[id]?['pendingActionFor']?.toString();
-  String? get relaisId => _extraData[id]?['relaisId']?.toString();
-
-  /// Identifiant de la réservation liée au fil. Le champ est conservé dans
-  /// les données brutes afin de rester compatible avec les réponses qui
-  /// exposent `reservationId`, `reservation_id` ou l'objet `reservation`.
-  String? get reservationId {
-    final data = _extraData[id];
-    final direct = data?['reservationId'] ?? data?['reservation_id'];
-    if (direct != null && direct.toString().isNotEmpty) {
-      return direct.toString();
-    }
-    final reservation = data?['reservation'];
-    if (reservation is Map && reservation['id'] != null) {
-      return reservation['id'].toString();
-    }
-    return null;
-  }
-  List<Map<String, dynamic>>? get actions {
-    final raw = _extraData[id]?['actions'];
-    if (raw is List) {
-      return raw.map((e) => Map<String, dynamic>.from(e is Map ? e : {})).toList();
-    }
-    return null;
-  }
-
-  bool get isReadOnly =>
-      (_extraData[id]?['readOnly'] == true) || status == 'blocked';
+  bool get isReadOnly => readOnly || status == 'blocked';
 }

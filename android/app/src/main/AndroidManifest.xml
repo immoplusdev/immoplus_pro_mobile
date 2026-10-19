@@ -23,6 +23,17 @@
         android:name="${applicationName}"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
+        <!-- Métadonnées de notification FCM par défaut -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="immoplus_pro_high_importance_channel" />
+
      <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyBXXo7cd9K6HWY2RP0bhm5hrM_bJBS-LZg"/>
             <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>

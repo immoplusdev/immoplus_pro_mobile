@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +9,9 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:app_settings/app_settings.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
 import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
@@ -25,6 +24,7 @@ import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dar
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/features/ratings/pages/ratings_history_page.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 
@@ -69,27 +69,20 @@ class _AccountPageV2State extends State<AccountPageV2>
 
   Future<void> _refreshNotificationStatus() async {
     if (!mounted) return;
-    
-    // On vérifie le statut réel dans le système du téléphone
-    final osGranted = OneSignal.Notifications.permission;
-    
-    // On force l'abonnement ou le désabonnement pour s'aligner avec l'OS
+
+    final osGranted = await Permission.notification.isGranted;
     if (osGranted) {
-      await OneSignal.User.pushSubscription.optIn();
-    } else {
-      await OneSignal.User.pushSubscription.optOut();
+      getIt<NotificationService>().suscribeCurrentUser();
     }
-    
+
     if (!mounted) return;
-    
-    // Le toggle reflète toujours 100% la réalité du téléphone
+
     setState(() {
       _notificationsEnabled = osGranted;
     });
   }
 
   Future<void> _toggleNotifications(bool value) async {
-
     await AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
@@ -299,6 +292,7 @@ class _AccountPageV2State extends State<AccountPageV2>
                   title: "Conditions générales d'utilisation",
                   onTap: () {
                     showModalBottomSheet(
+                      useRootNavigator: true,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20)),
                       isScrollControlled: true,
@@ -346,6 +340,7 @@ class _AccountPageV2State extends State<AccountPageV2>
                 ),
               ),
             ),
+            Gap(25 + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
@@ -527,9 +522,15 @@ class _AccountPageV2State extends State<AccountPageV2>
             CupertinoDialogAction(
               isDestructiveAction: true,
               onPressed: () async {
-                // SessionManager.logout() ferme tous les dialogs ouverts
-                // via navigatorKey avant de naviguer — pas besoin de pop() ici.
-                await SessionManager().logout();
+                Navigator.of(dialogContext).pop();
+                EasyLoadingHandler.showLoadingToast(
+                  text: "Déconnexion en cours...",
+                );
+                try {
+                  await SessionManager().logout();
+                } finally {
+                  EasyLoadingHandler.hideLoadingToast();
+                }
               },
               child: const Text('Déconnexion'),
             ),

@@ -129,7 +129,16 @@ class AppRouter {
               GoRoute(
                 path: CalendarPageV2.routePath,
                 name: CalendarPageV2.name,
-                builder: (context, state) => const CalendarPageV2(),
+                builder: (context, state) {
+                  final extra = state.extra;
+                  final showNotice = (extra is Map &&
+                          extra['showPostRefusalCalendarNotice'] == true) ||
+                      extra == true;
+                  return CalendarPageV2(
+                    showPostRefusalNotice: showNotice,
+                    noticeToken: extra,
+                  );
+                },
               ),
             ],
           ),
