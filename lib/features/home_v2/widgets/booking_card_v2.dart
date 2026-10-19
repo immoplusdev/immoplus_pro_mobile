@@ -13,10 +13,12 @@ import 'package:intl/intl.dart';
 
 class BookingCardV2 extends StatelessWidget {
   final ReservationModel reservationModel;
+  final ValueChanged<ReservationModel>? onMessageClient;
 
   const BookingCardV2({
     super.key,
     required this.reservationModel,
+    this.onMessageClient,
   });
 
   bool get isRatingPending =>
@@ -43,6 +45,9 @@ class BookingCardV2 extends StatelessWidget {
     final isAwaitingPayment =
         statusEnum == StatusReservation.enAttentePaiementClient ||
             statusEnum == StatusReservation.enAttenteReponseProprietaire;
+    final canMessageClient = statusEnum ==
+            StatusReservation.enAttentePaiementClient &&
+        onMessageClient != null;
 
     // Duration
     final duration = reservationModel.datesReservation.length;
@@ -255,6 +260,29 @@ class BookingCardV2 extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (canMessageClient) ...[
+                    const Gap(10),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: () => onMessageClient!(reservationModel),
+                        icon: const Icon(Iconsax.message, size: 16),
+                        label: const Text(
+                          'Envoyer un message au client',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.primary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 6,
+                          ),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

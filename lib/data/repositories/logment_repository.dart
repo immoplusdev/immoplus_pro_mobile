@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
+import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
+import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motifs_echec_response.dart';
+import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/submit_motif_echec_payload.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
@@ -365,6 +368,56 @@ class LogmentRepository {
     } catch (error) {
       log('Error: $error', name: 'validerPresence');
       rethrow;
+    }
+  }
+
+  static Future<MotifsEchecResponse> getMotifsEchec(
+      String reservationId) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .getMotifsEchec(reservationId);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to get failure reasons: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to get failure reasons: $error');
+    }
+  }
+
+  static Future<MotifEchecReponseModel> submitMotifEchec(
+    String reservationId, {
+    required String reasonCode,
+    String? comment,
+  }) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio).submitMotifEchec(
+        reservationId,
+        SubmitMotifEchecPayload(reasonCode: reasonCode, comment: comment).toJson(),
+      );
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      throw Exception('Failed to submit failure reason: ${dioError.message}');
+    } catch (error) {
+      log('Error: $error');
+      throw Exception('Failed to submit failure reason: $error');
+    }
+  }
+
+  static Future<MotifEchecReponseModel?> getMotifEchecReponse(
+      String reservationId) async {
+    try {
+      final response = await ReservationProvider(DioClient().dio)
+          .getMotifEchecReponse(reservationId);
+      return response;
+    } on DioException catch (dioError) {
+      log('DioError: ${dioError.message}');
+      return null;
+    } catch (error) {
+      log('Error: $error');
+      return null;
     }
   }
 }

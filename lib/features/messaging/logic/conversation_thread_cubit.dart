@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:immoplus_pro/data/models/remote/messaging/conversation_model.dart';
 import 'package:immoplus_pro/data/models/remote/messaging/message_model.dart';
 import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
 import 'package:immoplus_pro/services/messaging_socket_service.dart';
@@ -22,6 +23,7 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
   Timer? _typingSafetyTimer;
   Timer? _typingStopDebounce;
   bool _isTypingEmitted = false;
+  final Map<String, Map<String, dynamic>> _pendingStructuredMessages = {};
 
   ConversationThreadCubit(this._socketService)
       : super(const ConversationThreadState.loading());
@@ -184,9 +186,13 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
   Future<void> sendText(String content) async {
     final id = _conversationId;
     final current = state;
-    if (id == null || current is! ConversationThreadLoaded) return;
+    if (id == null ||
+        current is! ConversationThreadLoaded ||
+        current.conversation.isReadOnly) {
+      return;
+    }
     final trimmed = content.trim();
-    if (trimmed.isEmpty) return;
+    if (trimmed.isEmpty || trimmed.length > 2000) return;
 
     _stopTypingImmediately();
 
@@ -217,7 +223,85 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
       clientTempId,
       target.copyWith(deliveryState: MessageDeliveryState.sending),
     );
-    await _attemptSend(clientTempId, target.content);
+    final structuredBody = _pendingStructuredMessages[clientTempId];
+    if (structuredBody != null) {
+      await _attemptStructuredSend(clientTempId, structuredBody);
+    } else {
+      await _attemptSend(clientTempId, target.content);
+    }
+  }
+
+  Future<bool> sendStructuredMessage({
+    required String type,
+    required String content,
+    required Map<String, dynamic> payload,
+  }) async {
+    final id = _conversationId;
+    final current = state;
+    final trimmed = content.trim();
+    if (id == null ||
+        current is! ConversationThreadLoaded ||
+        current.conversation.isReadOnly ||
+        trimmed.isEmpty) {
+      return false;
+    }
+    if (type == 'availability_answer') {
+      final requestId = payload['requestMessageId']?.toString();
+      final request =
+          current.messages.where((message) => message.id == requestId);
+      if (current.conversation.typeEnum != ConversationType.reservation ||
+          request.isEmpty ||
+          !(request.first.actions ?? []).any(
+              (action) => action['id']?.toString() == 'answer_availability')) {
+        return false;
+      }
+    } else if (type == 'choice_answer' &&
+        current.conversation.typeEnum != ConversationType.support) {
+      return false;
+    }
+
+    _stopTypingImmediately();
+    final clientTempId = const Uuid().v4();
+    final body = <String, dynamic>{
+      'type': type,
+      'content': trimmed,
+      'payload': payload,
+      'clientTempId': clientTempId,
+    };
+    _pendingStructuredMessages[clientTempId] = body;
+    emit(current.copyWith(
+      messages: [
+        ...current.messages,
+        MessageModel(
+          id: clientTempId,
+          conversationId: id,
+          senderRole: 'pro',
+          type: type,
+          content: trimmed,
+          createdAt: DateTime.now(),
+          clientTempId: clientTempId,
+          deliveryState: MessageDeliveryState.sending,
+        ),
+      ],
+    ));
+    return _attemptStructuredSend(clientTempId, body);
+  }
+
+  Future<bool> _attemptStructuredSend(
+    String clientTempId,
+    Map<String, dynamic> body,
+  ) async {
+    final id = _conversationId;
+    if (id == null) return false;
+    try {
+      final message = await MessagingRepository.sendCustomMessage(id, body);
+      _pendingStructuredMessages.remove(clientTempId);
+      _replaceMessage(clientTempId, message);
+      return true;
+    } catch (_) {
+      _markFailed(clientTempId);
+      return false;
+    }
   }
 
   void deleteFailedMessage(String clientTempId) {
@@ -228,6 +312,7 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
           .where((m) => m.clientTempId != clientTempId)
           .toList(),
     ));
+    _pendingStructuredMessages.remove(clientTempId);
   }
 
   Future<void> _attemptSend(String clientTempId, String content) async {
@@ -260,8 +345,7 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
     }
   }
 
-  Future<void> _sendViaHttpFallback(
-      String clientTempId, String content) async {
+  Future<void> _sendViaHttpFallback(String clientTempId, String content) async {
     final id = _conversationId;
     if (id == null) return;
     try {
@@ -276,8 +360,7 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
       if (data is Map && data['code'] == 'CONTACT_INFO_DETECTED') {
         _rejectByModeration(
           clientTempId,
-          data['message']?.toString() ??
-              kContactInfoDetectedFallbackMessage,
+          data['message']?.toString() ?? kContactInfoDetectedFallbackMessage,
         );
       } else {
         _markFailed(clientTempId);
@@ -358,6 +441,39 @@ class ConversationThreadCubit extends Cubit<ConversationThreadState> {
     } catch (_) {
       return false;
     }
+  }
+
+  Future<void> sendStayProposal({
+    required String residenceId,
+    required String checkIn,
+    required String checkOut,
+    required int guests,
+  }) async {
+    final id = _conversationId;
+    if (id == null) return;
+    final current = state;
+    if (current is! ConversationThreadLoaded ||
+        current.conversation.isReadOnly ||
+        current.conversation.typeEnum != ConversationType.reservation ||
+        ![
+          ...?current.conversation.actions,
+          ...current.messages.expand((message) => message.actions ?? const []),
+        ].any((action) => action['id']?.toString() == 'propose_stay')) {
+      return;
+    }
+    final clientTempId = const Uuid().v4();
+    final body = {
+      "type": "stay_proposal",
+      "payload": {
+        "residenceId": residenceId,
+        "checkIn": checkIn,
+        "checkOut": checkOut,
+        "guests": guests,
+      },
+      "clientTempId": clientTempId,
+    };
+    await MessagingRepository.sendCustomMessage(id, body);
+    await load(id);
   }
 
   @override

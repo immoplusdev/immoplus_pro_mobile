@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:immoplus_pro/data/models/auth/withdraw_booking_history_dto.dart';
+import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motif_echec_reponse_model.dart';
+import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motifs_echec_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_response.dart';
 import 'package:immoplus_pro/data/models/reservations/reservations_collection.dart';
 import 'package:retrofit/retrofit.dart';
@@ -69,4 +71,16 @@ abstract class ReservationProvider {
 
   @POST("/reservations/action/valider-presence")
   Future<dynamic> validerPresence(@Body() Map<String, dynamic> body);
+
+  @GET('/reservations/{id}/motifs-echec')
+  Future<MotifsEchecResponse> getMotifsEchec(@Path('id') String id);
+
+  @POST('/reservations/{id}/motifs-echec')
+  Future<MotifEchecReponseModel> submitMotifEchec(
+    @Path('id') String id,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @GET('/reservations/{id}/motifs-echec/reponse')
+  Future<MotifEchecReponseModel?> getMotifEchecReponse(@Path('id') String id);
 }

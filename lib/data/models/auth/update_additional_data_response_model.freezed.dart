@@ -201,14 +201,21 @@ UpdateAdditionalDataResult _$UpdateAdditionalDataResultFromJson(
 
 /// @nodoc
 mixin _$UpdateAdditionalDataResult {
+  String? get id => throw _privateConstructorUsedError;
+  String? get user => throw _privateConstructorUsedError;
   String? get lieuNaissance => throw _privateConstructorUsedError;
   String? get activite => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get photoIdentite => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get pieceIdentite => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get pieceIdentiteVerso => throw _privateConstructorUsedError;
   String? get nomEntreprise => throw _privateConstructorUsedError;
   String? get emailEntreprise => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get registreCommerce => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _stringFromJson)
   String? get numeroContribuable => throw _privateConstructorUsedError;
   String? get typeEntreprise => throw _privateConstructorUsedError;
 
@@ -230,15 +237,17 @@ abstract class $UpdateAdditionalDataResultCopyWith<$Res> {
           UpdateAdditionalDataResult>;
   @useResult
   $Res call(
-      {String? lieuNaissance,
+      {String? id,
+      String? user,
+      String? lieuNaissance,
       String? activite,
-      String? photoIdentite,
-      String? pieceIdentite,
-      String? pieceIdentiteVerso,
+      @JsonKey(fromJson: _fileIdFromJson) String? photoIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) String? pieceIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) String? pieceIdentiteVerso,
       String? nomEntreprise,
       String? emailEntreprise,
-      String? registreCommerce,
-      String? numeroContribuable,
+      @JsonKey(fromJson: _fileIdFromJson) String? registreCommerce,
+      @JsonKey(fromJson: _stringFromJson) String? numeroContribuable,
       String? typeEntreprise});
 }
 
@@ -258,6 +267,8 @@ class _$UpdateAdditionalDataResultCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
+    Object? user = freezed,
     Object? lieuNaissance = freezed,
     Object? activite = freezed,
     Object? photoIdentite = freezed,
@@ -270,6 +281,14 @@ class _$UpdateAdditionalDataResultCopyWithImpl<$Res,
     Object? typeEntreprise = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as String?,
       lieuNaissance: freezed == lieuNaissance
           ? _value.lieuNaissance
           : lieuNaissance // ignore: cast_nullable_to_non_nullable
@@ -324,15 +343,17 @@ abstract class _$$UpdateAdditionalDataResultImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? lieuNaissance,
+      {String? id,
+      String? user,
+      String? lieuNaissance,
       String? activite,
-      String? photoIdentite,
-      String? pieceIdentite,
-      String? pieceIdentiteVerso,
+      @JsonKey(fromJson: _fileIdFromJson) String? photoIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) String? pieceIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) String? pieceIdentiteVerso,
       String? nomEntreprise,
       String? emailEntreprise,
-      String? registreCommerce,
-      String? numeroContribuable,
+      @JsonKey(fromJson: _fileIdFromJson) String? registreCommerce,
+      @JsonKey(fromJson: _stringFromJson) String? numeroContribuable,
       String? typeEntreprise});
 }
 
@@ -351,6 +372,8 @@ class __$$UpdateAdditionalDataResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
+    Object? user = freezed,
     Object? lieuNaissance = freezed,
     Object? activite = freezed,
     Object? photoIdentite = freezed,
@@ -363,6 +386,14 @@ class __$$UpdateAdditionalDataResultImplCopyWithImpl<$Res>
     Object? typeEntreprise = freezed,
   }) {
     return _then(_$UpdateAdditionalDataResultImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      user: freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as String?,
       lieuNaissance: freezed == lieuNaissance
           ? _value.lieuNaissance
           : lieuNaissance // ignore: cast_nullable_to_non_nullable
@@ -411,15 +442,17 @@ class __$$UpdateAdditionalDataResultImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UpdateAdditionalDataResultImpl implements _UpdateAdditionalDataResult {
   const _$UpdateAdditionalDataResultImpl(
-      {this.lieuNaissance,
+      {this.id,
+      this.user,
+      this.lieuNaissance,
       this.activite,
-      this.photoIdentite,
-      this.pieceIdentite,
-      this.pieceIdentiteVerso,
+      @JsonKey(fromJson: _fileIdFromJson) this.photoIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) this.pieceIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) this.pieceIdentiteVerso,
       this.nomEntreprise,
       this.emailEntreprise,
-      this.registreCommerce,
-      this.numeroContribuable,
+      @JsonKey(fromJson: _fileIdFromJson) this.registreCommerce,
+      @JsonKey(fromJson: _stringFromJson) this.numeroContribuable,
       this.typeEntreprise});
 
   factory _$UpdateAdditionalDataResultImpl.fromJson(
@@ -427,29 +460,38 @@ class _$UpdateAdditionalDataResultImpl implements _UpdateAdditionalDataResult {
       _$$UpdateAdditionalDataResultImplFromJson(json);
 
   @override
+  final String? id;
+  @override
+  final String? user;
+  @override
   final String? lieuNaissance;
   @override
   final String? activite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   final String? photoIdentite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   final String? pieceIdentite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   final String? pieceIdentiteVerso;
   @override
   final String? nomEntreprise;
   @override
   final String? emailEntreprise;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   final String? registreCommerce;
   @override
+  @JsonKey(fromJson: _stringFromJson)
   final String? numeroContribuable;
   @override
   final String? typeEntreprise;
 
   @override
   String toString() {
-    return 'UpdateAdditionalDataResult(lieuNaissance: $lieuNaissance, activite: $activite, photoIdentite: $photoIdentite, pieceIdentite: $pieceIdentite, pieceIdentiteVerso: $pieceIdentiteVerso, nomEntreprise: $nomEntreprise, emailEntreprise: $emailEntreprise, registreCommerce: $registreCommerce, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise)';
+    return 'UpdateAdditionalDataResult(id: $id, user: $user, lieuNaissance: $lieuNaissance, activite: $activite, photoIdentite: $photoIdentite, pieceIdentite: $pieceIdentite, pieceIdentiteVerso: $pieceIdentiteVerso, nomEntreprise: $nomEntreprise, emailEntreprise: $emailEntreprise, registreCommerce: $registreCommerce, numeroContribuable: $numeroContribuable, typeEntreprise: $typeEntreprise)';
   }
 
   @override
@@ -457,6 +499,8 @@ class _$UpdateAdditionalDataResultImpl implements _UpdateAdditionalDataResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UpdateAdditionalDataResultImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.lieuNaissance, lieuNaissance) ||
                 other.lieuNaissance == lieuNaissance) &&
             (identical(other.activite, activite) ||
@@ -483,6 +527,8 @@ class _$UpdateAdditionalDataResultImpl implements _UpdateAdditionalDataResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
+      user,
       lieuNaissance,
       activite,
       photoIdentite,
@@ -514,37 +560,48 @@ class _$UpdateAdditionalDataResultImpl implements _UpdateAdditionalDataResult {
 abstract class _UpdateAdditionalDataResult
     implements UpdateAdditionalDataResult {
   const factory _UpdateAdditionalDataResult(
-      {final String? lieuNaissance,
+      {final String? id,
+      final String? user,
+      final String? lieuNaissance,
       final String? activite,
-      final String? photoIdentite,
-      final String? pieceIdentite,
-      final String? pieceIdentiteVerso,
+      @JsonKey(fromJson: _fileIdFromJson) final String? photoIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) final String? pieceIdentite,
+      @JsonKey(fromJson: _fileIdFromJson) final String? pieceIdentiteVerso,
       final String? nomEntreprise,
       final String? emailEntreprise,
-      final String? registreCommerce,
-      final String? numeroContribuable,
+      @JsonKey(fromJson: _fileIdFromJson) final String? registreCommerce,
+      @JsonKey(fromJson: _stringFromJson) final String? numeroContribuable,
       final String? typeEntreprise}) = _$UpdateAdditionalDataResultImpl;
 
   factory _UpdateAdditionalDataResult.fromJson(Map<String, dynamic> json) =
       _$UpdateAdditionalDataResultImpl.fromJson;
 
   @override
+  String? get id;
+  @override
+  String? get user;
+  @override
   String? get lieuNaissance;
   @override
   String? get activite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get photoIdentite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get pieceIdentite;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get pieceIdentiteVerso;
   @override
   String? get nomEntreprise;
   @override
   String? get emailEntreprise;
   @override
+  @JsonKey(fromJson: _fileIdFromJson)
   String? get registreCommerce;
   @override
+  @JsonKey(fromJson: _stringFromJson)
   String? get numeroContribuable;
   @override
   String? get typeEntreprise;

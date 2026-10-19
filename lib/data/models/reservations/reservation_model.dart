@@ -35,8 +35,21 @@ class ReservationModel with _$ReservationModel {
     @Default(ProprietaireModel()) ProprietaireModel proprietaire,
   }) = _ReservationModel;
 
-  factory ReservationModel.fromJson(Map<String, dynamic> json) =>
-      _$ReservationModelFromJson(json);
+  factory ReservationModel.fromJson(Map<String, dynamic> json) {
+    // Certaines listes de réservations exposent le client sous `createdBy`
+    // plutôt que `client`. On normalise la réponse avant la désérialisation
+    // pour que les cartes puissent toujours utiliser `client.id`.
+    final normalized = Map<String, dynamic>.from(json);
+    final client = normalized['client'];
+    final hasClientId = client is Map &&
+        client['id'] != null &&
+        client['id'].toString().isNotEmpty;
+    final createdBy = normalized['createdBy'];
+    if (!hasClientId && createdBy is Map) {
+      normalized['client'] = Map<String, dynamic>.from(createdBy);
+    }
+    return _$ReservationModelFromJson(normalized);
+  }
 }
 
 extension ReservationModelX on ReservationModel {

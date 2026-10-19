@@ -29,6 +29,8 @@ mixin _$MessageModel {
   String? get moderationStatus => throw _privateConstructorUsedError;
   DateTime? get readAt => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get payload => throw _privateConstructorUsedError;
+  List<Map<String, dynamic>>? get actions => throw _privateConstructorUsedError;
 
   /// Id temporaire côté client (envoi optimiste), jamais renvoyé par
   /// l'API — sert uniquement à réconcilier la bulle locale avec la
@@ -67,6 +69,8 @@ abstract class $MessageModelCopyWith<$Res> {
       String? moderationStatus,
       DateTime? readAt,
       DateTime? createdAt,
+      Map<String, dynamic>? payload,
+      List<Map<String, dynamic>>? actions,
       @JsonKey(includeFromJson: false, includeToJson: false)
       String? clientTempId,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -97,6 +101,8 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? moderationStatus = freezed,
     Object? readAt = freezed,
     Object? createdAt = freezed,
+    Object? payload = freezed,
+    Object? actions = freezed,
     Object? clientTempId = freezed,
     Object? deliveryState = null,
   }) {
@@ -137,6 +143,14 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      payload: freezed == payload
+          ? _value.payload
+          : payload // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      actions: freezed == actions
+          ? _value.actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
       clientTempId: freezed == clientTempId
           ? _value.clientTempId
           : clientTempId // ignore: cast_nullable_to_non_nullable
@@ -167,6 +181,8 @@ abstract class _$$MessageModelImplCopyWith<$Res>
       String? moderationStatus,
       DateTime? readAt,
       DateTime? createdAt,
+      Map<String, dynamic>? payload,
+      List<Map<String, dynamic>>? actions,
       @JsonKey(includeFromJson: false, includeToJson: false)
       String? clientTempId,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -195,6 +211,8 @@ class __$$MessageModelImplCopyWithImpl<$Res>
     Object? moderationStatus = freezed,
     Object? readAt = freezed,
     Object? createdAt = freezed,
+    Object? payload = freezed,
+    Object? actions = freezed,
     Object? clientTempId = freezed,
     Object? deliveryState = null,
   }) {
@@ -235,6 +253,14 @@ class __$$MessageModelImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      payload: freezed == payload
+          ? _value._payload
+          : payload // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      actions: freezed == actions
+          ? _value._actions
+          : actions // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>?,
       clientTempId: freezed == clientTempId
           ? _value.clientTempId
           : clientTempId // ignore: cast_nullable_to_non_nullable
@@ -260,10 +286,14 @@ class _$MessageModelImpl extends _MessageModel {
       this.moderationStatus,
       this.readAt,
       this.createdAt,
+      final Map<String, dynamic>? payload,
+      final List<Map<String, dynamic>>? actions,
       @JsonKey(includeFromJson: false, includeToJson: false) this.clientTempId,
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.deliveryState = MessageDeliveryState.sent})
-      : super._();
+      : _payload = payload,
+        _actions = actions,
+        super._();
 
   factory _$MessageModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MessageModelImplFromJson(json);
@@ -288,6 +318,25 @@ class _$MessageModelImpl extends _MessageModel {
   final DateTime? readAt;
   @override
   final DateTime? createdAt;
+  final Map<String, dynamic>? _payload;
+  @override
+  Map<String, dynamic>? get payload {
+    final value = _payload;
+    if (value == null) return null;
+    if (_payload is EqualUnmodifiableMapView) return _payload;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
+  final List<Map<String, dynamic>>? _actions;
+  @override
+  List<Map<String, dynamic>>? get actions {
+    final value = _actions;
+    if (value == null) return null;
+    if (_actions is EqualUnmodifiableListView) return _actions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   /// Id temporaire côté client (envoi optimiste), jamais renvoyé par
   /// l'API — sert uniquement à réconcilier la bulle locale avec la
@@ -304,7 +353,7 @@ class _$MessageModelImpl extends _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, conversationId: $conversationId, senderId: $senderId, senderRole: $senderRole, type: $type, content: $content, moderationStatus: $moderationStatus, readAt: $readAt, createdAt: $createdAt, clientTempId: $clientTempId, deliveryState: $deliveryState)';
+    return 'MessageModel(id: $id, conversationId: $conversationId, senderId: $senderId, senderRole: $senderRole, type: $type, content: $content, moderationStatus: $moderationStatus, readAt: $readAt, createdAt: $createdAt, payload: $payload, actions: $actions, clientTempId: $clientTempId, deliveryState: $deliveryState)';
   }
 
   @override
@@ -326,6 +375,8 @@ class _$MessageModelImpl extends _MessageModel {
             (identical(other.readAt, readAt) || other.readAt == readAt) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other._payload, _payload) &&
+            const DeepCollectionEquality().equals(other._actions, _actions) &&
             (identical(other.clientTempId, clientTempId) ||
                 other.clientTempId == clientTempId) &&
             (identical(other.deliveryState, deliveryState) ||
@@ -345,6 +396,8 @@ class _$MessageModelImpl extends _MessageModel {
       moderationStatus,
       readAt,
       createdAt,
+      const DeepCollectionEquality().hash(_payload),
+      const DeepCollectionEquality().hash(_actions),
       clientTempId,
       deliveryState);
 
@@ -375,6 +428,8 @@ abstract class _MessageModel extends MessageModel {
       final String? moderationStatus,
       final DateTime? readAt,
       final DateTime? createdAt,
+      final Map<String, dynamic>? payload,
+      final List<Map<String, dynamic>>? actions,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final String? clientTempId,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -402,6 +457,10 @@ abstract class _MessageModel extends MessageModel {
   DateTime? get readAt;
   @override
   DateTime? get createdAt;
+  @override
+  Map<String, dynamic>? get payload;
+  @override
+  List<Map<String, dynamic>>? get actions;
 
   /// Id temporaire côté client (envoi optimiste), jamais renvoyé par
   /// l'API — sert uniquement à réconcilier la bulle locale avec la

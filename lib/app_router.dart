@@ -127,9 +127,18 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: MessagesInboxPage.routePath,
-                name: MessagesInboxPage.name,
-                builder: (context, state) => const MessagesInboxPage(),
+                path: CalendarPageV2.routePath,
+                name: CalendarPageV2.name,
+                builder: (context, state) {
+                  final extra = state.extra;
+                  final showNotice = (extra is Map &&
+                          extra['showPostRefusalCalendarNotice'] == true) ||
+                      extra == true;
+                  return CalendarPageV2(
+                    showPostRefusalNotice: showNotice,
+                    noticeToken: extra,
+                  );
+                },
               ),
             ],
           ),
@@ -144,9 +153,9 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: CalendarPageV2.routePath,
-                name: CalendarPageV2.name,
-                builder: (context, state) => const CalendarPageV2(),
+                path: MessagesInboxPage.routePath,
+                name: MessagesInboxPage.name,
+                builder: (context, state) => const MessagesInboxPage(),
               ),
             ],
           ),
@@ -612,6 +621,7 @@ class AppRouter {
         name: MessageThreadPage.name,
         builder: (context, state) => MessageThreadPage(
           conversationId: state.pathParameters['conversationId']!,
+          focusComposer: state.uri.queryParameters['focusComposer'] == 'true',
         ),
       ),
     ],

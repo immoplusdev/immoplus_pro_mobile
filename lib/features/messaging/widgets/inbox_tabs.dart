@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../../../data/models/remote/messaging/conversation_type_count.dart';
 
-/// Rangée d'onglets "pills" : Toutes / Réservation / Visite / Support.
+/// Rangée d'onglets "pills" : Toutes / Réservations / Visites / Relais / Support.
 class InboxTabs extends StatelessWidget {
   const InboxTabs({
     super.key,
@@ -30,11 +31,12 @@ class InboxTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final items = <(ConversationType?, String)>[
-      (null, 'Toutes'),
-      (ConversationType.reservation, 'Réservation'),
-      (ConversationType.visite, 'Visite'),
-      (ConversationType.support, 'Support'),
+    final items = <(ConversationType?, String, IconData)>[
+      (null, 'Toutes', Iconsax.messages),
+      (ConversationType.reservation, 'Réservations', Iconsax.calendar),
+      (ConversationType.visite, 'Visites', Iconsax.eye),
+      (ConversationType.relais, 'Relais', Iconsax.repeat),
+      (ConversationType.support, 'Support', Iconsax.headphone),
     ];
 
     return SizedBox(
@@ -45,31 +47,51 @@ class InboxTabs extends StatelessWidget {
         itemCount: items.length,
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
-          final (type, label) = items[index];
+          final (type, label, icon) = items[index];
           final isSelected = type == activeType;
           final unread = _unreadFor(type);
           return GestureDetector(
             onTap: () => onSelect(type),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
               padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.primary : Colors.white,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color:
-                      isSelected ? AppColors.primary : Colors.blue.shade100,
+                  color: isSelected
+                      ? AppColors.primary
+                      : const Color(0xFFE2E8F0),
                 ),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        )
+                      ]
+                    : null,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Icon(
+                    icon,
+                    size: 16,
+                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                  ),
+                  const SizedBox(width: 6),
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected ? Colors.white : AppColors.primary,
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.w500,
+                      color: isSelected
+                          ? Colors.white
+                          : const Color(0xFF334155),
                     ),
                   ),
                   if (unread > 0) ...[
@@ -86,7 +108,8 @@ class InboxTabs extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? AppColors.primary : Colors.white,
+                          color:
+                              isSelected ? AppColors.primary : Colors.white,
                         ),
                       ),
                     ),
@@ -100,3 +123,4 @@ class InboxTabs extends StatelessWidget {
     );
   }
 }
+

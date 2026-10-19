@@ -32,6 +32,8 @@ class MessageModel with _$MessageModel {
     String? moderationStatus,
     DateTime? readAt,
     DateTime? createdAt,
+    Map<String, dynamic>? payload,
+    List<Map<String, dynamic>>? actions,
 
     /// Id temporaire côté client (envoi optimiste), jamais renvoyé par
     /// l'API — sert uniquement à réconcilier la bulle locale avec la
@@ -54,6 +56,8 @@ class MessageModel with _$MessageModel {
 
   /// Côté Pro, l'utilisateur connecté est le pro : "de moi" = `pro`.
   bool get isFromPro => senderRoleEnum == MessageSenderRole.pro;
+
+  bool get isExpired => payload?['expired'] == true;
 }
 
 enum MessageDeliveryState {

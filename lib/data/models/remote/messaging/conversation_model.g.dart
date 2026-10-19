@@ -25,6 +25,15 @@ _$ConversationModelImpl _$$ConversationModelImplFromJson(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      stage: json['stage'] as String?,
+      pendingActionFor:
+          _readPendingActionFor(json, 'pendingActionFor') as String?,
+      relaisId: _readRelaisId(json, 'relaisId') as String?,
+      reservationId: _readReservationId(json, 'reservationId') as String?,
+      actions: (json['actions'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
+      readOnly: _readReadOnly(json, 'readOnly') as bool? ?? false,
     );
 
 Map<String, dynamic> _$$ConversationModelImplToJson(
@@ -42,4 +51,10 @@ Map<String, dynamic> _$$ConversationModelImplToJson(
       'lastMessagePreview': instance.lastMessagePreview,
       'lastMessageAt': instance.lastMessageAt?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
+      'stage': instance.stage,
+      'pendingActionFor': instance.pendingActionFor,
+      'relaisId': instance.relaisId,
+      'reservationId': instance.reservationId,
+      'actions': instance.actions,
+      'readOnly': instance.readOnly,
     };

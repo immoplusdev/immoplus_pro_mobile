@@ -5,17 +5,19 @@ import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/reservations/owner_invitation_model.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/features/booking/booking_detail_page.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_cubit.dart';
 import 'package:immoplus_pro/features/reservations/invitations/owner_invitations_state.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_cubit.dart';
+import 'package:immoplus_pro/features/reservations/refusal/reservation_refusal_reason_bottom_sheet.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:intl/intl.dart';
-import 'package:immoplus_pro/services/analytics_service.dart';
-import 'package:immoplus_pro/core/injection.dart';
 
 /// Card d'action "à répondre" : réservation en attente de réponse
 /// propriétaire OU invitation reverse-search (client cherchant une
@@ -258,9 +260,25 @@ class PendingReservationCardV2 extends StatelessWidget {
             TextButton.icon(
               onPressed: isLoading
                   ? null
-                  : () => context
-                      .read<PendingReservationsCubit>()
-                      .refuser(reservationModel.id),
+                  : () async {
+                      final confirmed = await AppDialog.confirmDialog(
+                        context: context,
+                        content:
+                            "Êtes-vous sûr de vouloir refuser cette réservation ?",
+                      );
+                      if (confirmed == true && context.mounted) {
+                        final success = await context
+                            .read<PendingReservationsCubit>()
+                            .refuser(reservationModel.id);
+                        if (success && context.mounted) {
+                          ReservationRefusalReasonBottomSheet.show(
+                            context,
+                            reservationId: reservationModel.id,
+                            reservation: reservationModel,
+                          );
+                        }
+                      }
+                    },
               icon: const Icon(Iconsax.close_circle, size: 16),
               label: const Text("Refuser",
                   style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),

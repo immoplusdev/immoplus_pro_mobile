@@ -16,13 +16,12 @@ import 'package:immoplus_pro/features/account/widgets/edit_account.dart';
 import 'package:immoplus_pro/features/booking/booking_history_page.dart';
 import 'package:immoplus_pro/features/estates/estates_page.dart';
 import 'package:immoplus_pro/features/furnitures/furnitures_page.dart';
-import 'package:immoplus_pro/features/contract/logic/contract_mode.dart';
-import 'package:immoplus_pro/features/contract/screens/contract_page.dart';
 import 'package:immoplus_pro/features/home_page/pages/general_condition_page.dart';
 import 'package:immoplus_pro/features/contact_change/view/change_credentials_page.dart';
 import 'package:immoplus_pro/features/residence/residences_page.dart';
 import 'package:immoplus_pro/features/reservations/pending/pending_reservations_page.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
+import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 import 'package:immoplus_pro/utils/utils.dart';
 import 'package:shimmer/shimmer.dart';
@@ -189,7 +188,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     horizontalTitleGap: 0,
                     leading: ImmoIcon(ImmoIcons.resi, color: AppColors.primary),
                     title: const Text('Résidences'),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -213,12 +213,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(EstatesPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.treeCity,
+                    leading: FaIcon(
+                      FontAwesomeIcons.treeCity,
                       color: AppColors.primary,
                       size: 20,
                     ),
                     title: const Text('Biens immobiliers'),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -243,12 +245,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         context.pushNamed(FurnituresPage.name);
                       },
                       horizontalTitleGap: 0,
-                      leading: FaIcon(FontAwesomeIcons.couch,
+                      leading: FaIcon(
+                        FontAwesomeIcons.couch,
                         color: AppColors.primary,
                         size: 20,
                       ),
                       title: const Text('Mes meubles'),
-                      trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                      trailing: FaIcon(
+                        FontAwesomeIcons.circleChevronRight,
                         size: 15,
                         color: AppColors.primary,
                       ),
@@ -280,7 +284,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Réservations en attente',
                       maxLines: 1,
                     ),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -295,7 +300,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(BookingHistoryPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.suitcaseRolling,
+                    leading: FaIcon(
+                      FontAwesomeIcons.suitcaseRolling,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -303,7 +309,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Historique des réservations',
                       maxLines: 1,
                     ),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -328,7 +335,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       context.pushNamed(VisitHistoryPage.name);
                     },
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.route,
+                    leading: FaIcon(
+                      FontAwesomeIcons.route,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -336,7 +344,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       'Historique des visites',
                       maxLines: 1,
                     ),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -364,7 +373,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       }
                     },
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.userPen,
+                    leading: FaIcon(
+                      FontAwesomeIcons.userPen,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -382,12 +392,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ListTile(
                     tileColor: Colors.white,
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.userShield,
+                    leading: FaIcon(
+                      FontAwesomeIcons.userShield,
                       color: AppColors.primary,
                       size: 20,
                     ),
                     title: const Text('Changer mes identifiants de connexion'),
-                    trailing: FaIcon(FontAwesomeIcons.circleChevronRight,
+                    trailing: FaIcon(
+                      FontAwesomeIcons.circleChevronRight,
                       size: 15,
                       color: AppColors.primary,
                     ),
@@ -411,7 +423,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       );
                     },
                     horizontalTitleGap: 0,
-                    leading: FaIcon(FontAwesomeIcons.fileContract,
+                    leading: FaIcon(
+                      FontAwesomeIcons.fileContract,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -460,7 +473,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   const Gap(20),
                   ListTile(
                     horizontalTitleGap: 0,
-                    leading: const FaIcon(FontAwesomeIcons.arrowRightFromBracket,
+                    leading: const FaIcon(
+                      FontAwesomeIcons.arrowRightFromBracket,
                       color: Colors.redAccent,
                       size: 20,
                     ),
@@ -490,9 +504,15 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               CupertinoDialogAction(
                                 isDestructiveAction: true,
                                 onPressed: () async {
-                                  // SessionManager.logout() ferme tous les dialogs
-                                  // avant de naviguer — pas besoin de pop() ici.
-                                  await SessionManager().logout();
+                                  Navigator.of(dialogContext).pop();
+                                  EasyLoadingHandler.showLoadingToast(
+                                    text: "Déconnexion en cours...",
+                                  );
+                                  try {
+                                    await SessionManager().logout();
+                                  } finally {
+                                    EasyLoadingHandler.hideLoadingToast();
+                                  }
                                 },
                                 child: const Text('Déconnexion'),
                               ),

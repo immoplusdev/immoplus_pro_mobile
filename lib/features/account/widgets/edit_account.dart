@@ -21,7 +21,6 @@ import 'package:immoplus_pro/utils/formuar_controller.dart';
 import 'package:immoplus_pro/utils/formular_utils.dart';
 import 'package:immoplus_pro/utils/toast_utils.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:immoplus_pro/utils/status_code_handler.dart';
 
 class EditAccount extends StatefulWidget {
   const EditAccount({super.key});
@@ -177,8 +176,7 @@ class _EditAccountState extends State<EditAccount> {
         height: 100,
         padding: const EdgeInsets.all(10.0),
         margin: EdgeInsets.only(
-            bottom:
-                MediaQuery.of(context).viewInsets.bottom + kDefaultPadding),
+            bottom: MediaQuery.of(context).viewInsets.bottom + kDefaultPadding),
         child: BlocBuilder<LoginCubit, LoginCubitState>(
           builder: (context, state) {
             return CustomLoadingButtom(
@@ -204,17 +202,14 @@ class _EditAccountState extends State<EditAccount> {
                             file: fileUploaderController.file!);
                       }
 
-                      if (_formKey.currentState!.validate() &&
-                          isPhoneNumberValid) {
+                      if (_formKey.currentState!.validate()) {
                         FocusScope.of(context).unfocus();
 
                         final body = UpdateUserDto(
                           firstName: _formController.firstName!.text,
                           lastName: _formController.lastName!.text,
-                          email: _formController.email!.text,
                           avatar:
                               avatar ?? SessionManager().currentUser!.avatar,
-                          phoneNumber: phoneNumber,
                         );
 
                         context.read<LoginCubit>().updateUserData(

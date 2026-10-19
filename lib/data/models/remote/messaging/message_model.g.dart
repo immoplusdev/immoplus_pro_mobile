@@ -21,6 +21,10 @@ _$MessageModelImpl _$$MessageModelImplFromJson(Map<String, dynamic> json) =>
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      payload: json['payload'] as Map<String, dynamic>?,
+      actions: (json['actions'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
     );
 
 Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
@@ -34,4 +38,6 @@ Map<String, dynamic> _$$MessageModelImplToJson(_$MessageModelImpl instance) =>
       'moderationStatus': instance.moderationStatus,
       'readAt': instance.readAt?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
+      'payload': instance.payload,
+      'actions': instance.actions,
     };

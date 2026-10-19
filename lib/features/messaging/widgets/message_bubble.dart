@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 
 import '../../../data/models/remote/messaging/message_model.dart';
@@ -51,8 +52,8 @@ class MessageBubble extends StatelessWidget {
                       ? CircleAvatar(
                           radius: 14,
                           backgroundColor: AppColors.primaryLite,
-                          child: Icon(Icons.person,
-                              size: 16, color: AppColors.primary),
+                          child: Icon(Iconsax.user,
+                              size: 14, color: AppColors.primary),
                         )
                       : null,
                 ),
@@ -75,7 +76,7 @@ class MessageBubble extends StatelessWidget {
                   child: Text(
                     message.content,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 14,
                       height: 1.4,
                       color: isSelf ? Colors.white : const Color(0xFF1F2937),
                     ),
@@ -124,7 +125,7 @@ class _StatusRow extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.error_outline, size: 14, color: AppColors.redFF0000),
+          Icon(Iconsax.danger, size: 14, color: AppColors.redFF0000),
           const SizedBox(width: 4),
           Text(
             'Échec',
@@ -170,7 +171,7 @@ class _StatusRow extends StatelessWidget {
               ),
             )
           else
-            Icon(Icons.done, size: 13, color: Colors.grey.shade400),
+            Icon(Iconsax.tick_circle, size: 13, color: Colors.grey.shade400),
         ],
         if (isSelf && showReadMarker) ...[
           const SizedBox(width: 6),

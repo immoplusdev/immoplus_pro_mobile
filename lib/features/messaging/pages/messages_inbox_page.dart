@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import '../../../data/models/remote/messaging/conversation_model.dart';
 import '../logic/inbox_cubit.dart';
 import '../logic/inbox_state.dart';
+import '../widgets/actions/messaging_settings_sheet.dart';
 import '../widgets/conversation_tile.dart';
 import '../widgets/inbox_tabs.dart';
 import '../widgets/message_composer_sheet.dart';
@@ -39,6 +40,8 @@ class _MessagesInboxView extends StatelessWidget {
         return 'Aucune conversation liée à une réservation.';
       case ConversationType.visite:
         return 'Aucune conversation liée à une visite.';
+      case ConversationType.relais:
+        return 'Aucun relais client actif.';
       case ConversationType.support:
         return "Vous n'avez pas encore contacté le support.";
       case null:
@@ -65,6 +68,13 @@ class _MessagesInboxView extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Iconsax.setting_2, color: Colors.black),
+            onPressed: () => MessagingSettingsSheet.show(context),
+            tooltip: 'Réglages de messagerie',
+          ),
+        ],
       ),
       body: BlocBuilder<InboxCubit, InboxState>(
         builder: (context, state) {
@@ -189,7 +199,7 @@ class _MessagesInboxView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.wifi_off, size: 40, color: Colors.grey.shade400),
+                    Icon(Iconsax.wifi_square, size: 40, color: Colors.grey.shade400),
                     const SizedBox(height: 12),
                     Text(message, textAlign: TextAlign.center),
                     const SizedBox(height: 16),

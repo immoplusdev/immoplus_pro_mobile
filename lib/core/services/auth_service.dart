@@ -67,8 +67,8 @@ class AuthService {
         ..identityVerified = currentUser.identityVerified
         ..createdAt = currentUser.createdAt;
 
-      // Sauvegarder en session
-      await SessionManager().saveUser(updatedUser);
+      // Sauvegarder en session sans relancer l'enregistrement push
+      await SessionManager().saveUser(updatedUser, registerPush: false);
       getIt<ReservationSocketService>().connect();
       getIt<MessagingSocketService>().connect();
 

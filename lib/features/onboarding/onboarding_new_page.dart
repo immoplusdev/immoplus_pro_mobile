@@ -8,8 +8,9 @@ import 'package:immoplus_pro/features/authentification/authentification_page.dar
 import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
 import 'package:immoplus_pro/features/shared_widgets/custom_button.dart';
 import 'package:immoplus_pro/services/notification_actif_service.dart';
+import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class OnboardingNewPage extends StatefulWidget {
   const OnboardingNewPage({super.key});
@@ -78,6 +79,7 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
   void _showNotificationModal() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.6),
       isScrollControlled: true,
@@ -86,13 +88,16 @@ class _OnboardingNewPageState extends State<OnboardingNewPage> {
       builder: (sheetCtx) => NotificationActifSheet(
         onAccept: () async {
           Navigator.of(sheetCtx).pop();
-          await NotificationActifService.setStatus(NotificationActifService.accepted);
-          await OneSignal.Notifications.requestPermission(true);
+          await NotificationActifService.setStatus(
+              NotificationActifService.accepted);
+          await Permission.notification.request();
+          await getIt<NotificationService>().suscribeCurrentUser();
           await _navigateLoginPage();
         },
         onMaybeLater: () async {
           Navigator.of(sheetCtx).pop();
-          await NotificationActifService.setStatus(NotificationActifService.maybeLater);
+          await NotificationActifService.setStatus(
+              NotificationActifService.maybeLater);
           await _navigateLoginPage();
         },
       ),
@@ -326,4 +331,3 @@ class OnBoardingItem {
     required this.image,
   });
 }
-
