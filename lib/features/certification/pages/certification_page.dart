@@ -408,7 +408,7 @@ class _CertificationPageState extends State<CertificationPage> {
     if (score >= 85) {
       return {
         'name': 'Or',
-        'color': const Color(0xFFFFD700),
+        'color': AppColors.gold400,
       };
     } else if (score >= 70) {
       return {

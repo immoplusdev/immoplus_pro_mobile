@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
@@ -112,7 +113,7 @@ class _EmptyState extends StatelessWidget {
             child: Text(
               'Aucune résidence marquée indisponible',
               style: calDmSans(
-                color: const Color(0xFF64748B),
+                color: AppColors.slate500,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),

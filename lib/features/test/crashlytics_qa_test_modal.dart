@@ -92,7 +92,7 @@ class _CrashlyticsQaTestModalState extends State<CrashlyticsQaTestModal> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
               ),
@@ -132,7 +132,7 @@ class _CrashlyticsQaTestModalState extends State<CrashlyticsQaTestModal> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1E293B),
+                color: AppColors.slate800,
               ),
             ),
             subtitle: Text(

@@ -100,7 +100,7 @@ class _AccountPageV2State extends State<AccountPageV2>
 
   /// Mêmes paliers que sur la page Certification (Or/Argent/Bronze) pour
   ({String name, Color color}) _certificationLevel(int score) {
-    if (score >= 85) return (name: 'Or', color: const Color(0xFFFFD700));
+    if (score >= 85) return (name: 'Or', color: AppColors.gold400);
     if (score >= 70) return (name: 'Argent', color: const Color(0xFFC0C0C0));
     if (score >= 50) return (name: 'Bronze', color: const Color(0xFFCD7F32));
     if (score > 0) return (name: 'Novice', color: Colors.orange);
@@ -368,7 +368,7 @@ class _AccountPageV2State extends State<AccountPageV2>
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
+              color: AppColors.slate800,
             ),
           ),
         ),

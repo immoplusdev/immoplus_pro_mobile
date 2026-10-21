@@ -99,6 +99,10 @@ import 'package:immoplus_pro/services/crashlytics_service.dart';
 class AppRouter {
   static bool userIs = false;
   static bool alreadyOpened = false;
+
+  static BuildContext? get context =>
+      NavigationService.navigatorKey.currentContext;
+
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',

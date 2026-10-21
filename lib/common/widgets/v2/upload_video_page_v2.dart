@@ -129,7 +129,7 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF3F4F6),
+                    color: AppColors.chipBackground,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: _videoPath.isEmpty

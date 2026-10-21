@@ -32,7 +32,7 @@ class DemandeStep1Overview extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF4FF),
+                  color: AppColors.blue40,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -64,7 +64,7 @@ class DemandeStep1Overview extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
-              color: Color(0xFF1E293B),
+              color: AppColors.slate800,
             ),
           ),
           const Gap(8),
@@ -108,7 +108,7 @@ class DemandeStep1Overview extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
                 Padding(
@@ -133,7 +133,7 @@ class DemandeStep1Overview extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
               ],
@@ -148,7 +148,7 @@ class DemandeStep1Overview extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1E293B),
+                color: AppColors.slate800,
               ),
             ),
             const Gap(12),
@@ -166,7 +166,7 @@ class DemandeStep1Overview extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFEFF4FF),
+              color: AppColors.blue40,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(

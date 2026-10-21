@@ -72,7 +72,7 @@ class _AvailabilityAnswerSheetState extends State<AvailabilityAnswerSheet> {
             title: 'Disponible',
             subtitle: 'Confirmer que la résidence est libre pour ces dates.',
             icon: Iconsax.tick_circle,
-            color: const Color(0xFF0F6E56),
+            color: AppColors.emerald700,
             isSelected: _selectedAvailable == true,
             onTap: () => setState(() => _selectedAvailable = true),
           ),
@@ -176,7 +176,7 @@ class _OptionTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? color : const Color(0xFF1E293B),
+                      color: isSelected ? color : AppColors.slate800,
                     ),
                   ),
                   const SizedBox(height: 2),

@@ -168,7 +168,7 @@ class _StayProposalSheetState extends State<StayProposalSheet> {
                         style: TextStyle(
                           fontSize: 14,
                           color: _checkInDate != null
-                              ? const Color(0xFF1E293B)
+                              ? AppColors.slate800
                               : Colors.grey.shade500,
                           fontWeight: _checkInDate != null
                               ? FontWeight.w600

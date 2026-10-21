@@ -114,7 +114,7 @@ class _FurnitureSelectorSheetState extends State<FurnitureSelectorSheet> {
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 filled: true,
-                fillColor: const Color(0xFFF3F4F6),
+                fillColor: AppColors.chipBackground,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,

@@ -16,9 +16,9 @@ abstract class _Constants {
 
   static const Color cardBackgroundColor = Color(0xFFF8FAFC);
   static const Color cardBorderColor = Color(0xFFE2E8F0);
-  static const Color titleColor = Color(0xFF0F172A);
-  static const Color subtitleColor = Color(0xFF64748B);
-  static const Color placeholderBgColor = Color(0xFFF1F5F9);
+  static const Color titleColor = AppColors.slate900;
+  static const Color subtitleColor = AppColors.slate500;
+  static const Color placeholderBgColor = AppColors.slate100;
   static const Color placeholderIconColor = Color(0xFF94A3B8);
 
   static const TextStyle titleStyle = TextStyle(
@@ -37,7 +37,7 @@ abstract class _Constants {
   static const TextStyle amountStyle = TextStyle(
     fontSize: 13.0,
     fontWeight: FontWeight.w700,
-    color: Color(0xFF2744DE),
+    color: AppColors.blue500,
   );
 }
 

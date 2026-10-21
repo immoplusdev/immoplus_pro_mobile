@@ -91,7 +91,7 @@ class DemandeCardV2 extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF0F172A),
+                        color: AppColors.slate900,
                       ),
                     ),
                   ),
@@ -129,7 +129,7 @@ class DemandeCardV2 extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.slate900,
                   ),
                 ),
               ],
@@ -164,7 +164,7 @@ class DemandeCardV2 extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF4FF),
+        color: AppColors.blue40,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
