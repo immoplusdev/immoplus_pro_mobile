@@ -26,7 +26,10 @@ import 'package:immoplus_pro/features/pin_code/logic/cubit/pin_code_cubit.dart'
 import 'package:immoplus_pro/features/pin_code/views/services/biometry_service.dart'
     as _i521;
 import 'package:immoplus_pro/services/analytics_service.dart' as _i1047;
+import 'package:immoplus_pro/services/crashlytics_service.dart' as _i269;
 import 'package:immoplus_pro/services/deep_link_services.dart' as _i178;
+import 'package:immoplus_pro/services/firebase_crashlytics_service_impl.dart'
+    as _i429;
 import 'package:immoplus_pro/services/messaging_socket_service.dart' as _i185;
 import 'package:immoplus_pro/services/notification_service.dart' as _i873;
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart'
@@ -75,6 +78,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i991.PushInstallationService());
     gh.lazySingleton<_i1047.AnalyticsService>(
         () => _i1047.FirebaseAnalyticsService());
+    gh.lazySingleton<_i269.CrashlyticsService>(
+        () => _i429.FirebaseCrashlyticsServiceImpl());
     gh.lazySingleton<_i1036.PushProvider>(() => _i212.FirebasePushProvider());
     gh.factory<_i135.ConversationThreadCubit>(() =>
         _i135.ConversationThreadCubit(gh<_i185.MessagingSocketService>()));

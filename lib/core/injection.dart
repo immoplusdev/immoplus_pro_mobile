@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:immoplus_pro/firebase_options.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/services/deep_link_services.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:immoplus_pro/services/remote_config_service.dart';
@@ -16,14 +17,24 @@ final getIt = GetIt.instance;
 @InjectableInit()
 Future<void> configureDependencies() async {
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
   } catch (e) {
     log('⚠️ Firebase.initializeApp() error: $e', name: 'INJECTION');
   }
 
   getIt.init();
+
+  try {
+    await getIt<CrashlyticsService>().init();
+    log('CrashlyticsService.init() done', name: 'INJECTION');
+  } catch (e) {
+    log('⚠️ CrashlyticsService.init() failed: $e', name: 'INJECTION');
+  }
+
   await getIt<DeepLinkServices>().initUniLinks();
   await getIt<EasyLoadingHandler>().init();
   await getIt<RemoteConfigService>().initialize();

@@ -7,9 +7,11 @@ import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/mot
 import 'package:immoplus_pro/data/models/remote/reservations/failure_reasons/motif_item.dart';
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/refusal_reason_recap_card.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/residence_mini_card.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 enum ProFailureReasonCode {
@@ -220,11 +222,21 @@ class _ReservationRefusalReasonBottomSheetState
         _isSubmitting = false;
         _currentStep = 2;
       });
-    } catch (e) {
+    } catch (e, stack) {
       if (!mounted) return;
       setState(() {
         _isSubmitting = false;
       });
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'ReservationRefusalReasonBottomSheet',
+        feature: 'reservation_refusal',
+        errorType: 'SubmitMotifEchecException',
+        additionalContext: {
+          'reason_code': _selectedMotif?.code ?? 'unknown',
+        },
+      );
       EasyLoadingHandler.showErrorToast(
         text: "Impossible d'enregistrer le motif. Veuillez réessayer.",
       );

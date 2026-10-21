@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/foundation.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,6 +12,7 @@ import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/features/test/crashlytics_qa_test_modal.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:immoplus_pro/data/schemas/user_model_schema.dart';
@@ -302,8 +304,15 @@ class _AccountPageV2State extends State<AccountPageV2>
                           heightFactor: 0.9, child: GeneralConditionPage()),
                     );
                   },
-                  isLast: true,
+                  isLast: kReleaseMode,
                 ),
+                if (!kReleaseMode)
+                  _buildActionItem(
+                    iconData: Iconsax.danger,
+                    title: "Crashlytics Test (DEV/QA)",
+                    onTap: () => CrashlyticsQaTestModal.show(context),
+                    isLast: true,
+                  ),
               ],
             ),
 
