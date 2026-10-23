@@ -80,7 +80,7 @@ class InboxTabs extends StatelessWidget {
                   Icon(
                     icon,
                     size: 16,
-                    color: isSelected ? Colors.white : const Color(0xFF64748B),
+                    color: isSelected ? Colors.white : AppColors.slate500,
                   ),
                   const SizedBox(width: 6),
                   Text(

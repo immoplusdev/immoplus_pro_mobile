@@ -48,7 +48,7 @@ class ChoicePromptWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.slate900,
                   ),
                 ),
               ],

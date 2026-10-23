@@ -171,10 +171,12 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
           ),
         ),
         body: BlocListener<LoginCubit, LoginCubitState>(
+          listenWhen: (previous, current) =>
+              previous is LOGIN_LOADING && current is LOGIN_SUCCESS,
           listener: (context, state) {
-            if (state is LOGIN_SUCCESS) {
-              ToastUtils.success('Documents mis à jour avec succès');
-            }
+            ToastUtils.dismissAll();
+            ToastUtils.success('Documents mis à jour avec succès');
+            context.pop();
           },
           child: Form(
             key: _formKey,
@@ -194,18 +196,20 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
         bottomNavigationBar: isReadOnly
             ? null
             : Container(
-                height: 120,
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: BlocBuilder<LoginCubit, LoginCubitState>(
-                      builder: (context, state) {
-                        return CustomLoadingButtom(
-                          isLoading: state is LOGIN_LOADING,
-                          onClick: state is LOGIN_LOADING ? null : _submit,
-                          text: "Enregistrer",
-                        );
-                      },
+                    child: SizedBox(
+                      height: 50,
+                      child: BlocBuilder<LoginCubit, LoginCubitState>(
+                        builder: (context, state) {
+                          return CustomLoadingButtom(
+                            isLoading: state is LOGIN_LOADING,
+                            onClick: state is LOGIN_LOADING ? null : _submit,
+                            text: "Enregistrer",
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),

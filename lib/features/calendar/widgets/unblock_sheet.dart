@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
@@ -66,7 +67,7 @@ Future<void> showCalUnblockSheet({
                               label: 'Dates',
                               value: calFormatDateLong(day),
                             ),
-                            const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                            const Divider(height: 1, color: AppColors.slate100),
                             CalDetailLine(
                               icon: Iconsax.house,
                               label: 'Résidences',
@@ -215,7 +216,7 @@ Future<bool> showCalConfirmUnblockDialog({
                 '${calFormatDateLong(day)} — ${calCompactNames(residenceNames)}',
                 textAlign: TextAlign.center,
                 style: calDmSans(
-                  color: const Color(0xFF64748B),
+                  color: AppColors.slate500,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),

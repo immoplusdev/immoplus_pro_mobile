@@ -53,7 +53,7 @@ class DemandeStep3Success extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Color(0xFF0F172A),
+              color: AppColors.slate900,
             ),
           ),
           const Gap(6),
@@ -97,7 +97,7 @@ class DemandeStep3Success extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
                 const Gap(2),
@@ -116,7 +116,7 @@ class DemandeStep3Success extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.slate900,
                   ),
                 ),
               ],
@@ -154,7 +154,7 @@ class DemandeStep3Success extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
               ],

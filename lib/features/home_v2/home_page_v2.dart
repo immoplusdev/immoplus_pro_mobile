@@ -277,7 +277,7 @@ class _HomePageV2State extends State<HomePageV2>
 
   /// Couleur de l'anneau ET de l'icône du badge selon le score de
   Color _certificationColor(int score) {
-    if (score >= 85) return const Color(0xFFFFD700); // Or
+    if (score >= 85) return AppColors.gold400; // Or
     if (score >= 70) return const Color(0xFFC0C0C0); // Argent
     if (score >= 50) return const Color(0xFFCD7F32); // Bronze
     if (score > 0) return Colors.orange; // En progression
@@ -1391,8 +1391,8 @@ class _HomePageV2State extends State<HomePageV2>
                           child: _buildBalanceColumnFixed(
                             label: "Solde disponible",
                             amount: wallet.availableBalance.toString(),
-                            dotColor: Color(0xff1CA53F).withOpacity(.2),
-                            dolarColor: Color(0xff1CA53F),
+                            dotColor: AppColors.green500.withOpacity(.2),
+                            dolarColor: AppColors.green500,
                           ),
                         ),
                         Container(
@@ -1519,7 +1519,7 @@ class _Constants {
   static const double blueHeaderHeight = 180.0;
   static const double walletBannerHeight = 130.0;
 
-  static const double stickyHeaderHeight = 125.0;
+  static const double stickyHeaderHeight = 128.0;
   static const double tabHeight = 48.0;
   static const double actionCircleSize = 50.0;
 
@@ -1544,7 +1544,7 @@ class _Constants {
   static const double certifBadgeDiameter = 24.0;
 
   // Colors
-  static const Color primaryAccent = Color(0xFF2744DE);
+  static const Color primaryAccent = AppColors.blue500;
 
   // Common UI assets
   static const String defaultAvatarUrl =

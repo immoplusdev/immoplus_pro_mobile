@@ -146,7 +146,7 @@ class BookingCardV2 extends StatelessWidget {
                                       horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: isPaid
-                                        ? const Color(0xFF1CA53F)
+                                        ? AppColors.green500
                                             .withOpacity(0.1)
                                         : isAwaitingPayment
                                             ? const Color(0xFFFFF7E6)
@@ -163,7 +163,7 @@ class BookingCardV2 extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 8,
                                       color: isPaid
-                                          ? const Color(0xFF1CA53F)
+                                          ? AppColors.green500
                                           : isAwaitingPayment
                                               ? Colors.orange.shade800
                                               : Colors.grey.shade700,
