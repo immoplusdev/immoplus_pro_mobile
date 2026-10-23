@@ -176,6 +176,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
           listener: (context, state) {
             ToastUtils.dismissAll();
             ToastUtils.success('Documents mis à jour avec succès');
+            context.pop();
           },
           child: Form(
             key: _formKey,
