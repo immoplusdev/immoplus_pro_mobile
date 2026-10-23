@@ -1519,7 +1519,7 @@ class _Constants {
   static const double blueHeaderHeight = 180.0;
   static const double walletBannerHeight = 130.0;
 
-  static const double stickyHeaderHeight = 125.0;
+  static const double stickyHeaderHeight = 128.0;
   static const double tabHeight = 48.0;
   static const double actionCircleSize = 50.0;
 
