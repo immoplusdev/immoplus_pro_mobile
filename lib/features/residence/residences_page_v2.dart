@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -119,6 +121,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
         _pagingController.appendPage(result.data ?? [], nextPageKey);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
       _pagingController.error = error;
     }
   }

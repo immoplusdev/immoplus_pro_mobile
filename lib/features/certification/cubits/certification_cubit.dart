@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/features/certification/repositories/certification_repository.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
@@ -13,7 +16,8 @@ class CertificationCubit extends Cubit<RequestState> {
       final certification = await CertificationRepository.getMyCertification();
       emit(RequestState.certification(data: certification));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.certification);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.certification)));
     }
   }
 }

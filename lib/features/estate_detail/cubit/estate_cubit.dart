@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_single.dart';
@@ -18,7 +21,8 @@ class EstateCubit extends Cubit<RequestState> {
         emit(const REQUEST_INITIAL());
       }
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -34,7 +38,8 @@ class EstateCubit extends Cubit<RequestState> {
         emit(const REQUEST_INITIAL());
       }
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -52,7 +57,8 @@ class EstateCubit extends Cubit<RequestState> {
             const RequestState.error(error: "Échec de la suppression du bien"));
       }
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 }

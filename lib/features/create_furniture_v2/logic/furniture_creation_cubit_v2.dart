@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/core/services/image_upload_service.dart';
@@ -271,7 +274,8 @@ class FurnitureCreationCubitV2 extends Cubit<FurnitureCreationStateV2> {
         ));
       }
     } catch (e) {
-      emit(state.copyWith(isLoading: false, error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingPublish);
+      emit(state.copyWith(isLoading: false, error: ErrorMessages.messageOf(e, ErrorContext.listingPublish)));
     }
   }
 

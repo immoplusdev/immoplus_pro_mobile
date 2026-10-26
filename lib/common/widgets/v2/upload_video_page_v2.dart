@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +77,9 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
       }
     } catch (e) {
       if (mounted) {
-        EasyLoadingHandler.showErrorToast(text: "Échec de l'envoi");
+        if (!ErrorFeedback.show(e, context: ErrorContext.fileUpload)) {
+          EasyLoadingHandler.showErrorToast(text: "Échec de l'envoi");
+        }
       }
     } finally {
       EasyLoadingHandler.hideLoadingToast();

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:easy_stepper/easy_stepper.dart';
@@ -121,7 +123,9 @@ class _CreateFurniturePageState extends State<CreateFurniturePage> {
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
-      ToastUtils.showError(title: 'Erreur : $e');
+      if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+        ToastUtils.showError(title: 'Erreur : $e');
+      }
       log('Erreur soumission meuble : $e', name: 'CREATE_FURNITURE');
     } finally {
       if (mounted) {

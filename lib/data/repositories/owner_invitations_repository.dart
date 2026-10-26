@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -59,10 +60,10 @@ class OwnerInvitationsRepository {
       );
     } on DioException catch (e) {
       log('DioError confirming invitation: ${e.message}');
-      throw Exception('Failed to confirm invitation: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error confirming invitation: $e');
-      throw Exception('Failed to confirm invitation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -81,10 +82,10 @@ class OwnerInvitationsRepository {
       );
     } on DioException catch (e) {
       log('DioError declining invitation: ${e.message}');
-      throw Exception('Failed to decline invitation: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error declining invitation: $e');
-      throw Exception('Failed to decline invitation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 }

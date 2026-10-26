@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -84,9 +86,11 @@ class _MessageComposerSheetState extends State<MessageComposerSheet> {
       }
       setState(() => _isSending = false);
       EasyLoading.showError("Le message n'a pas pu être envoyé. Réessayer.");
-    } catch (_) {
+    } catch (e) {
       setState(() => _isSending = false);
-      EasyLoading.showError("Le message n'a pas pu être envoyé. Réessayer.");
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        EasyLoading.showError("Le message n'a pas pu être envoyé. Réessayer.");
+      }
     }
   }
 

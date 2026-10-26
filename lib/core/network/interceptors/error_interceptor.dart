@@ -1,17 +1,13 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'package:immoplus_pro/core/logger/immo_logger.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/core/services/auth_service.dart';
 import 'package:immoplus_pro/data/enums/api_error_code.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
-import 'package:immoplus_pro/services/navigation_service.dart';
-import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
-import 'package:immoplus_pro/utils/toast_utils.dart';
 
 const _silentErrorCodes = {
   ApiErrorCode.jwtTokenExpired,
@@ -19,8 +15,8 @@ const _silentErrorCodes = {
 };
 
 /// Endpoints dont les erreurs sont gérées entièrement par l'écran appelant
-/// (dialog dédié au contexte), pour éviter un doublon avec le toast/dialog
-/// générique ci-dessous.
+/// (dialog dédié au contexte) ou qui sont des requêtes de fond : aucun retour
+/// utilisateur global.
 const _silentRequestPaths = {
   '/reservations/action/valider-presence',
   '/reverse-searches/data/invitations/owner',
@@ -41,30 +37,24 @@ class ErrorInterceptor extends Interceptor {
       if (handled) return; // Si traité avec succès, on s'arrête ici
     }
 
-    final isSilentRequest =
-        _silentRequestPaths.any((path) => err.requestOptions.path.contains(path));
+    // L'intercepteur n'affiche aucune UI : il convertit l'erreur technique en
+    // AppError (portée par `err.error`) que la feature présente via
+    // ErrorFeedback. Les requêtes dont l'écran gère lui-même l'erreur, et
+    // les requêtes de fond, sont marquées silencieuses (ou via
+    // `Options(extra: {AppErrorMapper.silentKey: true})`).
+    final requiresLogout = apiErrorResponse?.requiresLogout == true;
+    final isSilent = requiresLogout ||
+        _silentErrorCodes.contains(apiErrorResponse?.errorCode) ||
+        _silentRequestPaths
+            .any((path) => err.requestOptions.path.contains(path));
+    final appError = AppErrorMapper.fromDio(err, forceSilent: isSilent);
 
-    if (!isSilentRequest) {
-      // Certaines erreurs ont un dialog dédié (avec CTA de navigation) plutôt
-      // qu'un simple toast.
-      if (apiErrorResponse?.errorCode.hasDedicatedDialog == true) {
-        ApiErrorDialog.showForCode(
-          apiErrorResponse!.errorCode,
-          message: apiErrorResponse.message,
-        );
-      } else if (!_silentErrorCodes.contains(apiErrorResponse?.errorCode)) {
-        // Afficher le toast d'erreur (sauf pour token expiré qui sera géré par refresh) et social account not found
-        _showErrorToast(apiErrorResponse, err.response);
-      }
-    }
+    // Session invalide : déconnexion (et redirection) gérées ici, donc aucun
+    // retour supplémentaire. L'erreur est tout de même propagée pour que les
+    // appelants ne restent pas bloqués sur un chargement infini.
+    if (requiresLogout) await SessionManager().logout();
 
-    // Gérer la déconnexion si nécessaire
-    if (apiErrorResponse?.requiresLogout == true) {
-      await SessionManager().logout();
-      return; // Pas besoin d'appeler super.onError après déconnexion
-    }
-
-    super.onError(err, handler);
+    handler.next(err.copyWith(error: appError));
   }
 
   /// Parse la réponse d'erreur de façon sécurisée
@@ -107,63 +97,5 @@ class ErrorInterceptor extends Interceptor {
     }
 
     return false; // Indique que l'erreur n'a pas pu être traitée
-  }
-
-  /// Affiche le toast d'erreur approprié
-  void _showErrorToast(ApiErrorResponse? apiErrorResponse, Response? response) {
-    final context = NavigationService.navigatorKey.currentContext;
-    final message = apiErrorResponse?.message ?? _manageResponse(response);
-
-    if (context == null) {
-      Fluttertoast.showToast(
-        msg: message,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return;
-    }
-
-    ToastUtils.showError(
-      title: "Oops, quelque chose s'est mal passé.",
-      description: message,
-    );
-  }
-
-  _manageResponse(Response? response) {
-    try {
-      if (response?.data != null) {
-        if (response?.data['message'] != null) {
-          return response?.data['message'];
-        }
-      }
-      return _getMessageFromStatusCode(response?.statusCode);
-    } catch (e) {
-      ImmoLogger.e("manageResponse", e);
-      return _getMessageFromStatusCode(response?.statusCode);
-    }
-  }
-
-  /// Messages de fallback basés sur les codes de statut HTTP
-  String _getMessageFromStatusCode(int? statusCode) {
-    switch (statusCode) {
-      case 400:
-        return 'Nous avons rencontré une erreur lors du traitement de votre requête.';
-      case 401:
-        return "Non autorisé : Vous n'avez pas les permissions nécessaires.";
-      case 403:
-        return "Accès interdit : Vous n'êtes pas autorisé à accéder à cette ressource.";
-      case 404:
-        return "Ressource introuvable : La page que vous recherchez n'existe pas.";
-      case 405:
-        return "Méthode non autorisée : La méthode HTTP utilisée n'est pas supportée pour cette ressource.";
-      case 500:
-        return "Erreur interne du serveur : Une erreur inattendue s'est produite.";
-      case 502:
-        return "Bad Gateway : Le serveur a reçu une réponse invalide ";
-      case 503:
-        return "Service indisponible : Le serveur est temporairement indisponible.";
-      default:
-        return "Une erreur inconnue ${statusCode != null ? "($statusCode)" : ""}) s'est produite.";
-    }
   }
 }

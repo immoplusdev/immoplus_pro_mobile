@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -80,7 +82,9 @@ class _RateGuestSheetState extends State<RateGuestSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      EasyLoading.showError('Impossible d\'envoyer l\'évaluation.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.rating)) {
+        EasyLoading.showError('Impossible d\'envoyer l\'évaluation.');
+      }
     }
   }
 

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -86,8 +88,10 @@ class _QuickRepliesSheetState extends State<QuickRepliesSheet> {
   Future<void> _save(List<String> list) async {
     try {
       await MessagingRepository.updateQuickReplies(list);
-    } catch (_) {
-      EasyLoading.showError('Erreur de sauvegarde des réponses rapides.');
+    } catch (e) {
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        EasyLoading.showError('Erreur de sauvegarde des réponses rapides.');
+      }
     }
   }
 

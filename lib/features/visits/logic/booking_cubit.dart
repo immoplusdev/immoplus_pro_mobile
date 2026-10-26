@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/demande_visit_response.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
@@ -25,7 +28,8 @@ class VisitCubit extends Cubit<VisitRequestState> {
           await BienImmobilierRepository.getVisit(id: id);
       emit(VisitRequestState.receiveId(reservationModel));
     } catch (e) {
-      emit(VisitRequestState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.reservationLoad);
+      emit(VisitRequestState.error(ErrorMessages.messageOf(e, ErrorContext.reservationLoad)));
     }
   }
 }

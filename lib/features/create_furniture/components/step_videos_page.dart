@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -70,7 +72,8 @@ class _StepVideosPageState extends State<StepVideosPage> {
           _chewieController = null;
           setState(() => _isLoading = false);
         });
-    } catch (_) {
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.fileUpload);
       if (mounted) setState(() => _isLoading = false);
     }
   }

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/core/services/image_upload_service.dart';
@@ -314,6 +316,7 @@ class EstateCreationCubitV2 extends Cubit<EstateCreationStateV2> {
         emit(state.copyWith(id: result.data?.id, isSubmitting: false, submissionSuccess: true));
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.listingPublish);
       emit(state.copyWith(isSubmitting: false, submissionSuccess: false));
     }
   }

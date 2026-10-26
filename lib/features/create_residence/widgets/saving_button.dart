@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
@@ -43,7 +45,9 @@ class _SavingButtonState extends State<SavingButton> {
               },
             );
           } catch (e) {
-            EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+            if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+              EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+            }
           }
         },
       ),

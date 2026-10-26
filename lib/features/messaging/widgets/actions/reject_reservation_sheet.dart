@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -83,7 +85,9 @@ class _RejectReservationSheetState extends State<RejectReservationSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      EasyLoading.showError('Le refus a échoué. Réessayez.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.reservationAction)) {
+        EasyLoading.showError('Le refus a échoué. Réessayez.');
+      }
     }
   }
 
