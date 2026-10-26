@@ -12,6 +12,8 @@ import 'package:immoplus_pro/cubits/authentification/delete_account_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/delete_account_cubit_state.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/features/test/crashlytics_qa_test_modal.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -54,6 +56,8 @@ class _AccountPageV2State extends State<AccountPageV2>
     currentUser = sessionManager.currentUser;
     _refreshNotificationStatus();
     _loadCertification();
+    getIt<AnalyticsService>().logCertificationBannerViewed(
+        placement: CertificationPlacement.account);
   }
 
   @override
@@ -72,7 +76,8 @@ class _AccountPageV2State extends State<AccountPageV2>
   Future<void> _refreshNotificationStatus() async {
     if (!mounted) return;
 
-    final osGranted = await Permission.notification.isGranted;
+    final status = await Permission.notification.status;
+    final osGranted = status.isGranted || status.isProvisional;
     if (osGranted) {
       getIt<NotificationService>().suscribeCurrentUser();
     }
@@ -85,6 +90,17 @@ class _AccountPageV2State extends State<AccountPageV2>
   }
 
   Future<void> _toggleNotifications(bool value) async {
+    final status = await Permission.notification.status;
+
+    // Tant que la permission n'a jamais été refusée définitivement, on
+    // affiche la demande système : sur Android 13+ et iOS, les réglages de
+    // l'app n'exposent pas le switch avant cette première demande.
+    if (value && status.isDenied) {
+      await Permission.notification.request();
+      await _refreshNotificationStatus();
+      return;
+    }
+
     await AppSettings.openAppSettings(type: AppSettingsType.notification);
   }
 
@@ -100,7 +116,7 @@ class _AccountPageV2State extends State<AccountPageV2>
 
   /// Mêmes paliers que sur la page Certification (Or/Argent/Bronze) pour
   ({String name, Color color}) _certificationLevel(int score) {
-    if (score >= 85) return (name: 'Or', color: const Color(0xFFFFD700));
+    if (score >= 85) return (name: 'Or', color: AppColors.gold400);
     if (score >= 70) return (name: 'Argent', color: const Color(0xFFC0C0C0));
     if (score >= 50) return (name: 'Bronze', color: const Color(0xFFCD7F32));
     if (score > 0) return (name: 'Novice', color: Colors.orange);
@@ -282,7 +298,11 @@ class _AccountPageV2State extends State<AccountPageV2>
                 _buildActionItem(
                   icon: Assets.svgs.icons.securitySafe,
                   title: "Modifier mes documents",
-                  onTap: () => context.pushNamed(EditIdentityDocuments.name),
+                  onTap: () async {
+                    await context.pushNamed(EditIdentityDocuments.name);
+                    currentUser = sessionManager.currentUser;
+                    if (mounted) setState(() {});
+                  },
                 ),
                 _buildActionItem(
                   icon: Assets.svgs.userSquare,
@@ -368,7 +388,7 @@ class _AccountPageV2State extends State<AccountPageV2>
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
+              color: AppColors.slate800,
             ),
           ),
         ),
@@ -425,7 +445,11 @@ class _AccountPageV2State extends State<AccountPageV2>
     final level = _certificationLevel(data?.scoreTotal ?? 0);
 
     return ListTile(
-      onTap: () => context.pushNamed(CertificationPage.name),
+      onTap: () {
+        getIt<AnalyticsService>().logCertificationBannerTapped(
+            placement: CertificationPlacement.account);
+        context.pushNamed(CertificationPage.name);
+      },
       contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
       leading: Container(
         width: 40,

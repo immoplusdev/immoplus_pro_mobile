@@ -63,7 +63,7 @@ class ContactUtils {
               _buildContactItem(
                 context: context,
                 icon: Iconsax.message,
-                iconColor: const Color(0xFF25D366),
+                iconColor: AppColors.whatsAppGreen,
                 title: "Écrivez-nous sur WhatsApp",
                 onTap: () {
                   Navigator.pop(context);

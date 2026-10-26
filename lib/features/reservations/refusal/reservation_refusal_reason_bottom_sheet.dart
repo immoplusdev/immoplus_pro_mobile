@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -11,7 +12,10 @@ import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/refusal_reason_recap_card.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/residence_mini_card.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/crashlytics_service.dart';
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 enum ProFailureReasonCode {
@@ -40,18 +44,18 @@ abstract class _Constants {
       EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0);
 
   static const Color sheetBgColor = Colors.white;
-  static const Color dragHandleColor = Color(0xFFCBD5E1);
+  static const Color dragHandleColor = AppColors.slate300;
   static const Color itemBorderColor = Color(0xFFE2E8F0);
-  static const Color itemSelectedBorderColor = Color(0xFF2744DE);
+  static const Color itemSelectedBorderColor = AppColors.blue500;
   static const Color itemSelectedBgColor = Color(0xFFF4F6FE);
-  static const Color itemUnselectedBgColor = Color(0xFFFFFFFF);
-  static const Color primaryBlue = Color(0xFF2744DE);
+  static const Color itemUnselectedBgColor = AppColors.white;
+  static const Color primaryBlue = AppColors.blue500;
   static const Color successGreen = Color(0xFF17A30D);
   static const Color successGreenLight = Color(0xFFEAF8EC);
 
-  static const Color titleColor = Color(0xFF0F172A);
-  static const Color subtitleColor = Color(0xFF64748B);
-  static const Color textColor = Color(0xFF1E293B);
+  static const Color titleColor = AppColors.slate900;
+  static const Color subtitleColor = AppColors.slate500;
+  static const Color textColor = AppColors.slate800;
 
   static const TextStyle titleStyle = TextStyle(
     fontSize: 18.0,
@@ -215,6 +219,8 @@ class _ReservationRefusalReasonBottomSheetState
         comment: comment.isNotEmpty ? comment : null,
       );
 
+      _trackRefusal(reasonCode: _selectedMotif!.code, notes: comment);
+
       if (!mounted) return;
 
       setState(() {
@@ -241,6 +247,15 @@ class _ReservationRefusalReasonBottomSheetState
         text: "Impossible d'enregistrer le motif. Veuillez réessayer.",
       );
     }
+  }
+
+  void _trackRefusal({required String reasonCode, required String notes}) {
+    getIt<AnalyticsService>().logBookingRefused(
+      idReservation: widget.reservationId,
+      reason: RefusalReason.fromBackendCode(reasonCode),
+      notes: notes,
+    );
+    getIt<RefusalFollowUpTracker>().onBookingRefused(widget.reservationId);
   }
 
   @override

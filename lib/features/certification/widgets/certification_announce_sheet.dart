@@ -90,7 +90,7 @@ class CertificationAnnounceSheet extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _BonusCard(
-                          color: const Color(0xFF1CA53F),
+                          color: AppColors.green500,
                           label: "Bonus à l'acceptation",
                           amount: "250 F CFA",
                           description:

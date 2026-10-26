@@ -96,7 +96,7 @@ Future<String?> showOtpInputDialog(
                     style: GoogleFonts.plusJakartaSans(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF64748B),
+                      color: AppColors.slate500,
                     ),
                   ),
                   const SizedBox(height: 24),

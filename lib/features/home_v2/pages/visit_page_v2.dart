@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/data/enums/home_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
@@ -13,8 +14,6 @@ import 'package:immoplus_pro/common/widgets/v2/immo_empty_display.dart';
 import 'package:immoplus_pro/features/visits/visit_history_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
-
-enum VisitFilterV2 { all, express, normal }
 
 class VisitPageV2 extends StatefulWidget {
   final ValueNotifier<VisitFilterV2> filterNotifier;

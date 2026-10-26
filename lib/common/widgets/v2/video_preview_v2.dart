@@ -77,7 +77,7 @@ class _VideoPreviewV2State extends State<VideoPreviewV2> {
         width: double.infinity,
         height: 150,
         decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
+          color: AppColors.chipBackground,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
@@ -91,7 +91,7 @@ class _VideoPreviewV2State extends State<VideoPreviewV2> {
         width: double.infinity,
         height: 150,
         decoration: BoxDecoration(
-          color: const Color(0xFFF3F4F6),
+          color: AppColors.chipBackground,
           borderRadius: BorderRadius.circular(15),
         ),
         child: const Center(

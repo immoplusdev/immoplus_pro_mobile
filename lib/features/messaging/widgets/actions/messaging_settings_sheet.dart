@@ -178,7 +178,7 @@ class _MessagingSettingsSheetState extends State<MessagingSettingsSheet> {
                           style: TextStyle(
                             fontSize: 13,
                             color: _absenceUntil != null
-                                ? const Color(0xFF1E293B)
+                                ? AppColors.slate800
                                 : Colors.grey.shade500,
                           ),
                         ),

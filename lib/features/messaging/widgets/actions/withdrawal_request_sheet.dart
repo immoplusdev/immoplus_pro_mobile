@@ -106,10 +106,10 @@ class _WithdrawalRequestSheetState extends State<WithdrawalRequestSheet> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0F6E56).withValues(alpha: 0.1),
+                    color: AppColors.emerald700.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Iconsax.money_send, color: Color(0xFF0F6E56), size: 24),
+                  child: const Icon(Iconsax.money_send, color: AppColors.emerald700, size: 24),
                 ),
                 const SizedBox(width: 12),
                 const Expanded(
@@ -190,7 +190,7 @@ class _WithdrawalRequestSheetState extends State<WithdrawalRequestSheet> {
               child: ElevatedButton(
                 onPressed: !_isSubmitting ? _submit : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0F6E56),
+                  backgroundColor: AppColors.emerald700,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60),

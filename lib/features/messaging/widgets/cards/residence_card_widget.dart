@@ -82,14 +82,14 @@ class ResidenceCardWidget extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF0F172A),
+                          color: AppColors.slate900,
                         ),
                       ),
                       const SizedBox(height: 2),
                       const Text(
                         'Résidence ImmoPlus',
                         style:
-                            TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                            TextStyle(fontSize: 11, color: AppColors.slate500),
                       ),
                     ],
                   ),

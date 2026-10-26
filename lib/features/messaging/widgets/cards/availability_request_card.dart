@@ -63,7 +63,7 @@ class AvailabilityRequestCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.slate900,
                   ),
                 ),
               ],
@@ -98,7 +98,7 @@ class AvailabilityRequestCard extends StatelessWidget {
                 child: const Text(
                   'Réponse envoyée',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                  style: TextStyle(fontSize: 12, color: AppColors.slate500),
                 ),
               )
             else if (canAnswer)
@@ -156,11 +156,11 @@ class _InfoTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 12, color: const Color(0xFF64748B)),
+              Icon(icon, size: 12, color: AppColors.slate500),
               const SizedBox(width: 4),
               Text(
                 label,
-                style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                style: const TextStyle(fontSize: 10, color: AppColors.slate500),
               ),
             ],
           ),
@@ -170,7 +170,7 @@ class _InfoTile extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
+              color: AppColors.slate800,
             ),
           ),
         ],
