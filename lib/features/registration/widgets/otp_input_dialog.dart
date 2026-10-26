@@ -56,13 +56,15 @@ Future<String?> showOtpInputDialog(
               if (success) {
                 Navigator.of(ctx).pop(code);
               } else {
+                // Vider le champ déclenche `onChanged`, qui efface l'erreur :
+                // on le fait avant de poser le message.
+                otpController.clear();
                 setState(() {
                   isVerifying = false;
                   final custom = inlineErrorOf?.call();
                   currentError = custom == null
                       ? 'Code invalide ou expiré. Veuillez réessayer.'
                       : (custom.isEmpty ? null : custom);
-                  otpController.clear();
                 });
               }
             }
