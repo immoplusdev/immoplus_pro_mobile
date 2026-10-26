@@ -14,6 +14,7 @@ import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit.dart';
 import 'package:immoplus_pro/cubits/authentification/login_cubit_state.dart';
+import 'package:immoplus_pro/data/enums/home_filters.dart';
 import 'package:immoplus_pro/features/home_v2/pages/booking_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/visit_page_v2.dart';
 import 'package:immoplus_pro/features/home_v2/pages/demandes_page_v2.dart';
@@ -25,6 +26,9 @@ import 'package:immoplus_pro/gen/assets.gen.dart';
 import 'package:immoplus_pro/features/notification/widgets/notification_actif_sheet.dart';
 import 'package:immoplus_pro/features/reservations/pending/qr_scan_deposit_sheet.dart';
 import 'package:immoplus_pro/features/reservations/pending/withdrawal_recap_sheet.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
+import 'package:immoplus_pro/data/enums/qr_scan_error.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/notification_actif_service.dart';
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/data/models/error/api_error_response.dart';
@@ -75,6 +79,7 @@ class _HomePageV2State extends State<HomePageV2>
     with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   final _remoteConfig = getIt<RemoteConfigService>();
+  final _analytics = getIt<AnalyticsService>();
   late TabController _tabController;
 
   UserModelSchema? currentUser;
@@ -108,7 +113,13 @@ class _HomePageV2State extends State<HomePageV2>
         setState(() {}); // Rafraîchir pour mettre à jour les filtres affichés
       }
     });
+    _bookingFilterNotifier.addListener(() =>
+        _analytics.logBookingFilterChanged(filter: _bookingFilterNotifier.value));
+    _visitFilterNotifier.addListener(() =>
+        _analytics.logVisitFilterChanged(filter: _visitFilterNotifier.value));
     currentUser = SessionManager().currentUser;
+    _analytics.logCertificationBannerViewed(
+        placement: CertificationPlacement.dashboard);
 
     context.read<WalletCubit>().onGetWallet();
     final notificationService = getIt<NotificationService>();
@@ -220,6 +231,12 @@ class _HomePageV2State extends State<HomePageV2>
   /// l'anneau de progression du dashboard ou via le bottom sheet d'annonce.
   void _goToCertification() {
     context.pushNamed(CertificationPage.name);
+  }
+
+  void _onCertificationBadgeTapped() {
+    _analytics.logCertificationBannerTapped(
+        placement: CertificationPlacement.dashboard);
+    _goToCertification();
   }
 
   /// Charge le score de certification pour alimenter l'anneau de
@@ -347,24 +364,29 @@ class _HomePageV2State extends State<HomePageV2>
     }
   }
 
+  void _onVaultUnlocked() {
+    _analytics.logVaultUnlocked();
+    setState(() => _isUnlocked = true);
+  }
+
   void _showPaiementDialog() {
     context.pushNamed(
       PinCodePageV2.name,
       extra: () {
-        setState(() {
-          _isUnlocked = true;
-        });
+        _onVaultUnlocked();
         context.pop();
       },
     );
   }
 
   Future<void> _scanAndValidatePresence() async {
+    _analytics.logQrScannerOpened();
     final qrToken = await QrScannerPage.scan(context);
     if (qrToken != null && qrToken.isNotEmpty) {
       EasyLoadingHandler.showLoadingToast(text: "Validation en cours...");
       try {
         await LogmentRepository.validerPresence(qrToken: qrToken);
+        _analytics.logQrPresenceValidated();
         EasyLoadingHandler.hideLoadingToast();
         if (!mounted) return;
         final recapShown = await _showWithdrawalRecap(qrToken);
@@ -436,55 +458,28 @@ class _HomePageV2State extends State<HomePageV2>
     context.pushNamed(
       PinCodePageV2.name,
       extra: () {
-        setState(() => _isUnlocked = true);
+        _onVaultUnlocked();
         context.pop();
         context.pushNamed(WithdrawFormScreenV2.name, extra: reservationId);
       },
     );
   }
 
-  /// Messages métier renvoyés par POST /reservations/action/valider-presence
-  static const _qrScanErrorContent =
-      <String, (String title, String description)>{
-    'Le QR code a expiré. Veuillez générer un nouveau QR code.': (
-      'QR code expiré',
-      'Le QR code a expiré. Demandez au client de générer un nouveau QR code puis réessayez.',
-    ),
-    'QR code invalide.': (
-      'QR code invalide',
-      "Ce QR code n'est pas reconnu. Vérifiez qu'il s'agit bien du QR code de réservation du client.",
-    ),
-    'Accès interdit': (
-      'Accès refusé',
-      "Vous n'êtes pas autorisé à valider cette réservation.",
-    ),
-    "La réservation n'est pas encore payée.": (
-      'Réservation non payée',
-      "La réservation n'est pas encore payée. La présence ne peut pas être validée tant que le paiement n'est pas effectué.",
-    ),
-    'La présence du client a déjà été validée pour cette réservation.': (
-      'Présence déjà validée',
-      'La présence du client a déjà été validée pour cette réservation.',
-    ),
-    'Ce QR code a déjà été utilisé.': (
-      'QR code déjà utilisé',
-      'Ce QR code a déjà été utilisé et ne peut plus servir à valider une présence.',
-    ),
-  };
-
   Future<void> _showQrScanErrorDialog(Object error) async {
     final message = _extractErrorMessage(error);
+    final scanError = QrScanError.fromBackendMessage(message);
+    _analytics.logQrPresenceFailed(error: scanError);
 
     // Le backend a renvoyé un message : on l'affiche toujours dans le dialog
     // personnalisé (titre précis si on le reconnaît, sinon titre générique
     // mais le vrai message du backend) — jamais le toast générique tant
     // qu'on a de quoi informer le pro sur la vraie raison de l'échec.
     if (message != null) {
-      final content = _qrScanErrorContent[message];
       if (!mounted) return;
+      final isKnown = scanError != QrScanError.unknown;
       await AppDialog.show(
-        title: content?.$1 ?? "Échec de la validation",
-        description: content?.$2 ?? message,
+        title: scanError.title,
+        description: isKnown ? scanError.description : message,
         primaryButtonText: 'Fermer',
       );
       return;
@@ -568,7 +563,7 @@ class _HomePageV2State extends State<HomePageV2>
                                 return Row(
                                   children: [
                                     GestureDetector(
-                                      onTap: _goToCertification,
+                                      onTap: _onCertificationBadgeTapped,
                                       child: CircularStepProgressIndicator(
                                         totalSteps: 100,
                                         currentStep:
@@ -660,8 +655,11 @@ class _HomePageV2State extends State<HomePageV2>
                                     ),
                                     const Gap(_Constants.gapMedium),
                                     IconButton(
-                                      onPressed: () => context
-                                          .push(NotificationPage.routePath()),
+                                      onPressed: () {
+                                        _analytics.logNotificationIconTapped();
+                                        context
+                                            .push(NotificationPage.routePath());
+                                      },
                                       icon: const Icon(
                                         Iconsax.notification,
                                         color: Colors.white,
@@ -739,6 +737,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         width: 30,
                                       ),
                                     ),
+                                    action: DashboardAction.estates,
                                     label: "Bien immobilier",
                                     onTap: () =>
                                         context.pushNamed(EstatesPageV2.name),
@@ -753,6 +752,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         width: 30,
                                       ),
                                     ),
+                                    action: DashboardAction.residences,
                                     label: "Résidences",
                                     onTap: () => context
                                         .pushNamed(ResidencesPageV2.name),
@@ -767,6 +767,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         width: 30,
                                       ),
                                     ),
+                                    action: DashboardAction.transactions,
                                     label: "Transactions",
                                     onTap: () =>
                                         context.pushNamed(PaymentsPageV2.name),
@@ -781,6 +782,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         width: 30,
                                       ),
                                     ),
+                                    action: DashboardAction.scanner,
                                     label: "Scanner",
                                     onTap: _scanAndValidatePresence,
                                   ),
@@ -795,6 +797,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         color: _Constants.primaryAccent,
                                       ),
                                     ),
+                                    action: DashboardAction.statistics,
                                     label: "Statistiques",
                                     onTap: () => context
                                         .push(OwnerStatsPage.routePath()),
@@ -837,6 +840,7 @@ class _HomePageV2State extends State<HomePageV2>
                                         width: 30,
                                       ),
                                     ),
+                                    action: DashboardAction.support,
                                     label: "Support",
                                     onTap: () => ContactUtils.showContact(),
                                   ),
@@ -876,7 +880,10 @@ class _HomePageV2State extends State<HomePageV2>
                             children: [
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () => _tabController.animateTo(0),
+                                  onTap: () {
+                                    _analytics.logTabReservationsTapped();
+                                    _tabController.animateTo(0);
+                                  },
                                   child: Transform.translate(
                                     offset: const Offset(0, 2),
                                     child: AnimatedContainer(
@@ -953,7 +960,10 @@ class _HomePageV2State extends State<HomePageV2>
                               ),
                               Expanded(
                                 child: GestureDetector(
-                                  onTap: () => _tabController.animateTo(1),
+                                  onTap: () {
+                                    _analytics.logTabVisitesTapped();
+                                    _tabController.animateTo(1);
+                                  },
                                   child: Transform.translate(
                                     offset: const Offset(0, 2),
                                     child: AnimatedContainer(
@@ -1171,11 +1181,15 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   Widget _buildDashboardAction(
-      {required Widget iconWidget,
+      {required DashboardAction action,
+      required Widget iconWidget,
       required String label,
       required VoidCallback onTap}) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        _analytics.logDashboardActionTapped(action: action);
+        onTap();
+      },
       child: Column(
         children: [
           Container(
@@ -1360,7 +1374,10 @@ class _HomePageV2State extends State<HomePageV2>
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: () => context.pushNamed(WithdrawFormScreenV2.name),
+                      onTap: () {
+                        _analytics.logWithdrawalButtonTapped();
+                        context.pushNamed(WithdrawFormScreenV2.name);
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 25, vertical: 5),

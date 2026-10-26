@@ -11,10 +11,15 @@ import 'package:immoplus_pro/data/models/reservations/reservations_collection.da
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_response.dart';
 import 'package:immoplus_pro/data/models/residence/residences_collection.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/providers/reservation_provider.dart';
 import 'package:immoplus_pro/data/providers/residence_provider.dart';
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart';
 
 class LogmentRepository {
+  /// Champ du tarif dans le payload de mise à jour d'une résidence.
+  static const String _priceField = 'prixReservation';
+
   static Future<ReservationsCollection> getReservations({
     required int page,
     required int perPage,
@@ -167,6 +172,9 @@ class LogmentRepository {
       final response =
           await ResidenceProvider(DioClient().dio).update(id, fields);
       inspect(response);
+      if (fields.containsKey(_priceField)) {
+        getIt<RefusalFollowUpTracker>().onPriceUpdated();
+      }
       return response;
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
@@ -252,6 +260,7 @@ class LogmentRepository {
       final response = await ResidenceProvider(DioClient().dio)
           .addUnavailabilityDates(id, {"dates": dates});
       inspect(response);
+      getIt<RefusalFollowUpTracker>().onCalendarUpdated();
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
@@ -347,6 +356,7 @@ class LogmentRepository {
       final response = await ResidenceProvider(DioClient().dio)
           .updateUnavailabilityDates(id, {"dates": dates});
       inspect(response);
+      getIt<RefusalFollowUpTracker>().onCalendarUpdated();
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');

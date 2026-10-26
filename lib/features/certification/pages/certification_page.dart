@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/features/certification/cubits/certification_cubit.dart';
 import 'package:immoplus_pro/features/certification/models/certification_model.dart';
 
@@ -21,6 +23,7 @@ class _CertificationPageState extends State<CertificationPage> {
   void initState() {
     super.initState();
     context.read<CertificationCubit>().loadCertification();
+    getIt<AnalyticsService>().logCertificationPageViewed();
   }
 
   @override

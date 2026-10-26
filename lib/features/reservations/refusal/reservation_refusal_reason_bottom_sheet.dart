@@ -12,7 +12,10 @@ import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/refusal_reason_recap_card.dart';
 import 'package:immoplus_pro/features/reservations/refusal/widgets/residence_mini_card.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/crashlytics_service.dart';
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 
 enum ProFailureReasonCode {
@@ -216,6 +219,8 @@ class _ReservationRefusalReasonBottomSheetState
         comment: comment.isNotEmpty ? comment : null,
       );
 
+      _trackRefusal(reasonCode: _selectedMotif!.code, notes: comment);
+
       if (!mounted) return;
 
       setState(() {
@@ -242,6 +247,15 @@ class _ReservationRefusalReasonBottomSheetState
         text: "Impossible d'enregistrer le motif. Veuillez réessayer.",
       );
     }
+  }
+
+  void _trackRefusal({required String reasonCode, required String notes}) {
+    getIt<AnalyticsService>().logBookingRefused(
+      idReservation: widget.reservationId,
+      reason: RefusalReason.fromBackendCode(reasonCode),
+      notes: notes,
+    );
+    getIt<RefusalFollowUpTracker>().onBookingRefused(widget.reservationId);
   }
 
   @override

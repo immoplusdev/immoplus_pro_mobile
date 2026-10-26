@@ -174,6 +174,7 @@ class _EditIdentityDocumentsState extends State<EditIdentityDocuments> {
           listenWhen: (previous, current) =>
               previous is LOGIN_LOADING && current is LOGIN_SUCCESS,
           listener: (context, state) {
+            getIt<AnalyticsService>().logCertificationDocumentsSubmitted();
             ToastUtils.dismissAll();
             ToastUtils.success('Documents mis à jour avec succès');
             context.pop();

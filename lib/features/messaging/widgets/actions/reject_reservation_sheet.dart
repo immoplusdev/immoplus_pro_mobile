@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
 import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart';
 
 class RejectReservationSheet extends StatefulWidget {
   const RejectReservationSheet({
@@ -66,6 +70,12 @@ class _RejectReservationSheetState extends State<RejectReservationSheet> {
             ? null
             : _notesController.text.trim(),
       );
+      getIt<AnalyticsService>().logBookingRefused(
+        idReservation: widget.reservationId,
+        reason: RefusalReason.fromBackendCode(_selectedReason),
+        notes: _notesController.text.trim(),
+      );
+      getIt<RefusalFollowUpTracker>().onBookingRefused(widget.reservationId);
       if (!mounted) return;
       EasyLoading.showSuccess('Réservation refusée.');
       widget.onRejected();

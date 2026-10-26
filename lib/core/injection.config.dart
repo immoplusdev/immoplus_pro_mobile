@@ -39,6 +39,7 @@ import 'package:immoplus_pro/services/push/firebase_push_provider.dart'
 import 'package:immoplus_pro/services/push/push_installation_service.dart'
     as _i991;
 import 'package:immoplus_pro/services/push/push_provider.dart' as _i1036;
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart' as _i630;
 import 'package:immoplus_pro/services/remote_config_service.dart' as _i215;
 import 'package:immoplus_pro/services/reservation_socket_service.dart' as _i908;
 import 'package:immoplus_pro/utils/easy_loading_handler.dart' as _i166;
@@ -80,6 +81,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1047.FirebaseAnalyticsService());
     gh.lazySingleton<_i269.CrashlyticsService>(
         () => _i429.FirebaseCrashlyticsServiceImpl());
+    gh.lazySingleton<_i630.RefusalFollowUpTracker>(
+        () => _i630.RefusalFollowUpTracker(gh<_i1047.AnalyticsService>()));
     gh.lazySingleton<_i1036.PushProvider>(() => _i212.FirebasePushProvider());
     gh.factory<_i135.ConversationThreadCubit>(() =>
         _i135.ConversationThreadCubit(gh<_i185.MessagingSocketService>()));
