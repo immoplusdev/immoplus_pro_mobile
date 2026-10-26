@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
@@ -16,13 +17,13 @@ abstract class _Constants {
 
   static const Color cardBackgroundColor = Color(0xFFFFF7F7);
   static const Color cardBorderColor = Color(0xFFFFE2E2);
-  static const Color badgeBgColor = Color(0xFFFEE2E2);
-  static const Color badgeTextColor = Color(0xFFDC2626);
-  static const Color commentBgColor = Color(0xFFFFFFFF);
-  static const Color commentBorderColor = Color(0xFFFEE2E2);
+  static const Color badgeBgColor = AppColors.red100;
+  static const Color badgeTextColor = AppColors.red600;
+  static const Color commentBgColor = AppColors.white;
+  static const Color commentBorderColor = AppColors.red100;
 
-  static const Color titleColor = Color(0xFF1E293B);
-  static const Color commentColor = Color(0xFF64748B);
+  static const Color titleColor = AppColors.slate800;
+  static const Color commentColor = AppColors.slate500;
   static const Color dateColor = Color(0xFF94A3B8);
 
   static const String defaultRefusalTitle = 'Réservation refusée';

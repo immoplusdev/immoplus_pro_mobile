@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _Constants {
   static const Duration countdownInterval = Duration(seconds: 1);
   static const Duration refetchDelay = Duration(seconds: 50);
 
-  static const Color bgColor = Color(0xFFFFFFFF);
+  static const Color bgColor = AppColors.white;
   static const Color accent = Color(0xFFAB8DFF);
   static const Color accentLight = Color(0xFFEEE8FF);
   static const Color textPrimary = Color(0xFF1A1A1A);

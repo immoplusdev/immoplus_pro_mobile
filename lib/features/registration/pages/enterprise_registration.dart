@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -158,7 +159,10 @@ class _EnterpriseRegistrationPageState
     final body = EnterpriseRegistrationBody(
       email: _formController.email!.text,
       emailEntreprise: _formController.email!.text,
-      phoneNumber: widget.dataRouterRegistration.phoneNumber,
+      phoneNumber: widget.dataRouterRegistration.phoneNumber == null
+          ? null
+          : PhoneNumberHandler.formatPhoneNumber(
+              widget.dataRouterRegistration.phoneNumber!),
       password: code,
       nomEntreprise: _formController.enterpriseName!.text,
       typeEntreprise: _formController.enterpriseType!.text,

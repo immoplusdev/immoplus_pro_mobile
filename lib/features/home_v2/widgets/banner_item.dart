@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/models/banners/banner_model.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/features/home_v2/widgets/banner_button.dart';
 
 enum BannerAction {
@@ -27,6 +29,8 @@ class BannerItem extends StatelessWidget {
   const BannerItem({super.key, required this.banner, this.onCloseTap});
 
   void _handleAction(BuildContext context, String? url) {
+    getIt<AnalyticsService>()
+        .logProBannerCtaTapped(bannerId: banner.id, type: banner.type);
     if (url == null) return;
 
     final action = BannerAction.fromUrl(url);

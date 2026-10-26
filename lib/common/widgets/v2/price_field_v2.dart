@@ -40,7 +40,7 @@ class PriceFieldV2 extends StatelessWidget {
             decoration: InputDecoration(
               isDense: true,
               filled: true,
-              fillColor: const Color(0xFFF3F4F6),
+              fillColor: AppColors.chipBackground,
               hintText: hintText,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

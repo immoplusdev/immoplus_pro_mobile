@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -269,7 +270,7 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
       ..showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-        backgroundColor: isError ? const Color(0xFFDC2626) : calInkColor,
+        backgroundColor: isError ? AppColors.red600 : calInkColor,
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 18),
         duration: const Duration(milliseconds: 2800),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

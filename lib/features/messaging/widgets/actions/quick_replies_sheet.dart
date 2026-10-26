@@ -166,7 +166,7 @@ class _QuickRepliesSheetState extends State<QuickRepliesSheet> {
                             child: Text(
                               text,
                               style: const TextStyle(
-                                  fontSize: 14, color: Color(0xFF1E293B)),
+                                  fontSize: 14, color: AppColors.slate800),
                             ),
                           ),
                           if (_isEditing)

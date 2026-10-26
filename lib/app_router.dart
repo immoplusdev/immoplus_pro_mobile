@@ -94,13 +94,21 @@ import 'package:immoplus_pro/core/injection.dart';
 // ── Messagerie ──
 import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 
 class AppRouter {
   static bool userIs = false;
   static bool alreadyOpened = false;
+
+  static BuildContext? get context =>
+      NavigationService.navigatorKey.currentContext;
+
   static GoRouter router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
     initialLocation: '/',
+    observers: [
+      CrashlyticsRouteObserver(getIt<CrashlyticsService>()),
+    ],
     redirect: (context, state) => null,
     routes: [
       GoRoute(

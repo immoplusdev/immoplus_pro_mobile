@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/authentification/authentification_page.dar
 import 'package:immoplus_pro/features/onboarding/data/onboarding_entity.dart';
 import 'package:immoplus_pro/main.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/services/messaging_socket_service.dart';
 import 'package:immoplus_pro/services/navigation_service.dart';
 import 'package:immoplus_pro/services/notification_service.dart';
@@ -82,6 +83,9 @@ class SessionManager {
     });
     currentUser = user;
 
+    final uid = user.userId ?? user.id.toString();
+    getIt<CrashlyticsService>().setUserId(uid);
+
     // Enregistrement de l'appareil FCM dès la connexion
     if (registerPush) {
       getIt<NotificationService>().suscribeCurrentUser();
@@ -93,6 +97,8 @@ class SessionManager {
       final user = await isarInstance.userModelSchemas.where().findFirst();
       if (user != null) {
         currentUser = user;
+        final uid = user.userId ?? user.id.toString();
+        getIt<CrashlyticsService>().setUserId(uid);
       }
     }
     print('Get User from Session: $currentUser');
@@ -130,6 +136,7 @@ class SessionManager {
       }
 
       getIt<AnalyticsService>().clearUser();
+      getIt<CrashlyticsService>().clearUserId();
 
       // ⚠️ CRITIQUE : Désabonner du backend AVANT de vider le token de session
       try {

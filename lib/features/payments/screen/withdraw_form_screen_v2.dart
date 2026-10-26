@@ -17,6 +17,7 @@ import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:toastification/toastification.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -250,11 +251,22 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
           );
         }
       }
-    } catch (e) {
+    } catch (e, stack) {
       EasyLoadingHandler.hideLoadingToast();
       getIt<AnalyticsService>().logWithdrawalFailed(
         montantRetrait: parsedAmount.toDouble(),
         paymentMethod: selectedOperator?.value,
+      );
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'WithdrawFormScreenV2',
+        feature: 'withdrawal',
+        errorType: 'WithdrawalSubmissionException',
+        additionalContext: {
+          'operator': selectedOperator?.value ?? 'unknown',
+          'is_qr': widget.reservationId != null,
+        },
       );
       if (mounted) {
         toastification.show(

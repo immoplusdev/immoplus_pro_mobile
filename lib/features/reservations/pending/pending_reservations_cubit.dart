@@ -99,7 +99,6 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     emit(const RequestState.loading());
     try {
       await LogmentRepository.refuserReservation(reservationId, notes: notes);
-      getIt<AnalyticsService>().logBookingRefused(idReservation: reservationId);
       pagingController.refresh();
       getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());

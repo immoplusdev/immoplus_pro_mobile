@@ -61,7 +61,7 @@ class StayProposalCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: isExpired ? Colors.grey.shade600 : const Color(0xFF0F172A),
+                    color: isExpired ? Colors.grey.shade600 : AppColors.slate900,
                   ),
                 ),
                 const Spacer(),
@@ -93,7 +93,7 @@ class StayProposalCard extends StatelessWidget {
                     children: [
                       const Text(
                         'Dates',
-                        style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                        style: TextStyle(fontSize: 10, color: AppColors.slate500),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -101,7 +101,7 @@ class StayProposalCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1E293B),
+                          color: AppColors.slate800,
                         ),
                       ),
                     ],
@@ -112,7 +112,7 @@ class StayProposalCard extends StatelessWidget {
                   children: [
                     const Text(
                       'Voyageurs',
-                      style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                      style: TextStyle(fontSize: 10, color: AppColors.slate500),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -120,7 +120,7 @@ class StayProposalCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF1E293B),
+                        color: AppColors.slate800,
                       ),
                     ),
                   ],
@@ -136,14 +136,14 @@ class StayProposalCard extends StatelessWidget {
                 children: [
                   const Text(
                     'Montant calculé :',
-                    style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 12, color: AppColors.slate500),
                   ),
                   Text(
                     amount,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: isExpired ? Colors.grey : const Color(0xFF0F6E56),
+                      color: isExpired ? Colors.grey : AppColors.emerald700,
                     ),
                   ),
                 ],

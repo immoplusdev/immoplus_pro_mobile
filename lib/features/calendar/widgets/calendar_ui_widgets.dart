@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -30,7 +31,7 @@ class CalResidenceAvatar extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        color: const Color(0xFFF1F5F9),
+        color: AppColors.slate100,
         child: hasImage
             ? Image(
                 image: CachedNetworkImageProvider(
@@ -179,7 +180,7 @@ class CalBlockedDateTile extends StatelessWidget {
                     calCompactNames(residences.map((r) => r.nom).toList()),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: calDmSans(color: const Color(0xFF64748B), fontSize: 12, fontWeight: FontWeight.w600),
+                    style: calDmSans(color: AppColors.slate500, fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -368,7 +369,7 @@ class CalDetailLine extends StatelessWidget {
             width: 80,
             child: Text(
               label,
-              style: calDmSans(color: const Color(0xFF64748B), fontSize: 12, fontWeight: FontWeight.w600),
+              style: calDmSans(color: AppColors.slate500, fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(
@@ -416,9 +417,9 @@ class CalSheetButton extends StatelessWidget {
           elevation: 0,
           backgroundColor: filled ? accent : Colors.white,
           disabledBackgroundColor: filled ? accent.withValues(alpha: 0.4) : Colors.white,
-          foregroundColor: filled ? Colors.white : const Color(0xFF64748B),
+          foregroundColor: filled ? Colors.white : AppColors.slate500,
           disabledForegroundColor:
-              filled ? Colors.white.withValues(alpha: 0.9) : const Color(0xFFCBD5E1),
+              filled ? Colors.white.withValues(alpha: 0.9) : AppColors.slate300,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
             side: BorderSide(color: filled ? Colors.transparent : calLineColor),
@@ -562,7 +563,7 @@ class CalendarMessageState extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: calDmSans(
-                color: const Color(0xFF64748B),
+                color: AppColors.slate500,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 height: 1.35,

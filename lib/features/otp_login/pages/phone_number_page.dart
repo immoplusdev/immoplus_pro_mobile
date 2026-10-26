@@ -194,7 +194,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     ),
                     onValidPhoneNumber: (value) {
                       phoneNumber = value;
-                      OTPState.phoneNumber = phoneNumber;
+                      OTPState.phoneNumber = PhoneNumberHandler.formatPhoneNumber(phoneNumber);
                     },
                     onInputValidated: onInputValidated,
                   ),
