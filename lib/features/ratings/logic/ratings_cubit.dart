@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/models/rating/host_rating_request_dto.dart';
 import 'package:immoplus_pro/data/repositories/rating_repository.dart';
@@ -12,7 +15,8 @@ class RatingsCubit extends Cubit<RatingsState> {
       await RatingRepository.submitRating(dto: dto);
       emit(const RatingsState.success());
     } catch (e) {
-      emit(RatingsState.failure(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.rating);
+      emit(RatingsState.failure(ErrorMessages.messageOf(e, ErrorContext.rating)));
     }
   }
 
@@ -25,7 +29,8 @@ class RatingsCubit extends Cubit<RatingsState> {
       );
       emit(RatingsState.historyLoaded(response));
     } catch (e) {
-      emit(RatingsState.failure(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.rating);
+      emit(RatingsState.failure(ErrorMessages.messageOf(e, ErrorContext.rating)));
     }
   }
 }

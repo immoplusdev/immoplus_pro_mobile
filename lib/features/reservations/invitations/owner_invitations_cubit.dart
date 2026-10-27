@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,8 +18,9 @@ class OwnerInvitationsCubit extends Cubit<OwnerInvitationsState> {
       log('load() success: ${items.length} item(s)', name: 'OWNER_INVITATIONS_CUBIT');
       emit(OwnerInvitationsLoaded(items));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.demand);
       log('load() failed: $e', name: 'OWNER_INVITATIONS_CUBIT');
-      emit(OwnerInvitationsError(e.toString()));
+      emit(OwnerInvitationsError(ErrorMessages.messageOf(e, ErrorContext.demand)));
     }
   }
 
@@ -34,7 +38,8 @@ class OwnerInvitationsCubit extends Cubit<OwnerInvitationsState> {
       final updated = current.items.where((i) => i.id != item.id).toList();
       emit(OwnerInvitationsLoaded(updated));
       return true;
-    } catch (_) {
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.demand);
       emit(current.copyWith(clearActingItemId: true));
       return false;
     }
@@ -53,7 +58,8 @@ class OwnerInvitationsCubit extends Cubit<OwnerInvitationsState> {
       final updated = current.items.where((i) => i.id != item.id).toList();
       emit(OwnerInvitationsLoaded(updated));
       return true;
-    } catch (_) {
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.demand);
       emit(current.copyWith(clearActingItemId: true));
       return false;
     }

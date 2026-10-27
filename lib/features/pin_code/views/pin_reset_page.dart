@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,6 +90,7 @@ class _PinResetPageState extends State<PinResetPage>
         autoCloseDuration: const Duration(seconds: 3),
       );
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.pinCode);
       EasyLoadingHandler.hideLoadingToast();
     } finally {
       setState(() => _isLoading = false);
@@ -214,6 +217,7 @@ class _PinResetPageState extends State<PinResetPage>
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
+      ErrorFeedback.showUnlessInputRefusal(e, context: ErrorContext.pinCode);
       _triggerShake();
       // On network or API error, let them re-verify new PIN/confirmation
       setState(() {

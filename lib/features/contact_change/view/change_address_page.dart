@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -52,16 +54,18 @@ class _ChangeAddressPageState extends State<ChangeAddressPage> {
       if (!mounted) return;
       EasyLoadingHandler.showSuccessToast(text: "Adresse enregistrée");
       context.pop();
-    } catch (_) {
+    } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
       if (!mounted) return;
-      toastification.show(
-        type: ToastificationType.error,
-        context: context,
-        title: const Text("Échec de l'enregistrement"),
-        description: const Text("Veuillez réessayer."),
-        autoCloseDuration: const Duration(seconds: 4),
-      );
+      if (!ErrorFeedback.show(e, context: ErrorContext.profileUpdate)) {
+        toastification.show(
+          type: ToastificationType.error,
+          context: context,
+          title: const Text("Échec de l'enregistrement"),
+          description: const Text("Veuillez réessayer."),
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }

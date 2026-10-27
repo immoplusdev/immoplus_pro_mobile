@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -51,10 +52,10 @@ class FurnitureRepository {
     } on DioException catch (dioError) {
       final errorMessage = _dioErrorMessage(dioError);
       log('DioError getFurnitures: $errorMessage', name: 'FURNITURE_REPO');
-      throw Exception('Échec du chargement des meubles : $errorMessage');
+      throw AppErrorMapper.from(dioError);
     } catch (error, s) {
       log('Error: $error $s', name: 'FURNITURE_REPO');
-      throw Exception('Échec du chargement des meubles : $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -67,10 +68,10 @@ class FurnitureRepository {
     } on DioException catch (dioError) {
       final errorMessage = _dioErrorMessage(dioError);
       log('DioError getFurniture: $errorMessage', name: 'FURNITURE_REPO');
-      throw Exception('Échec du chargement du meuble : $errorMessage');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error', name: 'FURNITURE_REPO');
-      throw Exception('Échec du chargement du meuble : $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -90,10 +91,10 @@ class FurnitureRepository {
     } on DioException catch (dioError) {
       final errorMessage = _dioErrorMessage(dioError);
       log('DioError createFurniture: $errorMessage', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la création du meuble : $errorMessage');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la création du meuble : $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -109,10 +110,10 @@ class FurnitureRepository {
     } on DioException catch (dioError) {
       final errorMessage = _dioErrorMessage(dioError);
       log('DioError updateFurniture: $errorMessage', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la modification du meuble : $errorMessage');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la modification du meuble : $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -134,10 +135,10 @@ class FurnitureRepository {
     } on DioException catch (dioError) {
       final errorMessage = _dioErrorMessage(dioError);
       log('DioError deleteFurniture: $errorMessage', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la suppression du meuble : $errorMessage');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error', name: 'FURNITURE_REPO');
-      throw Exception('Échec de la suppression du meuble : $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

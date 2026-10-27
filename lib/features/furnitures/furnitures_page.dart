@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +77,8 @@ class _FurnituresPageState extends State<FurnituresPage> {
         _pagingController.appendLastPage(response.data ?? []);
       }
     } catch (error) {
-      _pagingController.error = error.toString();
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
+      _pagingController.error = ErrorMessages.messageOf(error, ErrorContext.feedLoad);
     }
   }
 

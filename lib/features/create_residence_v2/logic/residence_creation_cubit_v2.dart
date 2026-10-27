@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/core/services/image_upload_service.dart';
 import 'package:immoplus_pro/data/models/residence/commodite_model.dart';
@@ -370,6 +372,7 @@ class ResidenceCreationCubitV2 extends Cubit<ResidenceCreationStateV2> {
         ));
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.listingPublish);
       emit(state.copyWith(isSubmitting: false, submissionSuccess: false));
     }
   }

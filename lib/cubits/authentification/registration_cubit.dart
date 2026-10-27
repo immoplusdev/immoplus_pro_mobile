@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -42,10 +44,12 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      ErrorFeedback.show(dioError, context: ErrorContext.authentication);
       return false;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      ErrorFeedback.show(error, context: ErrorContext.authentication);
       return false;
     }
   }
@@ -62,10 +66,15 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
       emit(RegistrationCubitState.initial());
+      // Code invalide / expiré : affiché sous le champ par le dialogue.
+      ErrorFeedback.showUnlessInputRefusal(dioError,
+          context: ErrorContext.authentication);
       return null;
     } catch (error) {
       log('Error: $error');
       emit(RegistrationCubitState.initial());
+      ErrorFeedback.showUnlessInputRefusal(error,
+          context: ErrorContext.authentication);
       return null;
     }
   }
@@ -122,6 +131,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.authentication);
     }
   }
 
@@ -193,6 +203,7 @@ class RgistrationCubitCubit extends Cubit<RegistrationCubitState> {
       log(e.toString(), name: "ERROR BLOC");
 
       emit(const RegistrationCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.authentication);
     }
   }
 

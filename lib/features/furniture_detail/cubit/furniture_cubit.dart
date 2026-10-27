@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/repositories/furniture_repository.dart';
 import 'package:immoplus_pro/features/furniture_detail/cubit/furniture_state.dart';
@@ -18,7 +21,8 @@ class FurnitureCubit extends Cubit<FurnitureState> {
         emit(const FurnitureState.initial());
       }
     } catch (e) {
-      emit(FurnitureState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(FurnitureState.error(ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -35,7 +39,8 @@ class FurnitureCubit extends Cubit<FurnitureState> {
         emit(const FurnitureState.initial());
       }
     } catch (e) {
-      emit(FurnitureState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(FurnitureState.error(ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -54,7 +59,8 @@ class FurnitureCubit extends Cubit<FurnitureState> {
             'Échec de la suppression du meuble'));
       }
     } catch (e) {
-      emit(FurnitureState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(FurnitureState.error(ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -25,10 +26,10 @@ class OwnerStatsRepository {
       return OwnerStatsDto.fromJson(statsJson);
     } on DioException catch (e) {
       log('DioError stats: ${e.message}');
-      throw Exception('Erreur lors du chargement des statistiques: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error stats: $e');
-      throw Exception('Erreur lors du chargement des statistiques: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 }

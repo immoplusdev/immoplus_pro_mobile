@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -26,7 +28,18 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   final sessionManager = getIt<SessionManager>();
   Future<void> _getData({required BuildContext context}) async {
-    ConfigModel configModel = await AuthRepository().getConfig();
+    final ConfigModel configModel;
+    try {
+      configModel = await AuthRepository().getConfig();
+    } catch (e) {
+      // Lecture seule : sûre à relancer.
+      ErrorFeedback.show(
+        e,
+        context: ErrorContext.appStartup,
+        retry: () => _getData(context: context),
+      );
+      return;
+    }
     sessionManager.configModel = configModel;
     bool hasSeenOnboarding = await SessionManager().hasReadOnboarding();
     final notificationService = getIt<NotificationService>();

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -157,7 +159,9 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                   },
                 );
               } catch (e) {
-                EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+                if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+                  EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+                }
               }
             } else {
               try {
@@ -178,7 +182,9 @@ class _LogmentPricePageState extends State<LogmentPricePage> {
                 );
               } catch (e) {
                 EasyLoading.dismiss();
-                EasyLoadingHandler.showErrorToast(text: 'Création échoué');
+                if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+                  EasyLoadingHandler.showErrorToast(text: 'Création échoué');
+                }
               }
             }
           }

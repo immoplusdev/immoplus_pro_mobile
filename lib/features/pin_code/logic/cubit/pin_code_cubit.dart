@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:immoplus_pro/features/pin_code/data/repositories/pin_code_repository.dart';
@@ -42,7 +44,7 @@ class PinCodeCubit extends Cubit<PinCodeState> {
         emit(const PinCodeState.createPin());
       }
     } catch (e) {
-      emit(PinCodeState.error(e.toString()));
+      emit(PinCodeState.error(ErrorMessages.messageOf(e, ErrorContext.pinCode)));
     }
   }
 
@@ -68,7 +70,7 @@ class PinCodeCubit extends Cubit<PinCodeState> {
               // For now, we'll just leave it as pinSet which the UI handles
             }
           } catch (e) {
-            emit(PinCodeState.error(e.toString()));
+            emit(PinCodeState.error(ErrorMessages.messageOf(e, ErrorContext.pinCode)));
             emit(const PinCodeState.createPin());
             _tempPin = null;
           }
@@ -122,7 +124,7 @@ class PinCodeCubit extends Cubit<PinCodeState> {
         }
       }
     } catch (e) {
-      emit(PinCodeState.error(e.toString()));
+      emit(PinCodeState.error(ErrorMessages.messageOf(e, ErrorContext.pinCode)));
       final availableBiometrics =
           await _biometryService.getAvailableBiometrics();
       emit(PinCodeState.enterPin(availableBiometrics));

@@ -10,6 +10,12 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:immoplus_pro/app/design_system/feedback/easy_loading_handler.dart'
+    as _i806;
+import 'package:immoplus_pro/core/error/error_feedback_coordinator.dart'
+    as _i791;
+import 'package:immoplus_pro/core/error/error_presenter.dart' as _i362;
+import 'package:immoplus_pro/core/error/ui_error_presenter.dart' as _i594;
 import 'package:immoplus_pro/data/providers/notification_provider.dart'
     as _i472;
 import 'package:immoplus_pro/data/repositories/notification_repository.dart'
@@ -42,7 +48,6 @@ import 'package:immoplus_pro/services/push/push_provider.dart' as _i1036;
 import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart' as _i630;
 import 'package:immoplus_pro/services/remote_config_service.dart' as _i215;
 import 'package:immoplus_pro/services/reservation_socket_service.dart' as _i908;
-import 'package:immoplus_pro/utils/easy_loading_handler.dart' as _i166;
 import 'package:immoplus_pro/utils/session_manager.dart' as _i165;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -62,8 +67,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i521.BiometryService>(() => _i521.BiometryService());
     gh.factory<_i922.CertificationCubit>(() => _i922.CertificationCubit());
     gh.singleton<_i165.SessionManager>(() => _i165.SessionManager());
-    gh.lazySingleton<_i166.EasyLoadingHandler>(
-        () => _i166.EasyLoadingHandler());
     gh.lazySingleton<_i472.NotificationProvider>(
         () => notificationModule.notificationProvider);
     gh.lazySingleton<_i185.MessagingSocketService>(
@@ -77,8 +80,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i215.RemoteConfigService());
     gh.lazySingleton<_i991.PushInstallationService>(
         () => _i991.PushInstallationService());
+    gh.lazySingleton<_i806.EasyLoadingHandler>(
+        () => _i806.EasyLoadingHandler());
     gh.lazySingleton<_i1047.AnalyticsService>(
         () => _i1047.FirebaseAnalyticsService());
+    gh.lazySingleton<_i362.ErrorPresenter>(() => _i594.UiErrorPresenter());
     gh.lazySingleton<_i269.CrashlyticsService>(
         () => _i429.FirebaseCrashlyticsServiceImpl());
     gh.lazySingleton<_i630.RefusalFollowUpTracker>(
@@ -103,6 +109,11 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i185.MessagingSocketService>(),
           gh<_i165.SessionManager>(),
         ));
+    gh.lazySingleton<_i791.ErrorFeedbackCoordinator>(
+        () => _i791.ErrorFeedbackCoordinator(
+              gh<_i362.ErrorPresenter>(),
+              gh<_i269.CrashlyticsService>(),
+            ));
     return this;
   }
 }

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -70,7 +72,9 @@ class _QrCheckinScannerSheetState extends State<QrCheckinScannerSheet> {
     } catch (e) {
       EasyLoading.dismiss();
       if (!mounted) return;
-      EasyLoading.showError('Échec de la validation du QR code.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.reservationAction)) {
+        EasyLoading.showError('Échec de la validation du QR code.');
+      }
       setState(() => _isProcessing = false);
     }
   }

@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/cubits/authentification/update_password_cubit_state.dart';
@@ -26,7 +29,8 @@ class UpdatePasswordCubit extends Cubit<UpdatePasswordCubitState> {
       ));
       log('Password updated', name: 'UPDATE_PASSWORD_CUBIT');
     } catch (e) {
-      final msg = e.toString().replaceFirst('Exception: ', '');
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
+      final msg = ErrorMessages.messageOf(e, ErrorContext.profileUpdate);
       emit(UpdatePasswordCubitState.error(errorMessage: msg));
       log('Update password failed: $msg', name: 'UPDATE_PASSWORD_CUBIT');
     }
