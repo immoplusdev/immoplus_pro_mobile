@@ -85,6 +85,13 @@ class _HomePageV2State extends State<HomePageV2>
   UserModelSchema? currentUser;
   bool _isUnlocked = false;
 
+  bool get _isEntreprise =>
+      (currentUser ?? SessionManager().currentUser)?.isEntreprise ?? false;
+
+  List<_HomeTab> get _tabs => _isEntreprise
+      ? const [_HomeTab.visits, _HomeTab.demandes]
+      : const [_HomeTab.reservations];
+
   // final GlobalKey _scannerTutorialKey = GlobalKey(); // voir tuile commentée plus bas
   // final GlobalKey _certificationTutorialKey = GlobalKey(); // voir tuile commentée plus bas
 
@@ -106,8 +113,9 @@ class _HomePageV2State extends State<HomePageV2>
   @override
   void initState() {
     super.initState();
+    currentUser = SessionManager().currentUser;
     _bannersCubit = context.read<BannersCubit>();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: _tabs.length, vsync: this);
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         setState(() {}); // Rafraîchir pour mettre à jour les filtres affichés
@@ -117,7 +125,6 @@ class _HomePageV2State extends State<HomePageV2>
         _analytics.logBookingFilterChanged(filter: _bookingFilterNotifier.value));
     _visitFilterNotifier.addListener(() =>
         _analytics.logVisitFilterChanged(filter: _visitFilterNotifier.value));
-    currentUser = SessionManager().currentUser;
     _analytics.logCertificationBannerViewed(
         placement: CertificationPlacement.dashboard);
 
@@ -129,7 +136,9 @@ class _HomePageV2State extends State<HomePageV2>
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
     _checkNotifActif();
     _loadCertificationBadge();
-    _loadDemandesBadge();
+    if (_isEntreprise) {
+      _loadDemandesBadge();
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -728,36 +737,38 @@ class _HomePageV2State extends State<HomePageV2>
                               spacing: spacing,
                               runSpacing: 20,
                               children: [
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        Assets.svgs.buildings,
-                                        width: 30,
+                                if (_isEntreprise)
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.buildings,
+                                          width: 30,
+                                        ),
                                       ),
+                                      action: DashboardAction.estates,
+                                      label: "Bien immobilier",
+                                      onTap: () =>
+                                          context.pushNamed(EstatesPageV2.name),
                                     ),
-                                    action: DashboardAction.estates,
-                                    label: "Bien immobilier",
-                                    onTap: () =>
-                                        context.pushNamed(EstatesPageV2.name),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: itemWidth,
-                                  child: _buildDashboardAction(
-                                    iconWidget: Center(
-                                      child: SvgPicture.asset(
-                                        Assets.svgs.house,
-                                        width: 30,
+                                if (!_isEntreprise)
+                                  SizedBox(
+                                    width: itemWidth,
+                                    child: _buildDashboardAction(
+                                      iconWidget: Center(
+                                        child: SvgPicture.asset(
+                                          Assets.svgs.house,
+                                          width: 30,
+                                        ),
                                       ),
+                                      action: DashboardAction.residences,
+                                      label: "Résidences",
+                                      onTap: () => context
+                                          .pushNamed(ResidencesPageV2.name),
                                     ),
-                                    action: DashboardAction.residences,
-                                    label: "Résidences",
-                                    onTap: () => context
-                                        .pushNamed(ResidencesPageV2.name),
                                   ),
-                                ),
                                 SizedBox(
                                   width: itemWidth,
                                   child: _buildDashboardAction(
@@ -877,245 +888,10 @@ class _HomePageV2State extends State<HomePageV2>
                                     color: Colors.grey.shade200, width: 2)),
                           ),
                           child: Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _analytics.logTabReservationsTapped();
-                                    _tabController.animateTo(0);
-                                  },
-                                  child: Transform.translate(
-                                    offset: const Offset(0, 2),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: _tabController.index == 0
-                                                ? AppColors.primary
-                                                : Colors.transparent,
-                                            width: 2.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Réservations",
-                                            style: TextStyle(
-                                              color: _tabController.index == 0
-                                                  ? AppColors.primary
-                                                  : Colors.grey.shade600,
-                                              fontWeight:
-                                                  _tabController.index == 0
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const Gap(6),
-                                          if (_totalReservations > 0)
-                                            Container(
-                                              height: 17,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 0
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border:
-                                                    _tabController.index == 0
-                                                        ? null
-                                                        : Border.all(
-                                                            color: Colors
-                                                                .grey.shade300,
-                                                            width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalReservations",
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: _tabController.index ==
-                                                          0
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _analytics.logTabVisitesTapped();
-                                    _tabController.animateTo(1);
-                                  },
-                                  child: Transform.translate(
-                                    offset: const Offset(0, 2),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: _tabController.index == 1
-                                                ? AppColors.primary
-                                                : Colors.transparent,
-                                            width: 2.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Visites",
-                                            style: TextStyle(
-                                              color: _tabController.index == 1
-                                                  ? AppColors.primary
-                                                  : Colors.grey.shade600,
-                                              fontWeight:
-                                                  _tabController.index == 1
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const Gap(6),
-                                          if (_totalVisits > 0)
-                                            Container(
-                                              height: 17,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 1
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border:
-                                                    _tabController.index == 1
-                                                        ? null
-                                                        : Border.all(
-                                                            color: Colors
-                                                                .grey.shade300,
-                                                            width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalVisits",
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: _tabController.index ==
-                                                          1
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => _tabController.animateTo(2),
-                                  child: Transform.translate(
-                                    offset: const Offset(0, 2),
-                                    child: AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color: _tabController.index == 2
-                                                ? AppColors.primary
-                                                : Colors.transparent,
-                                            width: 2.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Demandes",
-                                            style: TextStyle(
-                                              color: _tabController.index == 2
-                                                  ? AppColors.primary
-                                                  : Colors.grey.shade600,
-                                              fontWeight:
-                                                  _tabController.index == 2
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w600,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          const Gap(6),
-                                          if (_totalDemandes > 0)
-                                            Container(
-                                              height: 17,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 6),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: _tabController.index == 2
-                                                    ? AppColors.primary
-                                                    : Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                border:
-                                                    _tabController.index == 2
-                                                        ? null
-                                                        : Border.all(
-                                                            color: Colors
-                                                                .grey.shade300,
-                                                            width: 0.5),
-                                              ),
-                                              child: Text(
-                                                "$_totalDemandes",
-                                                style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: _tabController.index ==
-                                                          2
-                                                      ? Colors.white
-                                                      : Colors.grey.shade600,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            children: List.generate(
+                              _tabs.length,
+                              (index) => _buildTabHeader(index, _tabs[index]),
+                            ),
                           ),
                         ),
 
@@ -1143,41 +919,131 @@ class _HomePageV2State extends State<HomePageV2>
         },
         body: TabBarView(
           controller: _tabController,
-          children: [
-            BookingPageV2(
-              filterNotifier: _bookingFilterNotifier,
-              onCountChanged: (count) {
-                if (_totalReservations != count) {
-                  Future.microtask(() {
-                    if (mounted) setState(() => _totalReservations = count);
-                  });
-                }
-              },
-            ),
-            VisitPageV2(
-              filterNotifier: _visitFilterNotifier,
-              onCountChanged: (count) {
-                if (_totalVisits != count) {
-                  Future.microtask(() {
-                    if (mounted) setState(() => _totalVisits = count);
-                  });
-                }
-              },
-            ),
-            DemandesPageV2(
-              filterNotifier: _demandeFilterNotifier,
-              onCountChanged: (count) {
-                if (_totalDemandes != count) {
-                  Future.microtask(() {
-                    if (mounted) setState(() => _totalDemandes = count);
-                  });
-                }
-              },
-            ),
-          ],
+          children: _tabs.map(_buildTabPage).toList(),
         ),
       ),
     );
+  }
+
+  Widget _buildTabHeader(int index, _HomeTab tab) {
+    final isSelected = _tabController.index == index;
+    final (String label, int badgeCount, VoidCallback? onLogAnalytics) =
+        switch (tab) {
+      _HomeTab.reservations => (
+          "Réservations",
+          _totalReservations,
+          _analytics.logTabReservationsTapped,
+        ),
+      _HomeTab.visits => (
+          "Visites",
+          _totalVisits,
+          _analytics.logTabVisitesTapped,
+        ),
+      _HomeTab.demandes => (
+          "Demandes",
+          _totalDemandes,
+          null,
+        ),
+    };
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          onLogAnalytics?.call();
+          _tabController.animateTo(index);
+        },
+        child: Transform.translate(
+          offset: const Offset(0, 2),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: isSelected ? AppColors.primary : Colors.transparent,
+                  width: 2.5,
+                ),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: isSelected ? AppColors.primary : Colors.grey.shade600,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const Gap(6),
+                if (badgeCount > 0)
+                  Container(
+                    height: 17,
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary
+                          : Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(10),
+                      border: isSelected
+                          ? null
+                          : Border.all(color: Colors.grey.shade300, width: 0.5),
+                    ),
+                    child: Text(
+                      "$badgeCount",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: isSelected ? Colors.white : Colors.grey.shade600,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabPage(_HomeTab tab) {
+    switch (tab) {
+      case _HomeTab.reservations:
+        return BookingPageV2(
+          filterNotifier: _bookingFilterNotifier,
+          onCountChanged: (count) {
+            if (_totalReservations != count) {
+              Future.microtask(() {
+                if (mounted) setState(() => _totalReservations = count);
+              });
+            }
+          },
+        );
+      case _HomeTab.visits:
+        return VisitPageV2(
+          filterNotifier: _visitFilterNotifier,
+          onCountChanged: (count) {
+            if (_totalVisits != count) {
+              Future.microtask(() {
+                if (mounted) setState(() => _totalVisits = count);
+              });
+            }
+          },
+        );
+      case _HomeTab.demandes:
+        return DemandesPageV2(
+          filterNotifier: _demandeFilterNotifier,
+          onCountChanged: (count) {
+            if (_totalDemandes != count) {
+              Future.microtask(() {
+                if (mounted) setState(() => _totalDemandes = count);
+              });
+            }
+          },
+        );
+    }
   }
 
   Widget _buildDashboardAction(
@@ -1222,64 +1088,66 @@ class _HomePageV2State extends State<HomePageV2>
   }
 
   List<Widget> _buildCurrentFilters() {
-    if (_tabController.index == 0) {
-      return [
-        _buildFilterChip(
+    final currentTab = _tabs[_tabController.index];
+    switch (currentTab) {
+      case _HomeTab.reservations:
+        return [
+          _buildFilterChip(
+              "Tous",
+              _bookingFilterNotifier.value == BookingFilterV2.all,
+              () => setState(
+                  () => _bookingFilterNotifier.value = BookingFilterV2.all)),
+          _buildFilterChip(
+            "Nouvelle réservation",
+            _bookingFilterNotifier.value == BookingFilterV2.nouvelle,
+            () => setState(
+                () => _bookingFilterNotifier.value = BookingFilterV2.nouvelle),
+          ),
+          _buildFilterChip(
+              "Payées",
+              _bookingFilterNotifier.value == BookingFilterV2.paid,
+              () => setState(
+                  () => _bookingFilterNotifier.value = BookingFilterV2.paid)),
+        ];
+      case _HomeTab.visits:
+        return [
+          _buildFilterChip(
+              "Tous",
+              _visitFilterNotifier.value == VisitFilterV2.all,
+              () => setState(
+                  () => _visitFilterNotifier.value = VisitFilterV2.all)),
+          _buildFilterChip(
+              "Demande express",
+              _visitFilterNotifier.value == VisitFilterV2.express,
+              () => setState(
+                  () => _visitFilterNotifier.value = VisitFilterV2.express)),
+          _buildFilterChip(
+              "Demande normale",
+              _visitFilterNotifier.value == VisitFilterV2.normal,
+              () => setState(
+                  () => _visitFilterNotifier.value = VisitFilterV2.normal)),
+        ];
+      case _HomeTab.demandes:
+        return [
+          _buildFilterChip(
             "Tous",
-            _bookingFilterNotifier.value == BookingFilterV2.all,
+            _demandeFilterNotifier.value == AlertViewFilter.all,
             () => setState(
-                () => _bookingFilterNotifier.value = BookingFilterV2.all)),
-        _buildFilterChip(
-          "Nouvelle réservation",
-          _bookingFilterNotifier.value == BookingFilterV2.nouvelle,
-          () => setState(
-              () => _bookingFilterNotifier.value = BookingFilterV2.nouvelle),
-        ),
-        _buildFilterChip(
-            "Payées",
-            _bookingFilterNotifier.value == BookingFilterV2.paid,
+                () => _demandeFilterNotifier.value = AlertViewFilter.all),
+          ),
+          _buildFilterChip(
+            "Demandes",
+            _demandeFilterNotifier.value == AlertViewFilter.demands,
             () => setState(
-                () => _bookingFilterNotifier.value = BookingFilterV2.paid)),
-      ];
-    } else if (_tabController.index == 1) {
-      return [
-        _buildFilterChip(
-            "Tous",
-            _visitFilterNotifier.value == VisitFilterV2.all,
-            () =>
-                setState(() => _visitFilterNotifier.value = VisitFilterV2.all)),
-        _buildFilterChip(
-            "Demande express",
-            _visitFilterNotifier.value == VisitFilterV2.express,
-            () => setState(
-                () => _visitFilterNotifier.value = VisitFilterV2.express)),
-        _buildFilterChip(
-            "Demande normale",
-            _visitFilterNotifier.value == VisitFilterV2.normal,
-            () => setState(
-                () => _visitFilterNotifier.value = VisitFilterV2.normal)),
-      ];
-    } else {
-      return [
-        _buildFilterChip(
-          "Tous",
-          _demandeFilterNotifier.value == AlertViewFilter.all,
-          () => setState(
-              () => _demandeFilterNotifier.value = AlertViewFilter.all),
-        ),
-        _buildFilterChip(
-          "Demandes",
-          _demandeFilterNotifier.value == AlertViewFilter.demands,
-          () => setState(
-              () => _demandeFilterNotifier.value = AlertViewFilter.demands),
-        ),
-        _buildFilterChip(
-          "Propositions",
-          _demandeFilterNotifier.value == AlertViewFilter.myProposals,
-          () => setState(
-              () => _demandeFilterNotifier.value = AlertViewFilter.myProposals),
-        ),
-      ];
+                () => _demandeFilterNotifier.value = AlertViewFilter.demands),
+          ),
+          _buildFilterChip(
+            "Propositions",
+            _demandeFilterNotifier.value == AlertViewFilter.myProposals,
+            () => setState(() =>
+                _demandeFilterNotifier.value = AlertViewFilter.myProposals),
+          ),
+        ];
     }
   }
 
@@ -1597,4 +1465,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_SliverAppBarDelegate oldDelegate) => true;
+}
+
+enum _HomeTab {
+  reservations,
+  visits,
+  demandes,
 }
