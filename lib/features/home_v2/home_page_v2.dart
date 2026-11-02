@@ -121,8 +121,8 @@ class _HomePageV2State extends State<HomePageV2>
         setState(() {}); // Rafraîchir pour mettre à jour les filtres affichés
       }
     });
-    _bookingFilterNotifier.addListener(() =>
-        _analytics.logBookingFilterChanged(filter: _bookingFilterNotifier.value));
+    _bookingFilterNotifier.addListener(() => _analytics.logBookingFilterChanged(
+        filter: _bookingFilterNotifier.value));
     _visitFilterNotifier.addListener(() =>
         _analytics.logVisitFilterChanged(filter: _visitFilterNotifier.value));
     _analytics.logCertificationBannerViewed(
@@ -971,7 +971,8 @@ class _HomePageV2State extends State<HomePageV2>
                 Text(
                   label,
                   style: TextStyle(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade600,
+                    color:
+                        isSelected ? AppColors.primary : Colors.grey.shade600,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -983,9 +984,8 @@ class _HomePageV2State extends State<HomePageV2>
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.primary
-                          : Colors.grey.shade100,
+                      color:
+                          isSelected ? AppColors.primary : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(10),
                       border: isSelected
                           ? null

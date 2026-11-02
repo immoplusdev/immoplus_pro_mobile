@@ -72,7 +72,10 @@ class PendingReservationCardV2 extends StatelessWidget {
           : null;
       startDate = Utils.toDateTime(r.dateDebut);
       endDate = Utils.toDateTime(r.dateFin);
-      duration = r.datesReservation.length;
+      final calcDuration = endDate.difference(startDate).inDays;
+      duration = r.datesReservation.isNotEmpty
+          ? r.datesReservation.length
+          : (calcDuration > 0 ? calcDuration : 1);
       montant = r.montantTotalReservation;
     }
 
