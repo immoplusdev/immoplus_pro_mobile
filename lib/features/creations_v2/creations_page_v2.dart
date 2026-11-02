@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/gen/assets.gen.dart';
+import 'package:immoplus_pro/utils/session_manager.dart';
 
 import '../create_estate_v2/create_estate_page_v2.dart';
 // import '../create_furniture_v2/create_furniture_page_v2.dart';
@@ -19,6 +20,8 @@ class CreationsPageV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isEntreprise = SessionManager().currentUser?.isEntreprise ?? false;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -48,27 +51,28 @@ class CreationsPageV2 extends StatelessWidget {
                 ),
               ),
               const Gap(40),
-              _CreationButton(
-                title: "Bien immobilier",
-                iconValue: Assets.svgs.buildings,
-                onTap: () => context.pushNamed(
-                  CreateEstatePageV2.name,
-                  extra: <String, dynamic>{
-                    'listingRoute': EstatesPageV2.name,
-                  },
+              if (isEntreprise)
+                _CreationButton(
+                  title: "Bien immobilier",
+                  iconValue: Assets.svgs.buildings,
+                  onTap: () => context.pushNamed(
+                    CreateEstatePageV2.name,
+                    extra: <String, dynamic>{
+                      'listingRoute': EstatesPageV2.name,
+                    },
+                  ),
+                )
+              else
+                _CreationButton(
+                  title: "Résidence",
+                  iconValue: Assets.svgs.house,
+                  onTap: () => context.pushNamed(
+                    CreateLodgmentPageV2.name,
+                    extra: <String, dynamic>{
+                      'listingRoute': ResidencesPageV2.name,
+                    },
+                  ),
                 ),
-              ),
-              const Gap(15),
-              _CreationButton(
-                title: "Résidence",
-                iconValue: Assets.svgs.house,
-                onTap: () => context.pushNamed(
-                  CreateLodgmentPageV2.name,
-                  extra: <String, dynamic>{
-                    'listingRoute': ResidencesPageV2.name,
-                  },
-                ),
-              ),
               // const Gap(15),
               // _CreationButton(
               //   title: "Meubles",
