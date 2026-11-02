@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
-import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
+import 'package:immoplus_pro/features/residence_creation/pages/residence_creation_page.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_available_day.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_logment_infos.dart';
 import 'package:immoplus_pro/features/residence_detail/components/detail_rooms.dart';
@@ -47,9 +47,10 @@ class _ResidenceDetailsPageV2State extends State<ResidenceDetailsPageV2> {
   }
 
   void _onEdit(ResidenceModel residence) {
-    context
-        .pushNamed(CreateLodgmentPageV2.name, extra: residence)
-        .then((result) {
+    context.pushNamed(
+      ResidenceCreationPage.editName,
+      pathParameters: {'id': residence.id},
+    ).then((result) {
       if (result == true && mounted) {
         _getResidenceById();
       }

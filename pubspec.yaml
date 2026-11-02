@@ -201,6 +201,7 @@ flutter:
     - assets/gif/
     - assets/svgs/
     - assets/svgs/icons/
+    - assets/svgs/catalog/
     - assets/svgs/undraw/
     - assets/svgs/creation_icon/
 

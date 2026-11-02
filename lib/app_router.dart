@@ -12,7 +12,6 @@ import 'package:immoplus_pro/features/estate_detail/estate_details_page_v2.dart'
 import 'package:immoplus_pro/features/estates/estates_page_v2.dart';
 import 'package:immoplus_pro/features/location_module/location_map_page.dart';
 import 'package:immoplus_pro/features/login_page/register_page.dart';
-import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/models/bienimmobilier/bien_immobilier_model.dart';
 // V2 Imports
 import 'package:immoplus_pro/features/main_navigation_v2/main_navigation_v2.dart';
@@ -29,7 +28,7 @@ import 'package:immoplus_pro/features/payments/screen/withdraw_form_screen_v2.da
 import 'package:immoplus_pro/features/payments/screen/withdrawal_success_page.dart';
 import 'package:immoplus_pro/features/certification/pages/certification_page.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
-import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
+import 'package:immoplus_pro/features/residence_creation/pages/residence_creation_page.dart';
 import 'package:immoplus_pro/features/create_furniture_v2/create_furniture_page_v2.dart';
 import 'package:immoplus_pro/features/my_feed/presentation/pages/my_feed_page.dart';
 import 'package:immoplus_pro/features/notification/notification_page.dart';
@@ -293,20 +292,16 @@ class AppRouter {
         name: CreateLodgmentPage.name,
       ),
       GoRoute(
-        path: '/create_lodgment_v2',
-        name: CreateLodgmentPageV2.name,
-        builder: (context, state) {
-          final extra = state.extra;
-          if (extra is ResidenceModel) {
-            return CreateLodgmentPageV2(initialResidence: extra);
-          }
-          if (extra is Map<String, dynamic>) {
-            return CreateLodgmentPageV2(
-              listingRoute: extra['listingRoute'] as String?,
-            );
-          }
-          return const CreateLodgmentPageV2();
-        },
+        path: ResidenceCreationPage.editRoutePath,
+        name: ResidenceCreationPage.editName,
+        builder: (context, state) => ResidenceCreationPage(
+          residenceId: state.pathParameters['id'],
+        ),
+      ),
+      GoRoute(
+        path: ResidenceCreationPage.routePath,
+        name: ResidenceCreationPage.name,
+        builder: (context, state) => const ResidenceCreationPage(),
       ),
       GoRoute(
         path: '/plage_page',
