@@ -50,7 +50,7 @@ class CreationsPageV2 extends StatelessWidget {
                 ),
               ),
               const Gap(40),
-              if (!isEntreprise)
+              if (isEntreprise)
                 _CreationButton(
                   title: "Bien immobilier",
                   iconValue: Assets.svgs.buildings,
