@@ -85,12 +85,11 @@ class _HomePageV2State extends State<HomePageV2>
   UserModelSchema? currentUser;
   bool _isUnlocked = false;
 
-  bool get _isEntreprise =>
-      (currentUser ?? SessionManager().currentUser)?.isEntreprise ?? false;
-
-  List<_HomeTab> get _tabs => _isEntreprise
-      ? const [_HomeTab.visits, _HomeTab.demandes]
-      : const [_HomeTab.reservations];
+  static const List<_HomeTab> _tabs = [
+    _HomeTab.reservations,
+    _HomeTab.visits,
+    _HomeTab.demandes,
+  ];
 
   // final GlobalKey _scannerTutorialKey = GlobalKey(); // voir tuile commentée plus bas
   // final GlobalKey _certificationTutorialKey = GlobalKey(); // voir tuile commentée plus bas
@@ -121,8 +120,8 @@ class _HomePageV2State extends State<HomePageV2>
         setState(() {}); // Rafraîchir pour mettre à jour les filtres affichés
       }
     });
-    _bookingFilterNotifier.addListener(() =>
-        _analytics.logBookingFilterChanged(filter: _bookingFilterNotifier.value));
+    _bookingFilterNotifier.addListener(() => _analytics.logBookingFilterChanged(
+        filter: _bookingFilterNotifier.value));
     _visitFilterNotifier.addListener(() =>
         _analytics.logVisitFilterChanged(filter: _visitFilterNotifier.value));
     _analytics.logCertificationBannerViewed(
@@ -136,9 +135,7 @@ class _HomePageV2State extends State<HomePageV2>
     _bannersCubit.startPolling(source: AccountSource.proApp.value);
     _checkNotifActif();
     _loadCertificationBadge();
-    if (_isEntreprise) {
-      _loadDemandesBadge();
-    }
+    _loadDemandesBadge();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.paiementId != null) {
@@ -737,38 +734,36 @@ class _HomePageV2State extends State<HomePageV2>
                               spacing: spacing,
                               runSpacing: 20,
                               children: [
-                                if (_isEntreprise)
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: _buildDashboardAction(
-                                      iconWidget: Center(
-                                        child: SvgPicture.asset(
-                                          Assets.svgs.buildings,
-                                          width: 30,
-                                        ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        Assets.svgs.buildings,
+                                        width: 30,
                                       ),
-                                      action: DashboardAction.estates,
-                                      label: "Bien immobilier",
-                                      onTap: () =>
-                                          context.pushNamed(EstatesPageV2.name),
                                     ),
+                                    action: DashboardAction.estates,
+                                    label: "Bien immobilier",
+                                    onTap: () =>
+                                        context.pushNamed(EstatesPageV2.name),
                                   ),
-                                if (!_isEntreprise)
-                                  SizedBox(
-                                    width: itemWidth,
-                                    child: _buildDashboardAction(
-                                      iconWidget: Center(
-                                        child: SvgPicture.asset(
-                                          Assets.svgs.house,
-                                          width: 30,
-                                        ),
+                                ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        Assets.svgs.house,
+                                        width: 30,
                                       ),
-                                      action: DashboardAction.residences,
-                                      label: "Résidences",
-                                      onTap: () => context
-                                          .pushNamed(ResidencesPageV2.name),
                                     ),
+                                    action: DashboardAction.residences,
+                                    label: "Résidences",
+                                    onTap: () => context
+                                        .pushNamed(ResidencesPageV2.name),
                                   ),
+                                ),
                                 SizedBox(
                                   width: itemWidth,
                                   child: _buildDashboardAction(
@@ -971,7 +966,8 @@ class _HomePageV2State extends State<HomePageV2>
                 Text(
                   label,
                   style: TextStyle(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade600,
+                    color:
+                        isSelected ? AppColors.primary : Colors.grey.shade600,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                     fontSize: 14,
                   ),
@@ -983,9 +979,8 @@ class _HomePageV2State extends State<HomePageV2>
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.primary
-                          : Colors.grey.shade100,
+                      color:
+                          isSelected ? AppColors.primary : Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(10),
                       border: isSelected
                           ? null

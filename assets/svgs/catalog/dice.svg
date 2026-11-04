@@ -1,0 +1,13 @@
+<svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 12H22A4 4 0 0 1 26 16V30A4 4 0 0 1 22 34H8A4 4 0 0 1 4 30V16A4 4 0 0 1 8 12Z" fill="#2744DE" fill-opacity="0.25"/>
+<path d="M8 12H22A4 4 0 0 1 26 16V30A4 4 0 0 1 22 34H8A4 4 0 0 1 4 30V16A4 4 0 0 1 8 12Z" stroke="#2744DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 18A2 2 0 1 0 12 18A2 2 0 1 0 8 18Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M13 23A2 2 0 1 0 17 23A2 2 0 1 0 13 23Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M18 28A2 2 0 1 0 22 28A2 2 0 1 0 18 28Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M27.5 20H37.5A3.5 3.5 0 0 1 41 23.5V33.5A3.5 3.5 0 0 1 37.5 37H27.5A3.5 3.5 0 0 1 24 33.5V23.5A3.5 3.5 0 0 1 27.5 20Z" fill="#2744DE" fill-opacity="0.25"/>
+<path d="M27.5 20H37.5A3.5 3.5 0 0 1 41 23.5V33.5A3.5 3.5 0 0 1 37.5 37H27.5A3.5 3.5 0 0 1 24 33.5V23.5A3.5 3.5 0 0 1 27.5 20Z" stroke="#2744DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M27.9 25.5A1.6 1.6 0 1 0 31.1 25.5A1.6 1.6 0 1 0 27.9 25.5Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M33.9 31.5A1.6 1.6 0 1 0 37.1 31.5A1.6 1.6 0 1 0 33.9 31.5Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M27.9 31.5A1.6 1.6 0 1 0 31.1 31.5A1.6 1.6 0 1 0 27.9 31.5Z" fill="#2744DE" fill-opacity="0.8"/>
+<path d="M33.9 25.5A1.6 1.6 0 1 0 37.1 25.5A1.6 1.6 0 1 0 33.9 25.5Z" fill="#2744DE" fill-opacity="0.8"/>
+</svg>
