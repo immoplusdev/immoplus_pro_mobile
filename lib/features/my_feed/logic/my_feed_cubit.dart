@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/features/my_feed/data/feed_repository.dart';
 import 'package:immoplus_pro/features/my_feed/logic/my_feed_state.dart';
@@ -16,12 +19,18 @@ class MyFeedCubit extends Cubit<MyFeedState> {
         hasMore: response.hasMore,
       ));
     } catch (e) {
-      emit(MyFeedError(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      emit(MyFeedError(ErrorMessages.messageOf(e, ErrorContext.feedLoad)));
     }
   }
 
   Future<void> deleteVideo(String id) async {
-    await FeedRepository.deleteVideo(id);
+    try {
+      await FeedRepository.deleteVideo(id);
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      return;
+    }
     final current = state;
     if (current is MyFeedLoaded) {
       final updated = current.videos.where((v) => v.id != id).toList();

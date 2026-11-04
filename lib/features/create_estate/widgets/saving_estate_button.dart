@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:immoplus_pro/data/repositories/bien_immobilier_repository.dart';
 import 'package:immoplus_pro/features/create_estate/utils/creation_estate_manager.dart';
@@ -43,7 +45,9 @@ class _SavingEstateButtonState extends State<SavingEstateButton> {
               },
             );
           } catch (e) {
-            EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+            if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+              EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+            }
           }
         },
       ),

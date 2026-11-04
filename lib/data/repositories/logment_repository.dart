@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -11,10 +12,15 @@ import 'package:immoplus_pro/data/models/reservations/reservations_collection.da
 import 'package:immoplus_pro/data/models/residence/residence_creation_model.dart';
 import 'package:immoplus_pro/data/models/residence/residence_response.dart';
 import 'package:immoplus_pro/data/models/residence/residences_collection.dart';
+import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/data/providers/reservation_provider.dart';
 import 'package:immoplus_pro/data/providers/residence_provider.dart';
+import 'package:immoplus_pro/services/refusal_follow_up_tracker.dart';
 
 class LogmentRepository {
+  /// Champ du tarif dans le payload de mise à jour d'une résidence.
+  static const String _priceField = 'prixReservation';
+
   static Future<ReservationsCollection> getReservations({
     required int page,
     required int perPage,
@@ -31,11 +37,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -56,11 +62,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -78,10 +84,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -97,11 +103,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -116,11 +122,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -135,11 +141,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -153,11 +159,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -167,15 +173,18 @@ class LogmentRepository {
       final response =
           await ResidenceProvider(DioClient().dio).update(id, fields);
       inspect(response);
+      if (fields.containsKey(_priceField)) {
+        getIt<RefusalFollowUpTracker>().onPriceUpdated();
+      }
       return response;
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -194,11 +203,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -212,11 +221,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -236,11 +245,11 @@ class LogmentRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to delete residence: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to delete residence: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -252,14 +261,14 @@ class LogmentRepository {
       final response = await ResidenceProvider(DioClient().dio)
           .addUnavailabilityDates(id, {"dates": dates});
       inspect(response);
+      getIt<RefusalFollowUpTracker>().onCalendarUpdated();
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception(
-          'Failed to add unavailability dates: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to add unavailability dates: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -274,11 +283,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception(
-          'Failed to remove unavailability dates: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to remove unavailability dates: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -301,10 +309,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load reservations: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to load reservations: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -315,10 +323,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to accept reservation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to accept reservation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -332,10 +340,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to refuse reservation: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to refuse reservation: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -347,14 +355,14 @@ class LogmentRepository {
       final response = await ResidenceProvider(DioClient().dio)
           .updateUnavailabilityDates(id, {"dates": dates});
       inspect(response);
+      getIt<RefusalFollowUpTracker>().onCalendarUpdated();
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception(
-          'Failed to update unavailability dates: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to update unavailability dates: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -379,10 +387,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to get failure reasons: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get failure reasons: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -399,10 +407,10 @@ class LogmentRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to submit failure reason: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to submit failure reason: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 

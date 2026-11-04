@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -32,7 +33,7 @@ class ErrorIndicator extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFFFEE2E2),
+                color: AppColors.red100,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
@@ -53,7 +54,7 @@ class ErrorIndicator extends StatelessWidget {
                       child: Text(
                         title!,
                         style: const TextStyle(
-                          color: Color(0xFFDC2626),
+                          color: AppColors.red600,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -156,7 +158,9 @@ class _EstateLogmentPricePageState extends State<EstateLogmentPricePage> {
                       );
                     } catch (e) {
                       EasyLoading.dismiss();
-                      EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+                      if (!ErrorFeedback.show(e, context: ErrorContext.listingPublish)) {
+                        EasyLoadingHandler.showErrorToast(text: 'Modification échoué');
+                      }
                     }
                   } else {
                     try {

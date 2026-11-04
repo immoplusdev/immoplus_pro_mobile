@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:io';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,12 @@ import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:video_player/video_player.dart';
 
 class UploadVideoPageV2 extends StatefulWidget {
-  const UploadVideoPageV2({super.key});
+  /// Envoie la vidéo et retourne l'identifiant du fichier. Par défaut, la
+  /// vidéo part vers `/files/public` ; un parcours peut fournir son propre
+  /// envoi (ex. `POST /files`).
+  final Future<String> Function(File file)? uploader;
+
+  const UploadVideoPageV2({super.key, this.uploader});
 
   @override
   State<UploadVideoPageV2> createState() => _UploadVideoPageV2State();
@@ -66,6 +73,13 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
     EasyLoadingHandler.showLoadingToast(text: "Envoi de la vidéo...");
 
     try {
+      final customUploader = widget.uploader;
+      if (customUploader != null) {
+        final id = await customUploader(File(_videoPath));
+        if (mounted) context.pop<String>(id);
+        return;
+      }
+
       FileDataModel response =
           await AuthRepository.uplaodFile(file: File(_videoPath));
       if (response.data != null) {
@@ -75,7 +89,9 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
       }
     } catch (e) {
       if (mounted) {
-        EasyLoadingHandler.showErrorToast(text: "Échec de l'envoi");
+        if (!ErrorFeedback.show(e, context: ErrorContext.fileUpload)) {
+          EasyLoadingHandler.showErrorToast(text: "Échec de l'envoi");
+        }
       }
     } finally {
       EasyLoadingHandler.hideLoadingToast();
@@ -129,7 +145,7 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF3F4F6),
+                    color: AppColors.chipBackground,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: _videoPath.isEmpty
@@ -150,8 +166,8 @@ class _UploadVideoPageV2State extends State<UploadVideoPageV2> {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(25),
                           child: (_chewieController != null &&
-                                  _chewieController!
-                                      .videoPlayerController.value.isInitialized)
+                                  _chewieController!.videoPlayerController.value
+                                      .isInitialized)
                               ? Chewie(controller: _chewieController!)
                               : const Center(
                                   child: CircularProgressIndicator()),

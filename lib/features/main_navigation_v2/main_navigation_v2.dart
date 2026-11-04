@@ -6,8 +6,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
 import 'package:immoplus_pro/constantes/constantes.dart';
 import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/data/enums/analytics_enums.dart';
 import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
 import 'package:adaptive_liquid_bottom_nav_bar/adaptive_liquid_bottom_nav_bar.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/messaging_socket_service.dart';
 import 'package:immoplus_pro/utils/session_manager.dart';
 
@@ -72,6 +74,9 @@ class _MainNavigationV2State extends State<MainNavigationV2>
   }
 
   void _onTap(int index) {
+    final tab = NavTab.fromBranchIndex(index);
+    if (tab != null) getIt<AnalyticsService>().logNavTabTapped(tab: tab);
+
     // When navigating to a new branch, it's recommended to use the goBranch
     // method, as doing so makes sure the last navigation state of the
     // Navigator for the branch is restored.

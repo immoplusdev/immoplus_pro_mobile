@@ -11,6 +11,7 @@ import 'package:immoplus_pro/data/repositories/notification_repository.dart';
 import 'package:immoplus_pro/features/messaging/logic/inbox_cubit.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:immoplus_pro/services/app_version_service.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/services/pending_reservation_overlay_service.dart';
 import 'package:immoplus_pro/services/push/push_installation_service.dart';
 import 'package:immoplus_pro/services/push/push_message.dart';
@@ -116,6 +117,7 @@ class NotificationService {
   void handleNotificationData(Map<String, dynamic> data) {
     log("handleNotificationData: $data", name: 'NOTIFICATION_SERVICE');
     final typeString = data['type']?.toString();
+    getIt<CrashlyticsService>().log('Notification tapped: type=$typeString');
     final id = data['id']?.toString() ??
         data['alertId']?.toString() ??
         data['reservationId']?.toString() ??

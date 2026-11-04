@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/data/models/residence/residence_response.dart';
@@ -14,7 +17,8 @@ class LogmentCubit extends Cubit<RequestState> {
 
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -27,7 +31,8 @@ class LogmentCubit extends Cubit<RequestState> {
 
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -44,7 +49,8 @@ class LogmentCubit extends Cubit<RequestState> {
             error: "Échec de la suppression de la résidence"));
       }
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -63,7 +69,8 @@ class LogmentCubit extends Cubit<RequestState> {
           message: "Dates d'indisponibilité ajoutées avec succès"));
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -82,7 +89,8 @@ class LogmentCubit extends Cubit<RequestState> {
           message: "Dates d'indisponibilité supprimées avec succès"));
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 
@@ -101,7 +109,8 @@ class LogmentCubit extends Cubit<RequestState> {
           message: "Dates d'indisponibilité mises à jour avec succès"));
       emit(RequestState.residence(data: residenceResponse.data));
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.listingLoad);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.listingLoad)));
     }
   }
 }

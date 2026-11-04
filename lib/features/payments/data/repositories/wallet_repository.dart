@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -23,11 +24,11 @@ class WalletRepository {
   //   } on DioException catch (dioError) {
   //     // Gérer les exceptions Dio ici
   //     log('DioError: ${dioError.message}');
-  //     throw Exception('Failed to load users: ${dioError.message}');
+  //     throw AppErrorMapper.from(dioError);
   //   } catch (error) {
   //     // Gérer d'autres types d'exceptions ici
   //     log('Error: $error');
-  //     throw Exception('Failed to load users: $error');
+  //     throw AppErrorMapper.from(error);
   //   }
   // }
 
@@ -40,11 +41,11 @@ class WalletRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -67,11 +68,11 @@ class WalletRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -95,11 +96,11 @@ class WalletRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -113,11 +114,11 @@ class WalletRepository {
     } on DioException catch (dioError) {
       // Gérer les exceptions Dio ici
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to load users: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       // Gérer d'autres types d'exceptions ici
       log('Error: $error');
-      throw Exception('Failed to load users: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -137,8 +138,7 @@ class WalletRepository {
       });
     } on DioException catch (dioError) {
       log('DioError createWithdrawalRequestFromQr: ${dioError.message}');
-      throw Exception(
-          dioError.response?.data['message'] ?? 'Échec de la demande de retrait');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error createWithdrawalRequestFromQr: $error');
       throw Exception('Erreur inconnue lors de la demande de retrait');
@@ -153,7 +153,7 @@ class WalletRepository {
       });
     } on DioException catch (dioError) {
       log('DioError changePin: ${dioError.message}');
-      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors du changement de PIN');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error changePin: $error');
       throw Exception('Erreur inconnue lors du changement de PIN');
@@ -165,7 +165,7 @@ class WalletRepository {
       await WalletProvider(DioClient().dio).requestPinReset();
     } on DioException catch (dioError) {
       log('DioError requestPinReset: ${dioError.message}');
-      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors de la demande de réinitialisation');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error requestPinReset: $error');
       throw Exception('Erreur inconnue lors de la demande de réinitialisation');
@@ -180,7 +180,7 @@ class WalletRepository {
       });
     } on DioException catch (dioError) {
       log('DioError resetPin: ${dioError.message}');
-      throw Exception(dioError.response?.data['message'] ?? 'Erreur lors de la validation du code PIN');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error resetPin: $error');
       throw Exception('Erreur inconnue lors de la validation du code PIN');

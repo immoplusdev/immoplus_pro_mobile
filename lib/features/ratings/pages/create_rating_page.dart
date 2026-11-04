@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -109,10 +110,10 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF2548E5) : Colors.white,
+            color: isSelected ? AppColors.blue550 : Colors.white,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isSelected ? const Color(0xFF2548E5) : Colors.grey.shade300,
+              color: isSelected ? AppColors.blue550 : Colors.grey.shade300,
             ),
           ),
           child: Text(
@@ -138,7 +139,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2548E5) : Colors.transparent,
+          color: isSelected ? AppColors.blue550 : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -230,7 +231,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                       if (initialLetter.isNotEmpty) ...[
                         CircleAvatar(
                           radius: 20,
-                          backgroundColor: const Color(0xFF2548E5),
+                          backgroundColor: AppColors.blue550,
                           child: Text(
                             initialLetter,
                             style: GoogleFonts.dmSans(
@@ -327,12 +328,12 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? const Color(0xFF2548E5)
+                                ? AppColors.blue550
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(24),
                             border: Border.all(
                               color: isSelected
-                                  ? const Color(0xFF2548E5)
+                                  ? AppColors.blue550
                                   : Colors.grey.shade300,
                             ),
                           ),
@@ -450,7 +451,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: Color(0xFF2548E5)),
+                    borderSide: const BorderSide(color: AppColors.blue550),
                   ),
                   contentPadding: const EdgeInsets.all(16),
                   counterText: '${_feedbackController.text.length} / 500',
@@ -472,7 +473,7 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                     child: CustomLoadingButtom(
                       text: 'Envoyer mon avis',
                       isLoading: isLoading,
-                      color: const Color(0xFF2548E5),
+                      color: AppColors.blue550,
                       onClick: _submit,
                     ),
                   );
@@ -499,10 +500,10 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
           padding: const EdgeInsets.symmetric(vertical: 12),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF2548E5) : Colors.white,
+            color: isSelected ? AppColors.blue550 : Colors.white,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: isSelected ? const Color(0xFF2548E5) : Colors.grey.shade300,
+              color: isSelected ? AppColors.blue550 : Colors.grey.shade300,
             ),
           ),
           child: Text(

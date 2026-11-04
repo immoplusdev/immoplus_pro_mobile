@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
@@ -249,7 +250,7 @@ class _CalendarDayCell extends StatelessWidget {
     final isRangeMiddle = isSelected && !isSingleSelection && !isRangeStart && !isRangeEnd;
 
     Color background   = Colors.transparent;
-    Color textColor    = isOutMonth ? const Color(0xFFCBD5E1) : calInkColor;
+    Color textColor    = isOutMonth ? AppColors.slate300 : calInkColor;
     FontWeight weight  = FontWeight.w600;
     BorderRadius radius = BorderRadius.circular(8);
 
@@ -282,7 +283,7 @@ class _CalendarDayCell extends StatelessWidget {
       weight    = FontWeight.w800;
     }
     if (isPast && !isBlocked && !isSelected) {
-      textColor = const Color(0xFFCBD5E1);
+      textColor = AppColors.slate300;
       weight    = FontWeight.w500;
     }
 

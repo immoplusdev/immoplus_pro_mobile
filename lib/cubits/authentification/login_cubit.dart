@@ -1,5 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
+import 'package:immoplus_pro/core/error/app_error.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -120,6 +124,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       NavigationService.navigatorKey.currentContext!.goNamed(HomePageV2.name);
     } catch (e) {
       emit(const LoginCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.authentication);
     }
   }
 
@@ -127,21 +132,31 @@ class LoginCubit extends Cubit<LoginCubitState> {
       {required SendOptModel body,
       required PageController pageController}) async {
     emit(const LOGIN_LOADING());
-    final response = await AuthRepository.sendOtp(body: body);
-    if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
+    try {
+      final response = await AuthRepository.sendOtp(body: body);
+      if (StatusCodeHandler.isSuccess(response.response.statusCode)) {
+        emit(const LoginCubitState.initial());
+        pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        emit(const LoginCubitState.initial());
+        ErrorFeedback.present(const UnknownError(),
+            context: ErrorContext.authentication);
+      }
+    } catch (e) {
       emit(const LoginCubitState.initial());
-      pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      EasyLoadingHandler.showErrorToast(
-          text: 'Envoie du code échoué veuillez ressayer');
-      emit(const LoginCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.authentication);
     }
   }
 
+  /// Dernière erreur de vérification du code (lue par le dialogue OTP pour
+  /// choisir entre message sous le champ et feedback global).
+  AppError? lastOtpError;
+
   Future<bool> onSendOtpData({required LoginOtpBody body}) async {
+    lastOtpError = null;
     emit(const LOGIN_LOADING());
     try {
       AccountCreationResponse response =
@@ -183,7 +198,11 @@ class LoginCubit extends Cubit<LoginCubitState> {
       NavigationService.navigatorKey.currentContext!.goNamed(SplashScreen.name);
       return true;
     } catch (e) {
+      lastOtpError = AppErrorMapper.from(e);
       emit(const LoginCubitState.initial());
+      // Code invalide / expiré : affiché sous le champ par le dialogue.
+      ErrorFeedback.showUnlessInputRefusal(e,
+          context: ErrorContext.authentication);
       return false;
     }
   }
@@ -232,6 +251,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       emit(const LoginCubitState.success());
     } catch (e) {
       emit(const LoginCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
     }
   }
 
@@ -246,6 +266,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
       emit(const LoginCubitState.success());
     } catch (e) {
       emit(const LoginCubitState.initial());
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
     }
   }
 
@@ -492,6 +513,7 @@ class LoginCubit extends Cubit<LoginCubitState> {
         return;
       }
       log('❌ Erreur social login: $e');
+      ErrorFeedback.show(e, context: ErrorContext.authentication);
     } catch (e) {
       log('❌ Erreur inattendue: $e');
     } finally {

@@ -121,14 +121,14 @@ class VisitCardV2 extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF1CA53F).withOpacity(0.1),
+                              color: AppColors.green500.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Text(
                               "Payée",
                               style: TextStyle(
                                 fontSize: 8,
-                                color: Color(0xFF1CA53F),
+                                color: AppColors.green500,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

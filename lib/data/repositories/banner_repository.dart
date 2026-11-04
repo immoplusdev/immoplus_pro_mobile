@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
@@ -11,10 +12,10 @@ class BannerRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError in BannerRepository: ${dioError.message}');
-      throw Exception('Failed to load banners: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in BannerRepository: $error');
-      throw Exception('Failed to load banners: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -56,14 +47,44 @@ class DefaultFirebaseOptions {
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD4OuOwQMgSTGAqG0zpXnvNVDNqNjh7x7g',
     appId: '1:1003203724496:ios:d923d874ae90ca8b458ad5',
     messagingSenderId: '1003203724496',
     projectId: 'immo-plus',
     storageBucket: 'immo-plus.firebasestorage.app',
+    androidClientId: '1003203724496-9jdg14j8e1cokrpie7pil5mh52hofe1j.apps.googleusercontent.com',
+    iosClientId: '1003203724496-bfhtnv633cn8i49hjtp9dug0f3c6lbpe.apps.googleusercontent.com',
     iosBundleId: 'com.immoplus.pro.ci',
   );
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDty_VKLZ4z2ojzN2Xdu_E0Y-jf__Rot-s',
+    appId: '1:1003203724496:web:8f470ee5caaff676458ad5',
+    messagingSenderId: '1003203724496',
+    projectId: 'immo-plus',
+    authDomain: 'immo-plus.firebaseapp.com',
+    storageBucket: 'immo-plus.firebasestorage.app',
+    measurementId: 'G-R69N9DYDPK',
+  );
 
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyD4OuOwQMgSTGAqG0zpXnvNVDNqNjh7x7g',
+    appId: '1:1003203724496:ios:f05389632ee36597458ad5',
+    messagingSenderId: '1003203724496',
+    projectId: 'immo-plus',
+    storageBucket: 'immo-plus.firebasestorage.app',
+    androidClientId: '1003203724496-9jdg14j8e1cokrpie7pil5mh52hofe1j.apps.googleusercontent.com',
+    iosClientId: '1003203724496-gir7eli4ao397s0nhg27nu54mcu9ehr3.apps.googleusercontent.com',
+    iosBundleId: 'com.example.immoplusPro',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCTtcDNnlebt8Uy6-qsLzK6THwy_4JlSSA',
+    appId: '1:1003203724496:web:a188738ffa6e0872458ad5',
+    messagingSenderId: '1003203724496',
+    projectId: 'immo-plus',
+    authDomain: 'immo-plus.firebaseapp.com',
+    storageBucket: 'immo-plus.firebasestorage.app',
+    measurementId: 'G-792M02KSPW',
+  );
 }

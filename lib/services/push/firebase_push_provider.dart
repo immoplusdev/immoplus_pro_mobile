@@ -85,8 +85,10 @@ class FirebasePushProvider implements PushProvider {
       await androidPlugin?.createNotificationChannel(_androidChannel);
     }
 
-    // 3. Demander la permission système
-    await requestPermission();
+    // 3. La permission système n'est plus demandée ici : elle l'est via le
+    // sheet d'activation des notifications, au bon moment. Si elle est déjà
+    // accordée, on rafraîchit seulement l'enregistrement (sans pop-up).
+    await _registerIfAuthorized();
 
     // 4. Configuration d'affichage Foreground sur iOS
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -160,11 +162,31 @@ class FirebasePushProvider implements PushProvider {
     }
   }
 
+  /// Si les notifications sont déjà autorisées, ré-enregistre l'appareil
+  /// auprès d'APNs. `requestPermission` n'affiche aucune pop-up dans ce cas.
+  /// Sans permission accordée, ne fait rien (jamais de demande implicite).
+  Future<void> _registerIfAuthorized() async {
+    try {
+      final settings =
+          await FirebaseMessaging.instance.getNotificationSettings();
+      final status = settings.authorizationStatus;
+      if (status == AuthorizationStatus.authorized ||
+          status == AuthorizationStatus.provisional) {
+        await requestPermission();
+      }
+    } catch (e) {
+      log('Error refreshing push registration: $e', name: 'FCM_PROVIDER');
+    }
+  }
+
   @override
   Future<String?> getToken() async {
     try {
       // Sur iOS, attendre que le token APNs natif soit disponible
       if (Platform.isIOS) {
+        // Permission accordée à l'instant via le sheet : l'enregistrement
+        // APNs doit être déclenché avant d'attendre le token.
+        await _registerIfAuthorized();
         String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
         int retries = 0;
         while (apnsToken == null && retries < 5) {

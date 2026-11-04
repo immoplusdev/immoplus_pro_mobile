@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -95,10 +97,12 @@ class _MessagingSettingsSheetState extends State<MessagingSettingsSheet> {
       if (!mounted) return;
       EasyLoading.showSuccess('Réglages enregistrés.');
       Navigator.of(context).pop();
-    } catch (_) {
+    } catch (e) {
       if (!mounted) return;
       setState(() => _isSaving = false);
-      EasyLoading.showError('Erreur de sauvegarde des réglages.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        EasyLoading.showError('Erreur de sauvegarde des réglages.');
+      }
     }
   }
 
@@ -178,7 +182,7 @@ class _MessagingSettingsSheetState extends State<MessagingSettingsSheet> {
                           style: TextStyle(
                             fontSize: 13,
                             color: _absenceUntil != null
-                                ? const Color(0xFF1E293B)
+                                ? AppColors.slate800
                                 : Colors.grey.shade500,
                           ),
                         ),

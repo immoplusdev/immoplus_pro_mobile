@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 // ── Notification type enum ──────────────────────────────────────────────────
@@ -9,7 +10,7 @@ enum NotificationType {
   visit('visit', Icons.calendar_month, Colors.purple),
   payment('payment', Icons.account_balance_wallet, Colors.green),
   message('message', Icons.chat_bubble, Colors.indigo),
-  reservation('reservation', Icons.calendar_today, Color(0xFF2744DE)),
+  reservation('reservation', Icons.calendar_today, AppColors.blue500),
   system('system', Icons.info, Colors.grey);
 
   final String value;

@@ -67,7 +67,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF1E293B),
+                            color: AppColors.slate800,
                           ),
                         ),
                         const Gap(2),
@@ -91,7 +91,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEFF4FF),
+                  color: AppColors.blue40,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -220,7 +220,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
               child: Container(
                 width: 72,
                 height: 72,
-                color: const Color(0xFFF1F5F9),
+                color: AppColors.slate100,
                 child: match.image != null && match.image!.isNotEmpty
                     ? Image.network(
                         match.image!,
@@ -244,7 +244,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF1E293B),
+                      color: AppColors.slate800,
                     ),
                   ),
                   const Gap(2),
@@ -263,7 +263,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF0F172A),
+                      color: AppColors.slate900,
                     ),
                   ),
                   const Gap(6),
@@ -272,7 +272,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF4FF),
+                      color: AppColors.blue40,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -320,7 +320,7 @@ class DemandeStep2ChooseProperty extends StatelessWidget {
 
   Widget _buildFallbackImage() {
     return Container(
-      color: const Color(0xFFF1F5F9),
+      color: AppColors.slate100,
       child: Center(
         child: Icon(
           Iconsax.building_3,

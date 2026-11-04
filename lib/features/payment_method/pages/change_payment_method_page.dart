@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +31,7 @@ const List<_PaymentMethodOption> _paymentMethodOptions = [
   _PaymentMethodOption(value: 'moov', label: 'Moov Money', icon: Iconsax.wallet_money, color: Color(0xFF0057A0)),
   _PaymentMethodOption(value: 'wave', label: 'Wave', icon: Iconsax.wallet_money, color: Color(0xFF1DC8F2)),
   _PaymentMethodOption(value: 'ecobank', label: 'Ecobank', icon: Iconsax.bank, color: Color(0xFF00A651)),
-  _PaymentMethodOption(value: 'cash', label: 'Espèces', icon: Iconsax.money, color: Color(0xFF1CA53F)),
+  _PaymentMethodOption(value: 'cash', label: 'Espèces', icon: Iconsax.money, color: AppColors.green500),
   _PaymentMethodOption(value: 'visa_card', label: 'Carte Visa', icon: Iconsax.card, color: Color(0xFF1A1F71)),
   _PaymentMethodOption(value: 'visa_card_retrait', label: 'Carte Visa (retrait)', icon: Iconsax.card, color: Color(0xFF1A1F71)),
 ];
@@ -117,16 +119,18 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
       if (!mounted) return;
       EasyLoadingHandler.showSuccessToast(text: "Moyen de paiement enregistré");
       context.pop();
-    } catch (_) {
+    } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
       if (!mounted) return;
-      toastification.show(
-        type: ToastificationType.error,
-        context: context,
-        title: const Text("Échec de l'enregistrement"),
-        description: const Text("Veuillez réessayer."),
-        autoCloseDuration: const Duration(seconds: 4),
-      );
+      if (!ErrorFeedback.show(e, context: ErrorContext.profileUpdate)) {
+        toastification.show(
+          type: ToastificationType.error,
+          context: context,
+          title: const Text("Échec de l'enregistrement"),
+          description: const Text("Veuillez réessayer."),
+          autoCloseDuration: const Duration(seconds: 4),
+        );
+      }
     } finally {
       if (mounted) setState(() => _isSaving = false);
     }
@@ -267,7 +271,7 @@ class _ChangePaymentMethodPageState extends State<ChangePaymentMethodPage> {
 
   Widget _buildOptionTile(_PaymentMethodOption option) {
     final isSelected = _selectedType == option.value;
-    final fg = isSelected ? Colors.white : const Color(0xFF1E293B);
+    final fg = isSelected ? Colors.white : AppColors.slate800;
 
     return GestureDetector(
       onTap: () => setState(() => _selectedType = option.value),

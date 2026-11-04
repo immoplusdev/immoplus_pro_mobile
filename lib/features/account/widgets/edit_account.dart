@@ -108,6 +108,7 @@ class _EditAccountState extends State<EditAccount> {
         listener: (context, state) {
           if (state is LOGIN_SUCCESS) {
             ToastUtils.success('Modification effectuée avec succès');
+            context.pop();
           }
         },
         child: SafeArea(

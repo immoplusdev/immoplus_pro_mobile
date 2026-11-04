@@ -127,7 +127,7 @@ class _ProfileCompletionCardState extends State<ProfileCompletionCard> {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.slate800,
                   ),
                 ),
               ),
@@ -261,7 +261,7 @@ class _ProfileCompletionCardState extends State<ProfileCompletionCard> {
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1E293B),
+                  color: AppColors.slate800,
                 ),
               ),
               const Gap(12),

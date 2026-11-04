@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ import 'package:immoplus_pro/utils/operator_payment.dart';
 import 'package:toastification/toastification.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
+import 'package:immoplus_pro/services/crashlytics_service.dart';
 import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/utils/utils.dart';
@@ -127,14 +130,16 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
         paymentMethod: selectedOperator?.value,
       );
       if (mounted) {
-        toastification.show(
-          type: ToastificationType.error,
-          context: context,
-          title: const Text("Échec de la demande"),
-          description: const Text(
-              "La demande de retrait a échoué. Veuillez réessayer."),
-          autoCloseDuration: const Duration(seconds: 4),
-        );
+        if (!ErrorFeedback.show(e, context: ErrorContext.withdrawal)) {
+          toastification.show(
+            type: ToastificationType.error,
+            context: context,
+            title: const Text("Échec de la demande"),
+            description: const Text(
+                "La demande de retrait a échoué. Veuillez réessayer."),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        }
       }
     } finally {
       if (mounted) {
@@ -250,21 +255,34 @@ class _WithdrawFormScreenV2State extends State<WithdrawFormScreenV2> {
           );
         }
       }
-    } catch (e) {
+    } catch (e, stack) {
       EasyLoadingHandler.hideLoadingToast();
       getIt<AnalyticsService>().logWithdrawalFailed(
         montantRetrait: parsedAmount.toDouble(),
         paymentMethod: selectedOperator?.value,
       );
+      getIt<CrashlyticsService>().recordNonFatalError(
+        exception: e,
+        stackTrace: stack,
+        screen: 'WithdrawFormScreenV2',
+        feature: 'withdrawal',
+        errorType: 'WithdrawalSubmissionException',
+        additionalContext: {
+          'operator': selectedOperator?.value ?? 'unknown',
+          'is_qr': widget.reservationId != null,
+        },
+      );
       if (mounted) {
-        toastification.show(
-          type: ToastificationType.error,
-          context: context,
-          title: const Text("Échec de la demande"),
-          description: const Text(
-              "La demande de retrait a échoué. Veuillez réessayer."),
-          autoCloseDuration: const Duration(seconds: 4),
-        );
+        if (!ErrorFeedback.show(e, context: ErrorContext.withdrawal)) {
+          toastification.show(
+            type: ToastificationType.error,
+            context: context,
+            title: const Text("Échec de la demande"),
+            description: const Text(
+                "La demande de retrait a échoué. Veuillez réessayer."),
+            autoCloseDuration: const Duration(seconds: 4),
+          );
+        }
       }
     } finally {
       if (mounted) {
