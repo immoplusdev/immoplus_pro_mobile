@@ -4,6 +4,7 @@ import 'package:immoplus_pro/features/residence_creation/logic/residence_creatio
 import 'package:immoplus_pro/features/residence_creation/logic/residence_creation_state.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_step_key.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/layout/creation_tips.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/booking_step_extras.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/field_list.dart';
 
@@ -23,7 +24,7 @@ class StepContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (CreationStepKey.fromValue(step.key)) {
+    final content = switch (CreationStepKey.fromValue(step.key)) {
       CreationStepKey.booking =>
         _BookingStepContent(step: step, state: state, cubit: cubit),
       _ => Column(
@@ -35,6 +36,16 @@ class StepContent extends StatelessWidget {
           ),
         ),
     };
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        content,
+        // Les conseils sont les mêmes pour toutes les étapes : ils viennent
+        // de l'API (`tips`).
+        CreationTips(tips: step.tips),
+      ],
+    );
   }
 }
 

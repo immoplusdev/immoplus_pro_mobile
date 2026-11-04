@@ -8,6 +8,7 @@ import 'package:immoplus_pro/features/residence_creation/models/creation_values.
 import 'package:immoplus_pro/features/residence_creation/models/residence_field_keys.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/amenities_field.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/counters_field.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/fields/map_location_picker.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/media_fields.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/option_fields.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/places_autocomplete_field.dart';
@@ -104,6 +105,7 @@ class DynamicField extends StatelessWidget {
           errorText: error,
           search: cubit.searchPlaces,
           resolve: cubit.resolvePlace,
+          pickOnMap: pickLocationOnMap,
           onChanged: set,
         );
       case CreationFieldType.mediaUpload:

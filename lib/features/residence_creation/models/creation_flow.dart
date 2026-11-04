@@ -173,12 +173,48 @@ class CreationField {
       );
 }
 
+/// Style d'un conseil. Une variante inconnue s'affiche comme [info].
+enum TipVariant {
+  info('info'),
+  success('success'),
+  warning('warning');
+
+  final String value;
+  const TipVariant(this.value);
+
+  static TipVariant fromValue(String? value) => TipVariant.values.firstWhere(
+        (e) => e.value == value,
+        orElse: () => TipVariant.info,
+      );
+}
+
+/// Conseil « Immo Plus » renvoyé par l'API (`tips`) : informatif, jamais
+/// bloquant. Textes, ordre et présence viennent entièrement de l'API.
+class CreationTip {
+  const CreationTip({
+    required this.title,
+    required this.text,
+    this.variant = TipVariant.info,
+  });
+
+  final String title;
+  final String text;
+  final TipVariant variant;
+
+  factory CreationTip.fromJson(Map<String, dynamic> json) => CreationTip(
+        title: json['title'] as String? ?? '',
+        text: json['text'] as String? ?? '',
+        variant: TipVariant.fromValue(json['variant'] as String?),
+      );
+}
+
 class CreationStep {
   const CreationStep({
     required this.key,
     required this.title,
     this.subtitle,
     required this.fields,
+    this.tips = const [],
     this.position = 0,
   });
 
@@ -186,6 +222,7 @@ class CreationStep {
   final String title;
   final String? subtitle;
   final List<CreationField> fields;
+  final List<CreationTip> tips;
   final int position;
 
   factory CreationStep.fromJson(Map<String, dynamic> json) => CreationStep(
@@ -194,6 +231,9 @@ class CreationStep {
         subtitle: json['subtitle'] as String?,
         fields: _list(json['fields'], CreationField.fromJson)
             .where((f) => f.type != CreationFieldType.unknown)
+            .toList(),
+        tips: _list(json['tips'], CreationTip.fromJson)
+            .where((t) => t.title.isNotEmpty || t.text.isNotEmpty)
             .toList(),
         position: (json['position'] as num?)?.toInt() ?? 0,
       );

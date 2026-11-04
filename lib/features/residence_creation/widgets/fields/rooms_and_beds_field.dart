@@ -138,55 +138,60 @@ class _RoomsAndBedsSheetState extends State<_RoomsAndBedsSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.field.label ?? '', style: AppTypography.h4),
-          AppSpacing.gap12,
-          CatalogSearchField(
-            hint: widget.field.searchPlaceholder,
-            onSearch: (text) => setState(() {
-              _search = text;
-              _future = _load();
-            }),
-          ),
-          AppSpacing.gap8,
-          Expanded(
-            child: SingleChildScrollView(
-              child: CatalogFutureBuilder(
-                future: _future,
-                onRetry: () => setState(() => _future = _load()),
-                builder: (groups) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final group in groups) ...[
-                      Padding(
-                        padding: const EdgeInsets.only(top: AppSpacing.md),
-                        child: Text(group.label,
-                            style: AppTypography.bodySmallSemiBold
-                                .copyWith(color: AppColors.gray400)),
-                      ),
-                      for (final item
-                          in group.items.where((i) => i.countKey != null))
-                        _ItemRow(
-                          item: item,
-                          count: _counts[item.countKey] ?? 0,
-                          onChanged: (v) => _setCount(item.countKey!, v),
+    // Sur Android en plein écran (bouton de navigation par-dessus la feuille),
+    // le bouton « Valider » doit rester au-dessus de la barre système.
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(widget.field.label ?? '', style: AppTypography.h4),
+            AppSpacing.gap12,
+            CatalogSearchField(
+              hint: widget.field.searchPlaceholder,
+              onSearch: (text) => setState(() {
+                _search = text;
+                _future = _load();
+              }),
+            ),
+            AppSpacing.gap8,
+            Expanded(
+              child: SingleChildScrollView(
+                child: CatalogFutureBuilder(
+                  future: _future,
+                  onRetry: () => setState(() => _future = _load()),
+                  builder: (groups) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final group in groups) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.md),
+                          child: Text(group.label,
+                              style: AppTypography.bodySmallSemiBold
+                                  .copyWith(color: AppColors.gray400)),
                         ),
+                        for (final item
+                            in group.items.where((i) => i.countKey != null))
+                          _ItemRow(
+                            item: item,
+                            count: _counts[item.countKey] ?? 0,
+                            onChanged: (v) => _setCount(item.countKey!, v),
+                          ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-          AppSpacing.gap8,
-          PillButton(
-            label: 'Valider',
-            onPressed: () => Navigator.of(context).pop(_counts),
-          ),
-        ],
+            AppSpacing.gap8,
+            PillButton(
+              label: 'Valider',
+              onPressed: () => Navigator.of(context).pop(_counts),
+            ),
+          ],
+        ),
       ),
     );
   }

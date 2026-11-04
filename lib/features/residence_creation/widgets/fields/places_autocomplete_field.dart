@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_values.dart';
@@ -21,6 +22,7 @@ class PlacesAutocompleteField extends StatefulWidget {
     required this.search,
     required this.resolve,
     required this.onChanged,
+    this.pickOnMap,
   });
 
   final CreationField field;
@@ -35,6 +37,10 @@ class PlacesAutocompleteField extends StatefulWidget {
     String? sessionToken,
   }) resolve;
   final ValueChanged<PlaceSelection?> onChanged;
+
+  /// Si fourni, affiche un bouton « carte » à côté du champ : position
+  /// actuelle ou point choisi sur la carte.
+  final Future<PlaceSelection?> Function(BuildContext context)? pickOnMap;
 
   @override
   State<PlacesAutocompleteField> createState() =>
@@ -135,6 +141,45 @@ class _PlacesAutocompleteFieldState extends State<PlacesAutocompleteField> {
     }
   }
 
+  Future<void> _pickOnMap() async {
+    _focusNode.unfocus();
+    _timer?.cancel();
+    final selection = await widget.pickOnMap!(context);
+    if (selection == null || !mounted) return;
+    _controller.text = selection.address;
+    setState(() {
+      _suggestions = const [];
+      _loading = false;
+      _localError = null;
+    });
+    widget.onChanged(selection);
+  }
+
+  Widget _textField(CreationField field, String? error) {
+    return TextField(
+      controller: _controller,
+      focusNode: _focusNode,
+      onChanged: _onTyped,
+      maxLength: field.maxLength,
+      style: AppTypography.bodyMedium,
+      textInputAction: TextInputAction.search,
+      decoration: creationInputDecoration(
+        hint: field.placeholder,
+        hasError: error != null,
+        prefix: Icon(Iconsax.location, size: 18, color: AppColors.primary),
+        suffix: _loading
+            ? const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : (widget.value != null
+                ? Icon(Icons.check_circle, size: 20, color: AppColors.green500)
+                : null),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final field = widget.field;
@@ -148,29 +193,15 @@ class _PlacesAutocompleteFieldState extends State<PlacesAutocompleteField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: _controller,
-            focusNode: _focusNode,
-            onChanged: _onTyped,
-            maxLength: field.maxLength,
-            style: AppTypography.bodyMedium,
-            textInputAction: TextInputAction.search,
-            decoration: creationInputDecoration(
-              hint: field.placeholder,
-              hasError: error != null,
-              prefix: Icon(Icons.location_on_outlined,
-                  size: 20, color: AppColors.gray400),
-              suffix: _loading
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : (widget.value != null
-                      ? Icon(Icons.check_circle,
-                          size: 20, color: AppColors.green500)
-                      : null),
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _textField(field, error)),
+              if (widget.pickOnMap != null) ...[
+                AppSpacing.gap8,
+                _MapButton(onTap: _pickOnMap),
+              ],
+            ],
           ),
           if (_suggestions.isNotEmpty) ...[
             AppSpacing.gap8,
@@ -234,6 +265,35 @@ class _SuggestionList extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// Bouton carré à côté du champ, à la hauteur de la saisie.
+class _MapButton extends StatelessWidget {
+  const _MapButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  static const double _size = 50;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Choisir sur la carte',
+      child: Material(
+        color: CreationStyle.selectedFill,
+        borderRadius: BorderRadius.circular(CreationStyle.fieldRadius),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(CreationStyle.fieldRadius),
+          child: SizedBox(
+            width: _size,
+            height: _size,
+            child: Icon(Icons.map_outlined, color: AppColors.primary),
+          ),
+        ),
       ),
     );
   }

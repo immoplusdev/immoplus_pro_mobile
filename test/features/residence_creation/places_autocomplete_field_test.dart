@@ -95,4 +95,51 @@ void main() {
 
     expect(find.textContaining('Recherche indisponible'), findsOneWidget);
   });
+
+  testWidgets('le bouton carte remplit le champ avec l\'adresse choisie',
+      (tester) async {
+    PlaceSelection? value;
+
+    await tester.pumpWidget(MaterialApp(
+      home: StatefulBuilder(
+        builder: (context, setState) => Scaffold(
+          body: PlacesAutocompleteField(
+            field: _field,
+            value: value,
+            errorText: null,
+            search: (input, {sessionToken}) async => const [],
+            resolve: (s, {sessionToken}) async => throw UnimplementedError(),
+            pickOnMap: (_) async => const PlaceSelection(
+              address: 'Riviera 3, Abidjan',
+              position: GeoPoint(latitude: 5.36, longitude: -3.98),
+            ),
+            onChanged: (v) => setState(() => value = v),
+          ),
+        ),
+      ),
+    ));
+
+    await tester.tap(find.byIcon(Icons.map_outlined));
+    await tester.pumpAndSettle();
+
+    expect(value?.address, 'Riviera 3, Abidjan');
+    expect(find.text('Riviera 3, Abidjan'), findsOneWidget);
+  });
+
+  testWidgets('sans pickOnMap, pas de bouton carte', (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: PlacesAutocompleteField(
+          field: _field,
+          value: null,
+          errorText: null,
+          search: (input, {sessionToken}) async => const [],
+          resolve: (s, {sessionToken}) async => throw UnimplementedError(),
+          onChanged: (_) {},
+        ),
+      ),
+    ));
+
+    expect(find.byIcon(Icons.map_outlined), findsNothing);
+  });
 }
