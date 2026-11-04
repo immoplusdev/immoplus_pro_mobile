@@ -1,0 +1,62 @@
+{
+  "id": "f6c663a0-34c5-4025-9828-f6ff6b866f18",
+  "nom": "test",
+  "typeResidence": "studio",
+  "description": "Un studio lumineux et calme, proche des commerces et des transports, idéal pour un court séjour ou un séjour professionnel.",
+  "images": [
+    "img-1",
+    "img-2",
+    "img-3",
+    "img-4",
+    "img-5"
+  ],
+  "adresse": "testded",
+  "position": {
+    "type": "Point",
+    "coordinates": [
+      -3.9986141,
+      5.353858199999999
+    ]
+  },
+  "prixReservation": 1000,
+  "dureeMinSejour": 1,
+  "dureeMaxSejour": 30,
+  "heureEntree": "14:00",
+  "heureDepart": "12:00",
+  "nombreMaxOccupants": 1,
+  "animauxAutorises": true,
+  "fetesAutorises": false,
+  "propertyTypeCode": "STUDIO",
+  "amenityCodes": [
+    "WIFI"
+  ],
+  "capacity": {
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "maxGuests": 3,
+    "livingRooms": 1
+  },
+  "roomCounts": {
+    "bunkBeds": 1,
+    "doubleBeds": 1,
+    "singleBeds": 1
+  },
+  "bookingMode": "INSTANT",
+  "advanceNoticeDays": 0,
+  "sameDayCutoff": null,
+  "bookingHorizonDays": 90,
+  "preparationNights": 1,
+  "weekendNightlyPrice": 45000,
+  "weeklyDiscountPercent": 10,
+  "video": null,
+  "ville": "v-1",
+  "commune": "c-1",
+  "ville_model": {
+    "id": "v-1",
+    "name": "Abidjan"
+  },
+  "commune_model": {
+    "id": "c-1",
+    "name": "Abobo"
+  }
+}
