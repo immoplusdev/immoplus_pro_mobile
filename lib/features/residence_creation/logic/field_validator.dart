@@ -24,9 +24,11 @@ abstract class FieldValidator {
       case CreationFieldType.chips:
       case CreationFieldType.timeChips:
       case CreationFieldType.time:
-      case CreationFieldType.select:
-      case CreationFieldType.mapPoint:
         return field.required && value == null ? requiredMessage : null;
+      case CreationFieldType.googlePlacesAutocomplete:
+        return field.required && value == null
+            ? 'Choisissez une adresse dans les suggestions'
+            : null;
       case CreationFieldType.counters:
       case CreationFieldType.bottomSheetCatalog:
       case CreationFieldType.toggle:

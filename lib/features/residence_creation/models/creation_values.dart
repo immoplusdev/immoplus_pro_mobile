@@ -1,11 +1,3 @@
-/// Référence choisie dans une liste (ville, commune).
-class SelectedRef {
-  const SelectedRef({required this.id, required this.label});
-
-  final String id;
-  final String label;
-}
-
 /// Point GPS choisi sur la carte.
 class GeoPoint {
   const GeoPoint({required this.latitude, required this.longitude});
@@ -18,6 +10,15 @@ class GeoPoint {
         'type': 'Point',
         'coordinates': [longitude, latitude],
       };
+}
+
+/// Adresse choisie dans les suggestions Google : le texte affiché et le
+/// point GPS correspondant.
+class PlaceSelection {
+  const PlaceSelection({required this.address, required this.position});
+
+  final String address;
+  final GeoPoint position;
 }
 
 /// Résultat de `POST /residences`.

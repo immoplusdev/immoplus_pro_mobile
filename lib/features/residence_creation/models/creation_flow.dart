@@ -7,8 +7,7 @@ enum CreationFieldType {
   counters('counters'),
   counter('counter'),
   bottomSheetCatalog('bottom_sheet_catalog'),
-  select('select'),
-  mapPoint('map_point'),
+  googlePlacesAutocomplete('google_places_autocomplete'),
   multiSelectCatalog('multi_select_catalog'),
   mediaUpload('media_upload'),
   time('time'),
@@ -107,7 +106,7 @@ class CreationField {
     this.options = const [],
     this.items = const [],
     this.catalogEndpoint,
-    this.dependsOn,
+    this.outputs = const {},
     this.visibleWhen,
     this.currency,
   });
@@ -130,7 +129,10 @@ class CreationField {
   final List<FieldOption> options;
   final List<CounterItem> items;
   final String? catalogEndpoint;
-  final String? dependsOn;
+
+  /// Pour `google_places_autocomplete` : sortie logique (`address`,
+  /// `position`) -> clé du payload (`adresse`, `position`).
+  final Map<String, String> outputs;
   final VisibleWhen? visibleWhen;
   final String? currency;
 
@@ -161,7 +163,9 @@ class CreationField {
         options: _list(json['options'], FieldOption.fromJson),
         items: _list(json['items'], CounterItem.fromJson),
         catalogEndpoint: json['catalogEndpoint'] as String?,
-        dependsOn: json['dependsOn'] as String?,
+        outputs: (json['outputs'] as Map?)
+                ?.map((k, v) => MapEntry(k as String, v as String)) ??
+            const {},
         visibleWhen: json['visibleWhen'] == null
             ? null
             : VisibleWhen.fromJson(json['visibleWhen'] as Map<String, dynamic>),

@@ -6,10 +6,7 @@ abstract class ResidenceFieldKeys {
   static const String propertyType = 'propertyType';
   static const String composition = 'composition';
   static const String roomsAndBeds = 'roomsAndBeds';
-  static const String address = 'address';
-  static const String city = 'city';
-  static const String commune = 'commune';
-  static const String position = 'position';
+  static const String location = 'location';
   static const String photos = 'photos';
   static const String video = 'video';
   static const String amenityCodes = 'amenityCodes';
@@ -21,9 +18,7 @@ abstract class ResidenceFieldKeys {
     propertyType: ['propertyType', 'typeResidence'],
     composition: ['capacity'],
     roomsAndBeds: ['roomCounts'],
-    address: ['adresse'],
-    city: ['ville'],
-    commune: ['commune'],
+    location: ['adresse', 'position'],
     photos: ['images', 'miniature'],
   };
 

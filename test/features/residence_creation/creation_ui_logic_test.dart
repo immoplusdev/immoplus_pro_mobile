@@ -53,7 +53,6 @@ void main() {
       expect(keys, isNot(contains(CreationStepKey.unknown)));
       expect(keys.map((k) => k.shortLabel), [
         'Mon bien',
-        'Localisation',
         'Équipements',
         'Présentation',
         'Règles et prix',

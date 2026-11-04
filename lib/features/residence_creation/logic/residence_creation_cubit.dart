@@ -11,6 +11,7 @@ import 'package:immoplus_pro/features/residence_creation/logic/residence_payload
 import 'package:immoplus_pro/features/residence_creation/models/catalog.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_values.dart';
+import 'package:immoplus_pro/features/residence_creation/models/place_suggestion.dart';
 import 'package:immoplus_pro/features/residence_creation/models/residence_field_keys.dart';
 import 'package:immoplus_pro/features/residence_creation/models/server_validation_errors.dart';
 import 'package:immoplus_pro/features/residence_creation/repositories/residence_creation_repository.dart';
@@ -49,18 +50,9 @@ class ResidenceCreationCubit extends Cubit<ResidenceCreationState> {
   }
 
   void setValue(String key, Object? value) {
-    final values = {...state.values, key: value};
-    // Changer de ville invalide la commune choisie.
-    if (key == ResidenceFieldKeys.city) {
-      values[ResidenceFieldKeys.commune] = null;
-    }
-
     emit(state.copyWith(
-      values: values,
-      fieldErrors: _withoutErrors({
-        key,
-        if (key == ResidenceFieldKeys.city) ResidenceFieldKeys.commune
-      }),
+      values: {...state.values, key: value},
+      fieldErrors: _withoutErrors({key}),
     ));
   }
 
@@ -70,6 +62,20 @@ class ResidenceCreationCubit extends Cubit<ResidenceCreationState> {
   /// Charge un catalogue à partir du `catalogEndpoint` d'un champ.
   Future<List<CatalogGroup>> loadCatalog(String endpoint, {String? search}) =>
       _repository.getCatalog(endpoint, search: search);
+
+  // ── Adresse ───────────────────────────────────────────────────────────
+
+  Future<List<PlaceSuggestion>> searchPlaces(String input,
+          {String? sessionToken}) =>
+      _repository.searchPlaces(input, sessionToken: sessionToken);
+
+  /// Transforme une suggestion en adresse + position GPS.
+  Future<PlaceSelection> resolvePlace(PlaceSuggestion suggestion,
+      {String? sessionToken}) async {
+    final position = await _repository.getPlacePosition(suggestion.placeId,
+        sessionToken: sessionToken);
+    return PlaceSelection(address: suggestion.description, position: position);
+  }
 
   // ── Photos ────────────────────────────────────────────────────────────
 
@@ -169,9 +175,7 @@ class ResidenceCreationCubit extends Cubit<ResidenceCreationState> {
     analytics.logPropertyCreationSubmitted(
       typeBien: propertyType,
       prix: price,
-      commune:
-          (state.values[ResidenceFieldKeys.commune] as SelectedRef?)?.label ??
-              '',
+      commune: '',
     );
 
     try {

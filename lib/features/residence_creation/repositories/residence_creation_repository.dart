@@ -1,15 +1,21 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:immoplus_pro/features/location_module/data/places_api_repository.dart';
+import 'package:immoplus_pro/features/residence_creation/models/place_suggestion.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
 import 'package:immoplus_pro/features/residence_creation/models/catalog.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_values.dart';
 
 class ResidenceCreationRepository {
-  ResidenceCreationRepository({Dio? dio}) : _dio = dio ?? DioClient().dio;
+  ResidenceCreationRepository({Dio? dio, PlacesApiRepository? places})
+      : _dio = dio ?? DioClient().dio,
+        _places = places ?? PlacesApiRepository();
 
   final Dio _dio;
+  final PlacesApiRepository _places;
 
   static const String _intent = 'STAY';
 
@@ -33,6 +39,51 @@ class ResidenceCreationRepository {
   /// Modifie une résidence avec le même corps que `POST /residences`.
   Future<void> updateResidence(String id, Map<String, dynamic> payload) async {
     await _dio.patch<dynamic>('/residences/$id', data: payload);
+  }
+
+  /// Suggestions d'adresses (Google Places) pour la saisie en cours.
+  /// [sessionToken] regroupe les frappes et la sélection d'une même recherche.
+  Future<List<PlaceSuggestion>> searchPlaces(
+    String input, {
+    String? sessionToken,
+  }) async {
+    final response = await _places.getPlaceAutocomplete(
+      input: input.trim(),
+      sessionToken: sessionToken,
+    );
+    return [
+      for (final p in response.predictions ?? const [])
+        if (p.placeId != null && p.description != null)
+          PlaceSuggestion(
+            placeId: p.placeId!,
+            description: p.description!,
+            primaryText: p.structuredFormatting?.mainText ?? p.description!,
+            secondaryText: p.structuredFormatting?.secondaryText,
+          ),
+    ];
+  }
+
+  /// Coordonnées GPS d'une suggestion. Google n'a pas besoin de notre jeton
+  /// d'authentification : on utilise un client Dio sans intercepteur.
+  Future<GeoPoint> getPlacePosition(
+    String placeId, {
+    String? sessionToken,
+  }) async {
+    final response = await Dio().get<Map<String, dynamic>>(
+      'https://maps.googleapis.com/maps/api/place/details/json',
+      queryParameters: {
+        'place_id': placeId,
+        'fields': 'geometry',
+        'key': dotenv.env['GOOGLE_API_KEY'],
+        if (sessionToken != null) 'sessiontoken': sessionToken,
+      },
+    );
+    final location = response.data?['result']?['geometry']?['location'];
+    if (location is! Map) throw StateError('Position introuvable');
+    return GeoPoint(
+      latitude: (location['lat'] as num).toDouble(),
+      longitude: (location['lng'] as num).toDouble(),
+    );
   }
 
   /// Charge un catalogue à partir du `catalogEndpoint` d'un champ. Les

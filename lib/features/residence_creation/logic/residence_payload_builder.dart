@@ -15,6 +15,11 @@ abstract class ResidencePayloadBuilder {
     for (final field in flow.allFields) {
       final value = field.isVisible(values) ? values[field.key] : null;
 
+      if (field.type == CreationFieldType.googlePlacesAutocomplete) {
+        _putLocation(payload, field, value as PlaceSelection?);
+        continue;
+      }
+
       switch (field.key) {
         case ResidenceFieldKeys.name:
           payload['nom'] = _trimmed(value);
@@ -28,14 +33,6 @@ abstract class ResidencePayloadBuilder {
             for (final e in (value as Map<String, int>? ?? {}).entries)
               if (e.value > 0) e.key: e.value,
           };
-        case ResidenceFieldKeys.address:
-          payload['adresse'] = _trimmed(value);
-        case ResidenceFieldKeys.city:
-          payload['ville'] = (value as SelectedRef?)?.id;
-        case ResidenceFieldKeys.commune:
-          payload['commune'] = (value as SelectedRef?)?.id;
-        case ResidenceFieldKeys.position:
-          payload['position'] = (value as GeoPoint?)?.toGeoJson();
         case ResidenceFieldKeys.photos:
           final ids = _uploadedIds(value);
           payload['images'] = ids;
@@ -47,6 +44,19 @@ abstract class ResidencePayloadBuilder {
       }
     }
     return payload;
+  }
+
+  /// Une sortie par clé de `outputs` : `address` -> texte, `position` ->
+  /// GeoJSON.
+  static void _putLocation(
+    Map<String, dynamic> payload,
+    CreationField field,
+    PlaceSelection? place,
+  ) {
+    final address = field.outputs['address'];
+    final position = field.outputs['position'];
+    if (address != null) payload[address] = place?.address.trim();
+    if (position != null) payload[position] = place?.position.toGeoJson();
   }
 
   static String? _trimmed(Object? value) => (value as String?)?.trim();

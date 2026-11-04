@@ -10,6 +10,7 @@ import 'package:immoplus_pro/features/residence_creation/logic/residence_creatio
 import 'package:immoplus_pro/features/residence_creation/models/catalog.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_values.dart';
+import 'package:immoplus_pro/features/residence_creation/models/place_suggestion.dart';
 import 'package:immoplus_pro/features/residence_creation/repositories/residence_creation_repository.dart';
 import 'package:immoplus_pro/services/analytics_service.dart';
 
@@ -45,6 +46,16 @@ class _FakeRepository implements ResidenceCreationRepository {
     updatedId = id;
     updatedPayload = payload;
   }
+
+  @override
+  Future<List<PlaceSuggestion>> searchPlaces(String input,
+          {String? sessionToken}) async =>
+      const [];
+
+  @override
+  Future<GeoPoint> getPlacePosition(String placeId,
+          {String? sessionToken}) async =>
+      const GeoPoint(latitude: 5.36, longitude: -3.98);
 
   @override
   Future<CreationFlow> getCreationFlow() async {
@@ -129,14 +140,6 @@ void main() {
     expect(cubit.state.fieldErrors.containsKey('propertyType'), isTrue);
   });
 
-  test('changer de ville réinitialise la commune', () {
-    cubit.setValue('city', const SelectedRef(id: 'v1', label: 'Abidjan'));
-    cubit.setValue('commune', const SelectedRef(id: 'c1', label: 'Cocody'));
-    cubit.setValue('city', const SelectedRef(id: 'v2', label: 'Bouaké'));
-
-    expect(cubit.state.values['commune'], isNull);
-  });
-
   group('envoi des photos (POST /files)', () {
     List<ImageUploadItem> photos() =>
         cubit.state.values['photos'] as List<ImageUploadItem>;
@@ -178,10 +181,13 @@ void main() {
   });
 
   Future<void> completeAllSteps() async {
-    await fillAndAdvance({'name': 'Les Palmiers', 'propertyType': 'VILLA'});
     await fillAndAdvance({
-      'address': 'Cocody Riviera 3',
-      'position': const GeoPoint(latitude: 5.36, longitude: -3.98),
+      'name': 'Les Palmiers',
+      'propertyType': 'VILLA',
+      'location': const PlaceSelection(
+        address: 'Cocody Riviera 3',
+        position: GeoPoint(latitude: 5.36, longitude: -3.98),
+      ),
     });
     await fillAndAdvance({});
     await fillAndAdvance({
@@ -194,7 +200,7 @@ void main() {
   test('parcours complet : soumet le payload et affiche la confirmation',
       () async {
     await completeAllSteps();
-    expect(cubit.state.stepIndex, 5);
+    expect(cubit.state.stepIndex, 4);
     expect(cubit.state.isLastStep, isTrue);
 
     await cubit.next();
@@ -247,7 +253,7 @@ void main() {
     await cubit.next();
 
     expect(cubit.state.generalErrors, ['Erreur interne']);
-    expect(cubit.state.stepIndex, 5);
+    expect(cubit.state.stepIndex, 4);
   });
 
   group('édition d\'une résidence (PATCH)', () {
@@ -275,9 +281,9 @@ void main() {
           {'bedrooms': 1, 'livingRooms': 1, 'bathrooms': 1, 'maxGuests': 3});
       expect(values['roomsAndBeds'],
           {'bunkBeds': 1, 'doubleBeds': 1, 'singleBeds': 1});
-      expect(values['city'].id, 'v-1');
-      expect((values['commune'] as SelectedRef).label, 'Abobo');
-      final point = values['position'] as GeoPoint;
+      final place = values['location'] as PlaceSelection;
+      expect(place.address, 'testded');
+      final point = place.position;
       expect(point.longitude, -3.9986141);
       expect(point.latitude, 5.353858199999999);
       expect(values['amenityCodes'], ['WIFI']);
@@ -306,7 +312,7 @@ void main() {
       expect(values['maxNights'], 2);
       expect(values['petsAllowed'], true);
       expect(values['amenityCodes'], isEmpty);
-      expect(values['city'], isNull);
+      expect(values['location'], isA<PlaceSelection>());
       expect(values['bookingMode'], 'INSTANT');
       expect(values['weekendPricingEnabled'], false);
     });
@@ -315,7 +321,7 @@ void main() {
         () async {
       final edit = await editing('residence_new_format.json');
 
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < 5; i++) {
         await edit.next();
       }
 
@@ -327,7 +333,11 @@ void main() {
       expect(payload['typeResidence'], 'studio');
       expect(payload['images'], ['img-1', 'img-2', 'img-3', 'img-4', 'img-5']);
       expect(payload['miniature'], 'img-1');
-      expect(payload['ville'], 'v-1');
+      expect(payload['adresse'], 'testded');
+      expect(payload['position'], {
+        'type': 'Point',
+        'coordinates': [-3.9986141, 5.353858199999999],
+      });
       expect(payload['baseNightlyPrice'], 1000);
       expect(edit.state.updated, isTrue);
       expect(edit.state.created, isNull);
@@ -344,7 +354,7 @@ void main() {
         ),
       );
 
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < 5; i++) {
         await edit.next();
       }
 

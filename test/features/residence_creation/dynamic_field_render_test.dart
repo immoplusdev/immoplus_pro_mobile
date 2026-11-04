@@ -76,7 +76,11 @@ void main() {
       // Montre aussi les champs conditionnels.
       cubit.setValue('advanceNoticeDays', 0);
       cubit.setValue('weekendPricingEnabled', true);
-      cubit.setValue('position', const GeoPoint(latitude: 1, longitude: 2));
+      cubit.setValue(
+          'location',
+          const PlaceSelection(
+              address: 'Cocody',
+              position: GeoPoint(latitude: 1, longitude: 2)));
 
       await tester.pumpWidget(
         MaterialApp(

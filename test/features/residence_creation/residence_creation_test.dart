@@ -38,10 +38,10 @@ Map<String, dynamic> _filledValues() => {
         'maxGuests': 4,
       },
       'roomsAndBeds': {'doubleBeds': 2, 'kitchens': 1, 'gardens': 0},
-      'address': 'Cocody Riviera 3, Abidjan',
-      'city': const SelectedRef(id: 'uuid-ville', label: 'Abidjan'),
-      'commune': const SelectedRef(id: 'uuid-commune', label: 'Cocody'),
-      'position': const GeoPoint(latitude: 5.3612, longitude: -3.9871),
+      'location': const PlaceSelection(
+        address: 'Cocody Riviera 3, Abidjan',
+        position: GeoPoint(latitude: 5.3612, longitude: -3.9871),
+      ),
       'amenityCodes': ['WIFI', 'PISCINE'],
       'photos': [for (var i = 1; i <= 5; i++) _photo('uuid-photo-$i')],
       'video': null,
@@ -70,7 +70,6 @@ void main() {
 
       expect(flow.steps.map((s) => s.key), [
         'property',
-        'location',
         'amenities',
         'presentation',
         'rules_pricing',
@@ -83,10 +82,24 @@ void main() {
       );
     });
 
-    test('REQUEST (enabled: false) n\'est pas proposé', () {
-      final bookingMode = _field(_loadFlow(), 'bookingMode');
+    test('une option désactivée (enabled: false) n\'est pas proposée', () {
+      final field = CreationField.fromJson({
+        'key': 'bookingMode',
+        'type': 'single_select_cards',
+        'options': [
+          {'value': 'INSTANT', 'label': 'Instantanée', 'enabled': true},
+          {'value': 'REQUEST', 'label': 'Demande', 'enabled': false},
+        ],
+      });
 
-      expect(bookingMode.enabledOptions.map((o) => o.value), ['INSTANT']);
+      expect(field.enabledOptions.map((o) => o.value), ['INSTANT']);
+    });
+
+    test('google_places_autocomplete : type et sorties lus depuis l\'API', () {
+      final location = _field(_loadFlow(), 'location');
+
+      expect(location.type, CreationFieldType.googlePlacesAutocomplete);
+      expect(location.outputs, {'address': 'adresse', 'position': 'position'});
     });
 
     test('sameDayCutoff et weekendNightlyPrice suivent visibleWhen', () {
@@ -163,8 +176,9 @@ void main() {
       expect(payload['typeResidence'], 'appartement');
       expect(payload['propertyType'], 'APPARTEMENT');
       expect(payload['adresse'], 'Cocody Riviera 3, Abidjan');
-      expect(payload['ville'], 'uuid-ville');
-      expect(payload['commune'], 'uuid-commune');
+      // Ville et commune ne sont plus demandées par le formulaire.
+      expect(payload.containsKey('ville'), isFalse);
+      expect(payload.containsKey('commune'), isFalse);
       expect(payload['position'], {
         'type': 'Point',
         'coordinates': [-3.9871, 5.3612],

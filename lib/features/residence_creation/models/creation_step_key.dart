@@ -3,7 +3,6 @@
 /// par l'API) garde son titre comme libellé.
 enum CreationStepKey {
   property('property', 'Mon bien'),
-  location('location', 'Localisation'),
   amenities('amenities', 'Équipements'),
   presentation('presentation', 'Présentation'),
   rulesPricing('rules_pricing', 'Règles et prix'),

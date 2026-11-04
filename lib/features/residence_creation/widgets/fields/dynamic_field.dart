@@ -8,9 +8,9 @@ import 'package:immoplus_pro/features/residence_creation/models/creation_values.
 import 'package:immoplus_pro/features/residence_creation/models/residence_field_keys.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/amenities_field.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/counters_field.dart';
-import 'package:immoplus_pro/features/residence_creation/widgets/fields/location_fields.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/media_fields.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/option_fields.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/fields/places_autocomplete_field.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/property_type_field.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/rooms_and_beds_field.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/text_input_field.dart';
@@ -97,30 +97,14 @@ class DynamicField extends StatelessWidget {
           loadCatalog: cubit.loadCatalog,
           onChanged: set,
         );
-      case CreationFieldType.select:
-        return ReferenceSelectField(
+      case CreationFieldType.googlePlacesAutocomplete:
+        return PlacesAutocompleteField(
           field: field,
-          value: value as SelectedRef?,
+          value: value as PlaceSelection?,
           errorText: error,
+          search: cubit.searchPlaces,
+          resolve: cubit.resolvePlace,
           onChanged: set,
-        );
-      case CreationFieldType.mapPoint:
-        return MapPointField(
-          field: field,
-          value: value as GeoPoint?,
-          errorText: error,
-          onPicked: (address) {
-            set(GeoPoint(
-              latitude: address.latitude!,
-              longitude: address.longitude!,
-            ));
-            final currentAddress =
-                state.values[ResidenceFieldKeys.address] as String?;
-            if ((currentAddress ?? '').trim().isEmpty &&
-                address.description != null) {
-              cubit.setValue(ResidenceFieldKeys.address, address.description);
-            }
-          },
         );
       case CreationFieldType.mediaUpload:
         return field.key == ResidenceFieldKeys.video

@@ -54,14 +54,8 @@ abstract class ResidenceFormValues {
         return _counters(field, json['capacity'], json['nombreMaxOccupants']);
       case ResidenceFieldKeys.roomsAndBeds:
         return _intMap(json['roomCounts']);
-      case ResidenceFieldKeys.address:
-        return json['adresse'];
-      case ResidenceFieldKeys.city:
-        return _ref(json['ville'], json['ville_model']);
-      case ResidenceFieldKeys.commune:
-        return _ref(json['commune'], json['commune_model']);
-      case ResidenceFieldKeys.position:
-        return _point(json['position']);
+      case ResidenceFieldKeys.location:
+        return _place(json['adresse'], json['position']);
       case ResidenceFieldKeys.amenityCodes:
         final codes = json['amenityCodes'];
         return codes is List ? codes.whereType<String>().toList() : null;
@@ -130,10 +124,12 @@ abstract class ResidenceFormValues {
         }
       : null;
 
-  static SelectedRef? _ref(Object? id, Object? model) {
-    if (id is! String || id.isEmpty) return null;
-    final name = model is Map ? model['name'] as String? : null;
-    return SelectedRef(id: id, label: name ?? '');
+  static PlaceSelection? _place(Object? address, Object? position) {
+    final point = _point(position);
+    if (address is! String || address.trim().isEmpty || point == null) {
+      return null;
+    }
+    return PlaceSelection(address: address, position: point);
   }
 
   static GeoPoint? _point(Object? raw) {
