@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,8 +36,9 @@ class ContactChangeCubit extends Cubit<ContactChangeState> {
       await AuthRepository.requestContactChange(body: body);
       emit(ContactChangeRequestSuccess(type));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
       log('ContactChangeCubit.requestChange error: $e');
-      emit(ContactChangeRequestError(e.toString()));
+      emit(ContactChangeRequestError(ErrorMessages.messageOf(e, ErrorContext.profileUpdate)));
     }
   }
 
@@ -75,8 +79,9 @@ class ContactChangeCubit extends Cubit<ContactChangeState> {
 
       emit(ContactChangeConfirmSuccess('Modification effectuée avec succès'));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.profileUpdate);
       log('ContactChangeCubit.confirmChange error: $e');
-      emit(ContactChangeConfirmError(e.toString()));
+      emit(ContactChangeConfirmError(ErrorMessages.messageOf(e, ErrorContext.profileUpdate)));
     }
   }
 }

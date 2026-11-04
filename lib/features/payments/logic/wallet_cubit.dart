@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,7 @@ class WalletCubit extends Cubit<RequestState> {
       inspect(data);
       emit(RequestState.wallet(data: data.data!));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.wallet);
       emit(const RequestState.initial());
     }
   }
@@ -44,6 +47,7 @@ class WalletCubit extends Cubit<RequestState> {
       emit(const RequestState.initial());
       return data;
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.withdrawal);
       inspect(e);
       emit(const RequestState.initial());
       return null;
@@ -67,6 +71,7 @@ class WalletCubit extends Cubit<RequestState> {
       emit(const RequestState.initial());
       return true;
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.withdrawal);
       inspect(e);
       emit(const RequestState.initial());
       return false;

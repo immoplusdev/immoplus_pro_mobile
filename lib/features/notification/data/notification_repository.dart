@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -29,13 +30,13 @@ class NotificationRepository {
       );
     } on DioException catch (e) {
       log('DioError getNotifications: ${e.message}');
-      throw Exception('Erreur chargement notifications: ${e.message}');
+      throw AppErrorMapper.from(e);
     } on RequestResponseExeption catch (e) {
       EasyLoading.showError(e.toString());
-      throw Exception('Erreur chargement notifications: $e');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getNotifications: $e');
-      throw Exception('Erreur chargement notifications: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -51,10 +52,10 @@ class NotificationRepository {
       return null;
     } on DioException catch (e) {
       log('DioError getNotificationById: ${e.message}');
-      throw Exception('Erreur chargement notification: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getNotificationById: $e');
-      throw Exception('Erreur chargement notification: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -73,10 +74,10 @@ class NotificationRepository {
       return 0;
     } on DioException catch (e) {
       log('DioError getUnreadCount: ${e.message}');
-      throw Exception('Erreur comptage non-lus: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getUnreadCount: $e');
-      throw Exception('Erreur comptage non-lus: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -87,10 +88,10 @@ class NotificationRepository {
       await _provider.markAsRead(notificationId);
     } on DioException catch (e) {
       log('DioError markAsRead: ${e.message}');
-      throw Exception('Erreur marquage notification: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error markAsRead: $e');
-      throw Exception('Erreur marquage notification: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -101,10 +102,10 @@ class NotificationRepository {
       await _provider.markAllAsRead();
     } on DioException catch (e) {
       log('DioError markAllAsRead: ${e.message}');
-      throw Exception('Erreur marquage toutes notifications: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error markAllAsRead: $e');
-      throw Exception('Erreur marquage toutes notifications: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -115,10 +116,10 @@ class NotificationRepository {
       await _provider.deleteNotification(notificationId);
     } on DioException catch (e) {
       log('DioError deleteNotification: ${e.message}');
-      throw Exception('Erreur suppression notification: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error deleteNotification: $e');
-      throw Exception('Erreur suppression notification: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 }

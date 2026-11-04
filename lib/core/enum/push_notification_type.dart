@@ -11,7 +11,7 @@ import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/owner_stats/presentation/pages/owner_stats_page.dart';
 import 'package:immoplus_pro/features/calendar/calendar_page_v2.dart';
 import 'package:immoplus_pro/features/payments/payments_page_v2.dart';
-import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
+import 'package:immoplus_pro/features/residence_creation/pages/residence_creation_page.dart';
 import 'package:immoplus_pro/features/create_estate_v2/create_estate_page_v2.dart';
 import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
 import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
@@ -129,7 +129,7 @@ enum PushNotificationType {
             return HomePageV2.routePath;
 
           case MarketingNotificationCode.proOnb02:
-            return CreateLodgmentPageV2.routePath;
+            return ResidenceCreationPage.routePath;
 
           case MarketingNotificationCode.proOnbEnt02:
             return CreateEstatePageV2.routePath;

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -14,7 +16,6 @@ import 'package:immoplus_pro/features/shared_widgets/custom_loading_button.dart'
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
 import 'package:immoplus_pro/features/otp_login/otp_login_page.dart';
 import 'package:immoplus_pro/features/shared_widgets/international_phone_number_input.dart';
-import 'package:immoplus_pro/utils/api_error_dialog.dart';
 import 'package:immoplus_pro/utils/app_dialog.dart';
 import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:immoplus_pro/utils/status_code_handler.dart';
@@ -83,9 +84,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      // Certaines erreurs (ex: USER_NOT_FOUND) affichent déjà leur propre
-      // dialog via ErrorInterceptor : pas besoin d'un toast en plus.
-      if (ApiErrorDialog.codeFrom(e)?.hasDedicatedDialog == true) return;
+      // Envoyer un code est sûr à relancer. Les cas métier (compte
+      // introuvable…) ont leur dialogue dédié via le coordinateur.
+      if (ErrorFeedback.show(e, context: ErrorContext.authentication)) return;
       EasyLoadingHandler.toast(
         toastPosition: EasyLoadingToastPosition.bottom,
         text: "Envoi de OTP code échoué, veuillez réessayer",
@@ -112,6 +113,13 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               source: AccountSource.proApp.value,
             ),
           ),
+      // Refus lié au code : message du back sous le champ ; pannes (403,
+      // réseau, serveur) : déjà présentées par le feedback global.
+      inlineErrorOf: () {
+        final error = context.read<LoginCubit>().lastOtpError;
+        if (error == null) return null;
+        return ErrorFeedback.isInputRefusal(error) ? error.message : '';
+      },
     );
   }
 
@@ -138,7 +146,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       );
     } catch (e) {
       if (!mounted) return;
-      if (ApiErrorDialog.codeFrom(e)?.hasDedicatedDialog == true) return;
+      if (ErrorFeedback.show(e, context: ErrorContext.authentication)) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Échec de l'envoi du code. Réessayez."),

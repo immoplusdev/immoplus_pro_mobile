@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -72,7 +74,9 @@ class _ArrivalInfoSheetState extends State<ArrivalInfoSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      EasyLoading.showError('Erreur de mise à jour de la fiche d\'arrivée.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        EasyLoading.showError('Erreur de mise à jour de la fiche d\'arrivée.');
+      }
     }
   }
 

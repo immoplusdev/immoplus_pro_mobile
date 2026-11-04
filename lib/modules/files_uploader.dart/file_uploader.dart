@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -117,6 +119,7 @@ class _FileUploaderState extends State<FileUploader> {
                   }
                 });
               } catch (e) {
+                ErrorFeedback.show(e, context: ErrorContext.fileUpload);
                 setState(() {
                   loading = false;
                 });

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:immoplus_pro/data/enums/home_filters.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -257,6 +259,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
         _pagingController.appendPage(result.data, nextPageKey);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.reservationLoad);
       _pagingController.error = error;
     }
   }

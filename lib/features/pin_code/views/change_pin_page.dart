@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -178,6 +180,7 @@ class _ChangePinPageState extends State<ChangePinPage>
       }
     } catch (e) {
       EasyLoadingHandler.hideLoadingToast();
+      ErrorFeedback.showUnlessInputRefusal(e, context: ErrorContext.pinCode);
       _triggerShake();
       // Reset confirmations on failure to let them retry
       setState(() {

@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:chewie/chewie.dart';
@@ -52,6 +54,7 @@ class _VideoLogmentPageState extends State<VideoLogmentPage> {
           });
         });
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.fileUpload);
       log('Erreur : $e');
       setState(() {
         _isLoading = false;

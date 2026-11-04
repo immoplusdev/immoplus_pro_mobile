@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -16,10 +17,10 @@ class RatingRepository {
       return response;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to submit rating: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to submit rating: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -33,10 +34,10 @@ class RatingRepository {
       return response.data;
     } on DioException catch (dioError) {
       log('DioError: ${dioError.message}');
-      throw Exception('Failed to get ratings: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error: $error');
-      throw Exception('Failed to get ratings: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 }

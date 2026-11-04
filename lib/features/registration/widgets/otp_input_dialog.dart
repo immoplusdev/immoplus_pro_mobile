@@ -19,6 +19,11 @@ Future<String?> showOtpInputDialog(
   String? errorText,
   VoidCallback? onResend,
   Future<bool> Function(String code)? onVerify,
+
+  /// Message à afficher sous le champ après un échec de [onVerify] : `null`
+  /// pour le message par défaut, chaîne vide pour n'en afficher aucun (erreur
+  /// déjà présentée par le feedback global : réseau, 403…).
+  String? Function()? inlineErrorOf,
 }) {
   final otpController = TextEditingController();
   String? currentError = errorText;
@@ -51,10 +56,15 @@ Future<String?> showOtpInputDialog(
               if (success) {
                 Navigator.of(ctx).pop(code);
               } else {
+                // Vider le champ déclenche `onChanged`, qui efface l'erreur :
+                // on le fait avant de poser le message.
+                otpController.clear();
                 setState(() {
                   isVerifying = false;
-                  currentError = 'Code invalide ou expiré. Veuillez réessayer.';
-                  otpController.clear();
+                  final custom = inlineErrorOf?.call();
+                  currentError = custom == null
+                      ? 'Code invalide ou expiré. Veuillez réessayer.'
+                      : (custom.isEmpty ? null : custom);
                 });
               }
             }

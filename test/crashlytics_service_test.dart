@@ -113,7 +113,8 @@ void main() {
       expect(fake.nonFatalErrors.length, equals(1));
     });
 
-    test('FirebaseCrashlyticsServiceImpl is assignable to CrashlyticsService', () {
+    test('FirebaseCrashlyticsServiceImpl is assignable to CrashlyticsService',
+        () {
       expect(
         FirebaseCrashlyticsServiceImpl.new,
         isA<CrashlyticsService Function()>(),

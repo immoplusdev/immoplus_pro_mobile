@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -79,7 +81,9 @@ class _WithdrawalRequestSheetState extends State<WithdrawalRequestSheet> {
     } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      EasyLoading.showError('Erreur lors de la demande de retrait.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.withdrawal)) {
+        EasyLoading.showError('Erreur lors de la demande de retrait.');
+      }
     }
   }
 

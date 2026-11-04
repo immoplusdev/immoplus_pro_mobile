@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 import 'dart:io';
 import 'package:chewie/chewie.dart';
@@ -71,6 +73,7 @@ class _EstateVideoLogmentPageState extends State<EstateVideoLogmentPage> {
         throw Exception('Erreur lors du téléchargement de la vidéo');
       }
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.fileUpload);
       log('Erreur : $e');
       setState(() {
         _isLoading = false;

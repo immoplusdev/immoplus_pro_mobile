@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:immoplus_pro/data/enums/home_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,6 +82,7 @@ class _VisitPageV2State extends State<VisitPageV2> {
         _pagingController.appendPage(result.data ?? [], nextPageKey);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.reservationLoad);
       _pagingController.error = error;
     }
   }

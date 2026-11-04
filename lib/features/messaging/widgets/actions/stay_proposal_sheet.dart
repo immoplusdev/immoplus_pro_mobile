@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:iconsax/iconsax.dart';
@@ -103,10 +105,12 @@ class _StayProposalSheetState extends State<StayProposalSheet> {
       if (!mounted) return;
       EasyLoading.showSuccess('Proposition de séjour envoyée !');
       Navigator.of(context).pop();
-    } catch (_) {
+    } catch (e) {
       if (!mounted) return;
       setState(() => _isSubmitting = false);
-      EasyLoading.showError('Erreur lors de l\'envoi de la proposition.');
+      if (!ErrorFeedback.show(e, context: ErrorContext.messaging)) {
+        EasyLoading.showError('Erreur lors de l\'envoi de la proposition.');
+      }
     }
   }
 

@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -185,7 +188,7 @@ class _ReservationRefusalReasonBottomSheetState
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _motifsError = e.toString();
+        _motifsError = ErrorMessages.messageOf(e, ErrorContext.reservationAction);
         _isLoadingMotifs = false;
       });
     }
@@ -243,9 +246,11 @@ class _ReservationRefusalReasonBottomSheetState
           'reason_code': _selectedMotif?.code ?? 'unknown',
         },
       );
-      EasyLoadingHandler.showErrorToast(
-        text: "Impossible d'enregistrer le motif. Veuillez réessayer.",
-      );
+      if (!ErrorFeedback.show(e, context: ErrorContext.reservationAction)) {
+        EasyLoadingHandler.showErrorToast(
+          text: "Impossible d'enregistrer le motif. Veuillez réessayer.",
+        );
+      }
     }
   }
 

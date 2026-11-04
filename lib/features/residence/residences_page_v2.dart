@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -8,7 +10,7 @@ import 'package:immoplus_pro/core/injection.dart';
 import 'package:immoplus_pro/core/services/share_service.dart';
 import 'package:immoplus_pro/data/models/residence/residence_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
-import 'package:immoplus_pro/features/create_residence_v2/create_lodgment_page_v2.dart';
+import 'package:immoplus_pro/features/residence_creation/pages/residence_creation_page.dart';
 import 'package:immoplus_pro/features/home_v2/home_page_v2.dart';
 import 'package:immoplus_pro/features/residence/widgets/residence_grid_card.dart';
 import 'package:immoplus_pro/features/residence_detail/residence_details_page_v2.dart';
@@ -119,6 +121,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
         _pagingController.appendPage(result.data ?? [], nextPageKey);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
       _pagingController.error = error;
     }
   }
@@ -263,7 +266,7 @@ class _ResidencesPageV2State extends State<ResidencesPageV2> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await context.pushNamed(CreateLodgmentPageV2.name);
+          final result = await context.pushNamed(ResidenceCreationPage.name);
           if (result == true) _pagingController.refresh();
         },
         backgroundColor: AppColors.primary,
