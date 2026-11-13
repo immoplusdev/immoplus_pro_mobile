@@ -88,7 +88,8 @@ class _HomePageV2State extends State<HomePageV2>
   static const List<_HomeTab> _tabs = [
     _HomeTab.reservations,
     _HomeTab.visits,
-    _HomeTab.demandes,
+    // Partie "demandes" masquée côté pro (ticket)
+    // _HomeTab.demandes,
   ];
 
   // final GlobalKey _scannerTutorialKey = GlobalKey(); // voir tuile commentée plus bas
