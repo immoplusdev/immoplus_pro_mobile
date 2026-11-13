@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -180,7 +181,7 @@ class FeedVideoCard extends StatelessWidget {
     bool showDot;
 
     if (video.isReady) {
-      bgColor = const Color(0xFF0F6E56);
+      bgColor = AppColors.emerald700;
       label = 'Prête';
       showDot = true;
     } else if (video.isProcessing) {

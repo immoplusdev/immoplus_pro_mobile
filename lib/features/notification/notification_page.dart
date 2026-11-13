@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -60,7 +63,8 @@ class _NotificationPageState extends State<NotificationPage> {
       // Recalcule l'unread badge
       if (mounted) setState(() {});
     } catch (error) {
-      _pagingController.error = error.toString();
+      ErrorFeedback.show(error, context: ErrorContext.feedLoad);
+      _pagingController.error = ErrorMessages.messageOf(error, ErrorContext.feedLoad);
     }
   }
 
@@ -68,12 +72,22 @@ class _NotificationPageState extends State<NotificationPage> {
 
   Future<void> _markAsRead(NotificationDto notif) async {
     if (notif.isRead) return;
-    await NotificationRepository.markAsRead(notif.id);
+    try {
+      await NotificationRepository.markAsRead(notif.id);
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      return;
+    }
     _updateItem(notif.id, notif.copyWith(isRead: true));
   }
 
   Future<void> _markAllAsRead() async {
-    await NotificationRepository.markAllAsRead();
+    try {
+      await NotificationRepository.markAllAsRead();
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      return;
+    }
     final updated = (_pagingController.itemList ?? [])
         .map((n) => n.copyWith(isRead: true))
         .toList();
@@ -82,7 +96,12 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<void> _deleteNotification(String id) async {
-    await NotificationRepository.deleteNotification(id);
+    try {
+      await NotificationRepository.deleteNotification(id);
+    } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.feedLoad);
+      return;
+    }
     final updated =
         (_pagingController.itemList ?? []).where((n) => n.id != id).toList();
     _pagingController.itemList = updated;

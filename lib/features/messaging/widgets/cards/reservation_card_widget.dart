@@ -31,7 +31,7 @@ class ReservationCardWidget extends StatelessWidget {
     switch (status) {
       case 'confirmed':
       case 'accepted':
-        statusColor = const Color(0xFF0F6E56);
+        statusColor = AppColors.emerald700;
         statusText = 'Confirmée';
         break;
       case 'rejected':
@@ -78,7 +78,7 @@ class ReservationCardWidget extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.slate900,
                   ),
                 ),
                 const Spacer(),
@@ -118,7 +118,7 @@ class ReservationCardWidget extends StatelessWidget {
                 label: 'Net à percevoir (hors commission)',
                 value: '$netAmount FCFA',
                 icon: Iconsax.money_3,
-                valueColor: const Color(0xFF0F6E56),
+                valueColor: AppColors.emerald700,
               ),
             ],
             if (dueAt != null) ...[
@@ -264,11 +264,11 @@ class _DetailColumn extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(icon, size: 12, color: const Color(0xFF64748B)),
+            Icon(icon, size: 12, color: AppColors.slate500),
             const SizedBox(width: 4),
             Text(
               label,
-              style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+              style: const TextStyle(fontSize: 11, color: AppColors.slate500),
             ),
           ],
         ),
@@ -278,7 +278,7 @@ class _DetailColumn extends StatelessWidget {
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: valueColor ?? const Color(0xFF1E293B),
+            color: valueColor ?? AppColors.slate800,
           ),
         ),
       ],

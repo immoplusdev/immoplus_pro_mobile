@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -25,7 +26,7 @@ class MessagingRepository {
       rethrow;
     } catch (e) {
       log('Error createSupportConversation: $e');
-      throw Exception('Failed to create support conversation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -36,10 +37,10 @@ class MessagingRepository {
       return await _provider.getConversations(type: type?.value);
     } on DioException catch (e) {
       log('DioError getConversations: ${e.message}');
-      throw Exception('Erreur chargement conversations: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getConversations: $e');
-      throw Exception('Erreur chargement conversations: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -50,10 +51,10 @@ class MessagingRepository {
       return await _provider.getConversationCounts();
     } on DioException catch (e) {
       log('DioError getConversationCounts: ${e.message}');
-      throw Exception('Erreur chargement compteurs: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getConversationCounts: $e');
-      throw Exception('Erreur chargement compteurs: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -66,7 +67,7 @@ class MessagingRepository {
       rethrow;
     } catch (e) {
       log('Error getConversation: $e');
-      throw Exception('Erreur chargement conversation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -93,10 +94,10 @@ class MessagingRepository {
       return [];
     } on DioException catch (e) {
       log('DioError getMessages: ${e.message}');
-      throw Exception('Erreur chargement messages: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error getMessages: $e');
-      throw Exception('Erreur chargement messages: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -122,7 +123,7 @@ class MessagingRepository {
       rethrow;
     } catch (e) {
       log('Error sendMessageHttp: $e');
-      throw Exception('Erreur envoi message: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -150,10 +151,10 @@ class MessagingRepository {
       return 0;
     } on DioException catch (e) {
       log('DioError markRead: ${e.message}');
-      throw Exception('Erreur marquage lu: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error markRead: $e');
-      throw Exception('Erreur marquage lu: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -162,10 +163,10 @@ class MessagingRepository {
       await _provider.blockConversation(conversationId);
     } on DioException catch (e) {
       log('DioError blockConversation: ${e.message}');
-      throw Exception('Erreur blocage conversation: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error blockConversation: $e');
-      throw Exception('Erreur blocage conversation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 
@@ -184,10 +185,10 @@ class MessagingRepository {
       );
     } on DioException catch (e) {
       log('DioError reportConversation: ${e.message}');
-      throw Exception('Erreur signalement conversation: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error reportConversation: $e');
-      throw Exception('Erreur signalement conversation: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 

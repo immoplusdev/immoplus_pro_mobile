@@ -1,3 +1,5 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -53,6 +55,7 @@ class DemandesCubit extends Cubit<DemandesState> {
         badgeCount: _badgeCount,
       ));
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.demand);
       log('Error in DemandesCubit._fetchPage: $error', name: 'DEMANDES_CUBIT');
       pagingController.error = error;
       emit(DemandesError(error.toString()));

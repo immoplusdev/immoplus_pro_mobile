@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/app_states/request_state.dart';
 import 'package:immoplus_pro/common/order_dir.dart';
@@ -78,7 +81,8 @@ class PendingReservationsCubit extends Cubit<RequestState> {
           break;
       }
     } catch (e) {
-      pagingController.error = e.toString();
+      ErrorFeedback.show(e, context: ErrorContext.reservationLoad);
+      pagingController.error = ErrorMessages.messageOf(e, ErrorContext.reservationLoad);
     }
   }
 
@@ -91,7 +95,8 @@ class PendingReservationsCubit extends Cubit<RequestState> {
       getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.reservationAction);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.reservationAction)));
     }
   }
 
@@ -99,13 +104,13 @@ class PendingReservationsCubit extends Cubit<RequestState> {
     emit(const RequestState.loading());
     try {
       await LogmentRepository.refuserReservation(reservationId, notes: notes);
-      getIt<AnalyticsService>().logBookingRefused(idReservation: reservationId);
       pagingController.refresh();
       getIt<PendingReservationOverlayService>().refreshPendingReservation();
       emit(const RequestState.success());
       return true;
     } catch (e) {
-      emit(RequestState.error(error: e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.reservationAction);
+      emit(RequestState.error(error: ErrorMessages.messageOf(e, ErrorContext.reservationAction)));
       return false;
     }
   }

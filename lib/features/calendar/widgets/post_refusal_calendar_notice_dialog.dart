@@ -39,7 +39,7 @@ Future<void> showPostRefusalCalendarNoticeDialog(BuildContext context) async {
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 17,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFF0F172A),
+                  color: AppColors.slate900,
                 ),
               ),
               const Gap(10),
@@ -49,7 +49,7 @@ Future<void> showPostRefusalCalendarNoticeDialog(BuildContext context) async {
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 13.5,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF64748B),
+                  color: AppColors.slate500,
                   height: 1.45,
                 ),
               ),

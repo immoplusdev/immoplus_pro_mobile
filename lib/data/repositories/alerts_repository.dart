@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:immoplus_pro/core/network/dio_client.dart';
@@ -27,11 +28,11 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.getMarketplaceAlerts: ${dioError.message}',
           name: 'ALERTS_API');
-      throw Exception('Failed to load marketplace alerts: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in AlertsRepository.getMarketplaceAlerts: $error',
           name: 'ALERTS_API');
-      throw Exception('Failed to load marketplace alerts: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -44,11 +45,11 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.getBadgeCount: ${dioError.message}',
           name: 'ALERTS_API');
-      throw Exception('Failed to load badge count: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in AlertsRepository.getBadgeCount: $error',
           name: 'ALERTS_API');
-      throw Exception('Failed to load badge count: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -63,11 +64,11 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.getAlertDetail: ${dioError.message}',
           name: 'ALERTS_API');
-      throw Exception('Failed to load alert detail: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in AlertsRepository.getAlertDetail: $error',
           name: 'ALERTS_API');
-      throw Exception('Failed to load alert detail: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -82,11 +83,11 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.getMatchesPro: ${dioError.message}',
           name: 'ALERTS_API');
-      throw Exception('Failed to load matches: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in AlertsRepository.getMatchesPro: $error',
           name: 'ALERTS_API');
-      throw Exception('Failed to load matches: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -107,15 +108,10 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.sendProposal: ${dioError.message}',
           name: 'ALERTS_API');
-      if (dioError.response?.data is Map<String, dynamic>) {
-        final errMap = dioError.response!.data as Map<String, dynamic>;
-        throw Exception(
-            errMap['message'] ?? 'Erreur lors de l\'envoi de la proposition');
-      }
-      throw Exception('Failed to send proposal: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (error) {
       log('Error in AlertsRepository.sendProposal: $error', name: 'ALERTS_API');
-      throw Exception('Failed to send proposal: $error');
+      throw AppErrorMapper.from(error);
     }
   }
 
@@ -128,10 +124,10 @@ class AlertsRepository {
     } on DioException catch (dioError) {
       log('DioError in AlertsRepository.markAsViewed: ${dioError.message}',
           name: 'ALERTS_API');
-      throw Exception('Failed to mark alert as viewed: ${dioError.message}');
+      throw AppErrorMapper.from(dioError);
     } catch (e) {
       log('Error marking alert as viewed: $e', name: 'ALERTS_API');
-      throw Exception('Failed to mark alert as viewed: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 }

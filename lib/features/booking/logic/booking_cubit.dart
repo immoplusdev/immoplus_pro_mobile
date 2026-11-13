@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +33,8 @@ class BookingCubit extends Cubit<BookingRequestState> {
           await LogmentRepository.getReservation(id: id);
       emit(BookingRequestState.receiveId(reservationModel));
     } catch (e) {
-      emit(BookingRequestState.error(e.toString()));
+      ErrorFeedback.show(e, context: ErrorContext.reservationLoad);
+      emit(BookingRequestState.error(ErrorMessages.messageOf(e, ErrorContext.reservationLoad)));
     }
   }
 }

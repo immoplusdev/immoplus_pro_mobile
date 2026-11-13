@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:immoplus_pro/utils/phone_number_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -192,7 +193,8 @@ class _ParticulierRegistrationState extends State<ParticulierRegistration> {
       firstName: _formController.firstName!.text,
       lastName: _formController.lastName!.text,
       email: _formController.email!.text,
-      phoneNumber: _formController.phoneNumber!.text,
+      phoneNumber: PhoneNumberHandler.formatPhoneNumber(
+          _formController.phoneNumber!.text),
       password: code,
       activite: _formController.activity!.text,
       token: widget.dataRouterRegistration.token,

@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:immoplus_pro/data/models/demandes/alert_marketplace_model.dart';
@@ -21,9 +24,10 @@ class DemandeProposalCubit extends Cubit<DemandeProposalState> {
         selectedMatch: selected,
       ));
     } catch (e) {
+      ErrorFeedback.show(e, context: ErrorContext.demand);
       log('Error loading matches in DemandeProposalCubit: $e',
           name: 'DEMANDE_PROPOSAL_CUBIT');
-      emit(DemandeProposalError(e.toString()));
+      emit(DemandeProposalError(ErrorMessages.messageOf(e, ErrorContext.demand)));
     }
   }
 

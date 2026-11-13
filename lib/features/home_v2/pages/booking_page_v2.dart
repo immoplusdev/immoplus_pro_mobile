@@ -1,3 +1,6 @@
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/data/enums/home_filters.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -29,8 +32,6 @@ import 'package:immoplus_pro/features/reservations/invitations/owner_invitations
 import 'package:immoplus_pro/data/models/remote/messaging/conversation_model.dart';
 import 'package:immoplus_pro/data/repositories/messaging_repository.dart';
 import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
-
-enum BookingFilterV2 { all, pending, paid, nouvelle }
 
 class BookingPageV2 extends StatefulWidget {
   final ValueNotifier<BookingFilterV2> filterNotifier;
@@ -258,6 +259,7 @@ class _BookingPageV2State extends State<BookingPageV2> {
         _pagingController.appendPage(result.data, nextPageKey);
       }
     } catch (error) {
+      ErrorFeedback.show(error, context: ErrorContext.reservationLoad);
       _pagingController.error = error;
     }
   }

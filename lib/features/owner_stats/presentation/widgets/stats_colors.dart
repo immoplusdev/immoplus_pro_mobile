@@ -1,13 +1,14 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
 class StatsColors {
-  static const brand = Color(0xFF2744DE);
+  static const brand = AppColors.blue500;
   static const brandLight = Color(0xFF7C8FF0);
   static const brandPale = Color(0xFFC5CEF6);
   static const brandIce = Color(0xFFEEF1FC);
 
-  static const success = Color(0xFF0F6E56);
-  static const successBg = Color(0xFFE1F5EE);
+  static const success = AppColors.emerald700;
+  static const successBg = AppColors.emerald50;
   static const warning = Color(0xFF854F0B);
   static const warningBg = Color(0xFFFAEEDA);
 
@@ -23,8 +24,8 @@ class StatsColors {
   static const kpiVuesBg = Color(0xFFFFF4EC);
   static const kpiScoreBg = Color(0xFFFFF8E6);
 
-  static const kpiRevenueAccent = Color(0xFF2744DE);
-  static const kpiBiensAccent = Color(0xFF0F6E56);
+  static const kpiRevenueAccent = AppColors.blue500;
+  static const kpiBiensAccent = AppColors.emerald700;
   static const kpiVuesAccent = Color(0xFFE8700A);
-  static const kpiScoreAccent = Color(0xFFD4A017);
+  static const kpiScoreAccent = AppColors.gold600;
 }

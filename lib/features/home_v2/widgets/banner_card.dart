@@ -6,6 +6,8 @@ import 'package:immoplus_pro/features/home_v2/widgets/banner_item.dart';
 import 'package:immoplus_pro/cubits/banners/banners_cubit.dart';
 import 'package:immoplus_pro/cubits/banners/banners_state.dart';
 import 'package:immoplus_pro/constantes/app_colors.dart';
+import 'package:immoplus_pro/core/injection.dart';
+import 'package:immoplus_pro/services/analytics_service.dart';
 import 'package:gap/gap.dart';
 
 class BannerCard extends StatefulWidget {
@@ -21,8 +23,10 @@ class BannerCard extends StatefulWidget {
 }
 
 class _BannerCardState extends State<BannerCard> {
+  final _analytics = getIt<AnalyticsService>();
   int _currentIndex = 0;
   bool _isDismissed = false;
+  int? _lastViewedBannerId;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
 
@@ -53,6 +57,8 @@ class _BannerCardState extends State<BannerCard> {
             },
           );
         }
+
+        _trackBannerViewed(apiBanners);
 
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
@@ -89,6 +95,10 @@ class _BannerCardState extends State<BannerCard> {
                       return BannerItem(
                         banner: apiBanners[index],
                         onCloseTap: () {
+                          _analytics.logProBannerDismissed(
+                            bannerId: apiBanners[index].id,
+                            type: apiBanners[index].type,
+                          );
                           setState(() {
                             _isDismissed = true;
                           });
@@ -106,6 +116,16 @@ class _BannerCardState extends State<BannerCard> {
         );
       },
     );
+  }
+
+  /// Une impression par bannière affichée : au premier affichage puis à
+  /// chaque changement de slide (pas à chaque rebuild).
+  void _trackBannerViewed(List<BannerModel> apiBanners) {
+    if (_currentIndex < 0 || _currentIndex >= apiBanners.length) return;
+    final banner = apiBanners[_currentIndex];
+    if (banner.id == _lastViewedBannerId) return;
+    _lastViewedBannerId = banner.id;
+    _analytics.logProBannerViewed(bannerId: banner.id, type: banner.type);
   }
 
   Color _getBackgroundColor(List<BannerModel> apiBanners) {

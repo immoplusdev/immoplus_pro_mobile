@@ -1,12 +1,13 @@
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ── Palette ──────────────────────────────────────────────────────────────────
 
-const calBackgroundColor  = Color(0xFFFFFFFF);
-const calPrimaryColor     = Color(0xFF2744DE);
+const calBackgroundColor  = AppColors.white;
+const calPrimaryColor     = AppColors.blue500;
 const calPrimarySoftColor = Color(0xFFEEF1FD);
-const calInkColor         = Color(0xFF0F172A);
+const calInkColor         = AppColors.slate900;
 const calMutedColor       = Color(0xFF94A3B8);
 const calLineColor        = Color(0xFFE2E8F0);
 const calDangerColor      = Color(0xFFEF4444);

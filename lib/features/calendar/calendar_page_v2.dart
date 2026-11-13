@@ -1,3 +1,7 @@
+import 'package:immoplus_pro/core/error/error_messages.dart';
+import 'package:immoplus_pro/core/error/error_feedback.dart';
+import 'package:immoplus_pro/core/error/error_context.dart';
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -174,7 +178,8 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
       });
     } catch (error) {
       if (!mounted) return;
-      setState(() { _isLoading = false; _errorMessage = error.toString(); });
+      ErrorFeedback.show(error, context: ErrorContext.calendar);
+      setState(() { _isLoading = false; _errorMessage = ErrorMessages.messageOf(error, ErrorContext.calendar); });
     }
   }
 
@@ -210,9 +215,11 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
           ? 'Dates bloquées — ${calCompactNames(updatedNames)}'
           : 'Ces dates sont déjà bloquées');
       return changed;
-    } catch (_) {
+    } catch (e) {
       if (mounted) setState(() => _isSaving = false);
-      _showToast('Erreur réseau, réessayez', isError: true);
+      if (!ErrorFeedback.show(e, context: ErrorContext.calendar)) {
+        _showToast('Erreur réseau, réessayez', isError: true);
+      }
       return false;
     }
   }
@@ -242,9 +249,11 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
       setState(() => _isSaving = false);
       if (changed) _showToast('Dates débloquées avec succès');
       return changed;
-    } catch (_) {
+    } catch (e) {
       if (mounted) setState(() => _isSaving = false);
-      _showToast('Erreur réseau, réessayez', isError: true);
+      if (!ErrorFeedback.show(e, context: ErrorContext.calendar)) {
+        _showToast('Erreur réseau, réessayez', isError: true);
+      }
       return false;
     }
   }
@@ -269,7 +278,7 @@ class _CalendarPageV2State extends State<CalendarPageV2> {
       ..showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-        backgroundColor: isError ? const Color(0xFFDC2626) : calInkColor,
+        backgroundColor: isError ? AppColors.red600 : calInkColor,
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 18),
         duration: const Duration(milliseconds: 2800),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

@@ -1,3 +1,4 @@
+import 'package:immoplus_pro/core/error/app_error_mapper.dart';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -22,10 +23,10 @@ class FeedRepository {
       return FeedResponse.fromJson(response.data);
     } on DioException catch (e) {
       log('DioError feed: ${e.message}');
-      throw Exception('Erreur chargement feed: ${e.message}');
+      throw AppErrorMapper.from(e);
     } catch (e) {
       log('Error feed: $e');
-      throw Exception('Erreur chargement feed: $e');
+      throw AppErrorMapper.from(e);
     }
   }
 

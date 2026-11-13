@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:immoplus_pro/utils/hex_color.dart';
@@ -38,11 +39,11 @@ class Constantes {
     primary: HexColor.fromHex("#2072ca"),
     secondary: const Color(0xFFABABAB),
     surface: const Color.fromARGB(255, 166, 173, 180),
-    error: const Color(0xFFFFFFFF),
-    onPrimary: const Color(0xFFFFFFFF),
+    error: AppColors.white,
+    onPrimary: AppColors.white,
     onSecondary: HexColor.fromHex("04b4fc"),
     onSurface: const Color(0xFF3E3C3C),
-    onError: const Color(0xFFFFFFFF),
+    onError: AppColors.white,
     brightness: Brightness.light,
   );
 
