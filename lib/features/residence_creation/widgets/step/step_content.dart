@@ -5,6 +5,7 @@ import 'package:immoplus_pro/features/residence_creation/logic/residence_creatio
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_step_key.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/layout/creation_tips.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/layout/price_commission_simulator.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/booking_step_extras.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/field_list.dart';
 
@@ -41,6 +42,10 @@ class StepContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         content,
+        if (CreationStepKey.fromValue(step.key) == CreationStepKey.rulesPricing)
+          PriceCommissionSimulator(
+            price: state.values['baseNightlyPrice'] as num?,
+          ),
         // Les conseils sont les mêmes pour toutes les étapes : ils viennent
         // de l'API (`tips`).
         CreationTips(tips: step.tips),
