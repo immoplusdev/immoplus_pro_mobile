@@ -37,7 +37,7 @@ class PriceCommissionSimulator extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Net / nuit',
+                  'Montant à recevoir',
                   style: AppTypography.bodyLargeSemiBold
                       .copyWith(color: AppColors.primary),
                 ),
