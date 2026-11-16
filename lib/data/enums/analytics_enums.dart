@@ -7,7 +7,8 @@ enum DashboardAction {
   transactions('transactions'),
   scanner('scanner'),
   statistics('statistics'),
-  support('support');
+  support('support'),
+  boost('boost');
 
   final String value;
   const DashboardAction(this.value);

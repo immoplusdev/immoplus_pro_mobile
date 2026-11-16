@@ -64,6 +64,7 @@ import 'package:immoplus_pro/features/reservations/pending/qr_scanner_page.dart'
 import 'package:immoplus_pro/data/models/reservations/reservation_model.dart';
 import 'package:immoplus_pro/data/repositories/logment_repository.dart';
 import 'package:immoplus_pro/utils/easy_loading_handler.dart';
+import 'package:immoplus_pro/features/boost/pages/boost_residences_page.dart';
 
 class HomePageV2 extends StatefulWidget {
   final String? paiementId;
@@ -850,6 +851,21 @@ class _HomePageV2State extends State<HomePageV2>
                                     action: DashboardAction.support,
                                     label: "Support",
                                     onTap: () => ContactUtils.showContact(),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: itemWidth,
+                                  child: _buildDashboardAction(
+                                    iconWidget: Center(
+                                      child: SvgPicture.asset(
+                                        "assets/svgs/boost.svg",
+                                        width: 30,
+                                      ),
+                                    ),
+                                    action: DashboardAction.boost,
+                                    label: "Boost",
+                                    onTap: () => context
+                                        .pushNamed(BoostResidencesPage.name),
                                   ),
                                 ),
                               ],

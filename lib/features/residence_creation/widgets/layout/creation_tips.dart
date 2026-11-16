@@ -17,7 +17,7 @@ class CreationTips extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (final tip in tips) ...[
-          _TipCard(tip: tip),
+          TipCard(tip: tip),
           AppSpacing.gap12,
         ],
         AppSpacing.gap12,
@@ -26,8 +26,8 @@ class CreationTips extends StatelessWidget {
   }
 }
 
-class _TipCard extends StatelessWidget {
-  const _TipCard({required this.tip});
+class TipCard extends StatelessWidget {
+  const TipCard({super.key, required this.tip});
 
   final CreationTip tip;
 

@@ -11,6 +11,7 @@ List<Widget> buildFieldWidgets({
   required List<CreationField> fields,
   required ResidenceCreationState state,
   required ResidenceCreationCubit cubit,
+  List<CreationTip> tips = const [],
 }) {
   final visible = fields.where((f) => f.isVisible(state.values)).toList();
   final widgets = <Widget>[];
@@ -36,8 +37,12 @@ List<Widget> buildFieldWidgets({
       continue;
     }
 
-    widgets.add(
-        DynamicField(key: ValueKey(field.key), field: field, state: state));
+    widgets.add(DynamicField(
+      key: ValueKey(field.key),
+      field: field,
+      state: state,
+      tips: tips,
+    ));
     i++;
   }
   return widgets;

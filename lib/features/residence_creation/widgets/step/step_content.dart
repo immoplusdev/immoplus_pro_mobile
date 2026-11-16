@@ -34,9 +34,22 @@ class StepContent extends StatelessWidget {
             fields: step.fields,
             state: state,
             cubit: cubit,
+            tips: step.tips,
           ),
         ),
     };
+
+    final inlineCardFieldKeys = {
+      for (final f in step.fields)
+        if (f.type == CreationFieldType.singleSelectCards &&
+            f.catalogEndpoint == null)
+          f.key,
+    };
+    final stepTips = step.tips
+        .where((t) =>
+            !inlineCardFieldKeys.contains(t.visibleWhen?.field) &&
+            t.isVisible(state.values))
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +61,7 @@ class StepContent extends StatelessWidget {
           ),
         // Les conseils sont les mêmes pour toutes les étapes : ils viennent
         // de l'API (`tips`).
-        CreationTips(tips: step.tips),
+        CreationTips(tips: stepTips),
       ],
     );
   }
@@ -75,8 +88,12 @@ class _BookingStepContent extends StatelessWidget {
   final ResidenceCreationState state;
   final ResidenceCreationCubit cubit;
 
-  List<Widget> _build(List<CreationField> fields) =>
-      buildFieldWidgets(fields: fields, state: state, cubit: cubit);
+  List<Widget> _build(List<CreationField> fields) => buildFieldWidgets(
+        fields: fields,
+        state: state,
+        cubit: cubit,
+        tips: step.tips,
+      );
 
   Widget? _weekendComparison() {
     final week = state.values['baseNightlyPrice'] as num?;

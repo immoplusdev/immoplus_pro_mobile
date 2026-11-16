@@ -195,16 +195,24 @@ class CreationTip {
     required this.title,
     required this.text,
     this.variant = TipVariant.info,
+    this.visibleWhen,
   });
 
   final String title;
   final String text;
   final TipVariant variant;
+  final VisibleWhen? visibleWhen;
+
+  bool isVisible(Map<String, dynamic> values) =>
+      visibleWhen?.isSatisfiedBy(values) ?? true;
 
   factory CreationTip.fromJson(Map<String, dynamic> json) => CreationTip(
         title: json['title'] as String? ?? '',
         text: json['text'] as String? ?? '',
         variant: TipVariant.fromValue(json['variant'] as String?),
+        visibleWhen: json['visibleWhen'] == null
+            ? null
+            : VisibleWhen.fromJson(json['visibleWhen'] as Map<String, dynamic>),
       );
 }
 
