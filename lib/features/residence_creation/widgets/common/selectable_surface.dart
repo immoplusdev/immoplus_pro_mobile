@@ -24,25 +24,28 @@ class SelectableSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: selected ? CreationStyle.selectedFill : Colors.white,
-      borderRadius: BorderRadius.circular(radius),
-      child: InkWell(
-        onTap: onTap,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        color: selected ? CreationStyle.selectedFill : Colors.white,
         borderRadius: BorderRadius.circular(radius),
-        child: Ink(
-          padding: padding,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              color: selected
-                  ? CreationStyle.selectedBorder
-                  : CreationStyle.border,
-            ),
+        border: Border.all(
+          color: selected ? CreationStyle.selectedBorder : CreationStyle.border,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(radius),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(radius),
+          child: Padding(
+            padding: padding,
+            child: alignment == null
+                ? child
+                : Align(alignment: alignment!, child: child),
           ),
-          child: alignment == null
-              ? child
-              : Align(alignment: alignment!, child: child),
         ),
       ),
     );

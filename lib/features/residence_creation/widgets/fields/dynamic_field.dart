@@ -21,10 +21,16 @@ import 'package:immoplus_pro/features/residence_creation/widgets/fields/toggle_f
 /// Affiche le widget correspondant au type d'un champ de la configuration.
 /// Un champ masqué par sa condition `visibleWhen` n'est pas affiché.
 class DynamicField extends StatelessWidget {
-  const DynamicField({super.key, required this.field, required this.state});
+  const DynamicField({
+    super.key,
+    required this.field,
+    required this.state,
+    this.tips = const [],
+  });
 
   final CreationField field;
   final ResidenceCreationState state;
+  final List<CreationTip> tips;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +65,7 @@ class DynamicField extends StatelessWidget {
                 value: value,
                 errorText: error,
                 onChanged: set,
+                tips: tips.isNotEmpty ? tips : (state.currentStep?.tips ?? const []),
               );
       case CreationFieldType.chips:
       case CreationFieldType.timeChips:
