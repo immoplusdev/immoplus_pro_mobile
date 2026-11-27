@@ -22,13 +22,26 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 @LazySingleton(as: PushProvider)
 class FirebasePushProvider implements PushProvider {
+  /// Nom du son personnalisé, sans extension :
+  /// - Android : `android/app/src/main/res/raw/immoplus_notification.ogg`
+  /// - iOS : `ios/Runner/immoplus_notification.caf` (bundle Runner)
+  static const String notificationSoundName = 'immoplus_notification';
+
+  /// Ancien canal (son système). Android fige le son d'un canal à sa
+  /// création : on ne peut pas le modifier, on le supprime au profit du
+  /// nouveau canal ci-dessous.
+  static const String _legacyChannelId = 'immoplus_pro_high_importance_channel';
+
+  /// Doit rester identique à `default_notification_channel_id` dans
+  /// AndroidManifest.xml et au `channel_id` envoyé par le backend.
   static const AndroidNotificationChannel _androidChannel =
       AndroidNotificationChannel(
-    'immoplus_pro_high_importance_channel',
+    'immoplus_pro_sound_channel',
     'Notifications ImmoPlus Pro',
     description: 'Canal pour les notifications push ImmoPlus Pro',
     importance: Importance.max,
     playSound: true,
+    sound: RawResourceAndroidNotificationSound(notificationSoundName),
   );
 
   final FlutterLocalNotificationsPlugin _localNotifications =
@@ -82,6 +95,7 @@ class FirebasePushProvider implements PushProvider {
     if (Platform.isAndroid) {
       final androidPlugin = _localNotifications.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
+      await androidPlugin?.deleteNotificationChannel(channelId: _legacyChannelId);
       await androidPlugin?.createNotificationChannel(_androidChannel);
     }
 
@@ -124,6 +138,9 @@ class FirebasePushProvider implements PushProvider {
                 icon: '@drawable/ic_notification',
                 importance: Importance.max,
                 priority: Priority.high,
+                playSound: true,
+                sound: const RawResourceAndroidNotificationSound(
+                    notificationSoundName),
                 color: const Color(0xFF2172CB),
               ),
             ),
