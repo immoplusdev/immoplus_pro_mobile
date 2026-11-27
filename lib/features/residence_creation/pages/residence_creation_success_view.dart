@@ -76,6 +76,8 @@ class ResidenceCreationSuccessView extends StatelessWidget {
                         'vos notifications activées.',
                   ),
                   AppSpacing.gap24,
+                  const _ShareHintBanner(),
+                  AppSpacing.gap24,
                 ],
               ),
             ),
@@ -88,12 +90,12 @@ class ResidenceCreationSuccessView extends StatelessWidget {
                     child: PillButton(
                       label: 'Modifier',
                       variant: PillButtonVariant.secondary,
+                      backgroundColor: const Color(0xFFA5B4F3),
                       onPressed: onEdit,
                     ),
                   ),
                   AppSpacing.gap12,
                   Expanded(
-                    flex: 2,
                     child: PillButton(label: 'Accueil', onPressed: onHome),
                   ),
                 ],
@@ -222,6 +224,49 @@ class _InfoTile extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ShareHintBanner extends StatelessWidget {
+  const _ShareHintBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: AppSpacing.edgeAll16,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(CreationStyle.tileRadius),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.near_me_rounded,
+            size: 22,
+            color: AppColors.gray400,
+          ),
+          AppSpacing.gap16,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Faites connaître votre résidence',
+                  style: AppTypography.bodyMediumSemiBold
+                      .copyWith(color: Colors.white),
+                ),
+                AppSpacing.gap4,
+                Text(
+                  'Partagez un lien unique et suivez vos visites.',
+                  style:
+                      AppTypography.caption.copyWith(color: AppColors.gray400),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

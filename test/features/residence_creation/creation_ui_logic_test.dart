@@ -149,6 +149,9 @@ void main() {
     expect(find.text('Vérifier votre logement'), findsOneWidget);
     expect(find.text('Commission'), findsOneWidget);
     expect(find.text('Première réservation'), findsOneWidget);
+    expect(find.text('Faites connaître votre résidence'), findsOneWidget);
+    expect(find.text('Partagez un lien unique et suivez vos visites.'),
+        findsOneWidget);
     await tester.tap(find.text('Modifier'));
     await tester.tap(find.text('Accueil'));
 

@@ -95,6 +95,10 @@ import 'package:immoplus_pro/features/messaging/pages/messages_inbox_page.dart';
 import 'package:immoplus_pro/features/messaging/pages/message_thread_page.dart';
 import 'package:immoplus_pro/services/crashlytics_service.dart';
 
+// ── Boost / Partage de résidence ──
+import 'package:immoplus_pro/features/boost/pages/boost_residences_page.dart';
+import 'package:immoplus_pro/features/boost/pages/share_residence_page.dart';
+
 class AppRouter {
   static bool userIs = false;
   static bool alreadyOpened = false;
@@ -626,6 +630,24 @@ class AppRouter {
           conversationId: state.pathParameters['conversationId']!,
           focusComposer: state.uri.queryParameters['focusComposer'] == 'true',
         ),
+      ),
+
+      // ── Boost (partage de résidences validées) ──
+      GoRoute(
+        path: BoostResidencesPage.routePath,
+        name: BoostResidencesPage.name,
+        builder: (context, state) => const BoostResidencesPage(),
+      ),
+      GoRoute(
+        path: ShareResidencePage.routePath,
+        name: ShareResidencePage.name,
+        builder: (context, state) {
+          final args = state.extra as ShareResidencePageArgs;
+          return ShareResidencePage(
+            residence: args.residence,
+            shareLink: args.shareLink,
+          );
+        },
       ),
     ],
   );

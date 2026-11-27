@@ -5,6 +5,7 @@ import 'package:immoplus_pro/features/residence_creation/logic/residence_creatio
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_step_key.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/layout/creation_tips.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/layout/price_commission_simulator.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/booking_step_extras.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/step/field_list.dart';
 
@@ -33,17 +34,34 @@ class StepContent extends StatelessWidget {
             fields: step.fields,
             state: state,
             cubit: cubit,
+            tips: step.tips,
           ),
         ),
     };
+
+    final inlineCardFieldKeys = {
+      for (final f in step.fields)
+        if (f.type == CreationFieldType.singleSelectCards &&
+            f.catalogEndpoint == null)
+          f.key,
+    };
+    final stepTips = step.tips
+        .where((t) =>
+            !inlineCardFieldKeys.contains(t.visibleWhen?.field) &&
+            t.isVisible(state.values))
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         content,
+        if (CreationStepKey.fromValue(step.key) == CreationStepKey.rulesPricing)
+          PriceCommissionSimulator(
+            price: state.values['baseNightlyPrice'] as num?,
+          ),
         // Les conseils sont les mêmes pour toutes les étapes : ils viennent
         // de l'API (`tips`).
-        CreationTips(tips: step.tips),
+        CreationTips(tips: stepTips),
       ],
     );
   }
@@ -70,8 +88,12 @@ class _BookingStepContent extends StatelessWidget {
   final ResidenceCreationState state;
   final ResidenceCreationCubit cubit;
 
-  List<Widget> _build(List<CreationField> fields) =>
-      buildFieldWidgets(fields: fields, state: state, cubit: cubit);
+  List<Widget> _build(List<CreationField> fields) => buildFieldWidgets(
+        fields: fields,
+        state: state,
+        cubit: cubit,
+        tips: step.tips,
+      );
 
   Widget? _weekendComparison() {
     final week = state.values['baseNightlyPrice'] as num?;

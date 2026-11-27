@@ -3,6 +3,7 @@ import 'package:immoplus_pro/app/design_system/design_system.dart';
 import 'package:immoplus_pro/features/residence_creation/models/creation_flow.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/common/selectable_surface.dart';
 import 'package:immoplus_pro/features/residence_creation/widgets/fields/field_shell.dart';
+import 'package:immoplus_pro/features/residence_creation/widgets/layout/creation_tips.dart';
 
 /// Champs `chips` et `time_chips` : choix unique parmi des options actives,
 /// réparties sur toute la largeur.
@@ -102,12 +103,20 @@ class OptionCardsField extends StatelessWidget {
     required this.value,
     required this.errorText,
     required this.onChanged,
+    this.tips = const [],
   });
 
   final CreationField field;
   final Object? value;
   final String? errorText;
   final ValueChanged<Object> onChanged;
+  final List<CreationTip> tips;
+
+  Iterable<CreationTip> _tipsForOption(Object optionValue) => tips.where(
+        (t) =>
+            t.visibleWhen?.field == field.key &&
+            t.visibleWhen?.equals == optionValue,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -117,15 +126,68 @@ class OptionCardsField extends StatelessWidget {
       errorText: errorText,
       child: Column(
         children: [
-          for (final option in field.enabledOptions)
-            Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-              child: _OptionCard(
-                option: option,
-                selected: value == option.value,
-                onTap: () => onChanged(option.value),
-              ),
+          for (final option in field.enabledOptions) ...[
+            Builder(
+              builder: (context) {
+                final optionTips = _tipsForOption(option.value).toList();
+                final isSelected = value == option.value;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                      child: _OptionCard(
+                        option: option,
+                        selected: isSelected,
+                        onTap: () => onChanged(option.value),
+                      ),
+                    ),
+                    if (optionTips.isNotEmpty)
+                      ClipRect(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 280),
+                          reverseDuration: const Duration(milliseconds: 220),
+                          switchInCurve: Curves.easeOutCubic,
+                          switchOutCurve: Curves.easeInCubic,
+                          transitionBuilder: (child, animation) =>
+                              SizeTransition(
+                            sizeFactor: animation,
+                            alignment: Alignment.topCenter,
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0, -0.06),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            ),
+                          ),
+                          child: isSelected
+                              ? Column(
+                                  key: ValueKey('tips_${option.value}'),
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    for (final tip in optionTips)
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: AppSpacing.sm),
+                                        child: TipCard(tip: tip),
+                                      ),
+                                  ],
+                                )
+                              : SizedBox.shrink(
+                                  key: ValueKey('empty_${option.value}'),
+                                ),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
+          ],
         ],
       ),
     );
@@ -211,7 +273,9 @@ class _RadioDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutCubic,
       width: 24,
       height: 24,
       decoration: BoxDecoration(
@@ -222,18 +286,23 @@ class _RadioDot extends StatelessWidget {
           width: 1.5,
         ),
       ),
-      child: selected
-          ? const Center(
-              child: SizedBox(
-                width: 8,
-                height: 8,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white),
-                ),
+      child: Center(
+        child: AnimatedScale(
+          scale: selected ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutBack,
+          child: const SizedBox(
+            width: 8,
+            height: 8,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
               ),
-            )
-          : null,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

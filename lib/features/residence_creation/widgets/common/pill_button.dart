@@ -11,6 +11,7 @@ class PillButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.variant = PillButtonVariant.primary,
+    this.backgroundColor,
     this.isLoading = false,
   });
 
@@ -19,21 +20,22 @@ class PillButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final PillButtonVariant variant;
+  final Color? backgroundColor;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     final isPrimary = variant == PillButtonVariant.primary;
+    final bg =
+        backgroundColor ?? (isPrimary ? AppColors.primary : AppColors.graySys5);
     return SizedBox(
       height: height,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: isPrimary ? AppColors.primary : AppColors.graySys5,
-          disabledBackgroundColor: isPrimary
-              ? AppColors.primary.withValues(alpha: 0.6)
-              : AppColors.graySys5,
+          backgroundColor: bg,
+          disabledBackgroundColor: bg.withValues(alpha: isPrimary ? 0.6 : 1.0),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(CreationStyle.pillRadius),
